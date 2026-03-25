@@ -56,6 +56,11 @@ namespace RentalVehicleService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("StationId,Name,Address,TotalCapacity,CurrentCount,IsActive")] Station station)
         {
+            // Không cho phép số xe hiện tại lớn hơn sức chứa
+            if (station.CurrentCount > station.TotalCapacity)
+            {
+                ModelState.AddModelError("CurrentCount", "Lỗi: Số xe hiện tại không thể lớn hơn sức chứa tối đa của trạm!");
+            }
             if (ModelState.IsValid)
             {
                 _context.Add(station);
