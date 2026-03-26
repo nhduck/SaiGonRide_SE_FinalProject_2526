@@ -83,6 +83,12 @@ namespace RentalVehicleService.Controllers
             {
                 return NotFound();
             }
+
+            if (station.CurrentCount > station.TotalCapacity)
+            {
+                ModelState.AddModelError("CurrentCount", "Lỗi: Số xe hiện tại không thể lớn hơn sức chứa tối đa của trạm vừa tạo!");
+            }
+
             return View(station);
         }
 
