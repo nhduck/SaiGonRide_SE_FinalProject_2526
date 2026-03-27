@@ -22,6 +22,10 @@ namespace RentalVehicleService.Controllers
         // GET: Vehicles
         public async Task<IActionResult> Index()
         {
+            int TotalVehicles = _context.Vehicle.Count();
+            int TotalRentable =  _context.Vehicle.Count(v => v.BatteryPercentage > 20);
+            ViewBag.TotalVehicles = TotalVehicles;
+            ViewBag.TotalRentable = TotalRentable;
             return View(await _context.Vehicle.ToListAsync());
         }
 

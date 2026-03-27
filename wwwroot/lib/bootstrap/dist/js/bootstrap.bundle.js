@@ -223,7 +223,7 @@
 
   const onDOMContentLoaded = callback => {
     if (document.readyState === 'loading') {
-      // add listener on the first call when the document is in loading state
+      // add listener on the first call when the document is in loading State
       if (!DOMContentLoadedCallbacks.length) {
         document.addEventListener('DOMContentLoaded', () => {
           DOMContentLoadedCallbacks.forEach(callback => callback());
@@ -343,7 +343,7 @@
     mouseleave: 'mouseout'
   };
   const customEventsRegex = /^(mouseenter|mouseleave)/i;
-  const nativeEvents = new Set(['click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readystatechange', 'error', 'abort', 'scroll']);
+  const nativeEvents = new Set(['click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readyStatechange', 'error', 'abort', 'scroll']);
   /**
    * ------------------------------------------------------------------------
    * Private methods
@@ -1947,7 +1947,7 @@
 
   var beforeMain = 'beforeMain';
   var main = 'main';
-  var afterMain = 'afterMain'; // modifier with the purpose to write to the DOM (or write into a framework state)
+  var afterMain = 'afterMain'; // modifier with the purpose to write to the DOM (or write into a framework State)
 
   var beforeWrite = 'beforeWrite';
   var write = 'write';
@@ -1994,11 +1994,11 @@
   // and applies them to the HTMLElements such as popper and arrow
 
   function applyStyles(_ref) {
-    var state = _ref.state;
-    Object.keys(state.elements).forEach(function (name) {
-      var style = state.styles[name] || {};
-      var attributes = state.attributes[name] || {};
-      var element = state.elements[name]; // arrow is optional + virtual elements
+    var State = _ref.State;
+    Object.keys(State.elements).forEach(function (name) {
+      var style = State.styles[name] || {};
+      var attributes = State.attributes[name] || {};
+      var element = State.elements[name]; // arrow is optional + virtual elements
 
       if (!isHTMLElement(element) || !getNodeName(element)) {
         return;
@@ -2021,10 +2021,10 @@
   }
 
   function effect$2(_ref2) {
-    var state = _ref2.state;
+    var State = _ref2.State;
     var initialStyles = {
       popper: {
-        position: state.options.strategy,
+        position: State.options.strategy,
         left: '0',
         top: '0',
         margin: '0'
@@ -2034,18 +2034,18 @@
       },
       reference: {}
     };
-    Object.assign(state.elements.popper.style, initialStyles.popper);
-    state.styles = initialStyles;
+    Object.assign(State.elements.popper.style, initialStyles.popper);
+    State.styles = initialStyles;
 
-    if (state.elements.arrow) {
-      Object.assign(state.elements.arrow.style, initialStyles.arrow);
+    if (State.elements.arrow) {
+      Object.assign(State.elements.arrow.style, initialStyles.arrow);
     }
 
     return function () {
-      Object.keys(state.elements).forEach(function (name) {
-        var element = state.elements[name];
-        var attributes = state.attributes[name] || {};
-        var styleProperties = Object.keys(state.styles.hasOwnProperty(name) ? state.styles[name] : initialStyles[name]); // Set all values to an empty string to unset them
+      Object.keys(State.elements).forEach(function (name) {
+        var element = State.elements[name];
+        var attributes = State.attributes[name] || {};
+        var styleProperties = Object.keys(State.styles.hasOwnProperty(name) ? State.styles[name] : initialStyles[name]); // Set all values to an empty string to unset them
 
         var style = styleProperties.reduce(function (style, property) {
           style[property] = '';
@@ -2275,22 +2275,22 @@
     }, {});
   }
 
-  var toPaddingObject = function toPaddingObject(padding, state) {
-    padding = typeof padding === 'function' ? padding(Object.assign({}, state.rects, {
-      placement: state.placement
+  var toPaddingObject = function toPaddingObject(padding, State) {
+    padding = typeof padding === 'function' ? padding(Object.assign({}, State.rects, {
+      placement: State.placement
     })) : padding;
     return mergePaddingObject(typeof padding !== 'number' ? padding : expandToHashMap(padding, basePlacements));
   };
 
   function arrow(_ref) {
-    var _state$modifiersData$;
+    var _State$modifiersData$;
 
-    var state = _ref.state,
+    var State = _ref.State,
         name = _ref.name,
         options = _ref.options;
-    var arrowElement = state.elements.arrow;
-    var popperOffsets = state.modifiersData.popperOffsets;
-    var basePlacement = getBasePlacement(state.placement);
+    var arrowElement = State.elements.arrow;
+    var popperOffsets = State.modifiersData.popperOffsets;
+    var basePlacement = getBasePlacement(State.placement);
     var axis = getMainAxisFromPlacement(basePlacement);
     var isVertical = [left, right].indexOf(basePlacement) >= 0;
     var len = isVertical ? 'height' : 'width';
@@ -2299,12 +2299,12 @@
       return;
     }
 
-    var paddingObject = toPaddingObject(options.padding, state);
+    var paddingObject = toPaddingObject(options.padding, State);
     var arrowRect = getLayoutRect(arrowElement);
     var minProp = axis === 'y' ? top : left;
     var maxProp = axis === 'y' ? bottom : right;
-    var endDiff = state.rects.reference[len] + state.rects.reference[axis] - popperOffsets[axis] - state.rects.popper[len];
-    var startDiff = popperOffsets[axis] - state.rects.reference[axis];
+    var endDiff = State.rects.reference[len] + State.rects.reference[axis] - popperOffsets[axis] - State.rects.popper[len];
+    var startDiff = popperOffsets[axis] - State.rects.reference[axis];
     var arrowOffsetParent = getOffsetParent(arrowElement);
     var clientSize = arrowOffsetParent ? axis === 'y' ? arrowOffsetParent.clientHeight || 0 : arrowOffsetParent.clientWidth || 0 : 0;
     var centerToReference = endDiff / 2 - startDiff / 2; // Make sure the arrow doesn't overflow the popper if the center point is
@@ -2316,11 +2316,11 @@
     var offset = within(min, center, max); // Prevents breaking syntax highlighting...
 
     var axisProp = axis;
-    state.modifiersData[name] = (_state$modifiersData$ = {}, _state$modifiersData$[axisProp] = offset, _state$modifiersData$.centerOffset = offset - center, _state$modifiersData$);
+    State.modifiersData[name] = (_State$modifiersData$ = {}, _State$modifiersData$[axisProp] = offset, _State$modifiersData$.centerOffset = offset - center, _State$modifiersData$);
   }
 
   function effect$1(_ref2) {
-    var state = _ref2.state,
+    var State = _ref2.State,
         options = _ref2.options;
     var _options$element = options.element,
         arrowElement = _options$element === void 0 ? '[data-popper-arrow]' : _options$element;
@@ -2331,19 +2331,19 @@
 
 
     if (typeof arrowElement === 'string') {
-      arrowElement = state.elements.popper.querySelector(arrowElement);
+      arrowElement = State.elements.popper.querySelector(arrowElement);
 
       if (!arrowElement) {
         return;
       }
     }
 
-    if (!contains(state.elements.popper, arrowElement)) {
+    if (!contains(State.elements.popper, arrowElement)) {
 
       return;
     }
 
-    state.elements.arrow = arrowElement;
+    State.elements.arrow = arrowElement;
   } // eslint-disable-next-line import/no-unused-modules
 
 
@@ -2447,7 +2447,7 @@
   }
 
   function computeStyles(_ref4) {
-    var state = _ref4.state,
+    var State = _ref4.State,
         options = _ref4.options;
     var _options$gpuAccelerat = options.gpuAcceleration,
         gpuAcceleration = _options$gpuAccelerat === void 0 ? true : _options$gpuAccelerat,
@@ -2457,32 +2457,32 @@
         roundOffsets = _options$roundOffsets === void 0 ? true : _options$roundOffsets;
 
     var commonStyles = {
-      placement: getBasePlacement(state.placement),
-      popper: state.elements.popper,
-      popperRect: state.rects.popper,
+      placement: getBasePlacement(State.placement),
+      popper: State.elements.popper,
+      popperRect: State.rects.popper,
       gpuAcceleration: gpuAcceleration
     };
 
-    if (state.modifiersData.popperOffsets != null) {
-      state.styles.popper = Object.assign({}, state.styles.popper, mapToStyles(Object.assign({}, commonStyles, {
-        offsets: state.modifiersData.popperOffsets,
-        position: state.options.strategy,
+    if (State.modifiersData.popperOffsets != null) {
+      State.styles.popper = Object.assign({}, State.styles.popper, mapToStyles(Object.assign({}, commonStyles, {
+        offsets: State.modifiersData.popperOffsets,
+        position: State.options.strategy,
         adaptive: adaptive,
         roundOffsets: roundOffsets
       })));
     }
 
-    if (state.modifiersData.arrow != null) {
-      state.styles.arrow = Object.assign({}, state.styles.arrow, mapToStyles(Object.assign({}, commonStyles, {
-        offsets: state.modifiersData.arrow,
+    if (State.modifiersData.arrow != null) {
+      State.styles.arrow = Object.assign({}, State.styles.arrow, mapToStyles(Object.assign({}, commonStyles, {
+        offsets: State.modifiersData.arrow,
         position: 'absolute',
         adaptive: false,
         roundOffsets: roundOffsets
       })));
     }
 
-    state.attributes.popper = Object.assign({}, state.attributes.popper, {
-      'data-popper-placement': state.placement
+    State.attributes.popper = Object.assign({}, State.attributes.popper, {
+      'data-popper-placement': State.placement
     });
   } // eslint-disable-next-line import/no-unused-modules
 
@@ -2500,15 +2500,15 @@
   };
 
   function effect(_ref) {
-    var state = _ref.state,
+    var State = _ref.State,
         instance = _ref.instance,
         options = _ref.options;
     var _options$scroll = options.scroll,
         scroll = _options$scroll === void 0 ? true : _options$scroll,
         _options$resize = options.resize,
         resize = _options$resize === void 0 ? true : _options$resize;
-    var window = getWindow(state.elements.popper);
-    var scrollParents = [].concat(state.scrollParents.reference, state.scrollParents.popper);
+    var window = getWindow(State.elements.popper);
+    var scrollParents = [].concat(State.scrollParents.reference, State.scrollParents.popper);
 
     if (scroll) {
       scrollParents.forEach(function (scrollParent) {
@@ -2829,14 +2829,14 @@
     return offsets;
   }
 
-  function detectOverflow(state, options) {
+  function detectOverflow(State, options) {
     if (options === void 0) {
       options = {};
     }
 
     var _options = options,
         _options$placement = _options.placement,
-        placement = _options$placement === void 0 ? state.placement : _options$placement,
+        placement = _options$placement === void 0 ? State.placement : _options$placement,
         _options$boundary = _options.boundary,
         boundary = _options$boundary === void 0 ? clippingParents : _options$boundary,
         _options$rootBoundary = _options.rootBoundary,
@@ -2849,10 +2849,10 @@
         padding = _options$padding === void 0 ? 0 : _options$padding;
     var paddingObject = mergePaddingObject(typeof padding !== 'number' ? padding : expandToHashMap(padding, basePlacements));
     var altContext = elementContext === popper ? reference : popper;
-    var referenceElement = state.elements.reference;
-    var popperRect = state.rects.popper;
-    var element = state.elements[altBoundary ? altContext : elementContext];
-    var clippingClientRect = getClippingRect(isElement(element) ? element : element.contextElement || getDocumentElement(state.elements.popper), boundary, rootBoundary);
+    var referenceElement = State.elements.reference;
+    var popperRect = State.rects.popper;
+    var element = State.elements[altBoundary ? altContext : elementContext];
+    var clippingClientRect = getClippingRect(isElement(element) ? element : element.contextElement || getDocumentElement(State.elements.popper), boundary, rootBoundary);
     var referenceClientRect = getBoundingClientRect(referenceElement);
     var popperOffsets = computeOffsets({
       reference: referenceClientRect,
@@ -2870,7 +2870,7 @@
       left: clippingClientRect.left - elementClientRect.left + paddingObject.left,
       right: elementClientRect.right - clippingClientRect.right + paddingObject.right
     };
-    var offsetData = state.modifiersData.offset; // Offsets can be applied only to the popper element
+    var offsetData = State.modifiersData.offset; // Offsets can be applied only to the popper element
 
     if (elementContext === popper && offsetData) {
       var offset = offsetData[placement];
@@ -2884,7 +2884,7 @@
     return overflowOffsets;
   }
 
-  function computeAutoPlacement(state, options) {
+  function computeAutoPlacement(State, options) {
     if (options === void 0) {
       options = {};
     }
@@ -2911,7 +2911,7 @@
 
 
     var overflows = allowedPlacements.reduce(function (acc, placement) {
-      acc[placement] = detectOverflow(state, {
+      acc[placement] = detectOverflow(State, {
         placement: placement,
         boundary: boundary,
         rootBoundary: rootBoundary,
@@ -2934,11 +2934,11 @@
   }
 
   function flip(_ref) {
-    var state = _ref.state,
+    var State = _ref.State,
         options = _ref.options,
         name = _ref.name;
 
-    if (state.modifiersData[name]._skip) {
+    if (State.modifiersData[name]._skip) {
       return;
     }
 
@@ -2954,12 +2954,12 @@
         _options$flipVariatio = options.flipVariations,
         flipVariations = _options$flipVariatio === void 0 ? true : _options$flipVariatio,
         allowedAutoPlacements = options.allowedAutoPlacements;
-    var preferredPlacement = state.options.placement;
+    var preferredPlacement = State.options.placement;
     var basePlacement = getBasePlacement(preferredPlacement);
     var isBasePlacement = basePlacement === preferredPlacement;
     var fallbackPlacements = specifiedFallbackPlacements || (isBasePlacement || !flipVariations ? [getOppositePlacement(preferredPlacement)] : getExpandedFallbackPlacements(preferredPlacement));
     var placements = [preferredPlacement].concat(fallbackPlacements).reduce(function (acc, placement) {
-      return acc.concat(getBasePlacement(placement) === auto ? computeAutoPlacement(state, {
+      return acc.concat(getBasePlacement(placement) === auto ? computeAutoPlacement(State, {
         placement: placement,
         boundary: boundary,
         rootBoundary: rootBoundary,
@@ -2968,8 +2968,8 @@
         allowedAutoPlacements: allowedAutoPlacements
       }) : placement);
     }, []);
-    var referenceRect = state.rects.reference;
-    var popperRect = state.rects.popper;
+    var referenceRect = State.rects.reference;
+    var popperRect = State.rects.popper;
     var checksMap = new Map();
     var makeFallbackChecks = true;
     var firstFittingPlacement = placements[0];
@@ -2982,7 +2982,7 @@
       var isStartVariation = getVariation(placement) === start;
       var isVertical = [top, bottom].indexOf(_basePlacement) >= 0;
       var len = isVertical ? 'width' : 'height';
-      var overflow = detectOverflow(state, {
+      var overflow = detectOverflow(State, {
         placement: placement,
         boundary: boundary,
         rootBoundary: rootBoundary,
@@ -3045,10 +3045,10 @@
       }
     }
 
-    if (state.placement !== firstFittingPlacement) {
-      state.modifiersData[name]._skip = true;
-      state.placement = firstFittingPlacement;
-      state.reset = true;
+    if (State.placement !== firstFittingPlacement) {
+      State.modifiersData[name]._skip = true;
+      State.placement = firstFittingPlacement;
+      State.reset = true;
     }
   } // eslint-disable-next-line import/no-unused-modules
 
@@ -3087,28 +3087,28 @@
   }
 
   function hide(_ref) {
-    var state = _ref.state,
+    var State = _ref.State,
         name = _ref.name;
-    var referenceRect = state.rects.reference;
-    var popperRect = state.rects.popper;
-    var preventedOffsets = state.modifiersData.preventOverflow;
-    var referenceOverflow = detectOverflow(state, {
+    var referenceRect = State.rects.reference;
+    var popperRect = State.rects.popper;
+    var preventedOffsets = State.modifiersData.preventOverflow;
+    var referenceOverflow = detectOverflow(State, {
       elementContext: 'reference'
     });
-    var popperAltOverflow = detectOverflow(state, {
+    var popperAltOverflow = detectOverflow(State, {
       altBoundary: true
     });
     var referenceClippingOffsets = getSideOffsets(referenceOverflow, referenceRect);
     var popperEscapeOffsets = getSideOffsets(popperAltOverflow, popperRect, preventedOffsets);
     var isReferenceHidden = isAnySideFullyClipped(referenceClippingOffsets);
     var hasPopperEscaped = isAnySideFullyClipped(popperEscapeOffsets);
-    state.modifiersData[name] = {
+    State.modifiersData[name] = {
       referenceClippingOffsets: referenceClippingOffsets,
       popperEscapeOffsets: popperEscapeOffsets,
       isReferenceHidden: isReferenceHidden,
       hasPopperEscaped: hasPopperEscaped
     };
-    state.attributes.popper = Object.assign({}, state.attributes.popper, {
+    State.attributes.popper = Object.assign({}, State.attributes.popper, {
       'data-popper-reference-hidden': isReferenceHidden,
       'data-popper-escaped': hasPopperEscaped
     });
@@ -3145,25 +3145,25 @@
   }
 
   function offset(_ref2) {
-    var state = _ref2.state,
+    var State = _ref2.State,
         options = _ref2.options,
         name = _ref2.name;
     var _options$offset = options.offset,
         offset = _options$offset === void 0 ? [0, 0] : _options$offset;
     var data = placements.reduce(function (acc, placement) {
-      acc[placement] = distanceAndSkiddingToXY(placement, state.rects, offset);
+      acc[placement] = distanceAndSkiddingToXY(placement, State.rects, offset);
       return acc;
     }, {});
-    var _data$state$placement = data[state.placement],
-        x = _data$state$placement.x,
-        y = _data$state$placement.y;
+    var _data$State$placement = data[State.placement],
+        x = _data$State$placement.x,
+        y = _data$State$placement.y;
 
-    if (state.modifiersData.popperOffsets != null) {
-      state.modifiersData.popperOffsets.x += x;
-      state.modifiersData.popperOffsets.y += y;
+    if (State.modifiersData.popperOffsets != null) {
+      State.modifiersData.popperOffsets.x += x;
+      State.modifiersData.popperOffsets.y += y;
     }
 
-    state.modifiersData[name] = data;
+    State.modifiersData[name] = data;
   } // eslint-disable-next-line import/no-unused-modules
 
 
@@ -3176,17 +3176,17 @@
   };
 
   function popperOffsets(_ref) {
-    var state = _ref.state,
+    var State = _ref.State,
         name = _ref.name;
     // Offsets are the actual position the popper needs to have to be
     // properly positioned near its reference element
     // This is the most basic placement, and will be adjusted by
     // the modifiers in the next step
-    state.modifiersData[name] = computeOffsets({
-      reference: state.rects.reference,
-      element: state.rects.popper,
+    State.modifiersData[name] = computeOffsets({
+      reference: State.rects.reference,
+      element: State.rects.popper,
       strategy: 'absolute',
-      placement: state.placement
+      placement: State.placement
     });
   } // eslint-disable-next-line import/no-unused-modules
 
@@ -3204,7 +3204,7 @@
   }
 
   function preventOverflow(_ref) {
-    var state = _ref.state,
+    var State = _ref.State,
         options = _ref.options,
         name = _ref.name;
     var _options$mainAxis = options.mainAxis,
@@ -3219,22 +3219,22 @@
         tether = _options$tether === void 0 ? true : _options$tether,
         _options$tetherOffset = options.tetherOffset,
         tetherOffset = _options$tetherOffset === void 0 ? 0 : _options$tetherOffset;
-    var overflow = detectOverflow(state, {
+    var overflow = detectOverflow(State, {
       boundary: boundary,
       rootBoundary: rootBoundary,
       padding: padding,
       altBoundary: altBoundary
     });
-    var basePlacement = getBasePlacement(state.placement);
-    var variation = getVariation(state.placement);
+    var basePlacement = getBasePlacement(State.placement);
+    var variation = getVariation(State.placement);
     var isBasePlacement = !variation;
     var mainAxis = getMainAxisFromPlacement(basePlacement);
     var altAxis = getAltAxis(mainAxis);
-    var popperOffsets = state.modifiersData.popperOffsets;
-    var referenceRect = state.rects.reference;
-    var popperRect = state.rects.popper;
-    var tetherOffsetValue = typeof tetherOffset === 'function' ? tetherOffset(Object.assign({}, state.rects, {
-      placement: state.placement
+    var popperOffsets = State.modifiersData.popperOffsets;
+    var referenceRect = State.rects.reference;
+    var popperRect = State.rects.popper;
+    var tetherOffsetValue = typeof tetherOffset === 'function' ? tetherOffset(Object.assign({}, State.rects, {
+      placement: State.placement
     })) : tetherOffset;
     var data = {
       x: 0,
@@ -3257,12 +3257,12 @@
       var maxLen = variation === start ? -popperRect[len] : -referenceRect[len]; // We need to include the arrow in the calculation so the arrow doesn't go
       // outside the reference bounds
 
-      var arrowElement = state.elements.arrow;
+      var arrowElement = State.elements.arrow;
       var arrowRect = tether && arrowElement ? getLayoutRect(arrowElement) : {
         width: 0,
         height: 0
       };
-      var arrowPaddingObject = state.modifiersData['arrow#persistent'] ? state.modifiersData['arrow#persistent'].padding : getFreshSideObject();
+      var arrowPaddingObject = State.modifiersData['arrow#persistent'] ? State.modifiersData['arrow#persistent'].padding : getFreshSideObject();
       var arrowPaddingMin = arrowPaddingObject[mainSide];
       var arrowPaddingMax = arrowPaddingObject[altSide]; // If the reference length is smaller than the arrow length, we don't want
       // to include its full size in the calculation. If the reference is small
@@ -3273,9 +3273,9 @@
       var arrowLen = within(0, referenceRect[len], arrowRect[len]);
       var minOffset = isBasePlacement ? referenceRect[len] / 2 - additive - arrowLen - arrowPaddingMin - tetherOffsetValue : minLen - arrowLen - arrowPaddingMin - tetherOffsetValue;
       var maxOffset = isBasePlacement ? -referenceRect[len] / 2 + additive + arrowLen + arrowPaddingMax + tetherOffsetValue : maxLen + arrowLen + arrowPaddingMax + tetherOffsetValue;
-      var arrowOffsetParent = state.elements.arrow && getOffsetParent(state.elements.arrow);
+      var arrowOffsetParent = State.elements.arrow && getOffsetParent(State.elements.arrow);
       var clientOffset = arrowOffsetParent ? mainAxis === 'y' ? arrowOffsetParent.clientTop || 0 : arrowOffsetParent.clientLeft || 0 : 0;
-      var offsetModifierValue = state.modifiersData.offset ? state.modifiersData.offset[state.placement][mainAxis] : 0;
+      var offsetModifierValue = State.modifiersData.offset ? State.modifiersData.offset[State.placement][mainAxis] : 0;
       var tetherMin = popperOffsets[mainAxis] + minOffset - offsetModifierValue - clientOffset;
       var tetherMax = popperOffsets[mainAxis] + maxOffset - offsetModifierValue;
 
@@ -3303,7 +3303,7 @@
       }
     }
 
-    state.modifiersData[name] = data;
+    State.modifiersData[name] = data;
   } // eslint-disable-next-line import/no-unused-modules
 
 
@@ -3485,7 +3485,7 @@
         options = defaultOptions;
       }
 
-      var state = {
+      var State = {
         placement: 'bottom',
         orderedModifiers: [],
         options: Object.assign({}, DEFAULT_OPTIONS, defaultOptions),
@@ -3500,19 +3500,19 @@
       var effectCleanupFns = [];
       var isDestroyed = false;
       var instance = {
-        state: state,
+        State: State,
         setOptions: function setOptions(options) {
           cleanupModifierEffects();
-          state.options = Object.assign({}, defaultOptions, state.options, options);
-          state.scrollParents = {
+          State.options = Object.assign({}, defaultOptions, State.options, options);
+          State.scrollParents = {
             reference: isElement(reference) ? listScrollParents(reference) : reference.contextElement ? listScrollParents(reference.contextElement) : [],
             popper: listScrollParents(popper)
           }; // Orders the modifiers based on their dependencies and `phase`
           // properties
 
-          var orderedModifiers = orderModifiers(mergeByName([].concat(defaultModifiers, state.options.modifiers))); // Strip out disabled modifiers
+          var orderedModifiers = orderModifiers(mergeByName([].concat(defaultModifiers, State.options.modifiers))); // Strip out disabled modifiers
 
-          state.orderedModifiers = orderedModifiers.filter(function (m) {
+          State.orderedModifiers = orderedModifiers.filter(function (m) {
             return m.enabled;
           }); // Validate the provided modifiers so that the consumer will get warned
 
@@ -3529,9 +3529,9 @@
             return;
           }
 
-          var _state$elements = state.elements,
-              reference = _state$elements.reference,
-              popper = _state$elements.popper; // Don't proceed if `reference` or `popper` are not valid elements
+          var _State$elements = State.elements,
+              reference = _State$elements.reference,
+              popper = _State$elements.popper; // Don't proceed if `reference` or `popper` are not valid elements
           // anymore
 
           if (!areValidElements(reference, popper)) {
@@ -3540,8 +3540,8 @@
           } // Store the reference and popper rects to be read by modifiers
 
 
-          state.rects = {
-            reference: getCompositeRect(reference, getOffsetParent(popper), state.options.strategy === 'fixed'),
+          State.rects = {
+            reference: getCompositeRect(reference, getOffsetParent(popper), State.options.strategy === 'fixed'),
             popper: getLayoutRect(popper)
           }; // Modifiers have the ability to reset the current update cycle. The
           // most common use case for this is the `flip` modifier changing the
@@ -3549,37 +3549,37 @@
           // logic was previously ran for the previous placement and is therefore
           // stale/incorrect
 
-          state.reset = false;
-          state.placement = state.options.placement; // On each update cycle, the `modifiersData` property for each modifier
+          State.reset = false;
+          State.placement = State.options.placement; // On each update cycle, the `modifiersData` property for each modifier
           // is filled with the initial data specified by the modifier. This means
           // it doesn't persist and is fresh on each update.
           // To ensure persistent data, use `${name}#persistent`
 
-          state.orderedModifiers.forEach(function (modifier) {
-            return state.modifiersData[modifier.name] = Object.assign({}, modifier.data);
+          State.orderedModifiers.forEach(function (modifier) {
+            return State.modifiersData[modifier.name] = Object.assign({}, modifier.data);
           });
 
-          for (var index = 0; index < state.orderedModifiers.length; index++) {
+          for (var index = 0; index < State.orderedModifiers.length; index++) {
 
-            if (state.reset === true) {
-              state.reset = false;
+            if (State.reset === true) {
+              State.reset = false;
               index = -1;
               continue;
             }
 
-            var _state$orderedModifie = state.orderedModifiers[index],
-                fn = _state$orderedModifie.fn,
-                _state$orderedModifie2 = _state$orderedModifie.options,
-                _options = _state$orderedModifie2 === void 0 ? {} : _state$orderedModifie2,
-                name = _state$orderedModifie.name;
+            var _State$orderedModifie = State.orderedModifiers[index],
+                fn = _State$orderedModifie.fn,
+                _State$orderedModifie2 = _State$orderedModifie.options,
+                _options = _State$orderedModifie2 === void 0 ? {} : _State$orderedModifie2,
+                name = _State$orderedModifie.name;
 
             if (typeof fn === 'function') {
-              state = fn({
-                state: state,
+              State = fn({
+                State: State,
                 options: _options,
                 name: name,
                 instance: instance
-              }) || state;
+              }) || State;
             }
           }
         },
@@ -3588,7 +3588,7 @@
         update: debounce(function () {
           return new Promise(function (resolve) {
             instance.forceUpdate();
-            resolve(state);
+            resolve(State);
           });
         }),
         destroy: function destroy() {
@@ -3602,9 +3602,9 @@
         return instance;
       }
 
-      instance.setOptions(options).then(function (state) {
+      instance.setOptions(options).then(function (State) {
         if (!isDestroyed && options.onFirstUpdate) {
-          options.onFirstUpdate(state);
+          options.onFirstUpdate(State);
         }
       }); // Modifiers have the ability to execute arbitrary code before the first
       // update cycle runs. They will be executed in the same order as the update
@@ -3613,7 +3613,7 @@
       // one.
 
       function runModifierEffects() {
-        state.orderedModifiers.forEach(function (_ref3) {
+        State.orderedModifiers.forEach(function (_ref3) {
           var name = _ref3.name,
               _ref3$options = _ref3.options,
               options = _ref3$options === void 0 ? {} : _ref3$options,
@@ -3621,7 +3621,7 @@
 
           if (typeof effect === 'function') {
             var cleanupFn = effect({
-              state: state,
+              State: State,
               name: name,
               instance: instance,
               options: options
@@ -5358,8 +5358,8 @@
   const CLASS_NAME_FADE$2 = 'fade';
   const CLASS_NAME_MODAL = 'modal';
   const CLASS_NAME_SHOW$2 = 'show';
-  const HOVER_STATE_SHOW = 'show';
-  const HOVER_STATE_OUT = 'out';
+  const HOVER_State_SHOW = 'show';
+  const HOVER_State_OUT = 'out';
   const SELECTOR_TOOLTIP_INNER = '.tooltip-inner';
   const SELECTOR_MODAL = `.${CLASS_NAME_MODAL}`;
   const EVENT_MODAL_HIDE = 'hide.bs.modal';
@@ -5536,7 +5536,7 @@
         this._hoverState = null;
         EventHandler.trigger(this._element, this.constructor.Event.SHOWN);
 
-        if (prevHoverState === HOVER_STATE_OUT) {
+        if (prevHoverState === HOVER_State_OUT) {
           this._leave(null, this);
         }
       };
@@ -5558,7 +5558,7 @@
           return;
         }
 
-        if (this._hoverState !== HOVER_STATE_SHOW) {
+        if (this._hoverState !== HOVER_State_SHOW) {
           tip.remove();
         }
 
@@ -5816,13 +5816,13 @@
         context._activeTrigger[event.type === 'focusin' ? TRIGGER_FOCUS : TRIGGER_HOVER] = true;
       }
 
-      if (context.getTipElement().classList.contains(CLASS_NAME_SHOW$2) || context._hoverState === HOVER_STATE_SHOW) {
-        context._hoverState = HOVER_STATE_SHOW;
+      if (context.getTipElement().classList.contains(CLASS_NAME_SHOW$2) || context._hoverState === HOVER_State_SHOW) {
+        context._hoverState = HOVER_State_SHOW;
         return;
       }
 
       clearTimeout(context._timeout);
-      context._hoverState = HOVER_STATE_SHOW;
+      context._hoverState = HOVER_State_SHOW;
 
       if (!context._config.delay || !context._config.delay.show) {
         context.show();
@@ -5830,7 +5830,7 @@
       }
 
       context._timeout = setTimeout(() => {
-        if (context._hoverState === HOVER_STATE_SHOW) {
+        if (context._hoverState === HOVER_State_SHOW) {
           context.show();
         }
       }, context._config.delay.show);
@@ -5848,7 +5848,7 @@
       }
 
       clearTimeout(context._timeout);
-      context._hoverState = HOVER_STATE_OUT;
+      context._hoverState = HOVER_State_OUT;
 
       if (!context._config.delay || !context._config.delay.hide) {
         context.hide();
@@ -5856,7 +5856,7 @@
       }
 
       context._timeout = setTimeout(() => {
-        if (context._hoverState === HOVER_STATE_OUT) {
+        if (context._hoverState === HOVER_State_OUT) {
           context.hide();
         }
       }, context._config.delay.hide);
@@ -5940,18 +5940,18 @@
 
     _handlePopperPlacementChange(popperData) {
       const {
-        state
+        State
       } = popperData;
 
-      if (!state) {
+      if (!State) {
         return;
       }
 
-      this.tip = state.elements.popper;
+      this.tip = State.elements.popper;
 
       this._cleanTipClass();
 
-      this._addAttachmentClass(this._getAttachment(state.placement));
+      this._addAttachmentClass(this._getAttachment(State.placement));
     } // Static
 
 

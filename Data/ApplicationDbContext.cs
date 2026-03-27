@@ -11,6 +11,6 @@ namespace RentalVehicleService.Data
         {
         }
         public DbSet<Station> Stations { get; set; }
-        public DbSet<RentalVehicleService.Models.Vehicle> Vehicle { get; set; } = default!;
+        public DbSet<RentalVehicleService.Models.Vehicle> Vehicle { get; set; }
         }
 }
