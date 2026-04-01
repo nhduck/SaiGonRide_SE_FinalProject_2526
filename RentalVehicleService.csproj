@@ -30,4 +30,9 @@
     <None Include="wwwroot\css\Vehicle\indexStyle.css" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Views\AdminDashboard\Pages\VehicleManagement\" />
+    <Folder Include="Views\AdminDashboard\Pages\StationManagement\" />
+  </ItemGroup>
+
 </Project>
