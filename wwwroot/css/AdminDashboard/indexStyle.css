@@ -1,0 +1,58 @@
+﻿div[b-tft4s0z4ee].container {
+    max-width: 100% !important;
+    margin: 0 !important;
+    padding: 0;
+}
+
+div #logo i {
+    color: green;
+}
+
+#main {
+    background-color: rgba(239, 246, 246);
+}
+
+/* Trạng thái bình thường */
+.nav-link {
+    color: #212529 !important;
+    background-color: transparent;
+    /* transition: thuộc tính - thời gian - kiểu chạy */
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 8px;
+    display: flex;
+    align-items: center;
+}
+
+    .nav-link i {
+        color: #6c757d;
+        display: inline-block; /* Quan trọng để hiệu ứng transform hoạt động */
+        transition: all 0.3s ease;
+    }
+
+    /* Khi di chuột vào (Hover) */
+    .nav-link:hover {
+        background-color: rgba(199, 241, 226, 0.7); /* Thêm độ trong suốt nhẹ */
+        color: #3cac88 !important;
+        /* Hiệu ứng nhích nhẹ toàn bộ thanh menu sang phải */
+        padding-left: 1.2rem !important;
+    }
+
+        /* Hiệu ứng riêng cho Icon khi Hover */
+        .nav-link:hover i {
+            color: #3cac88 !important;
+            /* Icon hơi xoay nhẹ hoặc nhích lên để tạo điểm nhấn */
+            transform: scale(1.1) translateX(2px);
+        }
+
+    /* Khi mục đó được "chốt" giữ lại (Active) */
+    .nav-link.active-selected {
+        background-color: rgba(199, 241, 226, 1) !important;
+        color: #3cac88 !important;
+        font-weight: 600;
+        border-radius: 8px;
+    }
+
+        .nav-link.active-selected i {
+            color: #3cac88 !important;
+            transform: scale(1.1); /* Giữ icon to hơn một chút ở trạng thái active */
+        }
