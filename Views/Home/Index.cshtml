@@ -98,7 +98,7 @@
                                 <!-- Fill bar -->
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="fill-bar flex-grow-1 bg-light rounded-pill" style="height: 8px; max-width: 250px;">
-                                        <div class="fill-bar-inner @fillColorClass rounded-pill" style="width: @fillPct%; height: 100%;"></div>
+                                        <div class="fill-bar-inner @fillColorClass rounded-pill" style="width: @(fillPct)%; height: 100%;"></div>
                                     </div>
                                     <small class="text-secondary fw-semibold" style="min-width: 100px;">@station.CurrentCount / @station.TotalCapacity vehicles</small>
                                     <span class="badge @(fillPct < 60 ? "bg-success" : fillPct < 85 ? "bg-warning text-dark" : "bg-danger")">@fillPct% Full</span>
