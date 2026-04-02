@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using RentalVehicleService.Data;
 
@@ -11,9 +12,11 @@ using RentalVehicleService.Data;
 namespace RentalVehicleService.Data.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    partial class ApplicationDbContextModelSnapshot : ModelSnapshot
+    [Migration("20260326035051_InitialVehicleFix")]
+    partial class InitialVehicleFix
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -270,16 +273,13 @@ namespace RentalVehicleService.Data.Migrations
                     b.Property<int?>("CurrentStationId")
                         .HasColumnType("int");
 
-                    b.Property<DateTime>("LastMaintenance")
-                        .HasColumnType("datetime2");
+                    b.Property<bool>("IsPluggedIn")
+                        .HasColumnType("bit");
 
                     b.Property<double>("Price")
                         .HasColumnType("float");
 
                     b.Property<int>("State")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Type")
                         .HasColumnType("int");
 
                     b.Property<string>("VehicleModel")
