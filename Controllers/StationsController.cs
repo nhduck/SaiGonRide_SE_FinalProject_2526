@@ -25,7 +25,7 @@ namespace RentalVehicleService.Controllers
             return View(await _context.Stations.ToListAsync());
         }
 
-        // GET: Stations/Details/5
+        // GET: Stations/Details
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -50,8 +50,6 @@ namespace RentalVehicleService.Controllers
         }
 
         // POST: Stations/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("StationId,Name,Address,TotalCapacity,CurrentCount,IsActive")] Station station)
@@ -70,7 +68,7 @@ namespace RentalVehicleService.Controllers
             return View(station);
         }
 
-        // GET: Stations/Edit/5
+        // GET: Stations/Edit
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -92,9 +90,7 @@ namespace RentalVehicleService.Controllers
             return View(station);
         }
 
-        // POST: Stations/Edit/5
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
+        // POST: Stations/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("StationId,Name,Address,TotalCapacity,CurrentCount,IsActive")] Station station)
@@ -127,7 +123,7 @@ namespace RentalVehicleService.Controllers
             return View(station);
         }
 
-        // GET: Stations/Delete/5
+        // GET: Stations/Delete
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -145,7 +141,7 @@ namespace RentalVehicleService.Controllers
             return View(station);
         }
 
-        // POST: Stations/Delete/5
+        // POST: Stations/Delete
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)

@@ -11,5 +11,5 @@ namespace RentalVehicleService.Data
         {
         }
         public DbSet<Station> Stations { get; set; }
-        }
+    }
 }

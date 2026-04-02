@@ -23,11 +23,11 @@ namespace RentalVehicleService.Models
 
         public bool IsActive { get; set; } = true;
 
-        // Logic tính toán: Tỷ lệ lấp đầy (không lưu vào DB)
+        // Tỷ lệ lấp đầy (không lưu vào DB)
         [NotMapped]
         public double FillRate => TotalCapacity > 0 ? (double)CurrentCount / TotalCapacity : 0;
 
-        // Logic nghiệp vụ: Cảnh báo bãi rỗng (< 20% sẽ được giảm giá 15%)
+        // Cảnh báo bãi rỗng (< 20% sẽ được giảm giá 15%)
         [NotMapped]
         public bool IsLowInventory => FillRate < 0.20;
     }
