@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using RentalVehicleService.Data;
 using RentalVehicleService.Models;
@@ -18,7 +18,7 @@ namespace RentalVehicleService.Controllers
         // GET: Vehicles - Load vào AdminDashboard dưới dạng PartialView
         public async Task<IActionResult> Index()
         {
-            var vehicles = await _context.Vehicle.ToListAsync();
+            var vehicles = await _context.Vehicles.ToListAsync();
 
             ViewBag.TotalVehicles = vehicles.Count;
             ViewBag.TotalRentable = vehicles.Count(v => v.BatteryPercentage > 20);
@@ -33,7 +33,7 @@ namespace RentalVehicleService.Controllers
         {
             if (id == null) return NotFound();
 
-            var vehicle = await _context.Vehicle
+            var vehicle = await _context.Vehicles
                 .FirstOrDefaultAsync(m => m.VehicleId == id);
 
             if (vehicle == null) return NotFound();
@@ -65,7 +65,7 @@ namespace RentalVehicleService.Controllers
         {
             if (id == null) return NotFound();
 
-            var vehicle = await _context.Vehicle.FindAsync(id);
+            var vehicle = await _context.Vehicles.FindAsync(id);
             if (vehicle == null) return NotFound();
 
             return View($"{ViewPath}Edit.cshtml", vehicle);
@@ -99,7 +99,7 @@ namespace RentalVehicleService.Controllers
         {
             if (id == null) return NotFound();
 
-            var vehicle = await _context.Vehicle
+            var vehicle = await _context.Vehicles
                 .FirstOrDefaultAsync(m => m.VehicleId == id);
 
             if (vehicle == null) return NotFound();
@@ -111,10 +111,10 @@ namespace RentalVehicleService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var vehicle = await _context.Vehicle.FindAsync(id);
+            var vehicle = await _context.Vehicles.FindAsync(id);
             if (vehicle != null)
             {
-                _context.Vehicle.Remove(vehicle);
+                _context.Vehicles.Remove(vehicle);
             }
 
             await _context.SaveChangesAsync();
@@ -123,7 +123,7 @@ namespace RentalVehicleService.Controllers
 
         private bool VehicleExists(int id)
         {
-            return _context.Vehicle.Any(e => e.VehicleId == id);
+            return _context.Vehicles.Any(e => e.VehicleId == id);
         }
     }
 }

@@ -1,0 +1,96 @@
+@model RentalVehicleService.Models.ViewModels.ProfileViewModel
+
+@{
+    ViewData["Title"] = "My Profile";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+                <div class="card-header bg-success text-white py-3">
+                    <h4 class="mb-0 fw-bold"><i class="bi bi-person-circle me-2"></i>My Profile</h4>
+                </div>
+                <div class="card-body p-4 p-md-5">
+                    
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            <i class="bi bi-check-circle-fill me-2"></i>@TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <form asp-action="Profile" method="post">
+                        <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
+
+                        <!-- Info section -->
+                        <div class="row g-4 mb-4">
+                            <div class="col-md-6">
+                                <label asp-for="FullName" class="form-label fw-semibold text-secondary"></label>
+                                <input asp-for="FullName" class="form-control form-control-lg bg-light" placeholder="John Doe" />
+                                <span asp-validation-for="FullName" class="text-danger small"></span>
+                            </div>
+                            
+                            <div class="col-md-6">
+                                <label asp-for="Email" class="form-label fw-semibold text-secondary"></label>
+                                <input asp-for="Email" class="form-control form-control-lg text-muted" readonly disabled />
+                                <span class="small text-muted"><i class="bi bi-info-circle me-1"></i>Email cannot be changed</span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label asp-for="PhoneNumber" class="form-label fw-semibold text-secondary"></label>
+                                <input asp-for="PhoneNumber" class="form-control form-control-lg bg-light" placeholder="+84 123 456 789" />
+                                <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                            </div>
+
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold text-secondary">Account Type</label>
+                                <input type="text" class="form-control form-control-lg text-muted" value="@Model.UserType" readonly disabled />
+                            </div>
+                        </div>
+
+                        <hr class="my-4 text-secondary opacity-25" />
+
+                        <h5 class="fw-bold mb-3 text-dark">Identity Documents</h5>
+                        <div class="row g-4 mb-4 justify-content-center">
+                            @if (Model.UserType == "Tourist")
+                            {
+                                <div class="col-md-6">
+                                    <label asp-for="PassportNumber" class="form-label fw-semibold text-secondary"></label>
+                                    <input asp-for="PassportNumber" class="form-control form-control-lg bg-light" />
+                                    <span asp-validation-for="PassportNumber" class="text-danger small"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="Nationality" class="form-label fw-semibold text-secondary"></label>
+                                    <input asp-for="Nationality" class="form-control form-control-lg bg-light" />
+                                    <span asp-validation-for="Nationality" class="text-danger small"></span>
+                                </div>
+                            }
+                            else
+                            {
+                                <div class="col-md-12">
+                                    <label asp-for="CCCD" class="form-label fw-semibold text-secondary"></label>
+                                    <input asp-for="CCCD" class="form-control form-control-lg bg-light" placeholder="012345678910" />
+                                    <span asp-validation-for="CCCD" class="text-danger small"></span>
+                                </div>
+                            }
+                        </div>
+
+                        <div class="d-grid gap-2 mt-5">
+                            <input type="hidden" asp-for="UserType" />
+                            <input type="hidden" asp-for="Email" />
+                            <button type="submit" class="btn btn-success btn-lg fw-bold rounded-3">
+                                <i class="bi bi-save me-2"></i>Save Changes
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

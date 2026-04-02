@@ -1,7 +1,7 @@
 ﻿@model RentalVehicleService.Models.Station
 
 @{
-    ViewData["Title"] = "Thêm Trạm Mới";
+    ViewData["Title"] = "Add New Station";
 }
 
 <div class="container py-4">
@@ -9,32 +9,32 @@
         <div class="col-md-8">
             <div class="card shadow-sm border-0">
                 <div class="card-header bg-primary text-white">
-                    <h4 class="mb-0 fw-bold">Thêm Trạm Xe Mới</h4>
+                    <h4 class="mb-0 fw-bold">Add New Station</h4>
                 </div>
                 <div class="card-body p-4">
                     <form asp-action="Create">
                         <div asp-validation-summary="ModelOnly" class="text-danger mb-3"></div>
 
                         <div class="mb-3">
-                            <label asp-for="Name" class="form-label fw-bold">Tên Trạm</label>
-                            <input asp-for="Name" class="form-control" placeholder="VD: Trạm Thảo Điền" />
+                            <label asp-for="Name" class="form-label fw-bold">Station Name</label>
+                            <input asp-for="Name" class="form-control" placeholder="VD: Thao Dien Station" />
                             <span asp-validation-for="Name" class="text-danger"></span>
                         </div>
 
                         <div class="mb-3">
-                            <label asp-for="Address" class="form-label fw-bold">Địa chỉ</label>
-                            <input asp-for="Address" class="form-control" placeholder="VD: Quận 2, TP.HCM" />
+                            <label asp-for="Address" class="form-label fw-bold">Address</label>
+                            <input asp-for="Address" class="form-control" placeholder="VD: District 2, HCMC" />
                             <span asp-validation-for="Address" class="text-danger"></span>
                         </div>
 
                         <div class="row">
                             <div class="col-md-6 mb-3">
-                                <label asp-for="TotalCapacity" class="form-label fw-bold">Sức chứa tối đa</label>
+                                <label asp-for="TotalCapacity" class="form-label fw-bold">Total Capacity</label>
                                 <input asp-for="TotalCapacity" class="form-control" type="number" min="1" />
                                 <span asp-validation-for="TotalCapacity" class="text-danger"></span>
                             </div>
                             <div class="col-md-6 mb-3">
-                                <label asp-for="CurrentCount" class="form-label fw-bold">Số xe hiện tại (Mặc định 0)</label>
+                                <label asp-for="CurrentCount" class="form-label fw-bold">Current Count (Default 0)</label>
                                 <input asp-for="CurrentCount" class="form-control" type="number" min="0" value="0" />
                                 <span asp-validation-for="CurrentCount" class="text-danger"></span>
                             </div>
@@ -42,12 +42,12 @@
 
                         <div class="form-check form-switch mb-4">
                             <input class="form-check-input" asp-for="IsActive" checked />
-                            <label class="form-check-label fw-bold" asp-for="IsActive">Đang hoạt động</label>
+                            <label class="form-check-label fw-bold" asp-for="IsActive">Active</label>
                         </div>
 
                         <div class="d-flex justify-content-between">
-                            <a asp-action="Index" class="btn btn-secondary">Quay lại danh sách</a>
-                            <button type="submit" class="btn btn-primary fw-bold">Lưu Trạm Xe</button>
+                            <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+                            <button type="submit" class="btn btn-primary fw-bold">Save Station</button>
                         </div>
                     </form>
                 </div>
