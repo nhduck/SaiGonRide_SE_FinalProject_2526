@@ -64,6 +64,15 @@
 
         <!-- Right Side Panel -->
         <div class="col-lg-4">
+            <!-- Map Card -->
+            <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
+                <div class="card-body p-0">
+                    <div id="map" style="height: 250px; z-index: 1;"></div>
+                    <div class="p-3 bg-light text-center small text-muted font-monospace">
+                        @Model.Latitude.ToString("0.00000"), @Model.Longitude.ToString("0.00000")
+                    </div>
+                </div>
+            </div>
             <!-- Capacity Card -->
             <div class="card border-0 shadow-sm rounded-4 mb-4">
                 <div class="card-body p-4">
@@ -104,3 +113,23 @@
     .hover-lift { transition: transform 0.15s ease-in-out, box-shadow 0.15s ease-in-out; }
     .hover-lift:hover { transform: translateY(-2px); box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1) !important;}
 </style>
+
+@section Scripts {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            var lat = @Model.Latitude;
+            var lng = @Model.Longitude;
+            
+            // If completely 0,0, map won't look great, but it's read-only anyway.
+            var map = L.map('map').setView([lat, lng], 15);
+            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+                attribution: '© OpenStreetMap contributors'
+            }).addTo(map);
+
+            L.marker([lat, lng]).addTo(map)
+                .bindPopup('<b>@Model.Name</b><br>@Model.Address').openPopup();
+        });
+    </script>
+}

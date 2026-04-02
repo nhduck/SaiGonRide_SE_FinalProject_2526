@@ -18,9 +18,17 @@
             <h1 class="h3 mb-1 text-gray-800 fw-bold"><i class="bi bi-geo-alt-fill text-primary me-2"></i>Stations Management</h1>
             <p class="text-muted mb-0">Manage all bike rental stations, monitor capacity and maintain operational status.</p>
         </div>
-        <a asp-action="Create" class="btn btn-primary shadow-sm rounded-pill px-4 text-nowrap">
-            <i class="bi bi-plus-lg me-2"></i>Add New Station
-        </a>
+        <div class="d-flex gap-3">
+            <div class="input-group shadow-sm rounded-pill overflow-hidden bg-white border" style="min-width: 280px;">
+                <span class="input-group-text bg-white border-0 ps-3 pe-2 text-muted">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" id="stationSearchBox" class="form-control border-0 shadow-none ps-0" placeholder="Search station...">
+            </div>
+            <a asp-action="Create" class="btn btn-primary shadow-sm rounded-pill px-4 text-nowrap d-flex align-items-center">
+                <i class="bi bi-plus-lg me-2"></i>Add New Station
+            </a>
+        </div>
     </div>
 
     <!-- Summary Cards -->
@@ -199,3 +207,49 @@
         box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08) !important;
     }
 </style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Real-time Search Logic
+            const searchBox = document.getElementById('stationSearchBox');
+            if(searchBox) {
+                searchBox.addEventListener('keyup', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const tableRows = document.querySelectorAll('.custom-table tbody tr');
+                    
+                    tableRows.forEach(row => {
+                        const name = row.querySelector('.fw-bold.text-dark.fs-6')?.textContent.toLowerCase() || '';
+                        const address = row.querySelector('.text-muted .bi-geo-alt')?.parentNode.textContent.toLowerCase() || '';
+                        
+                        if (name.includes(searchTerm) || address.includes(searchTerm)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            }
+
+            // Toast Notifications
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <text>
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: '@TempData["SuccessMessage"]',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'rounded-4 shadow-sm border'
+                    }
+                });
+                </text>
+            }
+        });
+    </script>
+}

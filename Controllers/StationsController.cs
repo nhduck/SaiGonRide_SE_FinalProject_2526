@@ -54,7 +54,7 @@ namespace RentalVehicleService.Controllers
         // POST: Stations/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StationId,Name,Address,TotalCapacity,CurrentCount,IsActive")] Station station)
+        public async Task<IActionResult> Create([Bind("StationId,Name,Address,Latitude,Longitude,TotalCapacity,CurrentCount,IsActive")] Station station)
         {
             // Không cho phép số xe hiện tại lớn hơn sức chứa
             if (station.CurrentCount > station.TotalCapacity)
@@ -65,6 +65,7 @@ namespace RentalVehicleService.Controllers
             {
                 _context.Add(station);
                 await _context.SaveChangesAsync();
+                TempData["SuccessMessage"] = "Station created successfully!";
                 return RedirectToAction(nameof(Index));
             }
             return View(station);
@@ -95,7 +96,7 @@ namespace RentalVehicleService.Controllers
         // POST: Stations/Edit
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StationId,Name,Address,TotalCapacity,CurrentCount,IsActive")] Station station)
+        public async Task<IActionResult> Edit(int id, [Bind("StationId,Name,Address,Latitude,Longitude,TotalCapacity,CurrentCount,IsActive")] Station station)
         {
             if (id != station.StationId)
             {
@@ -120,6 +121,7 @@ namespace RentalVehicleService.Controllers
                         throw;
                     }
                 }
+                TempData["SuccessMessage"] = "Station updated successfully!";
                 return RedirectToAction(nameof(Index));
             }
             return View(station);
@@ -155,6 +157,7 @@ namespace RentalVehicleService.Controllers
             }
 
             await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Station deleted successfully!";
             return RedirectToAction(nameof(Index));
         }
 
