@@ -50,7 +50,7 @@
                         <tr>
                             <td class="text-muted">Coordinates:</td>
                             <td>
-                                @if (Model.Latitude.HasValue && Model.Longitude.HasValue)
+                                @if (Model.Latitude != 0 && Model.Longitude !=0)
                                 {
                                     <a href="https://www.google.com/maps/search/?api=1&query=@Model.Latitude,@Model.Longitude" target="_blank" class="text-decoration-none">
                                         <i class="bi bi-map me-1"></i>@Model.Latitude, @Model.Longitude

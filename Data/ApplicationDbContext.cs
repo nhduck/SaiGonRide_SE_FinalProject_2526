@@ -12,10 +12,7 @@ namespace RentalVehicleService.Data
         }
 
         public DbSet<Station> Stations { get; set; }
-<<<<<<<<< Temporary merge branch 1
-        public DbSet<RentalVehicleService.Models.Vehicle> Vehicle { get; set; }
-        }
-=========
+        public DbSet<RentalVehicleService.Models.Vehicle> Vehicles { get; set; }
+        public DbSet<RentalVehicleService.Models.Rental> Rentals { get; set; }
     }
->>>>>>>>> Temporary merge branch 2
 }

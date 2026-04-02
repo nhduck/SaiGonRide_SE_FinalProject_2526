@@ -7,6 +7,9 @@ namespace RentalVehicleService.Models
     {
         [Key]
         public int StationId { get; set; }
+        public double Latitude { get; set; }
+        public double Longitude { get; set; }
+        public virtual ICollection<RentalVehicleService.Models.Vehicle> Vehicles { get; set; }
 
         [Required(ErrorMessage = "Station name cannot be empty")]
         [StringLength(100)]
@@ -28,11 +31,11 @@ namespace RentalVehicleService.Models
         [Display(Name = "Active Status")]
         public bool IsActive { get; set; } = true;
 
-        // Logic tính toán: Tỷ lệ lấp đầy (không lưu vào DB)
+        // Logic tính toán: Tỷ lệ lấp đầy
         [NotMapped]
         public double FillRate => TotalCapacity > 0 ? (double)CurrentCount / TotalCapacity : 0;
 
-        // Logic nghiệp vụ: Cảnh báo bãi rỗng (< 20% sẽ được giảm giá 15%)
+        // Logic nghiệp vụ: Cảnh báo bãi rỗng
         [NotMapped]
         public bool IsLowInventory => FillRate < 0.20;
     }

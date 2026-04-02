@@ -1,21 +1,54 @@
 @model IEnumerable<RentalVehicleService.Models.Station>
 
 @{
-    ViewData["Title"] = "Quản lý Trạm (UC-02)";
+    ViewData["Title"] = "Home";
+    var searchQuery = Context.Request.Query["query"].ToString();
 }
 
-<div class="container-fluid py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-primary">🚉 Quản lý Trạm Xe</h2>
-        <a asp-action="Create" class="btn btn-primary fw-bold">+ Thêm Trạm Mới</a>
-    </div>
+<!-- HERO BANNER -->
+<section class="sr-hero">
+    <div class="container">
+        <div class="row align-items-center min-vh-50">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold text-white mb-3">
+                    Fast rentals,<br/>go anywhere
+                </h1>
+                <p class="lead text-white-50 mb-4">
+                    A network of bikes and e-scooters distributed across Ho Chi Minh City.
+                    Green, convenient, and modern mobility.
+                </p>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        @foreach (var item in Model)
-        {
-            // Tính phần trăm lấp đầy bãi xe
-            var fillPct = (int)(item.FillRate * 100);
-            var barColor = item.IsLowInventory ? "bg-danger" : (fillPct >= 80 ? "bg-warning" : "bg-success");
+                <!-- Mini Stats -->
+                <div class="d-flex gap-4 flex-wrap mt-5">
+                    <div class="text-center">
+                        <div class="fs-3 fw-bold text-white">5+</div>
+                        <div class="small text-white-50">Stations</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="fs-3 fw-bold text-white">10+</div>
+                        <div class="small text-white-50">Vehicles</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="fs-3 fw-bold text-white">2+</div>
+                        <div class="small text-white-50">Active Trips</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-5 text-center d-none d-lg-block">
+                <div class="sr-hero-illustration position-relative mx-auto mt-4" style="width: 250px; height: 200px; color: rgba(255,255,255,0.15);">
+                    <!-- 6 people crowd illustration -->
+                    <i class="bi bi-person-fill position-absolute" style="font-size: 5rem; top: 20px; left: 10px;"></i>
+                    <i class="bi bi-person-fill position-absolute" style="font-size: 7rem; top: 0; left: 60px; z-index: 2;"></i>
+                    <i class="bi bi-person-fill position-absolute" style="font-size: 5rem; top: 20px; right: 10px;"></i>
+                    
+                    <i class="bi bi-person-fill position-absolute" style="font-size: 4rem; bottom: -10px; left: 30px;"></i>
+                    <i class="bi bi-person-fill position-absolute" style="font-size: 6rem; bottom: -20px; left: 90px; z-index: 3;"></i>
+                    <i class="bi bi-person-fill position-absolute" style="font-size: 4rem; bottom: -10px; right: 30px;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
 
 <!-- SEARCH RESULTS NOTICE -->
 @if (!string.IsNullOrEmpty(searchQuery))
