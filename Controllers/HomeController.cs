@@ -1,5 +1,6 @@
 using System.Diagnostics;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using RentalVehicleService.Data;
 using RentalVehicleService.Models;
 
@@ -16,13 +17,59 @@ namespace RentalVehicleService.Controllers
             _context = context;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string? query)
         {
-            var stations = _context.Stations.ToList();
-            return View(stations ?? []);
+            var stationsQuery = _context.Stations
+                .Where(s => s.IsActive)
+                .Include(s => s.Vehicles);
+
+            if (!string.IsNullOrWhiteSpace(query))
+            {
+                stationsQuery = stationsQuery
+                    .Where(s => s.Name.Contains(query) || s.Address.Contains(query))
+                    .Include(s => s.Vehicles);
+            }
+
+            var stations = await stationsQuery.Take(6).ToListAsync();
+
+            // Stats for hero
+            ViewBag.TotalStations = await _context.Stations.CountAsync(s => s.IsActive);
+            ViewBag.TotalVehicles = await _context.Vehicles.CountAsync();
+            ViewBag.ActiveRentals = await _context.Rentals.CountAsync(r => r.Status == RentalStatus.Active);
+            ViewBag.SearchQuery = query;
+
+            return View(stations);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> SearchStations(string query)
+        {
+            if (string.IsNullOrWhiteSpace(query))
+                return Json(new List<object>());
+
+            var stations = await _context.Stations
+                .Where(s => s.IsActive &&
+                       (s.Name.Contains(query) || s.Address.Contains(query)))
+                .Select(s => new
+                {
+                    s.StationId,
+                    s.Name,
+                    s.Address,
+                    s.CurrentCount,
+                    s.TotalCapacity
+                })
+                .Take(5)
+                .ToListAsync();
+
+            return Json(stations);
         }
 
         public IActionResult Privacy()
+        {
+            return View();
+        }
+
+        public IActionResult Guide()
         {
             return View();
         }

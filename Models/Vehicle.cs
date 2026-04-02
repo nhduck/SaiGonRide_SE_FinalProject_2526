@@ -1,20 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
+using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace RentalVehicleService.Models
 {
     public enum VehicleState
     {
-        Available, // Sẵn sàng
-        Rented,    // Đang thuê
-        Charging, // Đang sạc
-        Maintenance // Bảo trì
-
+        Available,    // Sẵn sàng
+        Rented,       // Đang thuê
+        Charging,     // Đang sạc
+        Maintenance   // Bảo trì
     }
 
     public enum VehicleType
@@ -28,23 +23,36 @@ namespace RentalVehicleService.Models
         [Key]
         public int VehicleId { get; set; }
 
-        [Required(ErrorMessage = "Tên dòng xe không được để trống")]
+        [Required(ErrorMessage = "Vehicle model cannot be empty")]
+        [Display(Name = "Vehicle Model")]
         public string? VehicleModel { get; set; }
 
         [Required]
+        [Display(Name = "Rental Price (VND/min)")]
         public double Price { get; set; }
 
-        [Range(-1, 100, ErrorMessage = "Pin phải từ 0% đến 100%")]
-        public int BatteryPercentage {  get; set; }
+        [Range(-1, 100, ErrorMessage = "Battery must be between 0% and 100%")]
+        [Display(Name = "Battery (%)")]
+        public int BatteryPercentage { get; set; }
 
+        [Display(Name = "State")]
         public VehicleState State { get; set; }
 
+        [Display(Name = "Type")]
         public VehicleType Type { get; set; }
 
-        public DateTime LastMaintenance {get; set; }
+        [Display(Name = "Last Maintenance Date")]
+        public DateTime LastMaintenance { get; set; }
+
+        [Display(Name = "Current Station")]
         public int? CurrentStationId { get; set; }
 
-        //Chỉ dùng để kiểm tra, không lưu Database
+        // Navigation property
+        [ForeignKey("CurrentStationId")]
+        public Station? CurrentStation { get; set; }
+
+        // Chỉ dùng để kiểm tra, không lưu Database
+        [NotMapped]
         public bool IsReadyForRent => BatteryPercentage > 20;
     }
 }
