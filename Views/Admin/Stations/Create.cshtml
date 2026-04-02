@@ -1,0 +1,67 @@
+@model RentalVehicleService.Models.Station
+
+@{
+    ViewData["Title"] = "Add New Station";
+}
+
+<div class="mb-4">
+    <h4 class="fw-bold"><i class="bi bi-plus-circle me-2"></i>Add New Station</h4>
+    <p class="text-muted small">Enter details for the new rental station</p>
+</div>
+
+<div class="card border-0 shadow-sm">
+    <div class="card-body p-4">
+        <form asp-action="Create" method="post">
+            <div class="row g-4">
+                <!-- Left column -->
+                <div class="col-md-7">
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label fw-semibold"></label>
+                        <input asp-for="Name" class="form-control" placeholder="e.g. Ben Thanh Station" />
+                        <span asp-validation-for="Name" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label asp-for="Address" class="form-label fw-semibold"></label>
+                        <input asp-for="Address" class="form-control" placeholder="e.g. 1 Le Loi, District 1, HCMC" />
+                        <span asp-validation-for="Address" class="text-danger small"></span>
+                    </div>
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label asp-for="Latitude" class="form-label fw-semibold"></label>
+                            <input asp-for="Latitude" class="form-control" placeholder="10.7725" />
+                        </div>
+                        <div class="col-md-6">
+                            <label asp-for="Longitude" class="form-label fw-semibold"></label>
+                            <input asp-for="Longitude" class="form-control" placeholder="106.6980" />
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Right column -->
+                <div class="col-md-5">
+                    <div class="mb-3">
+                        <label asp-for="TotalCapacity" class="form-label fw-semibold"></label>
+                        <input asp-for="TotalCapacity" class="form-control" placeholder="30" />
+                        <span asp-validation-for="TotalCapacity" class="text-danger small"></span>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label fw-semibold">Status</label>
+                        <div class="form-check form-switch">
+                            <input asp-for="IsActive" class="form-check-input" role="switch" checked />
+                            <label asp-for="IsActive" class="form-check-label">Active</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <hr class="my-4" />
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-success px-4">
+                    <i class="bi bi-check-lg me-1"></i>Create Station
+                </button>
+                <a href="/Admin/Stations" class="btn btn-outline-secondary">Cancel</a>
+            </div>
+        </form>
+    </div>
+</div>
