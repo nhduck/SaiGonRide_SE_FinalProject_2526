@@ -1,0 +1,165 @@
+@model RentalVehicleService.Models.ViewModels.RegisterViewModel
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+<div class="container py-5">
+    <div class="row justify-content-center">
+        <div class="col-lg-7 col-md-9">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4 p-md-5">
+                    <!-- Header -->
+                    <div class="text-center mb-4">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+                             stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                            <circle cx="5.5" cy="17.5" r="3.5"/>
+                            <circle cx="18.5" cy="17.5" r="3.5"/>
+                            <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2"/>
+                        </svg>
+                        <h4 class="mt-2 fw-bold">Create SaigonRide Account</h4>
+                        <p class="text-muted small">Register to start riding</p>
+                    </div>
+
+                    <!-- Validation errors -->
+                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(v => v.Errors.Any()))
+                    {
+                        <div class="alert alert-danger py-2 small">
+                            <i class="bi bi-exclamation-triangle me-1"></i>
+                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                            {
+                                <div>@error.ErrorMessage</div>
+                            }
+                        </div>
+                    }
+
+                    <!-- User Type Tabs -->
+                    <ul class="nav nav-tabs mb-4" id="userTypeTabs" role="tablist">
+                        <li class="nav-item flex-fill" role="presentation">
+                            <button class="nav-link w-100 active" id="local-tab" data-bs-toggle="tab"
+                                    data-bs-target="#local-panel" type="button" role="tab"
+                                    onclick="setUserType('Local')">
+                                🏙️ Local Resident
+                            </button>
+                        </li>
+                        <li class="nav-item flex-fill" role="presentation">
+                            <button class="nav-link w-100" id="tourist-tab" data-bs-toggle="tab"
+                                    data-bs-target="#tourist-panel" type="button" role="tab"
+                                    onclick="setUserType('Tourist')">
+                                ✈️ Tourist
+                            </button>
+                        </li>
+                    </ul>
+
+                    <form asp-action="Register" method="post" id="registerForm">
+                        <input type="hidden" name="UserType" id="userTypeInput" value="Local" />
+
+                        <!-- Tab content -->
+                        <div class="tab-content">
+                            <!-- LOCAL COMMUTER TAB -->
+                            <div class="tab-pane fade show active" id="local-panel" role="tabpanel">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label asp-for="FullName" class="form-label fw-semibold small"></label>
+                                        <input asp-for="FullName" class="form-control" placeholder="John Doe" />
+                                        <span asp-validation-for="FullName" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-12">
+                                        <label asp-for="Email" class="form-label fw-semibold small"></label>
+                                        <input asp-for="Email" class="form-control" placeholder="email@example.com" />
+                                        <span asp-validation-for="Email" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="Password" class="form-label fw-semibold small"></label>
+                                        <input asp-for="Password" class="form-control" placeholder="Min 6 characters" />
+                                        <span asp-validation-for="Password" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="ConfirmPassword" class="form-label fw-semibold small"></label>
+                                        <input asp-for="ConfirmPassword" class="form-control" placeholder="Re-enter password" />
+                                        <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="CCCD" class="form-label fw-semibold small"></label>
+                                        <input asp-for="CCCD" class="form-control" placeholder="9 or 12 digits" />
+                                        <span asp-validation-for="CCCD" class="text-danger small"></span>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label asp-for="PhoneNumber" class="form-label fw-semibold small"></label>
+                                        <input asp-for="PhoneNumber" class="form-control" placeholder="0901234567" />
+                                        <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- TOURIST TAB -->
+                            <div class="tab-pane fade" id="tourist-panel" role="tabpanel">
+                                <div class="row g-3">
+                                    <div class="col-12">
+                                        <label class="form-label fw-semibold small">Full Name</label>
+                                        <input name="FullName" class="form-control" placeholder="John Doe" />
+                                    </div>
+                                    <div class="col-12">
+                                        <label class="form-label fw-semibold small">Email</label>
+                                        <input name="Email" class="form-control" placeholder="john@example.com" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold small">Password</label>
+                                        <input type="password" name="Password" class="form-control" placeholder="Min 6 characters" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold small">Confirm Password</label>
+                                        <input type="password" name="ConfirmPassword" class="form-control" placeholder="Re-enter password" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold small">Passport Number</label>
+                                        <input name="PassportNumber" class="form-control" placeholder="AB1234567" />
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="form-label fw-semibold small">Nationality</label>
+                                        <select name="Nationality" class="form-select">
+                                            <option value="">Select country...</option>
+                                            <option value="US">United States</option>
+                                            <option value="UK">United Kingdom</option>
+                                            <option value="JP">Japan</option>
+                                            <option value="KR">South Korea</option>
+                                            <option value="AU">Australia</option>
+                                            <option value="FR">France</option>
+                                            <option value="DE">Germany</option>
+                                            <option value="SG">Singapore</option>
+                                            <option value="TH">Thailand</option>
+                                            <option value="CN">China</option>
+                                            <option value="OTHER">Other</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Submit -->
+                        <div class="mt-4">
+                            <button type="submit" class="btn btn-success w-100 py-2 fw-semibold">
+                                <i class="bi bi-person-plus me-1"></i>Register
+                            </button>
+                        </div>
+                    </form>
+
+                    <div class="text-center mt-3">
+                        <span class="small text-muted">Already have an account?</span>
+                        <a asp-action="Login" class="small fw-semibold text-decoration-none text-sr-green ms-1">
+                            Log In
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        function setUserType(type) {
+            document.getElementById('userTypeInput').value = type;
+        }
+    </script>
+}

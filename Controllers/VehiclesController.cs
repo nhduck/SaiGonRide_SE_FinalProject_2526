@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -22,11 +22,11 @@ namespace RentalVehicleService.Controllers
         // GET: Vehicles
         public async Task<IActionResult> Index()
         {
-            int TotalVehicles = _context.Vehicle.Count();
-            int TotalRentable =  _context.Vehicle.Count(v => v.BatteryPercentage > 20);
+            int TotalVehicles = _context.Vehicles.Count();
+            int TotalRentable =  _context.Vehicles.Count(v => v.BatteryPercentage > 20);
             ViewBag.TotalVehicles = TotalVehicles;
             ViewBag.TotalRentable = TotalRentable;
-            return View(await _context.Vehicle.ToListAsync());
+            return View(await _context.Vehicles.ToListAsync());
         }
 
         // GET: Vehicles/Details/5
@@ -37,7 +37,7 @@ namespace RentalVehicleService.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicle
+            var vehicle = await _context.Vehicles
                 .FirstOrDefaultAsync(m => m.VehicleId == id);
             if (vehicle == null)
             {
@@ -77,7 +77,7 @@ namespace RentalVehicleService.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicle.FindAsync(id);
+            var vehicle = await _context.Vehicles.FindAsync(id);
             if (vehicle == null)
             {
                 return NotFound();
@@ -128,7 +128,7 @@ namespace RentalVehicleService.Controllers
                 return NotFound();
             }
 
-            var vehicle = await _context.Vehicle
+            var vehicle = await _context.Vehicles
                 .FirstOrDefaultAsync(m => m.VehicleId == id);
             if (vehicle == null)
             {
@@ -143,10 +143,10 @@ namespace RentalVehicleService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var vehicle = await _context.Vehicle.FindAsync(id);
+            var vehicle = await _context.Vehicles.FindAsync(id);
             if (vehicle != null)
             {
-                _context.Vehicle.Remove(vehicle);
+                _context.Vehicles.Remove(vehicle);
             }
 
             await _context.SaveChangesAsync();
@@ -155,7 +155,7 @@ namespace RentalVehicleService.Controllers
 
         private bool VehicleExists(int id)
         {
-            return _context.Vehicle.Any(e => e.VehicleId == id);
+            return _context.Vehicles.Any(e => e.VehicleId == id);
         }
     }
 }

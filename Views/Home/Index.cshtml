@@ -1,59 +1,249 @@
-﻿@model IEnumerable<RentalVehicleService.Models.Station> 
-<RentalVehicleService.Models.Vehicle>
+@model IEnumerable<RentalVehicleService.Models.Station>
 
 @{
-    ViewData["Title"] = "Station Management";
+    ViewData["Title"] = "Home";
+    var searchQuery = Context.Request.Query["query"].ToString();
 }
 
-<div class="container-fluid py-4">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h2 class="fw-bold text-primary">🚉 Station Management</h2>
-        <a asp-action="Create" class="btn btn-primary fw-bold">+ Add New Station</a>
-    </div>
+<!-- HERO BANNER -->
+<section class="sr-hero">
+    <div class="container">
+        <div class="row align-items-center min-vh-50">
+            <div class="col-lg-7">
+                <h1 class="display-4 fw-bold text-white mb-3">
+                    Fast rentals,<br/>go anywhere
+                </h1>
+                <p class="lead text-white-50 mb-4">
+                    A network of bikes and e-scooters distributed across Ho Chi Minh City.
+                    Green, convenient, and modern mobility.
+                </p>
 
-    <div class="row row-cols-1 row-cols-md-3 g-4">
-        @foreach (var item in Model)
-        {
-            // Tính phần trăm lấp đầy bãi xe
-            var fillPct = (int)(item.FillRate * 100);
-            var barColor = item.IsLowInventory ? "bg-danger" : (fillPct >= 80 ? "bg-warning" : "bg-success");
-
-            <div class="col">
-                <div class="card h-100 shadow-sm border-0">
-                    <div class="card-body">
-                        <div class="d-flex justify-content-between align-items-start mb-2">
-                            <h5 class="card-title fw-bold mb-0">@item.Name</h5>
-                            @if (item.IsLowInventory)
-                            {
-                                <span class="badge bg-danger rounded-pill">⚠ Low Inventory</span>
-                            }
-                            else if (!item.IsActive)
-                            {
-                                <span class="badge bg-secondary rounded-pill">Đã đóng cửa</span>
-                            }
-                        </div>
-
-                        <p class="text-muted small mb-3">
-                            <i class="bi bi-geo-alt-fill"></i> @item.Address
-                        </p>
-
-                        <div class="d-flex justify-content-between mb-1">
-                            <small class="fw-semibold">Sức chứa: @item.CurrentCount / @item.TotalCapacity xe</small>
-                            <small class="fw-bold text-muted">@fillPct%</small>
-                        </div>
-
-                        <div class="progress mb-4" style="height: 8px;">
-                            <div class="progress-bar @barColor" role="progressbar" style="width: @fillPct%" aria-valuenow="@fillPct" aria-valuemin="0" aria-valuemax="100"></div>
-                        </div>
-
-                        <div class="btn-group w-100" role="group">
-                            <a asp-action="Edit" asp-route-id="@item.StationId" class="btn btn-outline-warning btn-sm">Sửa</a>
-                            <a asp-action="Details" asp-route-id="@item.StationId" class="btn btn-outline-info btn-sm">Chi tiết</a>
-                            <a asp-action="Delete" asp-route-id="@item.StationId" class="btn btn-outline-danger btn-sm">Xóa</a>
-                        </div>
+                <!-- Mini Stats -->
+                <div class="d-flex gap-4 flex-wrap mt-5">
+                    <div class="text-center">
+                        <div class="fs-3 fw-bold text-white">5+</div>
+                        <div class="small text-white-50">Stations</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="fs-3 fw-bold text-white">10+</div>
+                        <div class="small text-white-50">Vehicles</div>
+                    </div>
+                    <div class="text-center">
+                        <div class="fs-3 fw-bold text-white">2+</div>
+                        <div class="small text-white-50">Active Trips</div>
                     </div>
                 </div>
             </div>
+            <div class="col-lg-5 text-center d-none d-lg-block">
+                <div class="sr-hero-illustration position-relative mx-auto mt-4" style="width: 250px; height: 200px; color: rgba(255,255,255,0.15);">
+                    <!-- 6 people crowd illustration -->
+                    <i class="bi bi-person-fill position-absolute" style="font-size: 5rem; top: 20px; left: 10px;"></i>
+                    <i class="bi bi-person-fill position-absolute" style="font-size: 7rem; top: 0; left: 60px; z-index: 2;"></i>
+                    <i class="bi bi-person-fill position-absolute" style="font-size: 5rem; top: 20px; right: 10px;"></i>
+                    
+                    <i class="bi bi-person-fill position-absolute" style="font-size: 4rem; bottom: -10px; left: 30px;"></i>
+                    <i class="bi bi-person-fill position-absolute" style="font-size: 6rem; bottom: -20px; left: 90px; z-index: 3;"></i>
+                    <i class="bi bi-person-fill position-absolute" style="font-size: 4rem; bottom: -10px; right: 30px;"></i>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- SEARCH RESULTS NOTICE -->
+@if (!string.IsNullOrEmpty(searchQuery))
+{
+    <div class="container mt-4">
+        <div class="alert alert-info d-flex align-items-center" role="alert">
+            <i class="bi bi-search me-2"></i>
+            Search results for: <strong class="ms-1">"@searchQuery"</strong>
+            <a asp-action="Index" class="btn btn-sm btn-outline-secondary ms-auto">
+                <i class="bi bi-x-lg me-1"></i>Clear Filter
+            </a>
+        </div>
+    </div>
+}
+
+<!-- STATION HORIZONTAL CAROUSEL -->
+<section class="py-5" id="station-search">
+    <div class="container">
+        <div class="text-center mb-5">
+            <h2 class="fw-bold">📍 Stations Near You</h2>
+            <p class="text-muted">Pick a station, choose your ride, and start your journey</p>
+        </div>
+
+        @if (Model.Any())
+        {
+            <div class="d-flex flex-column gap-3 mt-4">
+                @foreach (var station in Model)
+                {
+                    var fillPct = (int)(station.FillRate * 100);
+                    var fillColorClass = fillPct < 60 ? "fill-green" : (fillPct < 85 ? "fill-amber" : "fill-red");
+
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden station-horizontal-card transition-all" id="station-@station.StationId">
+                        <div class="card-body p-4 d-flex flex-column flex-md-row align-items-md-center gap-4">
+                            <!-- Info Section (Left) -->
+                            <div class="flex-grow-1">
+                                <div class="d-flex align-items-center mb-1">
+                                    <h5 class="fw-bold mb-0 text-dark me-2">@station.Name</h5>
+                                    @if (station.IsLowInventory)
+                                    {
+                                        <span class="badge bg-danger rounded-pill px-2">Low Stock</span>
+                                    }
+                                </div>
+                                <div class="text-muted small mb-3">
+                                    <i class="bi bi-geo-alt-fill text-danger me-1"></i>@station.Address
+                                </div>
+
+                                <!-- Fill bar -->
+                                <div class="d-flex align-items-center gap-3">
+                                    <div class="fill-bar flex-grow-1 bg-light rounded-pill" style="height: 8px; max-width: 250px;">
+                                        <div class="fill-bar-inner @fillColorClass rounded-pill" style="width: @(fillPct)%; height: 100%;"></div>
+                                    </div>
+                                    <small class="text-secondary fw-semibold" style="min-width: 100px;">@station.CurrentCount / @station.TotalCapacity vehicles</small>
+                                    <span class="badge @(fillPct < 60 ? "bg-success" : fillPct < 85 ? "bg-warning text-dark" : "bg-danger")">@fillPct% Full</span>
+                                </div>
+                                @if (station.IsLowInventory)
+                                {
+                                    <div class="text-danger small mt-2 fw-semibold">
+                                        <i class="bi bi-tag-fill me-1"></i>Running out fast - 15% OFF!
+                                    </div>
+                                }
+                            </div>
+
+                            <!-- Actions Section (Right) -->
+                            <div class="d-flex gap-2 flex-shrink-0">
+                                @if (User.Identity?.IsAuthenticated == true)
+                                {
+                                    <a href="/Rentals/Checkout?stationId=@station.StationId&vehicleType=Standard"
+                                       class="btn btn-outline-success px-4 py-2 text-center d-flex flex-column align-items-center justify-content-center" style="min-width: 120px;">
+                                        <i class="bi bi-bicycle fs-4 mb-1"></i>
+                                        <span class="fw-semibold">Standard</span>
+                                        <small class="text-muted" style="font-size: 0.7rem;">500đ/min</small>
+                                    </a>
+                                    <a href="/Rentals/Checkout?stationId=@station.StationId&vehicleType=Electric"
+                                       class="btn btn-outline-primary px-4 py-2 text-center d-flex flex-column align-items-center justify-content-center" style="min-width: 120px;">
+                                        <i class="bi bi-lightning-charge fs-4 mb-1"></i>
+                                        <span class="fw-semibold">Electric</span>
+                                        <small class="text-muted" style="font-size: 0.7rem;">1.5kđ/min</small>
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-controller="Account" asp-action="Login"
+                                       class="btn btn-outline-success px-4 py-2 text-center d-flex flex-column align-items-center justify-content-center" style="min-width: 120px;">
+                                        <i class="bi bi-bicycle fs-4 mb-1"></i>
+                                        <span class="fw-semibold">Standard</span>
+                                    </a>
+                                    <a asp-controller="Account" asp-action="Login"
+                                       class="btn btn-outline-primary px-4 py-2 text-center d-flex flex-column align-items-center justify-content-center" style="min-width: 120px;">
+                                        <i class="bi bi-lightning-charge fs-4 mb-1"></i>
+                                        <span class="fw-semibold">Electric</span>
+                                    </a>
+                                }
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+        }
+        else
+        {
+            <div class="text-center py-5">
+                <i class="bi bi-geo fs-1 text-muted d-block mb-3"></i>
+                <h5 class="text-muted">No stations found</h5>
+                <p class="text-muted small">Please try searching with different keywords</p>
+                <a asp-action="Index" class="btn btn-outline-success mt-2">View All Stations</a>
+            </div>
         }
     </div>
-</div>
+</section>
+
+
+
+@section Styles {
+    <style>
+        .sr-hero {
+            background: linear-gradient(135deg, #16a34a 0%, #15803d 60%, #0f766e 100%);
+            padding: 4rem 0;
+            position: relative;
+            overflow: hidden;
+        }
+        .sr-hero::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            right: -20%;
+            width: 600px;
+            height: 600px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.05);
+        }
+        .sr-hero .input-group {
+            border-radius: var(--sr-radius-lg);
+            overflow: hidden;
+        }
+        .sr-search-dropdown {
+            position: absolute;
+            top: 4px;
+            left: 0;
+            right: 0;
+            background: #fff;
+            border-radius: var(--sr-radius);
+            box-shadow: var(--sr-shadow-lg);
+            z-index: 1050;
+            overflow: hidden;
+        }
+        .sr-search-dropdown-item {
+            padding: 0.75rem 1rem;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: background 0.15s;
+            text-decoration: none;
+            color: inherit;
+        }
+        .sr-search-dropdown-item:hover {
+            background: var(--sr-green-50);
+        }
+        .min-vh-50 {
+            min-height: 50vh;
+        }
+        /* Horizontal scroll classes */
+        .sr-horizontal-scroll {
+            overflow-x: auto;
+            -ms-overflow-style: none; /* IE and Edge */
+            scrollbar-width: thin; /* Firefox */
+        }
+        .sr-horizontal-scroll::-webkit-scrollbar {
+            height: 8px; /* WebKit browsers */
+            border-radius: 4px;
+        }
+        .sr-horizontal-scroll::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+            border-radius: 4px;
+        }
+        .sr-horizontal-scroll::-webkit-scrollbar-thumb {
+            background: #c1c1c1; 
+            border-radius: 4px;
+        }
+        .sr-horizontal-scroll::-webkit-scrollbar-thumb:hover {
+            background: #a8a8a8; 
+        }
+        .station-horizontal-card {
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .station-horizontal-card:hover {
+            transform: translateX(5px);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08) !important;
+        }
+        .transition-all {
+            transition: all 0.3s ease;
+        }
+    </style>
+}
+
+@section Scripts {
+
+}
