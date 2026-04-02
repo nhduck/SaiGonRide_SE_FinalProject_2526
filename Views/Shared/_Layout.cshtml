@@ -1,12 +1,168 @@
-﻿<!DOCTYPE html>
-<html lang="en">
+@using Microsoft.AspNetCore.Identity
+@inject SignInManager<RentalVehicleService.Models.ApplicationUser> SignInManager
+@inject UserManager<RentalVehicleService.Models.ApplicationUser> UserManager
+
+@{
+    var appUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
+    var displayName = string.IsNullOrWhiteSpace(appUser?.FullName) ? User.Identity?.Name : appUser.FullName;
+}
+<!DOCTYPE html>
+<html lang="vi">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>@ViewData["Title"] - RentalVehicleService</title>
+    <meta name="description" content="SaigonRide - Bike and e-scooter rental in HCMC" />
+    <title>@ViewData["Title"] - SaigonRide</title>
+    <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/RentalVehicleService.styles.css" asp-append-version="true" />
+    <style>
+        /* Premium FAB Styles */
+        .fab-wrapper {
+            position: fixed;
+            bottom: 25px;
+            right: 25px;
+            z-index: 1050;
+        }
+
+        .fab-btn {
+            width: 55px;
+            height: 55px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #16a34a, #15803d);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.5rem;
+            position: relative;
+            z-index: 1001;
+            transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+            box-shadow: 0 8px 16px rgba(22, 163, 74, 0.3);
+        }
+
+        .fab-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 14px 28px rgba(22, 163, 74, 0.4);
+        }
+
+        .pulse-animation::before {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: inherit;
+            border-radius: inherit;
+            z-index: -1;
+            animation: pulse 2s infinite;
+        }
+
+        @@keyframes pulse {
+            0% { transform: scale(1); opacity: 0.6; }
+            100% { transform: scale(1.5); opacity: 0; }
+        }
+
+        .fab-icon-main {
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+        }
+
+        .fab-icon-close {
+            position: absolute;
+            opacity: 0;
+            transform: rotate(-90deg) scale(0.5);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            font-size: 1.5rem;
+        }
+
+        .fab-checkbox:checked ~ .fab-btn .fab-icon-main {
+            opacity: 0;
+            transform: rotate(90deg) scale(0);
+        }
+
+        .fab-checkbox:checked ~ .fab-btn .fab-icon-close {
+            opacity: 1;
+            transform: rotate(0) scale(1);
+        }
+
+        .fab-checkbox:checked ~ .fab-btn::before {
+            animation: none;
+            opacity: 0;
+        }
+
+        .fab-menu {
+            position: absolute;
+            bottom: 70px;
+            right: 2px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            pointer-events: none;
+            align-items: flex-end;
+        }
+
+        .fab-item-container {
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            gap: 12px;
+        }
+
+        .fab-item {
+            width: 45px;
+            height: 45px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.25rem;
+            opacity: 0;
+            transform: translateY(20px) scale(0.8);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            border: none !important;
+        }
+
+        .fab-item:hover {
+            transform: scale(1.1) !important;
+            box-shadow: 0 8px 15px rgba(0,0,0,0.2) !important;
+        }
+
+        .fab-checkbox:checked ~ .fab-menu {
+            pointer-events: auto;
+        }
+
+        .fab-checkbox:checked ~ .fab-menu .fab-item {
+            opacity: 1;
+            transform: translateY(0) scale(1);
+        }
+
+        /* Staggered item animation */
+        .fab-item-container:nth-child(3) .fab-item { transition-delay: 0.05s; }
+        .fab-item-container:nth-child(2) .fab-item { transition-delay: 0.1s; }
+        .fab-item-container:nth-child(1) .fab-item { transition-delay: 0.15s; }
+
+        .fab-item-label {
+            background: #212529;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.85rem;
+            font-weight: 500;
+            opacity: 0;
+            pointer-events: none;
+            transform: translateX(10px);
+            transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+        }
+
+        /* Staggered label animation */
+        .fab-checkbox:checked ~ .fab-menu .fab-item-container:nth-child(3) .fab-item-label { transition-delay: 0.1s; opacity: 1; transform: translateX(0); }
+        .fab-checkbox:checked ~ .fab-menu .fab-item-container:nth-child(2) .fab-item-label { transition-delay: 0.15s; opacity: 1; transform: translateX(0); }
+        .fab-checkbox:checked ~ .fab-menu .fab-item-container:nth-child(1) .fab-item-label { transition-delay: 0.2s; opacity: 1; transform: translateX(0); }
+    </style>
+    @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <header>
@@ -23,7 +179,7 @@
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Index">Home</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link text-dark" asp-area="" asp-controller="Stations" asp-action="Index">Station Management</a>
+                            <a class="nav-link text-dark" asp-area="" asp-controller="Stations" asp-action="Index">Quản lý Trạm (UC-02)</a>
                         </li>
                         <li class="nav-item">
                             <a class="nav-link text-dark" asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
@@ -40,14 +196,71 @@
         </main>
     </div>
 
-    <footer class="border-top footer text-muted">
-        <div class="container">
-            &copy; 2026 - RentalVehicleService - <a asp-area="" asp-controller="Home" asp-action="Privacy">Privacy</a>
+            <hr class="my-4 border-secondary" />
+            <div class="text-center text-white-50 small pb-3">
+                &copy; 2026 SaigonRide. All rights reserved.
+            </div>
         </div>
     </footer>
+
+    <!-- Premium Expandable FAB Menu -->
+    <div class="fab-wrapper">
+        <input type="checkbox" id="fab-checkbox" class="fab-checkbox d-none" />
+        <label class="fab-btn shadow-lg pulse-animation" for="fab-checkbox">
+            <i class="bi bi-chat-dots-fill fab-icon-main"></i>
+            <i class="bi bi-x-lg fab-icon-close"></i>
+        </label>
+        
+        <div class="fab-menu">
+            <!-- Item 1: Facebook -->
+            <div class="fab-item-container">
+                <span class="fab-item-label">Messenger</span>
+                <a href="#" class="btn rounded-circle shadow-sm fab-item text-white" style="background-color: #0084FF;" title="Facebook">
+                    <i class="bi bi-messenger"></i>
+                </a>
+            </div>
+
+            <!-- Item 2: Instagram -->
+            <div class="fab-item-container">
+                <span class="fab-item-label">Instagram</span>
+                <a href="#" class="btn rounded-circle shadow-sm fab-item text-white" style="background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);" title="Instagram">
+                    <i class="bi bi-instagram"></i>
+                </a>
+            </div>
+
+            <!-- Item 3: Hotline/Call -->
+            <div class="fab-item-container">
+                <span class="fab-item-label">Gọi Hotline</span>
+                <a href="tel:0932013424" class="btn rounded-circle shadow-sm fab-item bg-success text-white" title="Call Us">
+                    <i class="bi bi-telephone-fill"></i>
+                </a>
+            </div>
+        </div>
+    </div>
+
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+
+    <!-- Google Translate Script -->
+    <script type="text/javascript">
+        function googleTranslateElementInit() {
+            new google.translate.TranslateElement({
+                pageLanguage: 'en',
+                includedLanguages: 'en,vi',
+                autoDisplay: false
+            }, 'google_translate_element');
+        }
+
+        function changeLanguage(langCode) {
+            // Set cookie for Google Translate
+            document.cookie = `googtrans=/en/${langCode}; path=/`;
+            document.cookie = `googtrans=/en/${langCode}; domain=.${location.hostname}; path=/`;
+            window.location.reload();
+        }
+    </script>
+    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>

@@ -204,7 +204,7 @@ $.validator.addMethod( "bic", function( value, element ) {
  *   M. Old format
  *   N. Nonresident entities
  *   P. Local authorities
- *   Q. Autonomous bodies, state or not, and the like, and congregations and religious institutions
+ *   Q. Autonomous bodies, State or not, and the like, and congregations and religious institutions
  *   R. Congregations and religious institutions (since 2008 ORDER EHA/451/2008)
  *   S. Organs of State Administration and regions
  *   V. Agrarian Transformation
@@ -1383,31 +1383,31 @@ $.validator.addMethod( "skip_or_fill_minimum", function( value, element, options
  * Usage examples:
  *
  *  This is the default - case insensitive, no territories, no military zones
- *  stateInput: {
+ *  StateInput: {
  *     caseSensitive: false,
  *     includeTerritories: false,
  *     includeMilitary: false
  *  }
  *
  *  Only allow capital letters, no territories, no military zones
- *  stateInput: {
+ *  StateInput: {
  *     caseSensitive: false
  *  }
  *
  *  Case insensitive, include territories but not military zones
- *  stateInput: {
+ *  StateInput: {
  *     includeTerritories: true
  *  }
  *
  *  Only allow capital letters, include territories and military zones
- *  stateInput: {
+ *  StateInput: {
  *     caseSensitive: true,
  *     includeTerritories: true,
  *     includeMilitary: true
  *  }
  *
  */
-$.validator.addMethod( "stateUS", function( value, element, options ) {
+$.validator.addMethod( "StateUS", function( value, element, options ) {
 	var isDefault = typeof options === "undefined",
 		caseSensitive = ( isDefault || typeof options.caseSensitive === "undefined" ) ? false : options.caseSensitive,
 		includeTerritories = ( isDefault || typeof options.includeTerritories === "undefined" ) ? false : options.includeTerritories,
@@ -1426,7 +1426,7 @@ $.validator.addMethod( "stateUS", function( value, element, options ) {
 
 	regex = caseSensitive ? new RegExp( regex ) : new RegExp( regex, "i" );
 	return this.optional( element ) || regex.test( value );
-}, "Please specify a valid state." );
+}, "Please specify a valid State." );
 
 // TODO check if value starts with <, otherwise don't try stripping anything
 $.validator.addMethod( "strippedminlength", function( value, element, param ) {

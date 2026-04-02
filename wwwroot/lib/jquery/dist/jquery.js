@@ -3695,7 +3695,7 @@ jQuery.extend( {
 		var tuples = [
 
 				// action, add listener, callbacks,
-				// ... .then handlers, argument index, [final state]
+				// ... .then handlers, argument index, [final State]
 				[ "notify", "progress", jQuery.Callbacks( "memory" ),
 					jQuery.Callbacks( "memory" ), 2 ],
 				[ "resolve", "done", jQuery.Callbacks( "once memory" ),
@@ -3703,10 +3703,10 @@ jQuery.extend( {
 				[ "reject", "fail", jQuery.Callbacks( "once memory" ),
 					jQuery.Callbacks( "once memory" ), 1, "rejected" ]
 			],
-			state = "pending",
+			State = "pending",
 			promise = {
-				state: function() {
-					return state;
+				State: function() {
+					return State;
 				},
 				always: function() {
 					deferred.done( arguments ).fail( arguments );
@@ -3923,21 +3923,21 @@ jQuery.extend( {
 		// Add list-specific methods
 		jQuery.each( tuples, function( i, tuple ) {
 			var list = tuple[ 2 ],
-				stateString = tuple[ 5 ];
+				StateString = tuple[ 5 ];
 
 			// promise.progress = list.add
 			// promise.done = list.add
 			// promise.fail = list.add
 			promise[ tuple[ 1 ] ] = list.add;
 
-			// Handle state
-			if ( stateString ) {
+			// Handle State
+			if ( StateString ) {
 				list.add(
 					function() {
 
-						// state = "resolved" (i.e., fulfilled)
-						// state = "rejected"
-						state = stateString;
+						// State = "resolved" (i.e., fulfilled)
+						// State = "rejected"
+						State = StateString;
 					},
 
 					// rejected_callbacks.disable
@@ -4021,7 +4021,7 @@ jQuery.extend( {
 				!remaining );
 
 			// Use .then() to unwrap secondary thenables (cf. gh-3000)
-			if ( primary.state() === "pending" ||
+			if ( primary.State() === "pending" ||
 				isFunction( resolveValues[ i ] && resolveValues[ i ].then ) ) {
 
 				return primary.then();
@@ -4885,9 +4885,9 @@ jQuery.fn.extend( {
 	hide: function() {
 		return showHide( this );
 	},
-	toggle: function( state ) {
-		if ( typeof state === "boolean" ) {
-			return state ? this.show() : this.hide();
+	toggle: function( State ) {
+		if ( typeof State === "boolean" ) {
+			return State ? this.show() : this.hide();
 		}
 
 		return this.each( function() {
@@ -4913,7 +4913,7 @@ var rscriptType = ( /^$|^module$|\/(?:java|ecma)script/i );
 		input = document.createElement( "input" );
 
 	// Support: Android 4.0 - 4.3 only
-	// Check state lost if the name is set (#11217)
+	// Check State lost if the name is set (#11217)
 	// Support: Windows Web Apps (WWA)
 	// `name` and `type` must use .setAttribute for WWA (#14901)
 	input.setAttribute( "type", "radio" );
@@ -4923,7 +4923,7 @@ var rscriptType = ( /^$|^module$|\/(?:java|ecma)script/i );
 	div.appendChild( input );
 
 	// Support: Android <=4.1 only
-	// Older WebKit doesn't clone checked state correctly in fragments
+	// Older WebKit doesn't clone checked State correctly in fragments
 	support.checkClone = div.cloneNode( true ).cloneNode( true ).lastChild.checked;
 
 	// Support: IE <=11 only
@@ -5547,7 +5547,7 @@ jQuery.event = {
 		},
 		click: {
 
-			// Utilize native event to ensure correct state for checkable inputs
+			// Utilize native event to ensure correct State for checkable inputs
 			setup: function( data ) {
 
 				// For mutual compressibility with _default, replace `this` access with a local var.
@@ -5608,7 +5608,7 @@ jQuery.event = {
 
 // Ensure the presence of an event listener that handles manually-triggered
 // synthetic events by interrupting progress until reinvoked in response to
-// *native* events that it fires directly, ensuring that state changes have
+// *native* events that it fires directly, ensuring that State changes have
 // already occurred before other listeners are invoked.
 function leverageNative( el, type, expectSync ) {
 
@@ -6020,11 +6020,11 @@ function cloneCopyEvent( src, dest ) {
 function fixInput( src, dest ) {
 	var nodeName = dest.nodeName.toLowerCase();
 
-	// Fails to persist the checked state of a cloned checkbox or radio button.
+	// Fails to persist the checked State of a cloned checkbox or radio button.
 	if ( nodeName === "input" && rcheckableType.test( src.type ) ) {
 		dest.checked = src.checked;
 
-	// Fails to return the selected option to the default selected state when cloning options
+	// Fails to return the selected option to the default selected State when cloning options
 	} else if ( nodeName === "input" || nodeName === "textarea" ) {
 		dest.defaultValue = src.defaultValue;
 	}
@@ -7708,7 +7708,7 @@ jQuery.speed = function( speed, easing, fn ) {
 		easing: fn && easing || easing && !isFunction( easing ) && easing
 	};
 
-	// Go to the end state if fx are off
+	// Go to the end State if fx are off
 	if ( jQuery.fx.off ) {
 		opt.duration = 0;
 
@@ -8354,19 +8354,19 @@ jQuery.fn.extend( {
 		return this;
 	},
 
-	toggleClass: function( value, stateVal ) {
+	toggleClass: function( value, StateVal ) {
 		var type = typeof value,
 			isValidValue = type === "string" || Array.isArray( value );
 
-		if ( typeof stateVal === "boolean" && isValidValue ) {
-			return stateVal ? this.addClass( value ) : this.removeClass( value );
+		if ( typeof StateVal === "boolean" && isValidValue ) {
+			return StateVal ? this.addClass( value ) : this.removeClass( value );
 		}
 
 		if ( isFunction( value ) ) {
 			return this.each( function( i ) {
 				jQuery( this ).toggleClass(
-					value.call( this, i, getClass( this ), stateVal ),
-					stateVal
+					value.call( this, i, getClass( this ), StateVal ),
+					StateVal
 				);
 			} );
 		}
@@ -9268,7 +9268,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 							response = conv( response );
 						} catch ( e ) {
 							return {
-								state: "parsererror",
+								State: "parsererror",
 								error: conv ? e : "No conversion from " + prev + " to " + current
 							};
 						}
@@ -9278,7 +9278,7 @@ function ajaxConvert( s, response, jqXHR, isSuccess ) {
 		}
 	}
 
-	return { state: "success", data: response };
+	return { State: "success", data: response };
 }
 
 jQuery.extend( {
@@ -9401,7 +9401,7 @@ jQuery.extend( {
 			// Url cleanup var
 			urlAnchor,
 
-			// Request state (becomes false upon send and true upon completion)
+			// Request State (becomes false upon send and true upon completion)
 			completed,
 
 			// To know if global events are to be dispatched
@@ -9770,7 +9770,7 @@ jQuery.extend( {
 
 				// If we have data, let's convert it
 				} else {
-					statusText = response.state;
+					statusText = response.State;
 					success = response.data;
 					error = response.error;
 					isSuccess = !error;
@@ -10034,7 +10034,7 @@ jQuery.ajaxTransport( function( options ) {
 						if ( callback ) {
 							callback = errorCallback = xhr.onload =
 								xhr.onerror = xhr.onabort = xhr.ontimeout =
-									xhr.onreadystatechange = null;
+									xhr.onreadyStatechange = null;
 
 							if ( type === "abort" ) {
 								xhr.abort();
@@ -10077,12 +10077,12 @@ jQuery.ajaxTransport( function( options ) {
 				errorCallback = xhr.onerror = xhr.ontimeout = callback( "error" );
 
 				// Support: IE 9 only
-				// Use onreadystatechange to replace onabort
+				// Use onreadyStatechange to replace onabort
 				// to handle uncaught aborts
 				if ( xhr.onabort !== undefined ) {
 					xhr.onabort = errorCallback;
 				} else {
-					xhr.onreadystatechange = function() {
+					xhr.onreadyStatechange = function() {
 
 						// Check readyState before timeout as it changes
 						if ( xhr.readyState === 4 ) {

@@ -245,7 +245,7 @@
 
   const onDOMContentLoaded = callback => {
     if (document.readyState === 'loading') {
-      // add listener on the first call when the document is in loading state
+      // add listener on the first call when the document is in loading State
       if (!DOMContentLoadedCallbacks.length) {
         document.addEventListener('DOMContentLoaded', () => {
           DOMContentLoadedCallbacks.forEach(callback => callback());
@@ -365,7 +365,7 @@
     mouseleave: 'mouseout'
   };
   const customEventsRegex = /^(mouseenter|mouseleave)/i;
-  const nativeEvents = new Set(['click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readystatechange', 'error', 'abort', 'scroll']);
+  const nativeEvents = new Set(['click', 'dblclick', 'mouseup', 'mousedown', 'contextmenu', 'mousewheel', 'DOMMouseScroll', 'mouseover', 'mouseout', 'mousemove', 'selectstart', 'selectend', 'keydown', 'keypress', 'keyup', 'orientationchange', 'touchstart', 'touchmove', 'touchend', 'touchcancel', 'pointerdown', 'pointermove', 'pointerup', 'pointerleave', 'pointercancel', 'gesturestart', 'gesturechange', 'gestureend', 'focus', 'blur', 'change', 'reset', 'select', 'submit', 'focusin', 'focusout', 'load', 'unload', 'beforeunload', 'resize', 'move', 'DOMContentLoaded', 'readyStatechange', 'error', 'abort', 'scroll']);
   /**
    * ------------------------------------------------------------------------
    * Private methods
@@ -3604,8 +3604,8 @@
   const CLASS_NAME_FADE$2 = 'fade';
   const CLASS_NAME_MODAL = 'modal';
   const CLASS_NAME_SHOW$2 = 'show';
-  const HOVER_STATE_SHOW = 'show';
-  const HOVER_STATE_OUT = 'out';
+  const HOVER_State_SHOW = 'show';
+  const HOVER_State_OUT = 'out';
   const SELECTOR_TOOLTIP_INNER = '.tooltip-inner';
   const SELECTOR_MODAL = `.${CLASS_NAME_MODAL}`;
   const EVENT_MODAL_HIDE = 'hide.bs.modal';
@@ -3782,7 +3782,7 @@
         this._hoverState = null;
         EventHandler.trigger(this._element, this.constructor.Event.SHOWN);
 
-        if (prevHoverState === HOVER_STATE_OUT) {
+        if (prevHoverState === HOVER_State_OUT) {
           this._leave(null, this);
         }
       };
@@ -3804,7 +3804,7 @@
           return;
         }
 
-        if (this._hoverState !== HOVER_STATE_SHOW) {
+        if (this._hoverState !== HOVER_State_SHOW) {
           tip.remove();
         }
 
@@ -4062,13 +4062,13 @@
         context._activeTrigger[event.type === 'focusin' ? TRIGGER_FOCUS : TRIGGER_HOVER] = true;
       }
 
-      if (context.getTipElement().classList.contains(CLASS_NAME_SHOW$2) || context._hoverState === HOVER_STATE_SHOW) {
-        context._hoverState = HOVER_STATE_SHOW;
+      if (context.getTipElement().classList.contains(CLASS_NAME_SHOW$2) || context._hoverState === HOVER_State_SHOW) {
+        context._hoverState = HOVER_State_SHOW;
         return;
       }
 
       clearTimeout(context._timeout);
-      context._hoverState = HOVER_STATE_SHOW;
+      context._hoverState = HOVER_State_SHOW;
 
       if (!context._config.delay || !context._config.delay.show) {
         context.show();
@@ -4076,7 +4076,7 @@
       }
 
       context._timeout = setTimeout(() => {
-        if (context._hoverState === HOVER_STATE_SHOW) {
+        if (context._hoverState === HOVER_State_SHOW) {
           context.show();
         }
       }, context._config.delay.show);
@@ -4094,7 +4094,7 @@
       }
 
       clearTimeout(context._timeout);
-      context._hoverState = HOVER_STATE_OUT;
+      context._hoverState = HOVER_State_OUT;
 
       if (!context._config.delay || !context._config.delay.hide) {
         context.hide();
@@ -4102,7 +4102,7 @@
       }
 
       context._timeout = setTimeout(() => {
-        if (context._hoverState === HOVER_STATE_OUT) {
+        if (context._hoverState === HOVER_State_OUT) {
           context.hide();
         }
       }, context._config.delay.hide);
@@ -4186,18 +4186,18 @@
 
     _handlePopperPlacementChange(popperData) {
       const {
-        state
+        State
       } = popperData;
 
-      if (!state) {
+      if (!State) {
         return;
       }
 
-      this.tip = state.elements.popper;
+      this.tip = State.elements.popper;
 
       this._cleanTipClass();
 
-      this._addAttachmentClass(this._getAttachment(state.placement));
+      this._addAttachmentClass(this._getAttachment(State.placement));
     } // Static
 
 
