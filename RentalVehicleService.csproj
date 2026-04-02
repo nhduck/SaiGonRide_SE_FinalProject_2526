@@ -31,8 +31,8 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="Views\AdminDashboard\Pages\VehicleManagement\" />
     <Folder Include="Views\AdminDashboard\Pages\StationManagement\" />
+    <Folder Include="Views\Vehicles\" />
   </ItemGroup>
 
 </Project>
