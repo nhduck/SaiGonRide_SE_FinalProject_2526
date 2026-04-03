@@ -15,6 +15,8 @@ namespace RentalVehicleService.Controllers
     public class StationsController : Controller
     {
         private readonly ApplicationDbContext _context;
+        // Thêm dòng cấu hình đường dẫn ViewPath
+        private const string ViewPath = "~/Views/AdminDashboard/Pages/StationManagement/";
 
         public StationsController(ApplicationDbContext context)
         {
@@ -24,31 +26,26 @@ namespace RentalVehicleService.Controllers
         // GET: Stations
         public async Task<IActionResult> Index()
         {
-            return View(await _context.Stations.ToListAsync());
+            var stations = await _context.Stations.ToListAsync();
+            // Trả về PartialView theo đường dẫn cụ thể
+            return PartialView($"{ViewPath}Index.cshtml", stations);
         }
 
-        // GET: Stations/Details
+        // GET: Stations/Details/5
         public async Task<IActionResult> Details(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var station = await _context.Stations
-                .FirstOrDefaultAsync(m => m.StationId == id);
-            if (station == null)
-            {
-                return NotFound();
-            }
+            var station = await _context.Stations.FirstOrDefaultAsync(m => m.StationId == id);
+            if (station == null) return NotFound();
 
-            return View(station);
+            return PartialView($"{ViewPath}Details.cshtml", station);
         }
 
         // GET: Stations/Create
         public IActionResult Create()
         {
-            return View();
+            return PartialView($"{ViewPath}Create.cshtml");
         }
 
         // POST: Stations/Create
@@ -56,50 +53,42 @@ namespace RentalVehicleService.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Create([Bind("StationId,Name,Address,TotalCapacity,CurrentCount,IsActive")] Station station)
         {
-            // Không cho phép số xe hiện tại lớn hơn sức chứa
             if (station.CurrentCount > station.TotalCapacity)
             {
-                ModelState.AddModelError("CurrentCount", "Lỗi: Số xe hiện tại không thể lớn hơn sức chứa tối đa của trạm!");
+                ModelState.AddModelError("CurrentCount", "Lỗi: Số xe hiện tại không thể lớn hơn sức chứa tối đa!");
             }
+
             if (ModelState.IsValid)
             {
                 _context.Add(station);
                 await _context.SaveChangesAsync();
+                // Sau khi tạo xong, thường sẽ load lại danh sách Index
                 return RedirectToAction(nameof(Index));
             }
-            return View(station);
+            return PartialView($"{ViewPath}Create.cshtml", station);
         }
 
-        // GET: Stations/Edit
+        // GET: Stations/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
             var station = await _context.Stations.FindAsync(id);
-            if (station == null)
-            {
-                return NotFound();
-            }
+            if (station == null) return NotFound();
 
-            if (station.CurrentCount > station.TotalCapacity)
-            {
-                ModelState.AddModelError("CurrentCount", "Lỗi: Số xe hiện tại không thể lớn hơn sức chứa tối đa của trạm vừa tạo!");
-            }
-
-            return View(station);
+            return PartialView($"{ViewPath}Edit.cshtml", station);
         }
 
-        // POST: Stations/Edit
+        // POST: Stations/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(int id, [Bind("StationId,Name,Address,TotalCapacity,CurrentCount,IsActive")] Station station)
         {
-            if (id != station.StationId)
+            if (id != station.StationId) return NotFound();
+
+            if (station.CurrentCount > station.TotalCapacity)
             {
-                return NotFound();
+                ModelState.AddModelError("CurrentCount", "Lỗi: Số xe hiện tại không thể lớn hơn sức chứa tối đa!");
             }
 
             if (ModelState.IsValid)
@@ -111,39 +100,26 @@ namespace RentalVehicleService.Controllers
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StationExists(station.StationId))
-                    {
-                        return NotFound();
-                    }
-                    else
-                    {
-                        throw;
-                    }
+                    if (!StationExists(station.StationId)) return NotFound();
+                    else throw;
                 }
                 return RedirectToAction(nameof(Index));
             }
-            return View(station);
+            return PartialView($"{ViewPath}Edit.cshtml", station);
         }
 
-        // GET: Stations/Delete
+        // GET: Stations/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
-            if (id == null)
-            {
-                return NotFound();
-            }
+            if (id == null) return NotFound();
 
-            var station = await _context.Stations
-                .FirstOrDefaultAsync(m => m.StationId == id);
-            if (station == null)
-            {
-                return NotFound();
-            }
+            var station = await _context.Stations.FirstOrDefaultAsync(m => m.StationId == id);
+            if (station == null) return NotFound();
 
-            return View(station);
+            return PartialView($"{ViewPath}Delete.cshtml", station);
         }
 
-        // POST: Stations/Delete
+        // POST: Stations/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
