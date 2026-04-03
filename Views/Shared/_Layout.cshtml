@@ -19,6 +19,8 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/RentalVehicleService.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
+    <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <style>
         /* Premium FAB Styles */
         .fab-wrapper {
@@ -204,6 +206,11 @@
                             <i class="bi bi-info-circle me-1"></i><span>How It Works</span>
                         </a>
                     </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-nowrap d-flex align-items-center" href="/AdminDashboard/Index">
+                            <i class="bi bi-info-circle me-1"></i><span>How It Works</span>
+                        </a>
+                    </li>
                 </ul>
 
                 <!-- Search bar -->
@@ -221,7 +228,7 @@
                 <div class="d-flex align-items-center gap-2 flex-nowrap">
                     @if (User.IsInRole("Admin"))
                     {
-                        <a class="btn btn-dark btn-sm d-flex align-items-center gap-1 px-3 fw-semibold flex-nowrap" href="/Admin/Dashboard">
+                        <a class="btn btn-dark btn-sm d-flex align-items-center gap-1 px-3 fw-semibold flex-nowrap" href="/AdminDashboard/Index">
                             <i class="bi bi-shield-lock flex-shrink-0"></i>
                             <span class="d-none d-xl-inline text-nowrap">Admin Panel</span>
                         </a>

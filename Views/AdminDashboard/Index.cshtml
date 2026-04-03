@@ -1,0 +1,79 @@
+﻿@{
+    ViewData["Title"] = "Admin Dashboard";
+}
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-2 min-vh-100 p-0">
+            <ul class="nav flex-column">
+                <li class="nav-item p-3">
+                    <h4 id="logo" class="mb-0 fw-bold d-flex align-items-center">
+                        <i class="bi bi-bicycle fs-1 me-2"></i>
+                        <span>Admin Dashboard</span>
+                    </h4>
+                </li>
+                <li class="p-0">
+                    <ul class="nav flex-column p-2 fs-5">
+                        <li class="nav-item my-1">
+                            <a class="nav-link text-dark text-decoration-none py-2 active-selected"
+                               href="#" data-url="/AdminDashboard/Dashboard">
+                                <i class="bi bi-speedometer2 me-2 fs-5"></i> Bảng Điều Khiển
+                            </a>
+                        </li>
+                        <li class="nav-item my-1">
+                            <a class="nav-link text-dark text-decoration-none py-2"
+                               href="#" data-url="/AdminDashboard/StationManagement">
+                                <i class="bi bi-geo-alt me-2 fs-5"></i> Quản Lý Trạm
+                            </a>
+                        </li>
+                        <li class="nav-item my-1">
+                            <a class="nav-link text-dark text-decoration-none py-2"
+                               href="#" data-url="/Vehicles/Index">
+                                <i class="bi bi-bicycle me-2 fs-5"></i> Quản Lý Xe
+                            </a>
+                        </li>
+                        <li class="nav-item my-1">
+                            <a class="nav-link text-dark text-decoration-none py-2"
+                               href="#" data-url="/AdminDashboard/UserManagement">
+                                <i class="bi bi-people me-2 fs-5"></i> Quản Lý Người Dùng
+                            </a>
+                        </li>
+                        <li class="nav-item my-1">
+                            <a class="nav-link text-dark text-decoration-none py-2"
+                               href="#" data-url="/AdminDashboard/Reports">
+                                <i class="bi bi-bar-chart-line me-2 fs-5"></i> Báo Cáo
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </div>
+        <div id="main" class="col-10">
+            <div class="p-4"></div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" href="~/css/AdminDashboard/indexStyle.css" />
+@section Scripts {
+    <script>
+        const navLinks = document.querySelectorAll('.nav-link');
+        $(document).ready(function () {
+            loadPage($('.nav-link.active-selected').data('url'));
+            $('.nav-link').click(function (e) {
+                e.preventDefault();
+                navLinks.forEach(item => item.classList.remove('active-selected'));
+                $(this).addClass('active-selected');
+                const url = $(this).data('url');
+                loadPage(url);
+            });
+        });
+        function loadPage(url) {
+            if (!url) return;
+            $('#main').html('<div class="h1 p-4 text-center"><span>Đang tải...</span></div>');
+            $('#main').load(url, function (response, status) {
+                if (status === 'error') {
+                    $('#main').html('<div class="h1 p-4 text-danger">Không thể tải nội dung.</div>');
+                }
+            });
+        }
+    </script>
+}
