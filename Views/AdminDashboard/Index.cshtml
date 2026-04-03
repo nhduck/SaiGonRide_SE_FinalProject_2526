@@ -15,13 +15,13 @@
                     <ul class="nav flex-column p-2 fs-5">
                         <li class="nav-item my-1">
                             <a class="nav-link text-dark text-decoration-none py-2 active-selected"
-                               href="#" data-url="/AdminDashboard/Dashboard">
+                               href="#" data-url="/AdminDashboard/Dashboard"> @*url = controllerName + methodName*@
                                 <i class="bi bi-speedometer2 me-2 fs-5"></i> Bảng Điều Khiển
                             </a>
                         </li>
                         <li class="nav-item my-1">
                             <a class="nav-link text-dark text-decoration-none py-2"
-                               href="#" data-url="/AdminDashboard/StationManagement">
+                               href="#" data-url="/Stations/Index">
                                 <i class="bi bi-geo-alt me-2 fs-5"></i> Quản Lý Trạm
                             </a>
                         </li>
@@ -52,7 +52,9 @@
         </div>
     </div>
 </div>
+
 <link rel="stylesheet" href="~/css/AdminDashboard/indexStyle.css" />
+
 @section Scripts {
     <script>
         const navLinks = document.querySelectorAll('.nav-link');
@@ -66,6 +68,7 @@
                 loadPage(url);
             });
         });
+
         function loadPage(url) {
             if (!url) return;
             $('#main').html('<div class="h1 p-4 text-center"><span>Đang tải...</span></div>');
