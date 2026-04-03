@@ -1,0 +1,170 @@
+﻿/* Premium FAB Styles */
+.fab-wrapper {
+    position: fixed;
+    bottom: 25px;
+    right: 25px;
+    z-index: 1050;
+}
+
+.fab-btn {
+    width: 55px;
+    height: 55px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #16a34a, #15803d);
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 1.5rem;
+    position: relative;
+    z-index: 1001;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+    box-shadow: 0 8px 16px rgba(22, 163, 74, 0.3);
+}
+
+    .fab-btn:hover {
+        transform: scale(1.05);
+        box-shadow: 0 14px 28px rgba(22, 163, 74, 0.4);
+    }
+
+.pulse-animation::before {
+    content: '';
+    position: absolute;
+    width: 100%;
+    height: 100%;
+    background: inherit;
+    border-radius: inherit;
+    z-index: -1;
+    animation: pulse 2s infinite;
+}
+
+@@keyframes pulse {
+    0% {
+        transform: scale(1);
+        opacity: 0.6;
+    }
+
+    100% {
+        transform: scale(1.5);
+        opacity: 0;
+    }
+}
+
+.fab-icon-main {
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.fab-icon-close {
+    position: absolute;
+    opacity: 0;
+    transform: rotate(-90deg) scale(0.5);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    font-size: 1.5rem;
+}
+
+.fab-checkbox:checked ~ .fab-btn .fab-icon-main {
+    opacity: 0;
+    transform: rotate(90deg) scale(0);
+}
+
+.fab-checkbox:checked ~ .fab-btn .fab-icon-close {
+    opacity: 1;
+    transform: rotate(0) scale(1);
+}
+
+.fab-checkbox:checked ~ .fab-btn::before {
+    animation: none;
+    opacity: 0;
+}
+
+.fab-menu {
+    position: absolute;
+    bottom: 70px;
+    right: 2px;
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    pointer-events: none;
+    align-items: flex-end;
+}
+
+.fab-item-container {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    gap: 12px;
+}
+
+.fab-item {
+    width: 45px;
+    height: 45px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.25rem;
+    opacity: 0;
+    transform: translateY(20px) scale(0.8);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    border: none !important;
+}
+
+    .fab-item:hover {
+        transform: scale(1.1) !important;
+        box-shadow: 0 8px 15px rgba(0,0,0,0.2) !important;
+    }
+
+.fab-checkbox:checked ~ .fab-menu {
+    pointer-events: auto;
+}
+
+    .fab-checkbox:checked ~ .fab-menu .fab-item {
+        opacity: 1;
+        transform: translateY(0) scale(1);
+    }
+
+/* Staggered item animation */
+.fab-item-container:nth-child(3) .fab-item {
+    transition-delay: 0.05s;
+}
+
+.fab-item-container:nth-child(2) .fab-item {
+    transition-delay: 0.1s;
+}
+
+.fab-item-container:nth-child(1) .fab-item {
+    transition-delay: 0.15s;
+}
+
+.fab-item-label {
+    background: #212529;
+    color: white;
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 0.85rem;
+    font-weight: 500;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateX(10px);
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+}
+
+/* Staggered label animation */
+.fab-checkbox:checked ~ .fab-menu .fab-item-container:nth-child(3) .fab-item-label {
+    transition-delay: 0.1s;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.fab-checkbox:checked ~ .fab-menu .fab-item-container:nth-child(2) .fab-item-label {
+    transition-delay: 0.15s;
+    opacity: 1;
+    transform: translateX(0);
+}
+
+.fab-checkbox:checked ~ .fab-menu .fab-item-container:nth-child(1) .fab-item-label {
+    transition-delay: 0.2s;
+    opacity: 1;
+    transform: translateX(0);
+}
