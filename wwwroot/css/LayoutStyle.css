@@ -1,54 +1,66 @@
-﻿/* Premium FAB Styles */
+/* ════════════════════════════════════════
+   PREMIUM FAB — Glassmorphism Edition
+   ════════════════════════════════════════ */
 .fab-wrapper {
     position: fixed;
-    bottom: 25px;
-    right: 25px;
+    bottom: 28px;
+    right: 28px;
     z-index: 1050;
+    font-family: 'Inter', system-ui, sans-serif;
 }
 
 .fab-btn {
-    width: 55px;
-    height: 55px;
+    width: 58px;
+    height: 58px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #16a34a, #15803d);
+    background: linear-gradient(135deg, #16a34a 0%, #15803d 100%);
     color: white;
     display: flex;
     align-items: center;
     justify-content: center;
     cursor: pointer;
-    font-size: 1.5rem;
+    font-size: 1.45rem;
     position: relative;
     z-index: 1001;
-    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-    box-shadow: 0 8px 16px rgba(22, 163, 74, 0.3);
+    transition: all 0.35s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow:
+        0 8px 20px rgba(22, 163, 74, 0.42),
+        0 2px 6px rgba(0,0,0,.14),
+        inset 0 1px 0 rgba(255,255,255,.2);
+    border: 1.5px solid rgba(255,255,255,.18);
 }
 
-    .fab-btn:hover {
-        transform: scale(1.05);
-        box-shadow: 0 14px 28px rgba(22, 163, 74, 0.4);
-    }
+.fab-btn:hover {
+    transform: scale(1.08) rotate(8deg);
+    box-shadow:
+        0 16px 32px rgba(22, 163, 74, 0.5),
+        0 4px 10px rgba(0,0,0,.16),
+        inset 0 1px 0 rgba(255,255,255,.25);
+}
 
-.pulse-animation::before {
+/* Dual-ring pulse */
+.pulse-animation::before,
+.pulse-animation::after {
     content: '';
     position: absolute;
     width: 100%;
     height: 100%;
-    background: inherit;
+    background: rgba(22,163,74,.4);
     border-radius: inherit;
     z-index: -1;
-    animation: pulse 2s infinite;
+}
+.pulse-animation::before { animation: fab-pulse 2.4s ease-out infinite; }
+.pulse-animation::after  { animation: fab-pulse 2.4s ease-out infinite .8s; }
+
+@keyframes fab-pulse {
+    0%   { transform: scale(1);   opacity: .55; }
+    80%  { transform: scale(1.7); opacity: 0; }
+    100% { transform: scale(1.7); opacity: 0; }
 }
 
-@@keyframes pulse {
-    0% {
-        transform: scale(1);
-        opacity: 0.6;
-    }
-
-    100% {
-        transform: scale(1.5);
-        opacity: 0;
-    }
+@keyframes pulse {
+    0%   { transform: scale(1);   opacity: 0.6; }
+    100% { transform: scale(1.5); opacity: 0; }
 }
 
 .fab-icon-main {
@@ -63,28 +75,28 @@
     font-size: 1.5rem;
 }
 
-.fab-checkbox:checked ~ .fab-btn .fab-icon-main {
+.fab-checkbox:checked~.fab-btn .fab-icon-main {
     opacity: 0;
     transform: rotate(90deg) scale(0);
 }
 
-.fab-checkbox:checked ~ .fab-btn .fab-icon-close {
+.fab-checkbox:checked~.fab-btn .fab-icon-close {
     opacity: 1;
     transform: rotate(0) scale(1);
 }
 
-.fab-checkbox:checked ~ .fab-btn::before {
+.fab-checkbox:checked~.fab-btn::before {
     animation: none;
     opacity: 0;
 }
 
 .fab-menu {
     position: absolute;
-    bottom: 70px;
+    bottom: 72px;
     right: 2px;
     display: flex;
     flex-direction: column;
-    gap: 12px;
+    gap: 10px;
     pointer-events: none;
     align-items: flex-end;
 }
@@ -93,35 +105,37 @@
     display: flex;
     align-items: center;
     justify-content: flex-end;
-    gap: 12px;
+    gap: 10px;
 }
 
 .fab-item {
-    width: 45px;
-    height: 45px;
+    width: 46px;
+    height: 46px;
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 1.25rem;
+    font-size: 1.2rem;
     opacity: 0;
-    transform: translateY(20px) scale(0.8);
-    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    border: none !important;
+    transform: translateY(24px) scale(0.75);
+    transition: all 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+    border: 1.5px solid rgba(255,255,255,.2) !important;
+    box-shadow: 0 6px 16px rgba(0,0,0,.18), inset 0 1px 0 rgba(255,255,255,.2);
 }
 
-    .fab-item:hover {
-        transform: scale(1.1) !important;
-        box-shadow: 0 8px 15px rgba(0,0,0,0.2) !important;
-    }
+.fab-item:hover {
+    transform: scale(1.15) !important;
+    filter: brightness(1.1);
+    box-shadow: 0 10px 22px rgba(0, 0, 0, 0.28) !important;
+}
 
 .fab-checkbox:checked ~ .fab-menu {
     pointer-events: auto;
 }
 
-    .fab-checkbox:checked ~ .fab-menu .fab-item {
-        opacity: 1;
-        transform: translateY(0) scale(1);
-    }
+.fab-checkbox:checked ~ .fab-menu .fab-item {
+    opacity: 1;
+    transform: translateY(0) scale(1);
+}
 
 /* Staggered item animation */
 .fab-item-container:nth-child(3) .fab-item {
@@ -137,33 +151,37 @@
 }
 
 .fab-item-label {
-    background: #212529;
-    color: white;
+    background: rgba(15, 23, 42, 0.88);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    color: #f1f5f9;
     padding: 6px 14px;
-    border-radius: 20px;
-    font-size: 0.85rem;
+    border-radius: 999px;
+    font-size: 0.82rem;
     font-weight: 500;
     opacity: 0;
     pointer-events: none;
-    transform: translateX(10px);
-    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
-    box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+    transform: translateX(12px);
+    transition: all 0.42s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.18);
+    border: 1px solid rgba(255,255,255,.1);
+    white-space: nowrap;
 }
 
 /* Staggered label animation */
-.fab-checkbox:checked ~ .fab-menu .fab-item-container:nth-child(3) .fab-item-label {
+.fab-checkbox:checked~.fab-menu .fab-item-container:nth-child(3) .fab-item-label {
     transition-delay: 0.1s;
     opacity: 1;
     transform: translateX(0);
 }
 
-.fab-checkbox:checked ~ .fab-menu .fab-item-container:nth-child(2) .fab-item-label {
+.fab-checkbox:checked~.fab-menu .fab-item-container:nth-child(2) .fab-item-label {
     transition-delay: 0.15s;
     opacity: 1;
     transform: translateX(0);
 }
 
-.fab-checkbox:checked ~ .fab-menu .fab-item-container:nth-child(1) .fab-item-label {
+.fab-checkbox:checked~.fab-menu .fab-item-container:nth-child(1) .fab-item-label {
     transition-delay: 0.2s;
     opacity: 1;
     transform: translateX(0);
