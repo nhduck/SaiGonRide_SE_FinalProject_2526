@@ -35,7 +35,32 @@
         <dd class = "col-sm-10">
             @Html.DisplayFor(model => model.State)
         </dd>
-        <dt class = "col-sm-2">
+        <dt class="col-sm-2">
+            <div class="modal fade" id="deleteModal" tabindex="-1" aria-labelledby="deleteModalLabel" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow">
+                        <div class="modal-header bg-danger text-white">
+                            <h5 class="modal-title" id="deleteModalLabel">Xác nhận xóa xe</h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body">
+                            <p>Bạn có chắc chắn muốn xóa phương tiện này không? Hành động này không thể hoàn tác.</p>
+                            <div class="p-3 bg-light rounded">
+                                <strong id="displayModelName"></strong> <br />
+                                <small class="text-muted">ID: <span id="displayVehicleId"></span></small>
+                            </div>
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <form id="deleteForm" method="post">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" id="confirmVehicleId" name="id" />
+                                <button type="submit" class="btn btn-danger">Xác nhận xóa</button>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
             @Html.DisplayNameFor(model => model.CurrentStationId)
         </dt>
         <dd class = "col-sm-10">
