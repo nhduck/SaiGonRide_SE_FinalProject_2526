@@ -9,7 +9,7 @@ namespace RentalVehicleService.Models
         public int StationId { get; set; }
         public double Latitude { get; set; }
         public double Longitude { get; set; }
-        public virtual ICollection<RentalVehicleService.Models.Vehicle> Vehicles { get; set; }
+        public virtual ICollection<RentalVehicleService.Models.Vehicle> Vehicles { get; set; } = new List<RentalVehicleService.Models.Vehicle>();
 
         [Required(ErrorMessage = "Station name cannot be empty")]
         [StringLength(100)]
