@@ -1,136 +1,225 @@
 @model RentalVehicleService.Models.ViewModels.LoginViewModel
 
 @{
-    ViewData["Title"] = "Đăng nhập";
+    ViewData["Title"] = "Log In";
+    ViewData["MetaDescription"] = "Log in to your SaigonRide account to rent bikes and e-scooters across Ho Chi Minh City.";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container-fluid min-vh-100 p-0">
-    <div class="row g-0 min-vh-100">
-        <!-- Left Panel: Illustration -->
-        <div class="col-lg-5 d-none d-lg-flex align-items-center justify-content-center"
-             style="background: linear-gradient(135deg, #16a34a 0%, #15803d 50%, #0f766e 100%);">
-            <div class="text-center text-white p-5">
-                <i class="bi bi-bicycle" style="font-size: 6rem; opacity: 0.8;"></i>
-                <h3 class="mt-4 fw-bold">SaigonRide</h3>
-                <p class="lead opacity-75">
-                    "Green mobility, green living —<br/>explore Saigon your way"
-                </p>
-                <div class="d-flex justify-content-center gap-4 mt-4">
-                    <div class="text-center">
-                        <div class="fs-4 fw-bold">50+</div>
-                        <small class="opacity-75">Stations</small>
-                    </div>
-                    <div class="text-center">
-                        <div class="fs-4 fw-bold">500+</div>
-                        <small class="opacity-75">Active Vehicles</small>
-                    </div>
-                    <div class="text-center">
-                        <div class="fs-4 fw-bold">24/7</div>
-                        <small class="opacity-75">Service</small>
-                    </div>
+<style>
+    .sr-login-page { min-height: 100vh; display: flex; background: #f8fafc; }
+    .sr-login-left {
+        background: linear-gradient(155deg, #064e3b 0%, #065f46 45%, #047857 80%, #065f46 100%);
+        display: flex; flex-direction: column; justify-content: center;
+        align-items: center; padding: 4rem 3rem; position: relative; overflow: hidden;
+    }
+    .sr-login-left::before {
+        content: '';
+        position: absolute; inset: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.03' fill-rule='evenodd'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .login-blob {
+        position: absolute; border-radius: 50%;
+        filter: blur(70px); pointer-events: none;
+    }
+    .login-blob-1 { width:350px;height:350px;background:rgba(74,222,128,.2);top:-100px;right:-80px; }
+    .login-blob-2 { width:250px;height:250px;background:rgba(14,165,233,.15);bottom:-60px;left:-60px; }
+
+    @@keyframes shake-x {
+        0%,100% { transform:translateX(0); }
+        20%      { transform:translateX(-6px); }
+        40%      { transform:translateX(6px); }
+        60%      { transform:translateX(-4px); }
+        80%      { transform:translateX(4px); }
+    }
+    .shake { animation: shake-x .4s ease; }
+
+    .sr-login-right {
+        display: flex; align-items: center; justify-content: center;
+        padding: 3rem 2rem; flex: 1;
+    }
+    .sr-login-card {
+        width: 100%; max-width: 440px;
+        background: #fff;
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.04);
+        padding: 2.75rem 2.5rem;
+        animation: cardIn .5s cubic-bezier(.4,0,.2,1) both;
+    }
+    @@keyframes cardIn {
+        from { opacity:0;transform:translateY(24px) scale(.97); }
+        to   { opacity:1;transform:none; }
+    }
+    .sr-divider {
+        display:flex;align-items:center;gap:1rem;color:#94a3b8;
+        font-size:.82rem;margin:1.25rem 0;
+    }
+    .sr-divider::before,.sr-divider::after {
+        content:'';flex:1;height:1px;background:#e2e8f0;
+    }
+</style>
+
+<div class="sr-login-page">
+    <!-- Left panel -->
+    <div class="col-lg-5 d-none d-lg-block sr-login-left">
+        <div class="login-blob login-blob-1"></div>
+        <div class="login-blob login-blob-2"></div>
+
+        <div class="text-center position-relative" style="z-index:1;">
+            <!-- Logo -->
+            <div class="d-flex align-items-center justify-content-center gap-2 mb-5">
+                <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
+                     stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                    <circle cx="5.5" cy="17.5" r="3.5"/>
+                    <circle cx="18.5" cy="17.5" r="3.5"/>
+                    <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2"/>
+                </svg>
+                <span class="text-white fw-bold fs-4">SaigonRide</span>
+            </div>
+
+            <!-- ⚡ EPIC BIKE ANIMATION ⚡ -->
+            <div class="sr-bike-wrapper mx-auto mb-4">
+                <div class="sr-bike-emoji">🚲</div>
+                <div class="sr-lightning-badge">⚡</div>
+            </div>
+
+            <h3 class="text-white fw-bold mb-2" style="font-size:1.7rem;">Welcome Back, Rider!</h3>
+            <p class="text-white-50 mb-4" style="max-width:300px;line-height:1.65;font-size:.95rem;margin:auto;">
+                Log in to continue your green journey across Saigon.
+            </p>
+
+            <!-- Stats badges -->
+            <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
+                <div class="sr-glass px-3 py-2 text-center">
+                    <div class="text-white fw-bold fs-5">50+</div>
+                    <div class="text-white-50" style="font-size:.75rem;">Stations</div>
+                </div>
+                <div class="sr-glass px-3 py-2 text-center">
+                    <div class="text-white fw-bold fs-5">500+</div>
+                    <div class="text-white-50" style="font-size:.75rem;">Vehicles</div>
+                </div>
+                <div class="sr-glass px-3 py-2 text-center">
+                    <div class="text-white fw-bold fs-5">24/7</div>
+                    <div class="text-white-50" style="font-size:.75rem;">Support</div>
                 </div>
             </div>
         </div>
+    </div>
 
-        <!-- Right Panel: Login Form -->
-        <div class="col-lg-7 d-flex align-items-center justify-content-center">
-            <div class="w-100" style="max-width: 420px; padding: 2rem;">
-                <!-- Logo Small -->
-                <div class="text-center mb-4">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
+    <!-- Right: form -->
+    <div class="col-12 col-lg-7 sr-login-right">
+        <div class="sr-login-card">
+            <div class="text-center mb-4">
+                <div class="d-lg-none mb-3">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="36" height="36" viewBox="0 0 24 24" fill="none"
                          stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="5.5" cy="17.5" r="3.5"/>
                         <circle cx="18.5" cy="17.5" r="3.5"/>
                         <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2"/>
                     </svg>
-                    <h4 class="mt-2 fw-bold">Welcome Back</h4>
-                    <p class="text-muted small">Log in to your SaigonRide account</p>
                 </div>
+                <h2 class="fw-bold mb-1" style="font-size:1.6rem;">Log In</h2>
+                <p class="text-muted mb-0" style="font-size:.9rem;">Welcome back! <span>👋</span></p>
+            </div>
 
-                <!-- Success message -->
-                @if (TempData["SuccessMessage"] != null)
-                {
-                    <div class="alert alert-success py-2 small">
-                        <i class="bi bi-check-circle me-1"></i>@TempData["SuccessMessage"]
-                    </div>
-                }
-
-                <!-- Validation errors -->
-                @if (!ViewData.ModelState.IsValid)
-                {
-                    <div class="alert alert-danger py-2 small">
-                        <i class="bi bi-exclamation-triangle me-1"></i>
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <div class="alert d-flex align-items-center gap-2 rounded-3 mb-4 py-2 border-0"
+                     style="background:#f0fdf4;color:#166534;">
+                    <i class="bi bi-check-circle-fill fs-5"></i>
+                    @TempData["SuccessMessage"]
+                </div>
+            }
+            @if (!ViewData.ModelState.IsValid)
+            {
+                <div class="alert d-flex align-items-start gap-2 rounded-3 mb-4 py-2 border-0 shake"
+                     id="loginError" style="background:#fef2f2;color:#991b1b;">
+                    <i class="bi bi-exclamation-triangle-fill fs-5 mt-1"></i>
+                    <div>
                         @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
                         {
                             <div>@error.ErrorMessage</div>
                         }
                     </div>
-                }
+                </div>
+            }
 
-                <form asp-action="Login" method="post">
-                    <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
+            <form asp-action="Login" method="post" id="loginForm">
+                <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
 
-                    <div class="mb-3">
-                        <label asp-for="Email" class="form-label fw-semibold small"></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white"><i class="bi bi-envelope"></i></span>
-                            <input asp-for="Email" class="form-control py-2" placeholder="name@example.com" />
-                        </div>
-                        <span asp-validation-for="Email" class="text-danger small"></span>
+                <div class="mb-3">
+                    <label asp-for="Email" class="form-label fw-semibold" style="font-size:.875rem;">Email</label>
+                    <div class="input-group sr-input-group">
+                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                        <input asp-for="Email" class="form-control py-2" placeholder="name@example.com" autocomplete="email" />
                     </div>
-
-                    <div class="mb-3">
-                        <label asp-for="Password" class="form-label fw-semibold small"></label>
-                        <div class="input-group">
-                            <span class="input-group-text bg-white"><i class="bi bi-lock"></i></span>
-                            <input asp-for="Password" class="form-control py-2" placeholder="••••••••" id="loginPassword" />
-                            <button class="btn btn-outline-secondary" type="button" onclick="togglePassword('loginPassword', this)">
-                                <i class="bi bi-eye"></i>
-                            </button>
-                        </div>
-                        <span asp-validation-for="Password" class="text-danger small"></span>
-                    </div>
-
-                    <div class="d-flex justify-content-between align-items-center mb-4">
-                        <div class="form-check">
-                            <input asp-for="RememberMe" class="form-check-input" />
-                            <label asp-for="RememberMe" class="form-check-label small"></label>
-                        </div>
-                        <a href="#" class="small text-decoration-none text-sr-green">Forgot Password?</a>
-                    </div>
-
-                    <button type="submit" class="btn btn-success w-100 py-2 fw-semibold mb-3">
-                        <i class="bi bi-box-arrow-in-right me-1"></i>Log In
-                    </button>
-                </form>
-
-                <div class="text-center my-3">
-                    <span class="text-muted small">─── OR ───</span>
+                    <span asp-validation-for="Email" class="text-danger" style="font-size:.8rem;"></span>
                 </div>
 
-                <div class="text-center">
-                    <span class="small text-muted">Don't have an account?</span>
-                    <a asp-action="Register" class="small fw-semibold text-decoration-none text-sr-green ms-1">
-                        Register Now
+                <div class="mb-3">
+                    <label asp-for="Password" class="form-label fw-semibold" style="font-size:.875rem;">Password</label>
+                    <div class="input-group sr-input-group">
+                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                        <input asp-for="Password" class="form-control py-2" placeholder="••••••••"
+                               id="loginPassword" autocomplete="current-password" />
+                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                onclick="togglePwd('loginPassword', this)" tabindex="-1">
+                            <i class="bi bi-eye"></i>
+                        </button>
+                    </div>
+                    <span asp-validation-for="Password" class="text-danger" style="font-size:.8rem;"></span>
+                </div>
+
+                <div class="d-flex justify-content-between align-items-center mb-4">
+                    <div class="form-check mb-0">
+                        <input asp-for="RememberMe" class="form-check-input" id="rememberMe">
+                        <label class="form-check-label text-muted" for="rememberMe" style="font-size:.875rem;">
+                            Remember me
+                        </label>
+                    </div>
+                    <a href="#" class="text-sr-green text-decoration-none fw-medium" style="font-size:.875rem;">
+                        Forgot password?
                     </a>
                 </div>
+
+                <button type="submit" class="btn btn-success w-100 py-2 fw-bold rounded-3 mb-3"
+                        id="loginBtn" style="font-size:1rem;letter-spacing:.02em;box-shadow:0 4px 16px rgba(22,163,74,.3);">
+                    <i class="bi bi-box-arrow-in-right me-2"></i>Log In
+                </button>
+            </form>
+
+            <div class="sr-divider">OR</div>
+
+            <div class="text-center">
+                <span class="text-muted" style="font-size:.9rem;">Don't have an account?</span>
+                <a asp-controller="Account" asp-action="Register"
+                   class="fw-bold text-sr-green text-decoration-none ms-1" style="font-size:.9rem;">
+                    Register free <i class="bi bi-arrow-right"></i>
+                </a>
             </div>
+
+            <p class="text-center text-muted mt-4 mb-0" style="font-size:.75rem;">
+                By logging in, you agree to our
+                <a href="/Home/Privacy" class="text-sr-green text-decoration-none">Privacy Policy</a>
+                and
+                <a href="/Home/Privacy" class="text-sr-green text-decoration-none">Terms of Service</a>.
+            </p>
         </div>
     </div>
 </div>
 
 @section Scripts {
-    <script>
-        function togglePassword(inputId, btn) {
-            const input = document.getElementById(inputId);
-            const icon = btn.querySelector('i');
-            if (input.type === 'password') {
-                input.type = 'text';
-                icon.className = 'bi bi-eye-slash';
-            } else {
-                input.type = 'password';
-                icon.className = 'bi bi-eye';
-            }
-        }
-    </script>
+<script>
+    function togglePwd(id, btn) {
+        const inp = document.getElementById(id);
+        const ico = btn.querySelector('i');
+        inp.type = inp.type === 'password' ? 'text' : 'password';
+        ico.className = inp.type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
+    }
+    document.getElementById('loginForm')?.addEventListener('submit', function () {
+        const btn = document.getElementById('loginBtn');
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Logging in...';
+        btn.disabled = true;
+    });
+</script>
 }

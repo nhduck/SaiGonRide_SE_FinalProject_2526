@@ -2,152 +2,256 @@
 
 @{
     ViewData["Title"] = "Register";
+    ViewData["MetaDescription"] = "Create a free SaigonRide account. Rent bikes & e-scooters across HCMC from 500 VND/min. Get 15% off your first 3 rides.";
+    Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-7 col-md-9">
-            <div class="card border-0 shadow-sm">
-                <div class="card-body p-4 p-md-5">
-                    <!-- Header -->
-                    <div class="text-center mb-4">
-                        <svg xmlns="http://www.w3.org/2000/svg" width="40" height="40" viewBox="0 0 24 24" fill="none"
-                             stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                            <circle cx="5.5" cy="17.5" r="3.5"/>
-                            <circle cx="18.5" cy="17.5" r="3.5"/>
-                            <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2"/>
-                        </svg>
-                        <h4 class="mt-2 fw-bold">Create SaigonRide Account</h4>
-                        <p class="text-muted small">Register to start riding</p>
+<style>
+    .sr-register-page {
+        min-height: 100vh;
+        background: linear-gradient(160deg, #f0fdf4 0%, #f8fafc 60%, #fff 100%);
+        padding: 3rem 1rem;
+    }
+    .sr-register-card {
+        background: #fff;
+        border-radius: 24px;
+        box-shadow: 0 20px 60px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.04);
+        overflow: hidden;
+        animation: cardSlideUp .5s cubic-bezier(.4,0,.2,1) both;
+    }
+    @@keyframes cardSlideUp {
+        from { opacity:0; transform:translateY(28px) scale(.97); }
+        to   { opacity:1; transform:none; }
+    }
+    .sr-register-banner {
+        background: linear-gradient(155deg, #064e3b 0%, #065f46 60%, #0f172a 100%);
+        padding: 2.5rem;
+        position: relative;
+        overflow: hidden;
+    }
+    .sr-register-banner::before {
+        content: '';
+        position: absolute; inset: 0;
+        background: url("data:image/svg+xml,%3Csvg width='40' height='40' viewBox='0 0 40 40' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='%23ffffff' fill-opacity='0.04'%3E%3Ccircle cx='20' cy='20' r='2'/%3E%3C/g%3E%3C/svg%3E");
+    }
+    .reg-blob { position: absolute; border-radius: 50%; filter: blur(60px); pointer-events: none; }
+    .reg-blob-1 { width:220px;height:220px;background:rgba(74,222,128,.2);top:-60px;right:-60px; }
+    .reg-blob-2 { width:160px;height:160px;background:rgba(14,165,233,.15);bottom:-40px;left:-40px; }
+
+    .sr-type-card {
+        border: 2px solid #e2e8f0;
+        border-radius: 16px;
+        padding: 1.25rem;
+        cursor: pointer;
+        transition: all .25s ease;
+        text-align: center;
+        background: #fff;
+    }
+    .sr-type-card:hover             { border-color: #16a34a; background: #f0fdf4; }
+    .sr-type-card.selected          { border-color: #16a34a; background: #f0fdf4; box-shadow: 0 0 0 3px rgba(22,163,74,.15); }
+    .sr-type-card .type-icon        { font-size:2rem;margin-bottom:.5rem;line-height:1; }
+    .sr-type-card .type-title       { font-weight:700;font-size:.95rem;color:#1e293b; }
+    .sr-type-card .type-sub         { font-size:.78rem;color:#64748b;margin-top:.2rem; }
+
+    .field-group { transition: all .3s ease; }
+    .field-appear { animation: fadeInUp .4s ease both; }
+    @@keyframes fadeInUp {
+        from { opacity:0; transform:translateY(12px); }
+        to   { opacity:1; transform:translateY(0); }
+    }
+    .sr-divider {
+        display:flex;align-items:center;gap:1rem;color:#94a3b8;
+        font-size:.82rem;margin:1rem 0;
+    }
+    .sr-divider::before,.sr-divider::after { content:'';flex:1;height:1px;background:#e2e8f0; }
+</style>
+
+<div class="sr-register-page">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-xl-9 col-lg-10">
+                <div class="sr-register-card">
+
+                    <!-- Banner -->
+                    <div class="sr-register-banner">
+                        <div class="reg-blob reg-blob-1"></div>
+                        <div class="reg-blob reg-blob-2"></div>
+                        <div class="d-flex align-items-center justify-content-between position-relative">
+                            <div>
+                                <div class="d-flex align-items-center gap-2 mb-2">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
+                                         stroke="#4ade80" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <circle cx="5.5" cy="17.5" r="3.5"/>
+                                        <circle cx="18.5" cy="17.5" r="3.5"/>
+                                        <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2"/>
+                                    </svg>
+                                    <span class="text-white fw-bold fs-5">SaigonRide</span>
+                                </div>
+                                <h2 class="text-white fw-bold mb-1" style="font-size:1.5rem;">Create Your Free Account</h2>
+                                <p class="text-white-50 mb-0" style="font-size:.88rem;">
+                                    Get <strong class="text-warning">15% OFF</strong> on your first 3 rides!
+                                </p>
+                            </div>
+                            <div class="d-none d-sm-block" style="font-size:4rem;opacity:.6;">🎉</div>
+                        </div>
                     </div>
 
-                    <!-- Validation errors -->
-                    @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(v => v.Errors.Any()))
-                    {
-                        <div class="alert alert-danger py-2 small">
-                            <i class="bi bi-exclamation-triangle me-1"></i>
-                            @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
-                            {
-                                <div>@error.ErrorMessage</div>
-                            }
-                        </div>
-                    }
+                    <!-- Form body -->
+                    <div class="p-4 p-md-5">
 
-                    <!-- User Type Tabs -->
-                    <ul class="nav nav-tabs mb-4" id="userTypeTabs" role="tablist">
-                        <li class="nav-item flex-fill" role="presentation">
-                            <button class="nav-link w-100 active" id="local-tab" data-bs-toggle="tab"
-                                    data-bs-target="#local-panel" type="button" role="tab"
-                                    onclick="setUserType('Local')">
-                                🏙️ Local Resident
-                            </button>
-                        </li>
-                        <li class="nav-item flex-fill" role="presentation">
-                            <button class="nav-link w-100" id="tourist-tab" data-bs-toggle="tab"
-                                    data-bs-target="#tourist-panel" type="button" role="tab"
-                                    onclick="setUserType('Tourist')">
-                                ✈️ Tourist
-                            </button>
-                        </li>
-                    </ul>
+                        @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(v => v.Errors.Any()))
+                        {
+                            <div class="alert d-flex align-items-start gap-2 rounded-3 mb-4 border-0"
+                                 style="background:#fef2f2;color:#991b1b;">
+                                <i class="bi bi-exclamation-triangle-fill fs-5 mt-1"></i>
+                                <div>
+                                    @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+                                    {
+                                        <div>@error.ErrorMessage</div>
+                                    }
+                                </div>
+                            </div>
+                        }
 
-                    <form asp-action="Register" method="post" id="registerForm">
-                        <input type="hidden" name="UserType" id="userTypeInput" value="Local" />
-
-                        <!-- Tab content -->
-                        <div class="tab-content">
-                            <!-- LOCAL COMMUTER TAB -->
-                            <div class="tab-pane fade show active" id="local-panel" role="tabpanel">
-                                <div class="row g-3">
-                                    <div class="col-12">
-                                        <label asp-for="FullName" class="form-label fw-semibold small"></label>
-                                        <input asp-for="FullName" class="form-control" placeholder="John Doe" />
-                                        <span asp-validation-for="FullName" class="text-danger small"></span>
+                        <!-- User type -->
+                        <div class="mb-4">
+                            <p class="fw-semibold mb-3" style="font-size:.9rem;color:#334155;">I am a...</p>
+                            <div class="row g-3">
+                                <div class="col-6">
+                                    <div class="sr-type-card selected" id="card-local" onclick="selectType('Local')">
+                                        <div class="type-icon">🏙️</div>
+                                        <div class="type-title">Local Resident</div>
+                                        <div class="type-sub">Vietnamese ID / Passport</div>
                                     </div>
-                                    <div class="col-12">
-                                        <label asp-for="Email" class="form-label fw-semibold small"></label>
-                                        <input asp-for="Email" class="form-control" placeholder="email@example.com" />
-                                        <span asp-validation-for="Email" class="text-danger small"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label asp-for="Password" class="form-label fw-semibold small"></label>
-                                        <input asp-for="Password" class="form-control" placeholder="Min 6 characters" />
-                                        <span asp-validation-for="Password" class="text-danger small"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label asp-for="ConfirmPassword" class="form-label fw-semibold small"></label>
-                                        <input asp-for="ConfirmPassword" class="form-control" placeholder="Re-enter password" />
-                                        <span asp-validation-for="ConfirmPassword" class="text-danger small"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label asp-for="CCCD" class="form-label fw-semibold small"></label>
-                                        <input asp-for="CCCD" class="form-control" placeholder="9 or 12 digits" />
-                                        <span asp-validation-for="CCCD" class="text-danger small"></span>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <label asp-for="PhoneNumber" class="form-label fw-semibold small"></label>
-                                        <input asp-for="PhoneNumber" class="form-control" placeholder="0901234567" />
-                                        <span asp-validation-for="PhoneNumber" class="text-danger small"></span>
+                                </div>
+                                <div class="col-6">
+                                    <div class="sr-type-card" id="card-tourist" onclick="selectType('Tourist')">
+                                        <div class="type-icon">✈️</div>
+                                        <div class="type-title">Tourist</div>
+                                        <div class="type-sub">Foreign Passport</div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
 
-                            <!-- TOURIST TAB -->
-                            <div class="tab-pane fade" id="tourist-panel" role="tabpanel">
-                                <div class="row g-3">
-                                    <div class="col-12">
-                                        <label class="form-label fw-semibold small">Full Name</label>
-                                        <input name="FullName" class="form-control" placeholder="John Doe" />
+                        <form asp-action="Register" method="post" id="registerForm">
+                            <input type="hidden" name="UserType" id="userTypeInput" value="Local" />
+
+                            <div class="row g-3 mb-3">
+                                <div class="col-12">
+                                    <label asp-for="FullName" class="form-label fw-semibold" style="font-size:.875rem;">Full Name</label>
+                                    <div class="input-group sr-input-group">
+                                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                        <input asp-for="FullName" class="form-control py-2" placeholder="John Doe" autocomplete="name" />
                                     </div>
-                                    <div class="col-12">
-                                        <label class="form-label fw-semibold small">Email</label>
-                                        <input name="Email" class="form-control" placeholder="john@example.com" />
+                                    <span asp-validation-for="FullName" class="text-danger" style="font-size:.8rem;"></span>
+                                </div>
+                                <div class="col-12">
+                                    <label asp-for="Email" class="form-label fw-semibold" style="font-size:.875rem;">Email Address</label>
+                                    <div class="input-group sr-input-group">
+                                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                        <input asp-for="Email" class="form-control py-2" placeholder="email@example.com" autocomplete="email" />
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-semibold small">Password</label>
-                                        <input type="password" name="Password" class="form-control" placeholder="Min 6 characters" />
+                                    <span asp-validation-for="Email" class="text-danger" style="font-size:.8rem;"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="Password" class="form-label fw-semibold" style="font-size:.875rem;">Password</label>
+                                    <div class="input-group sr-input-group">
+                                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                        <input asp-for="Password" class="form-control py-2" placeholder="At least 6 characters"
+                                               id="regPassword" autocomplete="new-password" />
+                                        <button class="btn btn-outline-secondary border-start-0" type="button"
+                                                onclick="togglePwd('regPassword',this)" tabindex="-1">
+                                            <i class="bi bi-eye"></i>
+                                        </button>
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-semibold small">Confirm Password</label>
-                                        <input type="password" name="ConfirmPassword" class="form-control" placeholder="Re-enter password" />
+                                    <span asp-validation-for="Password" class="text-danger" style="font-size:.8rem;"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="ConfirmPassword" class="form-label fw-semibold" style="font-size:.875rem;">Confirm Password</label>
+                                    <div class="input-group sr-input-group">
+                                        <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                                        <input asp-for="ConfirmPassword" class="form-control py-2" placeholder="Re-enter password"
+                                               id="regConfirmPassword" autocomplete="new-password" />
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-semibold small">Passport Number</label>
-                                        <input name="PassportNumber" class="form-control" placeholder="AB1234567" />
+                                    <span asp-validation-for="ConfirmPassword" class="text-danger" style="font-size:.8rem;"></span>
+                                </div>
+                            </div>
+
+                            <!-- Local fields -->
+                            <div id="local-fields" class="row g-3 mb-3 field-group">
+                                <div class="col-md-6">
+                                    <label asp-for="CCCD" class="form-label fw-semibold" style="font-size:.875rem;">National ID (CCCD/CMND)</label>
+                                    <div class="input-group sr-input-group">
+                                        <span class="input-group-text"><i class="bi bi-card-text"></i></span>
+                                        <input asp-for="CCCD" class="form-control py-2" placeholder="9 or 12 digits" />
                                     </div>
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-semibold small">Nationality</label>
-                                        <select name="Nationality" class="form-select">
+                                    <span asp-validation-for="CCCD" class="text-danger" style="font-size:.8rem;"></span>
+                                </div>
+                                <div class="col-md-6">
+                                    <label asp-for="PhoneNumber" class="form-label fw-semibold" style="font-size:.875rem;">Phone Number</label>
+                                    <div class="input-group sr-input-group">
+                                        <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                        <input asp-for="PhoneNumber" class="form-control py-2" placeholder="0901234567" autocomplete="tel" />
+                                    </div>
+                                    <span asp-validation-for="PhoneNumber" class="text-danger" style="font-size:.8rem;"></span>
+                                </div>
+                            </div>
+
+                            <!-- Tourist fields -->
+                            <div id="tourist-fields" class="row g-3 mb-3 field-group" style="display:none!important;">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold" style="font-size:.875rem;">Passport Number</label>
+                                    <div class="input-group sr-input-group">
+                                        <span class="input-group-text"><i class="bi bi-passport"></i></span>
+                                        <input name="PassportNumber" class="form-control py-2" placeholder="AB1234567" />
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold" style="font-size:.875rem;">Nationality</label>
+                                    <div class="input-group sr-input-group">
+                                        <span class="input-group-text"><i class="bi bi-globe"></i></span>
+                                        <select name="Nationality" class="form-select py-2">
                                             <option value="">Select country...</option>
-                                            <option value="US">United States</option>
-                                            <option value="UK">United Kingdom</option>
-                                            <option value="JP">Japan</option>
-                                            <option value="KR">South Korea</option>
-                                            <option value="AU">Australia</option>
-                                            <option value="FR">France</option>
-                                            <option value="DE">Germany</option>
-                                            <option value="SG">Singapore</option>
-                                            <option value="TH">Thailand</option>
-                                            <option value="CN">China</option>
-                                            <option value="OTHER">Other</option>
+                                            <option value="US">🇺🇸 United States</option>
+                                            <option value="UK">🇬🇧 United Kingdom</option>
+                                            <option value="AU">🇦🇺 Australia</option>
+                                            <option value="JP">🇯🇵 Japan</option>
+                                            <option value="KR">🇰🇷 South Korea</option>
+                                            <option value="FR">🇫🇷 France</option>
+                                            <option value="DE">🇩🇪 Germany</option>
+                                            <option value="SG">🇸🇬 Singapore</option>
+                                            <option value="TH">🇹🇭 Thailand</option>
+                                            <option value="CN">🇨🇳 China</option>
+                                            <option value="OTHER">🌐 Other</option>
                                         </select>
                                     </div>
                                 </div>
                             </div>
-                        </div>
 
-                        <!-- Submit -->
-                        <div class="mt-4">
-                            <button type="submit" class="btn btn-success w-100 py-2 fw-semibold">
-                                <i class="bi bi-person-plus me-1"></i>Register
+                            <!-- Terms -->
+                            <div class="form-check mb-4">
+                                <input class="form-check-input" type="checkbox" id="agreeTerms" required>
+                                <label class="form-check-label text-muted" for="agreeTerms" style="font-size:.85rem;">
+                                    I agree to the
+                                    <a href="/Home/Privacy" class="text-sr-green text-decoration-none fw-medium">Terms of Service</a>
+                                    and
+                                    <a href="/Home/Privacy" class="text-sr-green text-decoration-none fw-medium">Privacy Policy</a>
+                                </label>
+                            </div>
+
+                            <button type="submit" class="btn btn-success w-100 py-2 fw-bold rounded-3 mb-3"
+                                    id="registerBtn"
+                                    style="font-size:1rem;box-shadow:0 4px 16px rgba(22,163,74,.3);letter-spacing:.02em;">
+                                <i class="bi bi-person-plus me-2"></i>Create Account
                             </button>
-                        </div>
-                    </form>
+                        </form>
 
-                    <div class="text-center mt-3">
-                        <span class="small text-muted">Already have an account?</span>
-                        <a asp-action="Login" class="small fw-semibold text-decoration-none text-sr-green ms-1">
-                            Log In
+                        <div class="sr-divider">ALREADY HAVE AN ACCOUNT?</div>
+
+                        <a asp-controller="Account" asp-action="Login"
+                           class="btn btn-outline-success w-100 py-2 fw-semibold rounded-3">
+                            <i class="bi bi-box-arrow-in-right me-2"></i>Log In
                         </a>
                     </div>
                 </div>
@@ -157,9 +261,51 @@
 </div>
 
 @section Scripts {
-    <script>
-        function setUserType(type) {
-            document.getElementById('userTypeInput').value = type;
+<script>
+    function selectType(type) {
+        document.getElementById('userTypeInput').value = type;
+        document.getElementById('card-local').classList.toggle('selected', type === 'Local');
+        document.getElementById('card-tourist').classList.toggle('selected', type === 'Tourist');
+        const localF = document.getElementById('local-fields');
+        const touristF = document.getElementById('tourist-fields');
+        if (type === 'Local') {
+            localF.style.removeProperty('display');
+            touristF.style.setProperty('display', 'none', 'important');
+            localF.classList.add('field-appear');
+        } else {
+            localF.style.setProperty('display', 'none', 'important');
+            touristF.style.removeProperty('display');
+            touristF.classList.add('field-appear');
         }
-    </script>
+    }
+    function togglePwd(id, btn) {
+        const inp = document.getElementById(id);
+        const ico = btn.querySelector('i');
+        inp.type = inp.type === 'password' ? 'text' : 'password';
+        ico.className = inp.type === 'password' ? 'bi bi-eye' : 'bi bi-eye-slash';
+    }
+    document.getElementById('regPassword')?.addEventListener('input', function () {
+        const val = this.value;
+        let strength = 0;
+        if (val.length >= 6) strength++;
+        if (/[A-Z]/.test(val)) strength++;
+        if (/[0-9]/.test(val)) strength++;
+        if (/[^A-Za-z0-9]/.test(val)) strength++;
+        let el = document.getElementById('pwdStrength');
+        if (!el) {
+            el = document.createElement('div');
+            el.id = 'pwdStrength';
+            el.className = 'mt-1 d-flex gap-1';
+            el.innerHTML = '<div class="flex-fill rounded" style="height:3px;"></div>'.repeat(4);
+            this.closest('.input-group').after(el);
+        }
+        const colours = ['','#ef4444','#f59e0b','#22c55e','#16a34a'];
+        el.querySelectorAll('div').forEach((b, i) => { b.style.background = i < strength ? colours[strength] : '#e2e8f0'; });
+    });
+    document.getElementById('registerForm')?.addEventListener('submit', function () {
+        const btn = document.getElementById('registerBtn');
+        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating account...';
+        btn.disabled = true;
+    });
+</script>
 }
