@@ -24,17 +24,24 @@ namespace RentalVehicleService.Controllers
             _context = context; 
             _rentalService = rentalService; // Khởi tạo Service
         }
-
-        public RentalController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
-
         // GET: Rental
         public async Task<IActionResult> Index()
         {
-            var applicationDbContext = _context.Rentals.Include(r => r.EndStation).Include(r => r.StartStation).Include(r => r.Vehicle);
-            return View(await applicationDbContext.ToListAsync());
+            var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            var query = _context.Rentals
+                    .Include(r => r.EndStation)
+                    .Include(r => r.StartStation)
+                    .Include(r => r.Vehicle)
+                    .AsQueryable();
+
+            if (!User.IsInRole("Admin"))
+            {
+                query = query.Where(r => r.UserId == userID);
+
+            }
+
+            return View(await query.OrderByDescending(r => r.StartTime).ToListAsync());
         }
 
         // GET: Rental/Details/5
@@ -169,7 +176,7 @@ namespace RentalVehicleService.Controllers
                 return View(rental);
             }
         }
-
+        [Authorize(Roles = "Admin")]
         // GET: Rental/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
@@ -194,11 +201,18 @@ namespace RentalVehicleService.Controllers
         // POST: Rental/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var rental = await _context.Rentals.FindAsync(id);
             if (rental != null)
             {
+                var vehicle = await _context.Vehicles.FindAsync(rental.VehicleId);
+                if (vehicle != null && rental.Status == RentalStatus.Active)
+                {
+                    vehicle.State = VehicleState.Available;
+                }
+
                 _context.Rentals.Remove(rental);
             }
 
