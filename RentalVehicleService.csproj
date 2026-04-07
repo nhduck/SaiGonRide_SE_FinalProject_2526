@@ -10,6 +10,17 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="Views\Stations\**" />
+    <Compile Remove="Views\Vehicles\**" />
+    <Content Remove="Views\Stations\**" />
+    <Content Remove="Views\Vehicles\**" />
+    <EmbeddedResource Remove="Views\Stations\**" />
+    <EmbeddedResource Remove="Views\Vehicles\**" />
+    <None Remove="Views\Stations\**" />
+    <None Remove="Views\Vehicles\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <None Remove=".gitinore" />
   </ItemGroup>
 
@@ -32,11 +43,6 @@
 
   <ItemGroup>
     <None Include="wwwroot\css\Vehicle\indexStyle.css" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Views\AdminDashboard\Pages\VehicleManagement\" />
-    <Folder Include="Views\AdminDashboard\Pages\StationManagement\" />
   </ItemGroup>
 
 </Project>

@@ -5,79 +5,21 @@ namespace RentalVehicleService.Controllers
 {
     public class AdminDashboardController : Controller
     {
-        // GET: AdminDashboardController
-        public ActionResult Index()
-        {
-            return View();
-        }
+        public IActionResult Index() => View();
 
-        // GET: AdminDashboardController/Details/5
-        public ActionResult Details(int id)
-        {
-            return View();
-        }
+        public IActionResult Dashboard()
+            => PartialView("~/Views/AdminDashboard/Pages/Dashboard/Index.cshtml");
 
-        // GET: AdminDashboardController/Create
-        public ActionResult Create()
-        {
-            return View();
-        }
+        public IActionResult VehicleManagement()
+            => PartialView("~/Views/AdminDashboard/Pages/VehicleManagement/Index.cshtml");
 
-        // POST: AdminDashboardController/Create
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Create(IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        public IActionResult StationManagement()
+            => PartialView("~/Views/AdminDashboard/Pages/StationManagement/Index.cshtml");
 
-        // GET: AdminDashboardController/Edit/5
-        public ActionResult Edit(int id)
-        {
-            return View();
-        }
+        public IActionResult UserManagement()
+            => PartialView("~/Views/AdminDashboard/Pages/UserManagement/Index.cshtml");
 
-        // POST: AdminDashboardController/Edit/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Edit(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
-
-        // GET: AdminDashboardController/Delete/5
-        public ActionResult Delete(int id)
-        {
-            return View();
-        }
-
-        // POST: AdminDashboardController/Delete/5
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public ActionResult Delete(int id, IFormCollection collection)
-        {
-            try
-            {
-                return RedirectToAction(nameof(Index));
-            }
-            catch
-            {
-                return View();
-            }
-        }
+        public IActionResult Reports()
+            => PartialView("~/Views/AdminDashboard/Pages/Reports/Index.cshtml");
     }
 }
