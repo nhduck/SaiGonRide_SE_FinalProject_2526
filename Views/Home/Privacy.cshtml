@@ -1,51 +1,149 @@
 @{
-    ViewData["Title"] = "Privacy Policy";
+    ViewData["Title"] = "Privacy Policy & Terms of Service";
+    ViewData["MetaDescription"] = "SaigonRide's privacy policy, terms of service, and your data rights. We are committed to protecting your personal information.";
 }
 
+<!-- Hero -->
+<section style="background:linear-gradient(135deg,#1e293b,#0f172a);padding:4.5rem 0;">
+    <div class="container text-center">
+        <div style="font-size:3.5rem;margin-bottom:1rem;">🔒</div>
+        <h1 class="fw-bold text-white mb-2">Privacy Policy & Terms of Service</h1>
+        <p class="text-white-50">Last updated: January 1, 2026</p>
+    </div>
+</section>
+
 <div class="container py-5">
-    <div class="row justify-content-center">
-        <div class="col-lg-8">
-            <h1 class="mb-4 fw-bold">Privacy Policy</h1>
-            <p class="text-muted mb-5">Last updated: April 02, 2026</p>
-
-            <section class="mb-5">
-                <h3 class="fw-semibold mb-3">1. Information We Collect</h3>
-                <p>
-                    SaigonRide collects personal information when you register for an account, such as your full name, email address, phone number, and National ID/Passport. 
-                    We also collect real-time geolocation data when you active a rental to provide you with available vehicles in your area.
-                </p>
-                <ul>
-                    <li><strong>Account Data:</strong> Name, Email, Password (Encrypted), Identification.</li>
-                    <li><strong>Usage Data:</strong> Rental history, travel routes, start and end points.</li>
-                    <li><strong>Device Info:</strong> IP address, device type, browser used.</li>
-                </ul>
-            </section>
-
-            <section class="mb-5">
-                <h3 class="fw-semibold mb-3">2. How We Use Your Information</h3>
-                <p>We use the information we collect to operate, maintain, and provide you with the features and functionality of the Service, as well as to communicate directly with you.</p>
-                <p>Your location data is specifically used to verify the vehicle drop-off zones and calculate pricing accurately.</p>
-            </section>
-
-            <section class="mb-5">
-                <h3 class="fw-semibold mb-3">3. Data Sharing</h3>
-                <p>We do not sell, trade, or otherwise transfer your personally identifiable information to outside parties unless we provide users with advance notice. This does not include website hosting partners and other parties who assist us in operating our website.</p>
-            </section>
-
-            <section class="mb-5">
-                <h3 class="fw-semibold mb-3">4. Security of Your Information</h3>
-                <p>SaigonRide uses commercially reasonable physical, managerial, and technical safeguards (such as ASP.NET Core Identity encryption) to preserve the integrity and security of your personal information.</p>
-            </section>
-
-            <section class="mb-5">
-                <h3 class="fw-semibold mb-3">5. Contact Us</h3>
-                <p>If you have any questions about this Privacy Policy, please contact us at:</p>
-                <div class="bg-light p-4 rounded mt-3">
-                    <p class="mb-1"><i class="bi bi-envelope me-2 text-primary"></i> <strong>Email:</strong> tt3145539@gmail.com</p>
-                    <p class="mb-1"><i class="bi bi-telephone me-2 text-primary"></i> <strong>Phone:</strong> 0932 013 424</p>
-                    <p class="mb-0"><i class="bi bi-geo-alt me-2 text-primary"></i> <strong>Address:</strong> 670/32 Doan Van Bo, Ward 16, District 4, HCMC</p>
+    <div class="row">
+        <!-- TOC sidebar -->
+        <div class="col-lg-3 d-none d-lg-block">
+            <div class="sticky-top pt-2" style="top:80px;">
+                <div class="bg-white rounded-4 shadow-sm p-4">
+                    <h6 class="fw-bold mb-3 text-sr-green">Table of Contents</h6>
+                    <nav class="nav flex-column gap-1">
+                        <a href="#collect"  class="nav-link text-muted py-1 ps-0" style="font-size:.875rem;">1. Data we collect</a>
+                        <a href="#use"      class="nav-link text-muted py-1 ps-0" style="font-size:.875rem;">2. How we use data</a>
+                        <a href="#share"    class="nav-link text-muted py-1 ps-0" style="font-size:.875rem;">3. Data sharing</a>
+                        <a href="#security" class="nav-link text-muted py-1 ps-0" style="font-size:.875rem;">4. Security</a>
+                        <a href="#rights"   class="nav-link text-muted py-1 ps-0" style="font-size:.875rem;">5. Your rights</a>
+                        <a href="#terms"    class="nav-link text-muted py-1 ps-0" style="font-size:.875rem;">6. Terms of Service</a>
+                        <a href="#contact"  class="nav-link text-muted py-1 ps-0" style="font-size:.875rem;">7. Contact us</a>
+                    </nav>
                 </div>
-            </section>
+            </div>
+        </div>
+
+        <!-- Content -->
+        <div class="col-lg-9">
+            <div class="bg-white rounded-4 shadow-sm p-4 p-md-5">
+
+                <div class="alert rounded-3 mb-5 d-flex align-items-start gap-3 border-0"
+                     style="background:#f0fdf4;color:#166534;">
+                    <i class="bi bi-shield-check-fill fs-4 mt-1 flex-shrink-0"></i>
+                    <div>
+                        <strong>Our Commitment</strong><br>
+                        <span style="font-size:.9rem;">
+                            SaigonRide is committed to protecting your personal data in accordance with Vietnamese
+                            Decree 13/2023/ND-CP on the Protection of Personal Data.
+                        </span>
+                    </div>
+                </div>
+
+                <section id="collect" class="mb-5">
+                    <h3 class="fw-bold mb-3 pb-2 border-bottom">1. Data We Collect</h3>
+                    <p class="text-muted" style="line-height:1.8;">When you use SaigonRide, we may collect:</p>
+                    <ul class="text-muted" style="line-height:2.1;">
+                        <li><strong>Identity information:</strong> Full name, email, phone number, national ID/passport</li>
+                        <li><strong>Payment information:</strong> Payment method details (full card numbers are never stored)</li>
+                        <li><strong>Location data:</strong> Start and end station of each rental</li>
+                        <li><strong>Usage history:</strong> Rental history, duration, and route information</li>
+                        <li><strong>Device & browser:</strong> IP address, device type (to improve the user experience)</li>
+                    </ul>
+                </section>
+
+                <section id="use" class="mb-5">
+                    <h3 class="fw-bold mb-3 pb-2 border-bottom">2. How We Use Your Data</h3>
+                    <div class="row g-3">
+                        @{
+                            var uses = new[] {
+                                new { Icon="bi-bicycle",  Title="Provide the service",    Desc="Process bookings, handle payments, and provide customer support." },
+                                new { Icon="bi-graph-up", Title="Improve our service",    Desc="Analyse anonymised data to optimise the station network." },
+                                new { Icon="bi-bell",     Title="Important notifications", Desc="Send receipts, security alerts, and service updates." },
+                                new { Icon="bi-shield",   Title="Fraud prevention",       Desc="Detect and stop suspicious account activity." },
+                            };
+                        }
+                        @foreach (var u in uses)
+                        {
+                            <div class="col-md-6">
+                                <div class="d-flex gap-3 p-3 bg-light rounded-3">
+                                    <i class="bi @u.Icon text-sr-green fs-4 flex-shrink-0 mt-1"></i>
+                                    <div>
+                                        <div class="fw-semibold mb-1" style="font-size:.9rem;">@u.Title</div>
+                                        <div class="text-muted" style="font-size:.85rem;">@u.Desc</div>
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    </div>
+                </section>
+
+                <section id="share" class="mb-5">
+                    <h3 class="fw-bold mb-3 pb-2 border-bottom">3. Data Sharing</h3>
+                    <p class="text-muted" style="line-height:1.8;">SaigonRide <strong>NEVER sells your data</strong>. We share data only in 3 cases:</p>
+                    <ol class="text-muted" style="line-height:2.1;">
+                        <li><strong>Payment gateways:</strong> Information required to process your transaction (MoMo, ZaloPay, etc.)</li>
+                        <li><strong>Legal requests:</strong> When required by competent authorities under applicable law</li>
+                        <li><strong>Rights protection:</strong> To investigate fraud, disputes, or accidents</li>
+                    </ol>
+                </section>
+
+                <section id="security" class="mb-5">
+                    <h3 class="fw-bold mb-3 pb-2 border-bottom">4. Security</h3>
+                    <div class="d-flex gap-3 flex-wrap">
+                        @foreach (var item in new[] { "🔐 256-bit SSL/TLS Encryption", "🛡️ Two-Factor Authentication (2FA)", "💾 Daily Backups", "🕵️ Regular Security Audits" })
+                        {
+                            <span class="badge py-2 px-3" style="background:var(--sr-green-50);color:var(--sr-green);font-weight:500;border-radius:8px;font-size:.85rem;">@item</span>
+                        }
+                    </div>
+                </section>
+
+                <section id="rights" class="mb-5">
+                    <h3 class="fw-bold mb-3 pb-2 border-bottom">5. Your Rights</h3>
+                    <ul class="text-muted" style="line-height:2.2;">
+                        <li>✅ <strong>Access:</strong> Request a full copy of all data we hold about you</li>
+                        <li>✅ <strong>Correct:</strong> Update your personal information in your Profile page</li>
+                        <li>✅ <strong>Delete:</strong> Request deletion of your account and associated data</li>
+                        <li>✅ <strong>Opt-out:</strong> Unsubscribe from marketing emails at any time</li>
+                        <li>✅ <strong>Portability:</strong> Export your data in a machine-readable format</li>
+                    </ul>
+                </section>
+
+                <section id="terms" class="mb-5">
+                    <h3 class="fw-bold mb-3 pb-2 border-bottom">6. Terms of Service</h3>
+                    <ul class="text-muted" style="line-height:2.2;">
+                        <li>You must be at least <strong>16 years old</strong> to use the service</li>
+                        <li>Obey all Vietnamese road traffic laws; do not lend your account to others</li>
+                        <li>Report damaged vehicles before starting a ride; you are liable for damage you cause</li>
+                        <li>SaigonRide reserves the right to suspend accounts that violate these terms without prior notice</li>
+                    </ul>
+                </section>
+
+                <section id="contact">
+                    <h3 class="fw-bold mb-3 pb-2 border-bottom">7. Contact Us</h3>
+                    <div class="d-flex flex-wrap gap-3">
+                        <a href="mailto:tt3145539@gmail.com"
+                           class="btn btn-success rounded-3 d-flex align-items-center gap-2 fw-semibold">
+                            <i class="bi bi-envelope-fill"></i>tt3145539@gmail.com
+                        </a>
+                        <a href="tel:0932013424"
+                           class="btn btn-outline-success rounded-3 d-flex align-items-center gap-2 fw-semibold">
+                            <i class="bi bi-telephone-fill"></i>0932 013 424
+                        </a>
+                    </div>
+                    <p class="text-muted mt-3" style="font-size:.875rem;">
+                        Office address: Millenium Apartment 306F, District 4, Ho Chi Minh City
+                    </p>
+                </section>
+            </div>
         </div>
     </div>
 </div>
