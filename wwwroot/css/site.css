@@ -486,6 +486,7 @@ body {
     display: inline-block;
     width: 160px;
     height: 120px;
+    z-index: 5;
 }
 
 .sr-bike-emoji {

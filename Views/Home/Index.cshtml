@@ -65,39 +65,45 @@
 
             <!-- Right: EPIC BIKE ANIMATION -->
             <div class="col-lg-6 d-none d-lg-flex justify-content-center align-items-center">
-                <div class="text-center position-relative">
+                <div class="position-relative" style="width: 100%; height: 380px; max-width: 500px;">
 
-                    <!-- Epic Bike Wrapper -->
-                    <div class="sr-bike-wrapper mx-auto mb-3">
+                    <!-- STAIR 1: Zero CO2 -->
+                    <div class="sr-glass position-absolute d-flex align-items-center gap-2 px-3 py-2 shadow"
+                         style="top: 10%; left: 15%; animation: hero-slide-up .5s .7s both; z-index: 10;">
+                        <span style="font-size: 1.3rem;">🌿</span>
+                        <div>
+                            <div class="text-white fw-bold" style="font-size: .85rem;">Zero CO₂</div>
+                            <div style="font-size: .72rem; color: rgba(255, 255, 255, .6);">100% green</div>
+                        </div>
+                    </div>
+
+                    <!-- STAIR 2: E-Scooter -->
+                    <div class="sr-glass position-absolute d-flex align-items-center gap-2 px-3 py-2 shadow"
+                         style="top: 23%; left: 28%; animation: hero-slide-up .5s .85s both; z-index: 10;">
+                        <span style="font-size: 1.4rem;">⚡</span>
+                        <div>
+                            <div class="text-white fw-bold" style="font-size: .85rem;">E-Scooter</div>
+                            <div style="font-size: .72rem; color: rgba(255, 255, 255, .6);">1,500 VND/min</div>
+                        </div>
+                    </div>
+
+                    <!-- STAIR 3: Instant unlock -->
+                    <div class="sr-glass position-absolute d-flex align-items-center gap-2 px-3 py-2 shadow"
+                         style="top: 36%; left: 41%; animation: hero-slide-up .5s 1s both; z-index: 10;">
+                        <div class="text-success fw-bold me-1" style="font-size: 1.7rem;">✓</div>
+                        <div>
+                            <div class="text-white fw-bold" style="font-size: .85rem;">Instant unlock</div>
+                            <div style="font-size: .72rem; color: rgba(255, 255, 255, .6);">No cash needed</div>
+                        </div>
+                    </div>
+
+                    <!-- STAIR 4: EPIC BIKE WRAPPER -->
+                    <div class="sr-bike-wrapper position-absolute"
+                         style="top: 50%; left: 54%; transform: translate(-20px, 0); animation: hero-slide-up .5s 1.15s both;">
                         <div class="sr-bike-emoji">🚲</div>
                         <div class="sr-lightning-badge">⚡</div>
                     </div>
 
-                    <!-- Floating badges -->
-                    <div class="sr-glass position-absolute d-flex align-items-center gap-2 px-3 py-2 shadow"
-                         style="top:5%;left:-10%;animation:hero-slide-up .5s .7s both;">
-                        <span style="font-size:1.4rem;">⚡</span>
-                        <div>
-                            <div class="text-white fw-bold" style="font-size:.85rem;">E-Scooter</div>
-                            <div style="font-size:.72rem;color:rgba(255,255,255,.6);">1,500 VND/min</div>
-                        </div>
-                    </div>
-                    <div class="sr-glass position-absolute d-flex align-items-center gap-2 px-3 py-2 shadow"
-                         style="bottom:12%;right:-8%;animation:hero-slide-up .5s .85s both;">
-                        <div class="text-success fw-bold me-1" style="font-size:1.7rem;">✓</div>
-                        <div>
-                            <div class="text-white fw-bold" style="font-size:.85rem;">Instant unlock</div>
-                            <div style="font-size:.72rem;color:rgba(255,255,255,.6);">No cash needed</div>
-                        </div>
-                    </div>
-                    <div class="sr-glass position-absolute d-flex align-items-center gap-2 px-3 py-2 shadow"
-                         style="bottom:30%;left:-15%;animation:hero-slide-up .5s 1s both;">
-                        <span style="font-size:1.3rem;">🌿</span>
-                        <div>
-                            <div class="text-white fw-bold" style="font-size:.85rem;">Zero CO₂</div>
-                            <div style="font-size:.72rem;color:rgba(255,255,255,.6);">100% green</div>
-                        </div>
-                    </div>
                 </div>
             </div>
         </div>
@@ -127,7 +133,7 @@
                 var features = new[] {
                     new { Icon="bi-lightning-charge-fill", Color="#16a34a", BgColor="#dcfce7", Title="Lightning Fast",       Desc="Book a bike in under 30 seconds. Scan, ride, done. No dedicated app required.", Delay="sr-delay-1" },
                     new { Icon="bi-geo-alt-fill",           Color="#0d9488", BgColor="#ccfbf1", Title="City-Wide Network",   Desc="50+ stations from District 1 to District 12, Thu Duc and beyond. Always a bike nearby.", Delay="sr-delay-2" },
-                    new { Icon="bi-shield-check-fill",      Color="#7c3aed", BgColor="#ede9fe", Title="Safe & Transparent",  Desc="Vehicle insurance + real-time GPS tracking. Honest pricing, zero hidden fees.", Delay="sr-delay-3" },
+                    new { Icon="bi-shield-fill-check",      Color="#7c3aed", BgColor="#ede9fe", Title="Safe & Transparent",  Desc="Vehicle insurance + real-time GPS tracking. Honest pricing, zero hidden fees.", Delay="sr-delay-3" },
                     new { Icon="bi-currency-dollar",        Color="#ea580c", BgColor="#ffedd5", Title="Ultra Affordable",    Desc="Standard bike from 500 VND/min. E-scooter from 1,500 VND/min. Always cheaper than taxis.", Delay="sr-delay-4" },
                     new { Icon="bi-leaf-fill",              Color="#16a34a", BgColor="#dcfce7", Title="100% Eco-Friendly",   Desc="Each ride saves ~200g of CO₂ vs. a motorbike. Together, we're greening Saigon.", Delay="sr-delay-5" },
                     new { Icon="bi-headset",                Color="#0284c7", BgColor="#e0f2fe", Title="24/7 Support",        Desc="Live support agents around the clock. Issue on the road? We're there in 15 minutes.", Delay="sr-delay-6" },
