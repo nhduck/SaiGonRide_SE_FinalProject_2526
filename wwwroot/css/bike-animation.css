@@ -1,0 +1,307 @@
+/* SAIGONRIDE BIKE ANIMATION */
+
+/* Scene container */
+.sr-bike-scene {
+    position: relative;
+    width: 320px;
+    height: 240px;
+    display: flex;
+    align-items: flex-end;
+    justify-content: flex-end;
+    overflow: visible;
+}
+
+/* SVG Bike wrapper */
+.sr-bike-svg-wrap {
+    position: absolute;
+    bottom: 20px;
+    /* Phase 1: slide in from left → stop */
+    animation:
+        bike-run-in 1.4s cubic-bezier(.22, 1, .36, 1) 0.3s both,
+        bike-idle-bob 0.55s ease-in-out 1.75s infinite alternate;
+    will-change: transform;
+}
+
+@keyframes bike-run-in {
+    0% {
+        transform: translateX(-340px) translateY(0);
+    }
+
+    100% {
+        transform: translateX(0) translateY(0);
+    }
+}
+
+/* Whole-bike idle bob (wheels + body move together) */
+@keyframes bike-idle-bob {
+    0% {
+        transform: translateX(0) translateY(0px);
+    }
+
+    100% {
+        transform: translateX(0) translateY(-5px);
+    }
+}
+
+/* Road dust */
+.sr-dust-wrap {
+    position: absolute;
+    bottom: 22px;
+    left: -10px;
+    pointer-events: none;
+    animation: dust-fade 1.5s 0.3s both;
+}
+
+@keyframes dust-fade {
+    0% {
+        opacity: 0;
+        transform: scaleX(0.2);
+    }
+
+    30% {
+        opacity: 1;
+        transform: scaleX(1);
+    }
+
+    80% {
+        opacity: 0.5;
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Speed lines */
+.sr-speed-lines {
+    position: absolute;
+    bottom: 40px;
+    left: -80px;
+    pointer-events: none;
+    opacity: 0;
+    animation: speed-lines-show 1.2s 0.3s both;
+}
+
+@keyframes speed-lines-show {
+    0% {
+        opacity: 0;
+        transform: translateX(40px);
+    }
+
+    25% {
+        opacity: 1;
+    }
+
+    75% {
+        opacity: 0.6;
+        transform: translateX(0);
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Lightning burst on arrival */
+.sr-lightning-burst {
+    position: absolute;
+    top: -50px;
+    right: 80px;
+    pointer-events: none;
+    opacity: 0;
+    animation: lightning-burst 0.6s cubic-bezier(.4, 0, .2, 1) 1.6s both;
+}
+
+@keyframes lightning-burst {
+    0% {
+        opacity: 0;
+        transform: scale(0.3) rotate(-10deg);
+        filter: brightness(3) drop-shadow(0 0 20px #facc15);
+    }
+
+    20% {
+        opacity: 1;
+        transform: scale(1.6) rotate(-15deg);
+        filter: brightness(2.5) drop-shadow(0 0 30px #facc15);
+    }
+
+    40% {
+        opacity: 0.8;
+        transform: scale(1.3) rotate(-12deg);
+        filter: brightness(2);
+    }
+
+    60% {
+        opacity: 1;
+        transform: scale(1.5) rotate(-15deg);
+        filter: brightness(2.5) drop-shadow(0 0 20px #fbbf24);
+    }
+
+    100% {
+        opacity: 0;
+        transform: scale(0.8) rotate(-10deg);
+    }
+}
+
+/* Continuous idle sparks */
+.sr-idle-sparks {
+    position: absolute;
+    top: -20px;
+    right: 60px;
+    pointer-events: none;
+}
+
+.sr-spark {
+    position: absolute;
+    width: 4px;
+    height: 4px;
+    border-radius: 50%;
+    background: #facc15;
+    opacity: 0;
+}
+
+.sr-spark:nth-child(1) {
+    top: 0;
+    left: 0;
+    animation: spark-fly 1.4s 2.2s infinite;
+}
+
+.sr-spark:nth-child(2) {
+    top: -5px;
+    left: 8px;
+    animation: spark-fly 1.4s 2.55s infinite;
+    background: #fbbf24;
+    width: 3px;
+    height: 3px;
+}
+
+.sr-spark:nth-child(3) {
+    top: 4px;
+    left: -6px;
+    animation: spark-fly 1.4s 2.9s infinite;
+    background: #fde047;
+    width: 5px;
+    height: 5px;
+}
+
+.sr-spark:nth-child(4) {
+    top: -8px;
+    left: 4px;
+    animation: spark-fly 1.4s 3.2s infinite;
+    width: 3px;
+    height: 3px;
+}
+
+@keyframes spark-fly {
+    0% {
+        opacity: 0;
+        transform: translate(0, 0) scale(1);
+    }
+
+    15% {
+        opacity: 1;
+        transform: translate(0, 0) scale(1.4);
+        filter: drop-shadow(0 0 4px #facc15);
+    }
+
+    60% {
+        opacity: 0.7;
+        transform: translate(var(--sx, 14px), var(--sy, -18px)) scale(0.8);
+    }
+
+    100% {
+        opacity: 0;
+        transform: translate(var(--sx2, 20px), var(--sy2, -28px)) scale(0);
+    }
+}
+
+.sr-spark:nth-child(1) {
+    --sx: 12px;
+    --sy: -20px;
+    --sx2: 18px;
+    --sy2: -30px;
+}
+
+.sr-spark:nth-child(2) {
+    --sx: -8px;
+    --sy: -16px;
+    --sx2: -14px;
+    --sy2: -26px;
+}
+
+.sr-spark:nth-child(3) {
+    --sx: 16px;
+    --sy: -12px;
+    --sx2: 24px;
+    --sy2: -20px;
+}
+
+.sr-spark:nth-child(4) {
+    --sx: -5px;
+    --sy: -22px;
+    --sx2: -10px;
+    --sy2: -34px;
+}
+
+/* Continuous mini lightning */
+.sr-mini-lightning {
+    position: absolute;
+    top: -45px;
+    right: 75px;
+    pointer-events: none;
+    opacity: 0;
+    animation: mini-lightning-pulse 2.2s 2.5s infinite;
+    filter: drop-shadow(0 0 8px #facc15);
+}
+
+@keyframes mini-lightning-pulse {
+    0% {
+        opacity: 0;
+        transform: scale(0.6) rotate(-15deg);
+    }
+
+    8% {
+        opacity: 1;
+        transform: scale(1.1) rotate(-18deg);
+    }
+
+    16% {
+        opacity: 0.5;
+        transform: scale(0.9) rotate(-12deg);
+    }
+
+    24% {
+        opacity: 0;
+        transform: scale(0.7) rotate(-15deg);
+    }
+
+    100% {
+        opacity: 0;
+    }
+}
+
+/* Glow ring under bike */
+.sr-glow-ring {
+    position: absolute;
+    bottom: 12px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 220px;
+    height: 16px;
+    background: radial-gradient(ellipse, rgba(74, 222, 128, 0.35) 0%, transparent 70%);
+    border-radius: 50%;
+    animation: glow-ring-pulse 1.2s ease-in-out 1.7s infinite alternate;
+    pointer-events: none;
+}
+
+@keyframes glow-ring-pulse {
+    0% {
+        opacity: 0.5;
+        transform: translateX(-50%) scaleX(0.9);
+    }
+
+    100% {
+        opacity: 1;
+        transform: translateX(-50%) scaleX(1.1);
+    }
+}

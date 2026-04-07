@@ -15,7 +15,7 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <!-- ── SEO ── -->
+    <!-- SEO -->
     <title>@pageTitle - SaigonRide</title>
     <meta name="description" content="@metaDesc" />
     <meta name="robots" content="index, follow" />
@@ -48,6 +48,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/LayoutStyle.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/bike-animation.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/RentalVehicleService.styles.css" asp-append-version="true" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @await RenderSectionAsync("Styles", required: false)
@@ -63,7 +64,7 @@
 </head>
 <body>
 
-    <!-- ════ NAVBAR ════ -->
+    <!-- NAVBAR -->
     <nav class="navbar navbar-expand-xl sticky-top sr-navbar" id="mainNav">
         <div class="container-fluid px-4 px-xl-5">
             <a class="navbar-brand d-flex align-items-center text-nowrap" href="/">
@@ -271,8 +272,17 @@
     <!-- FAB -->
     <div class="fab-wrapper">
         <input type="checkbox" id="fab-checkbox" class="fab-checkbox d-none" />
+        
+        <!-- Contact Message Bubble -->
+        <div class="fab-contact-msg">
+            <span class="fb-msg-text">Contact here!</span>
+            <div class="fb-msg-dots">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+
         <label class="fab-btn shadow-lg pulse-animation" for="fab-checkbox">
-            <i class="bi bi-chat-dots-fill fab-icon-main"></i>
+            <i class="bi bi-telephone-fill fab-icon-main"></i>
             <i class="bi bi-x-lg fab-icon-close"></i>
         </label>
         <div class="fab-menu">
@@ -297,16 +307,13 @@
         </div>
     </div>
 
-    <!-- ════ SCRIPTS ════ -->
+    <!-- SCRIPTS -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
 
     <script>
-        // ── NProgress ─────────────────────────────────────────────
-        // Root-cause of double-load: Google Translate async script + iframe
-        // injection fires extra readystatechange events that re-trigger
-        // NProgress. Fix: one-shot listener + boolean guard + force-done.
+        // NProgress
         NProgress.configure({
             showSpinner: false,
             speed: 350,
@@ -320,11 +327,11 @@
         function _finishNProgress() {
             if (_npDone) return;
             _npDone = true;
-            NProgress.done(true);           // force=true removes bar immediately
+            NProgress.done(true);
         }
 
         if (document.readyState === 'complete') {
-            _finishNProgress();             // already loaded (cached page)
+            _finishNProgress();
         } else {
             // { once: true } — fires EXACTLY once, auto-removes itself
             window.addEventListener('load', _finishNProgress, { once: true });
@@ -346,7 +353,7 @@
             f.addEventListener('submit', () => NProgress.start());
         });
 
-        // ── Navbar scroll shrink ──────────────────────────────────
+        // Navbar scroll shrink
         const nav = document.getElementById('mainNav');
         if (nav) {
             window.addEventListener('scroll', () => {
@@ -354,7 +361,7 @@
             }, { passive: true });
         }
 
-        // ── Scroll-reveal ─────────────────────────────────────────
+        // Scroll-reveal
         const srObserver = new IntersectionObserver((entries) => {
             entries.forEach(e => {
                 if (e.isIntersecting) {
@@ -365,7 +372,7 @@
         }, { threshold: 0.12 });
         document.querySelectorAll('.sr-reveal').forEach(el => srObserver.observe(el));
 
-        // ── Google Translate ──────────────────────────────────────
+        // Google Translate
         function googleTranslateElementInit() {
             // Guard: initialise only once
             if (window._gtInitDone) return;

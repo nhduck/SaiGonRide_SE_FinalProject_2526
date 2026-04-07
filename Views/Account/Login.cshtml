@@ -77,10 +77,134 @@
                 <span class="text-white fw-bold fs-4">SaigonRide</span>
             </div>
 
-            <!-- ⚡ EPIC BIKE ANIMATION ⚡ -->
-            <div class="sr-bike-wrapper mx-auto mb-4">
-                <div class="sr-bike-emoji">🚲</div>
-                <div class="sr-lightning-badge">⚡</div>
+            <!-- SVG BIKE ANIMATION -->
+            <div class="sr-bike-scene mx-auto mb-4" style="position:relative;width:280px;height:180px;">
+                <!-- Speed lines -->
+                <div class="sr-speed-lines" style="bottom:40px;left:-60px;">
+                    <svg width="70" height="50" viewBox="0 0 70 50" fill="none">
+                        <line x1="0" y1="8" x2="60" y2="8" stroke="rgba(74,222,128,0.5)" stroke-width="2" stroke-linecap="round"/>
+                        <line x1="0" y1="19" x2="50" y2="19" stroke="rgba(74,222,128,0.3)" stroke-width="1.5" stroke-linecap="round"/>
+                        <line x1="0" y1="30" x2="65" y2="30" stroke="rgba(74,222,128,0.2)" stroke-width="1" stroke-linecap="round"/>
+                    </svg>
+                </div>
+
+                <!-- Dust -->
+                <div class="sr-dust-wrap" style="bottom:20px;left:-5px;">
+                    <svg width="50" height="25" viewBox="0 0 50 25">
+                        <circle cx="8" cy="18" r="4" fill="rgba(74,222,128,0.25)"/>
+                        <circle cx="20" cy="13" r="3" fill="rgba(74,222,128,0.18)"/>
+                        <circle cx="34" cy="19" r="3.5" fill="rgba(74,222,128,0.12)"/>
+                    </svg>
+                </div>
+
+                <!-- Bike SVG -->
+                <div class="sr-bike-svg-wrap" style="bottom:0;right:0;">
+                    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="260" height="165" style="overflow:visible;">
+                        <defs>
+                            <linearGradient id="loginFrameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                <stop offset="0%" style="stop-color:#4ade80;stop-opacity:1"/>
+                                <stop offset="50%" style="stop-color:#16a34a;stop-opacity:1"/>
+                                <stop offset="100%" style="stop-color:#14532d;stop-opacity:1"/>
+                            </linearGradient>
+                            <filter id="loginGlow">
+                                <feGaussianBlur stdDeviation="2" result="blur"/>
+                                <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                            </filter>
+                            <filter id="loginShadow">
+                                <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#166534" flood-opacity="0.5"/>
+                            </filter>
+                        </defs>
+                        <!-- Rear wheel -->
+                        <g transform="translate(82,148)">
+                            <g>
+                                <animateTransform attributeName="transform" type="rotate"
+                                    from="0 0 0" to="360 0 0"
+                                    dur="0.45s" begin="1.75s" repeatCount="indefinite"/>
+                                <circle r="52" fill="#111827" stroke="#1f2937" stroke-width="2"/>
+                                <circle r="46" fill="none" stroke="#374151" stroke-width="4"/>
+                                <circle r="41" fill="#1a1f2e" stroke="#374151" stroke-width="1.5"/>
+                                <circle r="6" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+                                <circle r="3" fill="#9ca3af"/>
+                                <g stroke="#6b7280" stroke-width="1.3" opacity="0.8">
+                                    <line x1="0" y1="-6" x2="0" y2="-41"/>
+                                    <line x1="0" y1="6" x2="0" y2="41"/>
+                                    <line x1="-6" y1="0" x2="-41" y2="0"/>
+                                    <line x1="6" y1="0" x2="41" y2="0"/>
+                                    <line x1="-4" y1="-4" x2="-29" y2="-29"/>
+                                    <line x1="4" y1="-4" x2="29" y2="-29"/>
+                                    <line x1="-4" y1="4" x2="-29" y2="29"/>
+                                    <line x1="4" y1="4" x2="29" y2="29"/>
+                                </g>
+                                <circle r="16" fill="none" stroke="#374151" stroke-width="7" stroke-dasharray="5 3" opacity="0.55"/>
+                            </g>
+                        </g>
+                        <g transform="translate(238,148)">
+                            <g>
+                                <animateTransform attributeName="transform" type="rotate"
+                                    from="0 0 0" to="360 0 0"
+                                    dur="0.45s" begin="1.75s" repeatCount="indefinite"/>
+                                <circle r="52" fill="#111827" stroke="#1f2937" stroke-width="2"/>
+                                <circle r="46" fill="none" stroke="#374151" stroke-width="4"/>
+                                <circle r="41" fill="#1a1f2e" stroke="#374151" stroke-width="1.5"/>
+                                <circle r="6" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+                                <circle r="3" fill="#9ca3af"/>
+                                <g stroke="#6b7280" stroke-width="1.3" opacity="0.8">
+                                    <line x1="0" y1="-6" x2="0" y2="-41"/>
+                                    <line x1="0" y1="6" x2="0" y2="41"/>
+                                    <line x1="-6" y1="0" x2="-41" y2="0"/>
+                                    <line x1="6" y1="0" x2="41" y2="0"/>
+                                    <line x1="-4" y1="-4" x2="-29" y2="-29"/>
+                                    <line x1="4" y1="-4" x2="29" y2="-29"/>
+                                    <line x1="-4" y1="4" x2="-29" y2="29"/>
+                                    <line x1="4" y1="4" x2="29" y2="29"/>
+                                </g>
+                                <circle r="16" fill="none" stroke="#374151" stroke-width="7" stroke-dasharray="5 3" opacity="0.55"/>
+                            </g>
+                        </g>
+                        <!-- Body -->
+                        <g class="sr-bike-body-group">
+                            <line x1="82" y1="148" x2="158" y2="153" stroke="url(#loginFrameGrad)" stroke-width="7" stroke-linecap="round" filter="url(#loginShadow)"/>
+                            <circle cx="158" cy="153" r="9" fill="#1f2937" stroke="#374151" stroke-width="2"/>
+                            <circle cx="158" cy="153" r="17" fill="none" stroke="#4b5563" stroke-width="2.5" stroke-dasharray="4 3"/>
+                            <circle cx="158" cy="153" r="6" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+                            <line x1="158" y1="153" x2="148" y2="90" stroke="url(#loginFrameGrad)" stroke-width="8" stroke-linecap="round" filter="url(#loginShadow)"/>
+                            <line x1="212" y1="97" x2="158" y2="153" stroke="url(#loginFrameGrad)" stroke-width="8" stroke-linecap="round" filter="url(#loginShadow)"/>
+                            <line x1="148" y1="90" x2="212" y2="97" stroke="url(#loginFrameGrad)" stroke-width="7" stroke-linecap="round" filter="url(#loginShadow)"/>
+                            <line x1="148" y1="90" x2="82" y2="148" stroke="url(#loginFrameGrad)" stroke-width="6" stroke-linecap="round" filter="url(#loginShadow)"/>
+                            <line x1="212" y1="97" x2="238" y2="148" stroke="url(#loginFrameGrad)" stroke-width="7" stroke-linecap="round" filter="url(#loginShadow)"/>
+                            <rect x="206" y="89" width="12" height="22" rx="5" fill="url(#loginFrameGrad)" stroke="#166534" stroke-width="1"/>
+                            <text x="172" y="130" font-family="Arial" font-size="8.5" font-weight="900" fill="rgba(255,255,255,0.92)"
+                                  transform="rotate(-38,172,130)" letter-spacing="0.6">SaigonRide</text>
+                            <line x1="148" y1="90" x2="141" y2="70" stroke="#374151" stroke-width="5" stroke-linecap="round"/>
+                            <path d="M 125 69 Q 141 64 157 68 Q 149 73 141 72 Q 133 73 125 69 Z" fill="#1f2937" stroke="#4b5563" stroke-width="1.5"/>
+                            <line x1="212" y1="93" x2="224" y2="79" stroke="#374151" stroke-width="5" stroke-linecap="round"/>
+                            <path d="M 218 77 Q 224 73 230 75 Q 236 79 238 87 Q 236 91 232 89" fill="none" stroke="#1f2937" stroke-width="5" stroke-linecap="round"/>
+                            <circle cx="188" cy="118" r="3.5" fill="rgba(74,222,128,0.7)" filter="url(#loginGlow)"/>
+                        </g>
+                    </svg>
+                </div>
+
+                <!-- Glow ring -->
+                <div class="sr-glow-ring"></div>
+                <!-- Lightning burst -->
+                <div class="sr-lightning-burst" style="top:-40px;right:70px;">
+                    <svg width="48" height="64" viewBox="0 0 60 80" fill="none">
+                        <polygon points="35,0 20,38 32,38 18,80 50,28 36,28 52,0" fill="#facc15" opacity="0.95"/>
+                    </svg>
+                </div>
+                <!-- Mini lightning -->
+                <div class="sr-mini-lightning" style="top:-35px;right:82px;">
+                    <svg width="22" height="30" viewBox="0 0 28 38" fill="none">
+                        <polygon points="17,0 9,18 15,18 8,38 24,13 17,13 25,0" fill="#facc15"/>
+                    </svg>
+                </div>
+                <!-- Sparks -->
+                <div class="sr-idle-sparks" style="top:-10px;right:65px;">
+                    <div class="sr-spark"></div>
+                    <div class="sr-spark"></div>
+                    <div class="sr-spark"></div>
+                    <div class="sr-spark"></div>
+                </div>
             </div>
 
             <h3 class="text-white fw-bold mb-2" style="font-size:1.7rem;">Welcome Back, Rider!</h3>
