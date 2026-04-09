@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RentalVehicleService.Models.Rental>
+@model IEnumerable<RentalVehicleService.Models.Rental>
 
 @{
     ViewData["Title"] = "Index";
@@ -64,13 +64,13 @@
                 @Html.DisplayFor(modelItem => item.VehicleType)
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.Vehicle.VehicleModel)
+                @item.Vehicle?.VehicleModel
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.StartStation.Address)
+                @item.StartStation?.Address
             </td>
             <td>
-                @Html.DisplayFor(modelItem => item.EndStation.Address)
+                @item.EndStation?.Address
             </td>
             <td>
                 <a asp-action="Edit" asp-route-id="@item.RentalId">Edit</a> |

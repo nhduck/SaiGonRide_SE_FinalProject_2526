@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,13 +22,10 @@ namespace RentalVehicleService.Controllers
         public RentalController(ApplicationDbContext context, RentalService rentalService)
         {
             _context = context; 
-            _rentalService = rentalService; // Khởi tạo Service
+            _rentalService = rentalService;
         }
 
-        public RentalController(ApplicationDbContext context)
-        {
-            _context = context;
-        }
+        // Removed redundant constructor that caused CS8618
 
         // GET: Rental
         public async Task<IActionResult> Index()
@@ -94,7 +91,7 @@ namespace RentalVehicleService.Controllers
                 StartStationId = startStationId,
                 StartTime = DateTime.Now,
                 Status = RentalStatus.Active,
-                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty,
                 VehicleType = vehicle.Type
             };
 

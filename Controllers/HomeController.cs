@@ -30,7 +30,10 @@ namespace RentalVehicleService.Controllers
                     .Include(s => s.Vehicles);
             }
 
-            var stations = await stationsQuery.Take(6).ToListAsync();
+            var stations = await stationsQuery
+                .OrderBy(s => s.StationId)
+                .Take(6)
+                .ToListAsync();
 
             // Stats for hero
             ViewBag.TotalStations = await _context.Stations.CountAsync(s => s.IsActive);
@@ -58,6 +61,7 @@ namespace RentalVehicleService.Controllers
                     s.CurrentCount,
                     s.TotalCapacity
                 })
+                .OrderBy(s => s.StationId)
                 .Take(5)
                 .ToListAsync();
 
