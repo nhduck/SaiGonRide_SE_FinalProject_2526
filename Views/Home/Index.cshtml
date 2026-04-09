@@ -2,143 +2,471 @@
 
 @{
     ViewData["Title"] = "Home";
+    ViewData["MetaDescription"] = "SaigonRide – Smart bike & e-scooter rental in Ho Chi Minh City. 50+ stations, from just 500 VND/min, available 24/7. Sign up now!";
     var searchQuery = Context.Request.Query["query"].ToString();
 }
 
-<!-- HERO BANNER -->
+<!-- HERO SECTION -->
 <section class="sr-hero">
-    <div class="container">
-        <div class="row align-items-center min-vh-50">
-            <div class="col-lg-7">
-                <h1 class="display-4 fw-bold text-white mb-3">
-                    Fast rentals,<br/>go anywhere
+    <div class="sr-hero-blob sr-hero-blob-1"></div>
+    <div class="sr-hero-blob sr-hero-blob-2"></div>
+
+    <div class="container py-5">
+        <div class="row align-items-center g-5">
+            <!-- Left text -->
+            <div class="col-lg-6">
+                <span class="badge mb-4 hero-animate-1"
+                      style="background:rgba(22,163,74,.2);color:#4ade80;border:1px solid rgba(74,222,128,.3);
+                             font-weight:600;font-size:.82rem;padding:.45rem 1rem;border-radius:999px;letter-spacing:.04em;">
+                    <i class="bi bi-lightning-charge-fill me-1"></i> #1 Bike Sharing in Ho Chi Minh City
+                </span>
+
+                <h1 class="display-4 fw-bold text-white mb-4 hero-animate-2" style="line-height:1.15;letter-spacing:-.02em;">
+                    Move green,<br/>
+                    <span style="background:linear-gradient(90deg,#4ade80,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+                        go anywhere
+                    </span>
                 </h1>
-                <p class="lead text-white-50 mb-4">
-                    A network of bikes and e-scooters distributed across Ho Chi Minh City.
-                    Green, convenient, and modern mobility.
+
+                <p class="text-white-50 mb-5 hero-animate-3" style="font-size:1.1rem;line-height:1.75;max-width:480px;">
+                    A network of over <strong class="text-white">50 stations</strong> covering all of HCMC.
+                    Book a bike in 30 seconds — no cash, no traffic jams.
                 </p>
 
-                <!-- Mini Stats -->
-                <div class="d-flex gap-4 flex-wrap mt-5">
-                    <div class="text-center">
-                        <div class="fs-3 fw-bold text-white">5+</div>
-                        <div class="small text-white-50">Stations</div>
+                <div class="d-flex flex-wrap gap-3 hero-animate-4">
+                    <a href="/#station-search"
+                       class="btn btn-success btn-lg px-5 fw-bold"
+                       style="border-radius:999px;box-shadow:0 8px 24px rgba(22,163,74,.4);">
+                        <i class="bi bi-geo-alt-fill me-2"></i>Find a Station
+                    </a>
+                    <a href="/Home/Guide"
+                       class="btn btn-lg px-5 fw-semibold"
+                       style="border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:#fff;backdrop-filter:blur(8px);">
+                        <i class="bi bi-play-circle me-2"></i>How It Works
+                    </a>
+                </div>
+
+                <!-- Mini stats -->
+                <div class="d-flex gap-5 mt-5 hero-animate-4 pt-2">
+                    <div>
+                        <div class="sr-stat-number" data-target="50">0</div>
+                        <div class="text-white-50 small mt-1">Stations</div>
                     </div>
-                    <div class="text-center">
-                        <div class="fs-3 fw-bold text-white">10+</div>
-                        <div class="small text-white-50">Vehicles</div>
+                    <div style="border-left:1px solid rgba(255,255,255,.15);padding-left:2rem;">
+                        <div class="sr-stat-number" data-target="500">0</div>
+                        <div class="text-white-50 small mt-1">Vehicles</div>
                     </div>
-                    <div class="text-center">
-                        <div class="fs-3 fw-bold text-white">2+</div>
-                        <div class="small text-white-50">Active Trips</div>
+                    <div style="border-left:1px solid rgba(255,255,255,.15);padding-left:2rem;">
+                        <div class="sr-stat-number" data-target="10000">0</div>
+                        <div class="text-white-50 small mt-1">Total Rides</div>
                     </div>
                 </div>
             </div>
-            <div class="col-lg-5 text-center d-none d-lg-block">
-                <div class="sr-hero-illustration position-relative mx-auto mt-4" style="width: 250px; height: 200px; color: rgba(255,255,255,0.15);">
-                    <!-- 6 people crowd illustration -->
-                    <i class="bi bi-person-fill position-absolute" style="font-size: 5rem; top: 20px; left: 10px;"></i>
-                    <i class="bi bi-person-fill position-absolute" style="font-size: 7rem; top: 0; left: 60px; z-index: 2;"></i>
-                    <i class="bi bi-person-fill position-absolute" style="font-size: 5rem; top: 20px; right: 10px;"></i>
-                    
-                    <i class="bi bi-person-fill position-absolute" style="font-size: 4rem; bottom: -10px; left: 30px;"></i>
-                    <i class="bi bi-person-fill position-absolute" style="font-size: 6rem; bottom: -20px; left: 90px; z-index: 3;"></i>
-                    <i class="bi bi-person-fill position-absolute" style="font-size: 4rem; bottom: -10px; right: 30px;"></i>
+
+            <!-- Right: PREMIUM SVG BIKE ANIMATION -->
+            <div class="col-lg-6 d-none d-lg-flex justify-content-center align-items-center">
+                <div class="position-relative" style="width:100%;max-width:480px;height:380px;">
+
+                    <!-- STAIR 1: Zero CO2 -->
+                    <div class="sr-glass position-absolute d-flex align-items-center gap-2 px-3 py-2 shadow"
+                         style="top: 10%; left: 15%; animation: hero-slide-up .5s .7s both; z-index: 10;">
+                        <span style="font-size: 1.3rem;">🌿</span>
+                        <div>
+                            <div class="text-white fw-bold" style="font-size: .85rem;">Zero CO₂</div>
+                            <div style="font-size: .72rem; color: rgba(255, 255, 255, .6);">100% green</div>
+                        </div>
+                    </div>
+
+                    <!-- STAIR 2: E-Scooter -->
+                    <div class="sr-glass position-absolute d-flex align-items-center gap-2 px-3 py-2 shadow"
+                         style="top: 23%; left: 28%; animation: hero-slide-up .5s .85s both; z-index: 10;">
+                        <span style="font-size: 1.4rem;">⚡</span>
+                        <div>
+                            <div class="text-white fw-bold" style="font-size: .85rem;">E-Scooter</div>
+                            <div style="font-size: .72rem; color: rgba(255, 255, 255, .6);">1,500 VND/min</div>
+                        </div>
+                    </div>
+
+                    <!-- STAIR 3: Instant unlock -->
+                    <div class="sr-glass position-absolute d-flex align-items-center gap-2 px-3 py-2 shadow"
+                         style="top: 36%; left: 41%; animation: hero-slide-up .5s 1s both; z-index: 10;">
+                        <div class="text-success fw-bold me-1" style="font-size: 1.7rem;">✓</div>
+                        <div>
+                            <div class="text-white fw-bold" style="font-size: .85rem;">Instant unlock</div>
+                            <div style="font-size: .72rem; color: rgba(255, 255, 255, .6);">No cash needed</div>
+                        </div>
+                    </div>
+
+                    <!-- === SVG BIKE SCENE === -->
+                    <div class="sr-bike-scene position-absolute" style="bottom:0;right:0;width:340px;height:220px;">
+
+                        <!-- Speed lines (visible during run-in) -->
+                        <div class="sr-speed-lines">
+                            <svg width="80" height="60" viewBox="0 0 80 60" fill="none">
+                                <line x1="0" y1="10" x2="70" y2="10" stroke="rgba(74,222,128,0.5)" stroke-width="2" stroke-linecap="round"/>
+                                <line x1="0" y1="22" x2="60" y2="22" stroke="rgba(74,222,128,0.35)" stroke-width="1.5" stroke-linecap="round"/>
+                                <line x1="0" y1="34" x2="78" y2="34" stroke="rgba(74,222,128,0.25)" stroke-width="1" stroke-linecap="round"/>
+                                <line x1="0" y1="46" x2="55" y2="46" stroke="rgba(74,222,128,0.2)" stroke-width="1" stroke-linecap="round"/>
+                            </svg>
+                        </div>
+
+                        <!-- Dust particles -->
+                        <div class="sr-dust-wrap">
+                            <svg width="60" height="30" viewBox="0 0 60 30">
+                                <circle cx="10" cy="20" r="5" fill="rgba(74,222,128,0.3)"/>
+                                <circle cx="25" cy="15" r="3.5" fill="rgba(74,222,128,0.2)"/>
+                                <circle cx="40" cy="22" r="4" fill="rgba(74,222,128,0.15)"/>
+                                <circle cx="55" cy="18" r="2.5" fill="rgba(74,222,128,0.1)"/>
+                            </svg>
+                        </div>
+
+                        <!-- THE BIKE SVG -->
+                        <div class="sr-bike-svg-wrap">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="300" height="190" style="overflow:visible;">
+                                <defs>
+                                    <linearGradient id="bikeFrameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#4ade80;stop-opacity:1"/>
+                                        <stop offset="50%" style="stop-color:#16a34a;stop-opacity:1"/>
+                                        <stop offset="100%" style="stop-color:#14532d;stop-opacity:1"/>
+                                    </linearGradient>
+                                    <filter id="bikeGlow">
+                                        <feGaussianBlur stdDeviation="2" result="blur"/>
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+                                    </filter>
+                                    <filter id="fShadow">
+                                        <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#166534" flood-opacity="0.5"/>
+                                    </filter>
+                                </defs>
+
+                                <!-- REAR WHEEL-->
+                                <g transform="translate(82,148)">
+                                    <g>
+                                        <animateTransform attributeName="transform" type="rotate"
+                                            from="0 0 0" to="360 0 0"
+                                            dur="0.45s" begin="1.75s" repeatCount="indefinite"/>
+                                        <circle r="52" fill="#111827" stroke="#1f2937" stroke-width="2"/>
+                                        <circle r="46" fill="none" stroke="#374151" stroke-width="4"/>
+                                        <circle r="41" fill="#1a1f2e" stroke="#374151" stroke-width="1.5"/>
+                                        <circle r="6" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+                                        <circle r="3" fill="#9ca3af"/>
+                                        <g stroke="#6b7280" stroke-width="1.3" opacity="0.8">
+                                            <line x1="0" y1="-6" x2="0" y2="-41"/>
+                                            <line x1="0" y1="6" x2="0" y2="41"/>
+                                            <line x1="-6" y1="0" x2="-41" y2="0"/>
+                                            <line x1="6" y1="0" x2="41" y2="0"/>
+                                            <line x1="-4" y1="-4" x2="-29" y2="-29"/>
+                                            <line x1="4" y1="-4" x2="29" y2="-29"/>
+                                            <line x1="-4" y1="4" x2="-29" y2="29"/>
+                                            <line x1="4" y1="4" x2="29" y2="29"/>
+                                        </g>
+                                        <circle r="16" fill="none" stroke="#374151" stroke-width="7" stroke-dasharray="5 3" opacity="0.55"/>
+                                        <text font-family="Arial" font-size="5.5" font-weight="700" fill="#4b5563" letter-spacing="2.2">
+                                            <textPath href="#rWheelPath" startOffset="2%">RideToEveryWhere ·</textPath>
+                                        </text>
+                                        <path id="rWheelPath" d="M 0,-46 A 46,46 0 1,1 -0.1,-46" fill="none"/>
+                                    </g>
+                                </g>
+
+                                <!-- FRONT WHEEL -->
+                                <g transform="translate(238,148)">
+                                    <g>
+                                        <animateTransform attributeName="transform" type="rotate"
+                                            from="0 0 0" to="360 0 0"
+                                            dur="0.45s" begin="1.75s" repeatCount="indefinite"/>
+                                        <circle r="52" fill="#111827" stroke="#1f2937" stroke-width="2"/>
+                                        <circle r="46" fill="none" stroke="#374151" stroke-width="4"/>
+                                        <circle r="41" fill="#1a1f2e" stroke="#374151" stroke-width="1.5"/>
+                                        <circle r="6" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+                                        <circle r="3" fill="#9ca3af"/>
+                                        <g stroke="#6b7280" stroke-width="1.3" opacity="0.8">
+                                            <line x1="0" y1="-6" x2="0" y2="-41"/>
+                                            <line x1="0" y1="6" x2="0" y2="41"/>
+                                            <line x1="-6" y1="0" x2="-41" y2="0"/>
+                                            <line x1="6" y1="0" x2="41" y2="0"/>
+                                            <line x1="-4" y1="-4" x2="-29" y2="-29"/>
+                                            <line x1="4" y1="-4" x2="29" y2="-29"/>
+                                            <line x1="-4" y1="4" x2="-29" y2="29"/>
+                                            <line x1="4" y1="4" x2="29" y2="29"/>
+                                        </g>
+                                        <circle r="16" fill="none" stroke="#374151" stroke-width="7" stroke-dasharray="5 3" opacity="0.55"/>
+                                        <text font-family="Arial" font-size="5.5" font-weight="700" fill="#4b5563" letter-spacing="2.2">
+                                            <textPath href="#fWheelPath" startOffset="2%">RideToEveryWhere ·</textPath>
+                                        </text>
+                                        <path id="fWheelPath" d="M 0,-46 A 46,46 0 1,1 -0.1,-46" fill="none"/>
+                                    </g>
+                                </g>
+
+                                <!-- BODY GROUP -->
+                                <g class="sr-bike-body-group">
+                                    <line x1="82" y1="148" x2="158" y2="153" stroke="url(#bikeFrameGrad)" stroke-width="7" stroke-linecap="round" filter="url(#fShadow)"/>
+                                    <circle cx="158" cy="153" r="9" fill="#1f2937" stroke="#374151" stroke-width="2"/>
+                                    <circle cx="158" cy="153" r="17" fill="none" stroke="#4b5563" stroke-width="2.5" stroke-dasharray="4 3"/>
+                                    <circle cx="158" cy="153" r="6" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+                                    <line x1="158" y1="153" x2="148" y2="90" stroke="url(#bikeFrameGrad)" stroke-width="8" stroke-linecap="round" filter="url(#fShadow)"/>
+                                    <line x1="212" y1="97" x2="158" y2="153" stroke="url(#bikeFrameGrad)" stroke-width="8" stroke-linecap="round" filter="url(#fShadow)"/>
+                                    <line x1="148" y1="90" x2="212" y2="97" stroke="url(#bikeFrameGrad)" stroke-width="7" stroke-linecap="round" filter="url(#fShadow)"/>
+                                    <line x1="148" y1="90" x2="82" y2="148" stroke="url(#bikeFrameGrad)" stroke-width="6" stroke-linecap="round" filter="url(#fShadow)"/>
+                                    <line x1="212" y1="97" x2="238" y2="148" stroke="url(#bikeFrameGrad)" stroke-width="7" stroke-linecap="round" filter="url(#fShadow)"/>
+                                    <rect x="206" y="89" width="12" height="22" rx="5" fill="url(#bikeFrameGrad)" stroke="#166534" stroke-width="1"/>
+                                    <text x="172" y="130" font-family="Arial" font-size="8.5" font-weight="900" fill="rgba(255,255,255,0.92)"
+                                          transform="rotate(-38,172,130)" letter-spacing="0.6">SaigonRide</text>
+                                    <rect x="166" y="108" width="9" height="22" rx="3" fill="#475569" stroke="#94a3b8" stroke-width="1"/>
+                                    <rect x="168" y="105" width="5" height="6" rx="2" fill="#94a3b8"/>
+                                    <line x1="148" y1="90" x2="141" y2="70" stroke="#374151" stroke-width="5" stroke-linecap="round"/>
+                                    <path d="M 125 69 Q 141 64 157 68 Q 149 73 141 72 Q 133 73 125 69 Z" fill="#1f2937" stroke="#4b5563" stroke-width="1.5"/>
+                                    <line x1="212" y1="93" x2="224" y2="79" stroke="#374151" stroke-width="5" stroke-linecap="round"/>
+                                    <path d="M 218 77 Q 224 73 230 75 Q 236 79 238 87 Q 236 91 232 89" fill="none" stroke="#1f2937" stroke-width="5" stroke-linecap="round"/>
+                                    <path d="M 218 77 Q 216 73 214 75" fill="none" stroke="#1f2937" stroke-width="4" stroke-linecap="round"/>
+                                    <line x1="158" y1="153" x2="170" y2="168" stroke="#374151" stroke-width="5" stroke-linecap="round"/>
+                                    <rect x="167" y="167" width="11" height="4" rx="2" fill="#4b5563"/>
+                                    <line x1="158" y1="153" x2="146" y2="138" stroke="#374151" stroke-width="5" stroke-linecap="round"/>
+                                    <rect x="141" y="133" width="11" height="4" rx="2" fill="#4b5563"/>
+                                    <path d="M 88 156 Q 122 164 150 156" fill="none" stroke="#4b5563" stroke-width="2" stroke-dasharray="3 2" opacity="0.7"/>
+                                    <circle cx="188" cy="118" r="3.5" fill="rgba(74,222,128,0.7)" filter="url(#bikeGlow)"/>
+                                </g>
+                            </svg>
+                        </div>
+
+                        <!-- Glow ring under bike -->
+                        <div class="sr-glow-ring"></div>
+
+                        <!-- Lightning burst on arrival -->
+                        <div class="sr-lightning-burst">
+                            <svg width="60" height="80" viewBox="0 0 60 80" fill="none">
+                                <polygon points="35,0 20,38 32,38 18,80 50,28 36,28 52,0" fill="#facc15" opacity="0.95"/>
+                                <polygon points="35,0 20,38 32,38 18,80 50,28 36,28 52,0" fill="#fbbf24" opacity="0.4" transform="scale(1.15) translate(-3,-4)"/>
+                            </svg>
+                        </div>
+
+                        <!-- Mini lightning idle -->
+                        <div class="sr-mini-lightning">
+                            <svg width="28" height="38" viewBox="0 0 28 38" fill="none">
+                                <polygon points="17,0 9,18 15,18 8,38 24,13 17,13 25,0" fill="#facc15"/>
+                            </svg>
+                        </div>
+
+                        <!-- Idle sparks -->
+                        <div class="sr-idle-sparks">
+                            <div class="sr-spark"></div>
+                            <div class="sr-spark"></div>
+                            <div class="sr-spark"></div>
+                            <div class="sr-spark"></div>
+                        </div>
+
+                    </div><!-- /.sr-bike-scene -->
+
                 </div>
             </div>
+        </div>
+    </div>
+
+    <!-- Wave divider -->
+    <div style="position:absolute;bottom:0;left:0;right:0;line-height:0;">
+        <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="width:100%;display:block;">
+            <path d="M0,40 C360,90 1080,-10 1440,40 L1440,80 L0,80 Z" fill="#ffffff"/>
+        </svg>
+    </div>
+</section>
+
+<!-- FEATURES SECTION-->
+<section class="sr-section" style="background:#fff;">
+    <div class="container">
+        <div class="text-center mb-5 sr-reveal">
+            <span class="sr-price-badge mb-3">Why SaigonRide?</span>
+            <h2 class="fw-bold mt-3" style="font-size:2.2rem;">Smarter urban mobility</h2>
+            <p class="text-muted mt-2" style="max-width:520px;margin:auto;">
+                Designed for the busy city lifestyle — fast, green, and effortlessly convenient.
+            </p>
+        </div>
+
+        <div class="row g-4">
+            @{
+                var features = new[] {
+                    new { Icon="bi-lightning-charge-fill", Color="#16a34a", BgColor="#dcfce7", Title="Lightning Fast",       Desc="Book a bike in under 30 seconds. Scan, ride, done. No dedicated app required.", Delay="sr-delay-1" },
+                    new { Icon="bi-geo-alt-fill",           Color="#0d9488", BgColor="#ccfbf1", Title="City-Wide Network",   Desc="50+ stations from District 1 to District 12, Thu Duc and beyond. Always a bike nearby.", Delay="sr-delay-2" },
+                    new { Icon="bi-shield-fill-check",      Color="#7c3aed", BgColor="#ede9fe", Title="Safe & Transparent",  Desc="Vehicle insurance + real-time GPS tracking. Honest pricing, zero hidden fees.", Delay="sr-delay-3" },
+                    new { Icon="bi-currency-dollar",        Color="#ea580c", BgColor="#ffedd5", Title="Ultra Affordable",    Desc="Standard bike from 500 VND/min. E-scooter from 1,500 VND/min. Always cheaper than taxis.", Delay="sr-delay-4" },
+                    new { Icon="bi-leaf-fill",              Color="#16a34a", BgColor="#dcfce7", Title="100% Eco-Friendly",   Desc="Each ride saves ~200g of CO₂ vs. a motorbike. Together, we're greening Saigon.", Delay="sr-delay-5" },
+                    new { Icon="bi-headset",                Color="#0284c7", BgColor="#e0f2fe", Title="24/7 Support",        Desc="Live support agents around the clock. Issue on the road? We're there in 15 minutes.", Delay="sr-delay-6" },
+                };
+            }
+
+            @foreach (var f in features)
+            {
+                <div class="col-lg-4 col-md-6 sr-reveal @f.Delay">
+                    <div class="sr-feature-card h-100">
+                        <div class="sr-feature-icon" style="background:@f.BgColor;color:@f.Color;">
+                            <i class="bi @f.Icon"></i>
+                        </div>
+                        <h5 class="fw-bold mb-2">@f.Title</h5>
+                        <p class="text-muted mb-0" style="font-size:.92rem;line-height:1.65;">@f.Desc</p>
+                    </div>
+                </div>
+            }
         </div>
     </div>
 </section>
 
-<!-- SEARCH RESULTS NOTICE -->
-@if (!string.IsNullOrEmpty(searchQuery))
-{
-    <div class="container mt-4">
-        <div class="alert alert-info d-flex align-items-center" role="alert">
-            <i class="bi bi-search me-2"></i>
-            Search results for: <strong class="ms-1">"@searchQuery"</strong>
-            <a asp-action="Index" class="btn btn-sm btn-outline-secondary ms-auto">
-                <i class="bi bi-x-lg me-1"></i>Clear Filter
+<!-- HOW IT WORKS -->
+<section class="sr-section" style="background:var(--sr-gray-50);">
+    <div class="container">
+        <div class="text-center mb-5 sr-reveal">
+            <span class="sr-price-badge mb-3">Simple 3-step process</span>
+            <h2 class="fw-bold mt-3" style="font-size:2.2rem;">Start riding in seconds</h2>
+        </div>
+
+        <div class="row g-4 justify-content-center">
+            @{
+                var steps = new[] {
+                    new { Num="1", Icon="📍", Title="Find a Station",     Desc="Open the map, pick the nearest station. Check vehicle count and type availability." },
+                    new { Num="2", Icon="🚲", Title="Choose & Book",       Desc="Select Standard or Electric. Confirm payment. Your bike unlocks immediately." },
+                    new { Num="3", Icon="🏁", Title="Return & Done",       Desc="Drop off at any station. The system auto-bills you and emails a receipt." },
+                };
+            }
+            @for (int i = 0; i < steps.Length; i++)
+            {
+                var s = steps[i];
+                <div class="col-lg-4 col-md-6 sr-reveal sr-delay-@(i+1)">
+                    <div class="text-center p-4 position-relative">
+                        <div class="position-relative d-inline-block mb-4">
+                            <div style="width:90px;height:90px;border-radius:50%;background:linear-gradient(135deg,#064e3b,#065f46);
+                                        display:flex;align-items:center;justify-content:center;font-size:2.5rem;
+                                        box-shadow:0 12px 30px rgba(22,163,74,.25);margin:auto;">
+                                @s.Icon
+                            </div>
+                            <div class="position-absolute top-0 start-0"
+                                 style="width:28px;height:28px;background:var(--sr-green);border-radius:50%;
+                                        display:flex;align-items:center;justify-content:center;
+                                        color:#fff;font-weight:800;font-size:.85rem;
+                                        box-shadow:0 2px 8px rgba(22,163,74,.4);">
+                                @s.Num
+                            </div>
+                        </div>
+                        <h5 class="fw-bold mb-2">@s.Title</h5>
+                        <p class="text-muted mb-0" style="font-size:.9rem;line-height:1.65;max-width:260px;margin:auto;">@s.Desc</p>
+                    </div>
+                </div>
+            }
+        </div>
+
+        <div class="text-center mt-4 sr-reveal">
+            <a href="/Home/Guide" class="btn btn-outline-success px-5 rounded-pill fw-semibold">
+                <i class="bi bi-book me-2"></i>View Detailed Guide
             </a>
         </div>
     </div>
-}
+</section>
 
-<!-- STATION HORIZONTAL CAROUSEL -->
-<section class="py-5" id="station-search">
+<!-- STATION SEARCH SECTION -->
+<section class="sr-section" id="station-search" style="background:#fff;">
     <div class="container">
-        <div class="text-center mb-5">
-            <h2 class="fw-bold">📍 Stations Near You</h2>
-            <p class="text-muted">Pick a station, choose your ride, and start your journey</p>
+        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3 sr-reveal">
+            <div>
+                <h2 class="fw-bold mb-1" style="font-size:2rem;">📍 Stations Near You</h2>
+                <p class="text-muted mb-0">Pick a station, pick a ride, start your journey</p>
+            </div>
+            <div class="d-flex gap-3 align-items-center flex-shrink-0">
+                <div class="input-group shadow-sm rounded-pill overflow-hidden bg-white border" style="min-width:260px;">
+                    <span class="input-group-text bg-white border-0 ps-3 text-muted"><i class="bi bi-search"></i></span>
+                    <input type="text" id="liveSearchBox" class="form-control border-0 shadow-none ps-1" placeholder="Search by name or address...">
+                </div>
+            </div>
         </div>
+
+        @if (!string.IsNullOrEmpty(searchQuery))
+        {
+            <div class="alert alert-info d-flex align-items-center mb-4 sr-reveal" role="alert">
+                <i class="bi bi-search me-2"></i>
+                Results for: <strong class="ms-1">"@searchQuery"</strong>
+                <a asp-action="Index" class="btn btn-sm btn-outline-secondary ms-auto rounded-pill">
+                    <i class="bi bi-x-lg me-1"></i>Clear
+                </a>
+            </div>
+        }
 
         @if (Model.Any())
         {
-            <div class="d-flex flex-column gap-3 mt-4">
+            <div class="d-flex flex-column gap-3" id="stationList">
                 @foreach (var station in Model)
                 {
                     var fillPct = (int)(station.FillRate * 100);
                     var fillColorClass = fillPct < 60 ? "fill-green" : (fillPct < 85 ? "fill-amber" : "fill-red");
+                    var badgeClass = fillPct < 60 ? "bg-success" : (fillPct < 85 ? "bg-warning text-dark" : "bg-danger");
 
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden station-horizontal-card transition-all" id="station-@station.StationId">
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden station-horizontal-card sr-reveal station-item"
+                         data-name="@station.Name.ToLower()" data-address="@station.Address.ToLower()">
                         <div class="card-body p-4 d-flex flex-column flex-md-row align-items-md-center gap-4">
-                            <!-- Info Section (Left) -->
+
+                            <div class="d-none d-md-flex align-items-center justify-content-center flex-shrink-0"
+                                 style="width:56px;height:56px;border-radius:16px;background:var(--sr-green-50);">
+                                <i class="bi bi-geo-alt-fill text-success fs-4"></i>
+                            </div>
+
                             <div class="flex-grow-1">
-                                <div class="d-flex align-items-center mb-1">
-                                    <h5 class="fw-bold mb-0 text-dark me-2">@station.Name</h5>
+                                <div class="d-flex align-items-center gap-2 mb-1">
+                                    <h5 class="fw-bold mb-0 text-dark">@station.Name</h5>
                                     @if (station.IsLowInventory)
                                     {
-                                        <span class="badge bg-danger rounded-pill px-2">Low Stock</span>
+                                        <span class="badge bg-danger rounded-pill px-2 py-1" style="font-size:.7rem;animation:pulse-badge 2s infinite;">
+                                            <i class="bi bi-exclamation-triangle me-1"></i>Almost full
+                                        </span>
+                                    }
+                                    @if (!station.IsActive)
+                                    {
+                                        <span class="badge bg-secondary rounded-pill px-2 py-1" style="font-size:.7rem;">Temporarily closed</span>
                                     }
                                 </div>
                                 <div class="text-muted small mb-3">
                                     <i class="bi bi-geo-alt-fill text-danger me-1"></i>@station.Address
                                 </div>
-
-                                <!-- Fill bar -->
                                 <div class="d-flex align-items-center gap-3">
-                                    <div class="fill-bar flex-grow-1 bg-light rounded-pill" style="height: 8px; max-width: 250px;">
-                                        <div class="fill-bar-inner @fillColorClass rounded-pill" style="width: @(fillPct)%; height: 100%;"></div>
+                                    <div class="fill-bar flex-grow-1" style="max-width:220px;">
+                                        <div class="fill-bar-inner @fillColorClass" style="width:@(fillPct)%;"></div>
                                     </div>
-                                    <small class="text-secondary fw-semibold" style="min-width: 100px;">@station.CurrentCount / @station.TotalCapacity vehicles</small>
-                                    <span class="badge @(fillPct < 60 ? "bg-success" : fillPct < 85 ? "bg-warning text-dark" : "bg-danger")">@fillPct% Full</span>
+                                    <small class="text-secondary fw-semibold">@station.CurrentCount/@station.TotalCapacity vehicles</small>
+                                    <span class="badge @badgeClass rounded-pill px-2">@fillPct% full</span>
                                 </div>
                                 @if (station.IsLowInventory)
                                 {
                                     <div class="text-danger small mt-2 fw-semibold">
-                                        <i class="bi bi-tag-fill me-1"></i>Running out fast - 15% OFF!
+                                        <i class="bi bi-tag-fill me-1"></i>Almost sold out — 15% discount applied!
                                     </div>
                                 }
                             </div>
 
-                            <!-- Actions Section (Right) -->
-                            <div class="d-flex gap-2 flex-shrink-0">
+                            <div class="d-flex gap-2 flex-shrink-0 flex-wrap">
                                 @if (User.Identity?.IsAuthenticated == true)
                                 {
                                     <a href="/Rentals/Checkout?stationId=@station.StationId&vehicleType=Standard"
-                                       class="btn btn-outline-success px-4 py-2 text-center d-flex flex-column align-items-center justify-content-center" style="min-width: 120px;">
+                                       class="btn btn-outline-success px-4 py-2 text-center d-flex flex-column align-items-center"
+                                       style="min-width:110px;border-radius:14px;">
                                         <i class="bi bi-bicycle fs-4 mb-1"></i>
-                                        <span class="fw-semibold">Standard</span>
-                                        <small class="text-muted" style="font-size: 0.7rem;">500đ/min</small>
+                                        <span class="fw-semibold" style="font-size:.82rem;">Standard</span>
+                                        <small class="text-muted" style="font-size:.68rem;">500 VND/min</small>
                                     </a>
                                     <a href="/Rentals/Checkout?stationId=@station.StationId&vehicleType=Electric"
-                                       class="btn btn-outline-primary px-4 py-2 text-center d-flex flex-column align-items-center justify-content-center" style="min-width: 120px;">
-                                        <i class="bi bi-lightning-charge fs-4 mb-1"></i>
-                                        <span class="fw-semibold">Electric</span>
-                                        <small class="text-muted" style="font-size: 0.7rem;">1.5kđ/min</small>
+                                       class="btn btn-outline-primary px-4 py-2 text-center d-flex flex-column align-items-center"
+                                       style="min-width:110px;border-radius:14px;">
+                                        <i class="bi bi-lightning-charge-fill fs-4 mb-1"></i>
+                                        <span class="fw-semibold" style="font-size:.82rem;">Electric</span>
+                                        <small class="text-muted" style="font-size:.68rem;">1,500 VND/min</small>
                                     </a>
                                 }
                                 else
                                 {
                                     <a asp-controller="Account" asp-action="Login"
-                                       class="btn btn-outline-success px-4 py-2 text-center d-flex flex-column align-items-center justify-content-center" style="min-width: 120px;">
+                                       class="btn btn-outline-success px-4 py-2 text-center d-flex flex-column align-items-center"
+                                       style="min-width:110px;border-radius:14px;">
                                         <i class="bi bi-bicycle fs-4 mb-1"></i>
-                                        <span class="fw-semibold">Standard</span>
+                                        <span class="fw-semibold" style="font-size:.82rem;">Standard</span>
+                                        <small class="text-muted" style="font-size:.68rem;">Log in to rent</small>
                                     </a>
                                     <a asp-controller="Account" asp-action="Login"
-                                       class="btn btn-outline-primary px-4 py-2 text-center d-flex flex-column align-items-center justify-content-center" style="min-width: 120px;">
-                                        <i class="bi bi-lightning-charge fs-4 mb-1"></i>
-                                        <span class="fw-semibold">Electric</span>
+                                       class="btn btn-outline-primary px-4 py-2 text-center d-flex flex-column align-items-center"
+                                       style="min-width:110px;border-radius:14px;">
+                                        <i class="bi bi-lightning-charge-fill fs-4 mb-1"></i>
+                                        <span class="fw-semibold" style="font-size:.82rem;">Electric</span>
+                                        <small class="text-muted" style="font-size:.68rem;">Log in to rent</small>
                                     </a>
                                 }
                             </div>
@@ -149,19 +477,119 @@
         }
         else
         {
-            <div class="text-center py-5">
+            <div class="text-center py-5 sr-reveal">
                 <i class="bi bi-geo fs-1 text-muted d-block mb-3"></i>
                 <h5 class="text-muted">No stations found</h5>
-                <p class="text-muted small">Please try searching with different keywords</p>
-                <a asp-action="Index" class="btn btn-outline-success mt-2">View All Stations</a>
+                <p class="text-muted small">Try searching with a different keyword</p>
+                <a asp-action="Index" class="btn btn-outline-success mt-2 rounded-pill px-4">View All Stations</a>
             </div>
         }
     </div>
 </section>
 
+<!-- TESTIMONIALS -->
+<section class="sr-section" style="background:var(--sr-gray-50);">
+    <div class="container">
+        <div class="text-center mb-5 sr-reveal">
+            <span class="sr-price-badge mb-3">What riders say</span>
+            <h2 class="fw-bold mt-3" style="font-size:2rem;">Thousands already trust us</h2>
+        </div>
+        <div class="row g-4">
+            @{
+                var testimonials = new[] {
+                    new { Name="Nguyen Minh Tuan", Role="Office worker, District 1", Stars=5,
+                          Text="I use SaigonRide to commute every day. It saves me 70% compared to Grab and I never worry about traffic jams anymore. Absolutely love it!", Initial="T" },
+                    new { Name="Sarah Johnson", Role="Australian traveller, backpacker", Stars=5,
+                          Text="Amazing service! Rented an e-bike for 3 days exploring Saigon. Super easy to use, very affordable. Highly recommend to any visitor!", Initial="S" },
+                    new { Name="Tran Thi Lan", Role="Student, HCMUT University", Stars=5,
+                          Text="Students need to save money. SaigonRide lets me get to class for just a few thousand VND each day. It's genuinely great!", Initial="L" },
+                };
+            }
+            @for (int i = 0; i < testimonials.Length; i++)
+            {
+                var t = testimonials[i];
+                <div class="col-md-4 sr-reveal sr-delay-@(i+1)">
+                    <div class="sr-testimonial h-100">
+                        <div class="text-warning mb-3" style="font-size:1.1rem;">
+                            @for (int s = 0; s < t.Stars; s++) { <span>★</span> }
+                        </div>
+                        <p class="text-muted mb-4" style="font-size:.95rem;line-height:1.7;font-style:italic;">
+                            "@t.Text"
+                        </p>
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="sr-testimonial-avatar">@t.Initial</div>
+                            <div>
+                                <div class="fw-bold text-dark" style="font-size:.95rem;">@t.Name</div>
+                                <div class="text-muted" style="font-size:.8rem;">@t.Role</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+</section>
 
-<link rel="stylesheet" href="~/css/Home/indexStyle.css" />
+<!-- CTA BANNER -->
+<section class="sr-section" style="background:#fff;">
+    <div class="container sr-reveal">
+        <div class="rounded-4 p-5 text-center text-white position-relative overflow-hidden"
+             style="background:linear-gradient(135deg,#064e3b,#065f46 50%,#0f172a);">
+            <div style="position:absolute;top:-60px;right:-60px;width:280px;height:280px;
+                        border-radius:50%;background:rgba(22,163,74,.15);filter:blur(50px);"></div>
+            <div style="position:absolute;bottom:-40px;left:-40px;width:200px;height:200px;
+                        border-radius:50%;background:rgba(14,165,233,.12);filter:blur(40px);"></div>
+
+            <h2 class="fw-bold mb-3 position-relative" style="font-size:2.2rem;">
+                Ready to start your ride?
+            </h2>
+            <p class="text-white-50 mb-4 position-relative" style="max-width:480px;margin:auto;font-size:1.05rem;">
+                Sign up free and get 15% off your first 3 rides.
+            </p>
+            <div class="d-flex justify-content-center gap-3 flex-wrap position-relative">
+                <a asp-controller="Account" asp-action="Register"
+                   class="btn btn-success btn-lg px-5 fw-bold rounded-pill"
+                   style="box-shadow:0 8px 24px rgba(22,163,74,.4);">
+                    <i class="bi bi-person-plus me-2"></i>Register Free
+                </a>
+                <a href="/#station-search"
+                   class="btn btn-lg px-5 fw-semibold rounded-pill"
+                   style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:#fff;">
+                    <i class="bi bi-map me-2"></i>View Station Map
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
 
 @section Scripts {
+<script>
+    document.getElementById('liveSearchBox')?.addEventListener('input', function () {
+        const q = this.value.toLowerCase().trim();
+        document.querySelectorAll('.station-item').forEach(el => {
+            const match = el.dataset.name?.includes(q) || el.dataset.address?.includes(q);
+            el.style.display = match ? '' : 'none';
+        });
+    });
 
+    function animateCount(el) {
+        const target = parseInt(el.dataset.target, 10);
+        const duration = 1600;
+        const step = target / (duration / 16);
+        let current = 0;
+        const timer = setInterval(() => {
+            current = Math.min(current + step, target);
+            el.textContent = Math.floor(current).toLocaleString('en-US') + '+';
+            if (current >= target) clearInterval(timer);
+        }, 16);
+    }
+
+    const counters = document.querySelectorAll('.sr-stat-number[data-target]');
+    const countObs = new IntersectionObserver(entries => {
+        entries.forEach(e => {
+            if (e.isIntersecting) { animateCount(e.target); countObs.unobserve(e.target); }
+        });
+    }, { threshold: .5 });
+    counters.forEach(c => countObs.observe(c));
+</script>
 }

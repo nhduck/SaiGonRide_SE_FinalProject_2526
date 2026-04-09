@@ -116,7 +116,7 @@ namespace RentalVehicleService.Controllers
             var model = new ProfileViewModel
             {
                 FullName = user.FullName,
-                Email = user.Email,
+                Email = user.Email ?? string.Empty,
                 PhoneNumber = user.PhoneNumber,
                 UserType = user.UserType,
                 CCCD = user.CCCD,

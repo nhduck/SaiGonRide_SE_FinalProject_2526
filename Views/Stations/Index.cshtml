@@ -1,0 +1,255 @@
+@model IEnumerable<RentalVehicleService.Models.Station>
+
+@{
+    ViewData["Title"] = "Stations Management";
+    
+    // Tính toán số liệu tổng quan
+    var totalStations = Model.Count();
+    var activeStations = Model.Count(s => s.IsActive);
+    var totalVehicles = Model.Sum(s => s.CurrentCount);
+    var totalCapacity = Model.Sum(s => s.TotalCapacity);
+    var fillPercentage = totalCapacity > 0 ? (totalVehicles * 100.0 / totalCapacity) : 0;
+}
+
+<div class="container-fluid py-4">
+    <!-- Header Section -->
+    <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
+        <div>
+            <h1 class="h3 mb-1 text-gray-800 fw-bold"><i class="bi bi-geo-alt-fill text-primary me-2"></i>Stations Management</h1>
+            <p class="text-muted mb-0">Manage all bike rental stations, monitor capacity and maintain operational status.</p>
+        </div>
+        <div class="d-flex gap-3">
+            <div class="input-group shadow-sm rounded-pill overflow-hidden bg-white border" style="min-width: 280px;">
+                <span class="input-group-text bg-white border-0 ps-3 pe-2 text-muted">
+                    <i class="bi bi-search"></i>
+                </span>
+                <input type="text" id="stationSearchBox" class="form-control border-0 shadow-none ps-0" placeholder="Search station...">
+            </div>
+            <a asp-action="Create" class="btn btn-primary shadow-sm rounded-pill px-4 text-nowrap d-flex align-items-center">
+                <i class="bi bi-plus-lg me-2"></i>Add New Station
+            </a>
+        </div>
+    </div>
+
+    <!-- Summary Cards -->
+    <div class="row g-4 mb-4">
+        <!-- Total Stations Card -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 position-relative overflow-hidden">
+                <div class="position-absolute" style="top: 0; left: 0; width: 5px; height: 100%; background-color: #0d6efd;"></div>
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="text-muted fw-semibold text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Total Stations</div>
+                        <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                            <i class="bi bi-buildings fs-4 text-primary"></i>
+                        </div>
+                    </div>
+                    <div class="h2 mb-1 fw-bold text-gray-800">@totalStations</div>
+                    <div class="text-muted" style="font-size: 0.85rem">
+                        <span class="text-success fw-medium"><i class="bi bi-check-circle me-1"></i>@activeStations</span> active stations
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- System Capacity Card -->
+        <div class="col-xl-4 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100 position-relative overflow-hidden">
+                <div class="position-absolute" style="top: 0; left: 0; width: 5px; height: 100%; background-color: #198754;"></div>
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="text-muted fw-semibold text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">System Capacity</div>
+                        <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                            <i class="bi bi-bicycle fs-4 text-success"></i>
+                        </div>
+                    </div>
+                    <div class="h2 mb-1 fw-bold text-gray-800">@totalVehicles <span class="fs-5 text-muted fw-normal">/ @totalCapacity</span></div>
+                    <div class="text-muted" style="font-size: 0.85rem">
+                        Vehicles currently docked across all stations
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Overall Fill Rate Card -->
+        <div class="col-xl-4 col-md-12">
+            <div class="card border-0 shadow-sm rounded-4 h-100 position-relative overflow-hidden">
+                <div class="position-absolute" style="top: 0; left: 0; width: 5px; height: 100%; background-color: #0dcaf0;"></div>
+                <div class="card-body p-4">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <div class="text-muted fw-semibold text-uppercase" style="font-size: 0.8rem; letter-spacing: 0.5px;">Overall Fill Rate</div>
+                        <div class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width: 48px; height: 48px;">
+                            <i class="bi bi-battery-half fs-4 text-info"></i>
+                        </div>
+                    </div>
+                    <div class="d-flex align-items-end mb-2">
+                        <div class="h2 mb-0 fw-bold text-gray-800 me-3">@fillPercentage.ToString("0.0")%</div>
+                    </div>
+                    <div class="progress mt-2" style="height: 6px; border-radius: 10px;">
+                        <div class="progress-bar bg-info" role="progressbar" style="width: @fillPercentage%" aria-valuenow="@fillPercentage" aria-valuemin="0" aria-valuemax="100"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Stations Data Table -->
+    <div class="card shadow-sm border-0 rounded-4 mb-4 overflow-hidden">
+        <div class="card-body p-0">
+            <div class="table-responsive">
+                <table class="table table-hover align-middle mb-0 custom-table">
+                    <thead class="bg-light">
+                        <tr>
+                            <th class="ps-4">Station Info</th>
+                            <th>Capacity Status</th>
+                            <th>Operation</th>
+                            <th class="text-end pe-4">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @foreach (var item in Model) {
+                            var fillRateValue = (item.TotalCapacity > 0) ? (item.CurrentCount * 100.0 / item.TotalCapacity) : 0;
+                            var pbColor = fillRateValue > 90 ? "bg-danger" : (fillRateValue < 20 ? "bg-warning" : "bg-success");
+                            
+                            <tr>
+                                <td class="ps-4">
+                                    <div class="d-flex flex-column">
+                                        <span class="fw-bold text-dark fs-6">@item.Name</span>
+                                        <span class="text-muted" style="font-size: 0.85rem;"><i class="bi bi-geo-alt me-1"></i>@item.Address</span>
+                                    </div>
+                                </td>
+                                <td style="min-width: 200px;">
+                                    <div class="d-flex justify-content-between align-items-center mb-1" style="font-size: 0.85rem;">
+                                        <span class="text-muted">@item.CurrentCount / @item.TotalCapacity Vehicles</span>
+                                        <span class="fw-bold text-dark">@fillRateValue.ToString("0")%</span>
+                                    </div>
+                                    <div class="progress" style="height: 8px; border-radius: 10px;">
+                                        <div class="progress-bar @pbColor" role="progressbar" style="width: @fillRateValue%" aria-valuenow="@fillRateValue" aria-valuemin="0" aria-valuemax="100"></div>
+                                    </div>
+                                </td>
+                                <td>
+                                    @if(item.IsActive) {
+                                        <span class="badge bg-success bg-opacity-10 text-success px-3 py-2 rounded-pill fw-medium border border-success border-opacity-25">
+                                            <i class="bi bi-circle-fill me-1" style="font-size: 0.4rem; vertical-align: middle;"></i> Active
+                                        </span>
+                                    } else {
+                                        <span class="badge bg-danger bg-opacity-10 text-danger px-3 py-2 rounded-pill fw-medium border border-danger border-opacity-25">
+                                            <i class="bi bi-circle-fill me-1" style="font-size: 0.4rem; vertical-align: middle;"></i> Inactive
+                                        </span>
+                                    }
+                                </td>
+                                <td class="text-end pe-4">
+                                    <div class="btn-group shadow-sm" role="group">
+                                        <a asp-action="Edit" asp-route-id="@item.StationId" class="btn btn-light border-0 text-primary btn-sm px-3 hover-lift" title="Edit">
+                                            <i class="bi bi-pencil-square"></i>
+                                        </a>
+                                        <a asp-action="Details" asp-route-id="@item.StationId" class="btn btn-light border-0 text-info btn-sm px-3 hover-lift" title="Details">
+                                            <i class="bi bi-info-circle"></i>
+                                        </a>
+                                        <a asp-action="Delete" asp-route-id="@item.StationId" class="btn btn-light border-0 text-danger btn-sm px-3 hover-lift" title="Delete">
+                                            <i class="bi bi-trash"></i>
+                                        </a>
+                                    </div>
+                                </td>
+                            </tr>
+                        }
+                    </tbody>
+                </table>
+            </div>
+            @if(!Model.Any())
+            {
+                <div class="text-center py-5">
+                    <i class="bi bi-inbox text-muted" style="font-size: 3rem;"></i>
+                    <p class="mt-3 text-muted">No stations found. Click "Add New Station" to get started.</p>
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<style>
+    /* Custom Styling for the Premium Layout */
+    .custom-table th {
+        font-weight: 600;
+        color: #6c757d;
+        text-transform: uppercase;
+        font-size: 0.75rem;
+        letter-spacing: 0.5px;
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid #edf2f9;
+        background-color: #f8f9fa;
+    }
+    .custom-table td {
+        padding-top: 1.25rem;
+        padding-bottom: 1.25rem;
+        border-bottom: 1px solid #edf2f9;
+        vertical-align: middle;
+    }
+    .custom-table tbody tr {
+        transition: all 0.2s ease-in-out;
+    }
+    .custom-table tbody tr:hover {
+        background-color: #fbfbfc;
+    }
+    .hover-lift {
+        transition: transform 0.15s ease-in-out, background-color 0.15s ease-in-out;
+    }
+    .hover-lift:hover {
+        transform: translateY(-2px);
+        background-color: #f1f3f5 !important;
+    }
+    .card {
+        transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
+    }
+    .card:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.08) !important;
+    }
+</style>
+
+@section Scripts {
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            // Real-time Search Logic
+            const searchBox = document.getElementById('stationSearchBox');
+            if(searchBox) {
+                searchBox.addEventListener('keyup', function() {
+                    const searchTerm = this.value.toLowerCase();
+                    const tableRows = document.querySelectorAll('.custom-table tbody tr');
+                    
+                    tableRows.forEach(row => {
+                        const name = row.querySelector('.fw-bold.text-dark.fs-6')?.textContent.toLowerCase() || '';
+                        const address = row.querySelector('.text-muted .bi-geo-alt')?.parentNode.textContent.toLowerCase() || '';
+                        
+                        if (name.includes(searchTerm) || address.includes(searchTerm)) {
+                            row.style.display = '';
+                        } else {
+                            row.style.display = 'none';
+                        }
+                    });
+                });
+            }
+
+            // Toast Notifications
+            @if (TempData["SuccessMessage"] != null)
+            {
+                <text>
+                Swal.fire({
+                    toast: true,
+                    position: 'top-end',
+                    icon: 'success',
+                    title: '@TempData["SuccessMessage"]',
+                    showConfirmButton: false,
+                    timer: 3000,
+                    timerProgressBar: true,
+                    customClass: {
+                        popup: 'rounded-4 shadow-sm border'
+                    }
+                });
+                </text>
+            }
+        });
+    </script>
+}

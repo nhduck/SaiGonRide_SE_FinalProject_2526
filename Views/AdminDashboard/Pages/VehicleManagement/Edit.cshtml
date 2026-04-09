@@ -1,54 +1,44 @@
 ﻿@model RentalVehicleService.Models.Vehicle
 
-@{
-    ViewData["Title"] = "Edit";
-}
+<form id="editVehicleForm">
+    @Html.AntiForgeryToken()
+    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+    <input type="hidden" asp-for="VehicleId" />
 
-<h1>Edit</h1>
-
-<h4>Vehicle</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Edit">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <input type="hidden" asp-for="VehicleId" />
-            <div class="form-group">
-                <label asp-for="VehicleModel" class="control-label"></label>
-                <input asp-for="VehicleModel" class="form-control" />
-                <span asp-validation-for="VehicleModel" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BatteryPercentage" class="control-label"></label>
-                <input asp-for="BatteryPercentage" class="form-control" />
-                <span asp-validation-for="BatteryPercentage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="State" class="control-label"></label>
-                <input asp-for="State" class="form-control" />
-                <span asp-validation-for="State" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CurrentStationId" class="control-label"></label>
-                <input asp-for="CurrentStationId" class="form-control" />
-                <span asp-validation-for="CurrentStationId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Save" class="btn btn-primary" />
-            </div>
-        </form>
+    <div class="row g-3">
+        <div class="col-md-6">
+            <label asp-for="VehicleModel" class="form-label fw-bold"></label>
+            <input asp-for="VehicleModel" class="form-control" />
+            <span asp-validation-for="VehicleModel" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="Price" class="form-label fw-bold"></label>
+            <input asp-for="Price" class="form-control" />
+            <span asp-validation-for="Price" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="BatteryPercentage" class="form-label fw-bold"></label>
+            <input asp-for="BatteryPercentage" class="form-control" type="number" />
+            <span asp-validation-for="BatteryPercentage" class="text-danger"></span>
+        </div>
+        <div class="col-md-6">
+            <label asp-for="State" class="form-label fw-bold"></label>
+            <input asp-for="State" class="form-control" />
+            <span asp-validation-for="State" class="text-danger"></span>
+        </div>
+        <div class="col-12">
+            <label asp-for="CurrentStationId" class="form-label fw-bold"></label>
+            <input asp-for="CurrentStationId" class="form-control" />
+            <span asp-validation-for="CurrentStationId" class="text-danger"></span>
+        </div>
     </div>
-</div>
 
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
+    <div class="modal-footer px-0 pb-0 mt-4">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+        <button type="button" onclick="submitEditForm()" class="btn btn-primary px-4">Lưu thay đổi</button>
+    </div>
+</form>
 
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+@{
+    await Html.RenderPartialAsync("_ValidationScriptsPartial");
 }

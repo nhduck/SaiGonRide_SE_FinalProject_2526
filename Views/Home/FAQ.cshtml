@@ -1,0 +1,143 @@
+@{
+    ViewData["Title"] = "FAQ – Frequently Asked Questions";
+    ViewData["MetaDescription"] = "Got questions about SaigonRide? Find answers about how to rent, payment methods, returning bikes, pricing, and refund policies.";
+}
+
+<!-- Hero -->
+<section style="background:linear-gradient(135deg,#064e3b,#065f46);padding:5rem 0 6rem;">
+    <div class="container text-center">
+        <span class="badge mb-3" style="background:rgba(74,222,128,.2);color:#4ade80;
+              border:1px solid rgba(74,222,128,.3);padding:.5rem 1.25rem;border-radius:999px;">💬 Help Center</span>
+        <h1 class="display-5 fw-bold text-white mt-2 mb-3">Frequently Asked Questions</h1>
+        <p class="text-white-50 mx-auto" style="max-width:500px;font-size:1rem;">
+            Can't find an answer? Call our hotline <strong class="text-white">0932 013 424</strong> or email us anytime.
+        </p>
+        <div class="mt-4 mx-auto" style="max-width:440px;">
+            <div class="input-group shadow-lg rounded-pill overflow-hidden">
+                <span class="input-group-text bg-white border-0 ps-3"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" id="faqSearch" class="form-control border-0 shadow-none py-2"
+                       placeholder="Search questions...">
+            </div>
+        </div>
+    </div>
+</section>
+
+<div style="margin-top:-2.5rem;position:relative;z-index:2;">
+    <div class="container">
+        <div class="row g-4">
+            <!-- FAQ List -->
+            <div class="col-lg-8">
+                @{
+                    var faqs = new[] {
+                        new { Cat="Renting",     Q="Do I need to create an account?",
+                              A="Yes, you need a free SaigonRide account. It takes about 1 minute with just your email and ID/passport. Once registered, you can rent immediately." },
+                        new { Cat="Renting",     Q="How long can I rent a vehicle?",
+                              A="There is no time limit. Pricing is calculated per minute from the moment you unlock the vehicle until you return it. Standard bike: 500 VND/min. E-scooter: 1,500 VND/min." },
+                        new { Cat="Renting",     Q="Can I return the vehicle to a different station?",
+                              A="Absolutely! You can return to any SaigonRide station in the city — not just your starting point. This is our most-loved flexibility feature." },
+                        new { Cat="Payment",     Q="What payment methods are accepted?",
+                              A="We support Visa/Mastercard, MoMo, ZaloPay, VNPay, and Internet Banking. Payment is processed automatically when your ride ends — no cash needed." },
+                        new { Cat="Payment",     Q="How do I receive my 15% first-ride discount?",
+                              A="The discount is automatically applied to your first 3 rides after creating a new account. No promo code needed — the system handles it all." },
+                        new { Cat="Payment",     Q="Can I get a refund if I cancel a ride?",
+                              A="If you cancel within the first 2 minutes of unlocking, you get a full 100% refund. After 2 minutes, the elapsed time is billed normally." },
+                        new { Cat="Safety",      Q="Are vehicles insured?",
+                              A="Yes. All vehicles carry basic accident insurance. E-scooters also include physical damage coverage for traffic accidents." },
+                        new { Cat="Safety",      Q="What battery level is required for an e-scooter?",
+                              A="The system only allows rentals when the battery is at 20% or above, ensuring you have enough charge for your journey. Live battery level is shown on the station page." },
+                        new { Cat="Safety",      Q="What if my vehicle breaks down?",
+                              A="Call our hotline 0932 013 424 or report the issue in-app. Our team will be on-site within 15 minutes. Billing stops from the moment you report the issue." },
+                        new { Cat="Account",     Q="What do I do if I forget my password?",
+                              A="Click 'Forgot password?' on the login page, enter your email, and we'll send a reset link within 2 minutes." },
+                    };
+                }
+
+                <div class="accordion accordion-flush bg-white rounded-4 shadow-sm overflow-hidden" id="faqAccordion">
+                    @for (int i = 0; i < faqs.Length; i++)
+                    {
+                        var faq = faqs[i];
+                        <div class="accordion-item border-bottom faq-item" data-q="@faq.Q.ToLower()">
+                            <h2 class="accordion-header">
+                                <button class="accordion-button @(i > 0 ? "collapsed" : "") fw-semibold py-4"
+                                        type="button" data-bs-toggle="collapse"
+                                        data-bs-target="#faq-@i" aria-expanded="@(i == 0 ? "true" : "false")">
+                                    <span class="badge me-3 rounded-pill" style="background:var(--sr-green-50);color:var(--sr-green);font-weight:600;font-size:.72rem;padding:.3rem .7rem;flex-shrink:0;">
+                                        @faq.Cat
+                                    </span>
+                                    @faq.Q
+                                </button>
+                            </h2>
+                            <div id="faq-@i" class="accordion-collapse collapse @(i == 0 ? "show" : "")"
+                                 data-bs-parent="#faqAccordion">
+                                <div class="accordion-body text-muted pt-0 pb-4" style="line-height:1.75;font-size:.95rem;">
+                                    @faq.A
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <!-- Sidebar -->
+            <div class="col-lg-4">
+                <div class="bg-white rounded-4 shadow-sm p-4 mb-4">
+                    <h6 class="fw-bold mb-3">📞 Quick Contact</h6>
+                    <div class="d-flex flex-column gap-3">
+                        <a href="tel:0932013424" class="btn btn-success rounded-3 d-flex align-items-center gap-2 fw-semibold">
+                            <i class="bi bi-telephone-fill"></i>0932 013 424
+                        </a>
+                        <a href="mailto:tt3145539@gmail.com" class="btn btn-outline-success rounded-3 d-flex align-items-center gap-2 fw-semibold">
+                            <i class="bi bi-envelope-fill"></i>Send Email
+                        </a>
+                        <a href="#" class="btn btn-outline-secondary rounded-3 d-flex align-items-center gap-2 fw-semibold">
+                            <i class="bi bi-messenger"></i>Chat on Facebook
+                        </a>
+                    </div>
+                </div>
+
+                <div class="bg-white rounded-4 shadow-sm p-4 mb-4">
+                    <h6 class="fw-bold mb-3">🕐 Support Hours</h6>
+                    <ul class="list-unstyled small text-muted mb-0">
+                        <li class="d-flex justify-content-between py-2 border-bottom">
+                            <span>Hotline</span><strong class="text-dark">24/7</strong>
+                        </li>
+                        <li class="d-flex justify-content-between py-2 border-bottom">
+                            <span>Live Chat</span><strong class="text-dark">7:00 – 22:00</strong>
+                        </li>
+                        <li class="d-flex justify-content-between py-2">
+                            <span>Email</span><strong class="text-dark">Within 4 hrs</strong>
+                        </li>
+                    </ul>
+                </div>
+
+                <div class="bg-white rounded-4 shadow-sm p-4">
+                    <h6 class="fw-bold mb-3">🔗 Useful Links</h6>
+                    <div class="list-group list-group-flush">
+                        <a href="/Home/Guide"   class="list-group-item list-group-item-action border-0 ps-0 text-muted py-2">
+                            <i class="bi bi-book me-2 text-sr-green"></i>User Guide
+                        </a>
+                        <a href="/Home/Privacy" class="list-group-item list-group-item-action border-0 ps-0 text-muted py-2">
+                            <i class="bi bi-shield-check me-2 text-sr-green"></i>Privacy Policy
+                        </a>
+                        <a href="/Home/About"   class="list-group-item list-group-item-action border-0 ps-0 text-muted py-2">
+                            <i class="bi bi-people me-2 text-sr-green"></i>About Us
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div style="padding-bottom:5rem;"></div>
+
+@section Scripts {
+<script>
+    document.getElementById('faqSearch')?.addEventListener('input', function () {
+        const q = this.value.toLowerCase();
+        document.querySelectorAll('.faq-item').forEach(el => {
+            el.style.display = el.dataset.q?.includes(q) ? '' : 'none';
+        });
+    });
+</script>
+}

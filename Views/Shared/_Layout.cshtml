@@ -5,79 +5,111 @@
 @{
     var appUser = SignInManager.IsSignedIn(User) ? await UserManager.GetUserAsync(User) : null;
     var displayName = string.IsNullOrWhiteSpace(appUser?.FullName) ? User.Identity?.Name : appUser.FullName;
+    var pageTitle   = ViewData["Title"]?.ToString() ?? "Home";
+    var metaDesc    = ViewData["MetaDescription"]?.ToString()
+                      ?? "SaigonRide – Smart bike & e-scooter rental network across Ho Chi Minh City. Green, convenient, and affordable urban mobility.";
+    var ogImage     = ViewData["OgImage"]?.ToString() ?? "https://i.imgur.com/placeholder.png";
 }
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="description" content="SaigonRide - Bike and e-scooter rental in HCMC" />
-    <title>@ViewData["Title"] - SaigonRide</title>
+    <!-- SEO -->
+    <title>@pageTitle - SaigonRide</title>
+    <meta name="description" content="@metaDesc" />
+    <meta name="robots" content="index, follow" />
+    <meta name="author" content="SaigonRide Team" />
+    <meta name="keywords" content="bike rental, e-scooter, SaigonRide, Ho Chi Minh City, HCMC, green transport, cycling" />
+    <!-- Open Graph -->
+    <meta property="og:type"        content="website" />
+    <meta property="og:title"       content="@pageTitle - SaigonRide" />
+    <meta property="og:description" content="@metaDesc" />
+    <meta property="og:image"       content="@ogImage" />
+    <meta property="og:url"         content="https://saigonride.vn/" />
+    <meta property="og:locale"      content="en_US" />
+    <!-- Twitter Card -->
+    <meta name="twitter:card"        content="summary_large_image" />
+    <meta name="twitter:title"       content="@pageTitle - SaigonRide" />
+    <meta name="twitter:description" content="@metaDesc" />
+    <meta name="twitter:image"       content="@ogImage" />
+    <!-- Canonical -->
+    <link rel="canonical" href="https://saigonride.vn/@Context.Request.Path" />
+    <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet" />
+    <!-- CSS -->
     <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
+    <!-- NProgress -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/LayoutStyle.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/bike-animation.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/RentalVehicleService.styles.css" asp-append-version="true" />
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css">
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
-    <link rel="stylesheet" href="~/css/LayoutStyle.css" />
     @await RenderSectionAsync("Styles", required: false)
+
+    <style>
+        #nprogress .bar { background: #16a34a !important; height: 3px; }
+        #nprogress .peg  { box-shadow: 0 0 10px #16a34a, 0 0 5px #16a34a !important; }
+        #nprogress .spinner-icon {
+            border-top-color: #16a34a !important;
+            border-left-color: #16a34a !important;
+        }
+    </style>
 </head>
 <body>
-    <!--NAVBAR -->
-    <nav class="navbar navbar-expand-xl sticky-top sr-navbar">
+
+    <!-- NAVBAR -->
+    <nav class="navbar navbar-expand-xl sticky-top sr-navbar" id="mainNav">
         <div class="container-fluid px-4 px-xl-5">
-            <!-- Brand -->
             <a class="navbar-brand d-flex align-items-center text-nowrap" href="/">
                 <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" viewBox="0 0 24 24" fill="none"
                      stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2 flex-shrink-0">
-                    <circle cx="5.5" cy="17.5" r="3.5"/>
-                    <circle cx="18.5" cy="17.5" r="3.5"/>
+                    <circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/>
                     <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2"/>
                 </svg>
                 <span class="sr-brand-text fw-bold">SaigonRide</span>
             </a>
 
-            <!-- Toggler -->
             <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
                     aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
             </button>
 
-            <!-- Collapsible content -->
             <div class="collapse navbar-collapse" id="mainNavbar">
-                <!-- Nav Links -->
                 <ul class="navbar-nav me-auto mb-2 mb-xl-0 gap-1">
                     <li class="nav-item">
-                        <a class="nav-link text-nowrap d-flex align-items-center" href="/">
-                            <i class="bi bi-house-door me-1"></i><span>Home</span>
-                        </a>
+                        <a class="nav-link text-nowrap d-flex align-items-center" href="/"><i class="bi bi-house-door me-1"></i>Home</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-nowrap d-flex align-items-center" href="/#station-search">
-                            <i class="bi bi-geo-alt me-1"></i><span>Find Stations</span>
-                        </a>
+                        <a class="nav-link text-nowrap d-flex align-items-center" href="/#station-search"><i class="bi bi-geo-alt me-1"></i>Find Stations</a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-nowrap d-flex align-items-center" href="/Home/Guide">
-                            <i class="bi bi-info-circle me-1"></i><span>How It Works</span>
-                        </a>
+                        <a class="nav-link text-nowrap d-flex align-items-center" href="/Home/Guide"><i class="bi bi-info-circle me-1"></i>How It Works</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-nowrap d-flex align-items-center" href="/Home/About"><i class="bi bi-people me-1"></i>About Us</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link text-nowrap d-flex align-items-center" href="/Home/FAQ"><i class="bi bi-chat-square-dots me-1"></i>FAQ</a>
                     </li>
                 </ul>
 
-                <!-- Search bar -->
-                <form class="d-flex me-3 sr-search-form flex-grow-1" style="max-width: 300px;" role="search" action="/" method="get">
+                <!-- Search -->
+                <form class="d-flex me-3 sr-search-form flex-grow-1" style="max-width:280px;" role="search" action="/" method="get">
                     <div class="input-group flex-nowrap">
                         <input class="form-control text-truncate border-success" type="search" name="query"
-                               placeholder="Search for stations..." aria-label="Search" />
-                        <button class="btn btn-success flex-shrink-0" type="submit">
-                            <i class="bi bi-search"></i>
-                        </button>
+                               placeholder="Search stations..." aria-label="Search" />
+                        <button class="btn btn-success flex-shrink-0" type="submit"><i class="bi bi-search"></i></button>
                     </div>
                 </form>
 
-                <!-- Auth buttons and Language -->
+                <!-- Auth -->
                 <div class="d-flex align-items-center gap-2 flex-nowrap">
                     @if (User.IsInRole("Admin"))
                     {
@@ -86,34 +118,33 @@
                             <span class="d-none d-xl-inline text-nowrap">Admin Panel</span>
                         </a>
                     }
-                    
-                    <!-- Custom Language Dropdown -->
+
                     <div class="dropdown me-1 d-none d-xl-block">
-                        <button class="btn btn-outline-success dropdown-toggle btn-sm d-flex align-items-center gap-1 px-3 text-nowrap" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-translate flex-shrink-0"></i>
-                            <span>Language</span>
+                        <button class="btn btn-outline-success dropdown-toggle btn-sm d-flex align-items-center gap-1 px-3 text-nowrap"
+                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-translate flex-shrink-0"></i><span>Language</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
                             <li><a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0);" onclick="changeLanguage('en')">🇬🇧 English</a></li>
                             <li><a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0);" onclick="changeLanguage('vi')">🇻🇳 Tiếng Việt</a></li>
                         </ul>
                     </div>
-                    <!-- Hidden Google Translate Element -->
                     <div id="google_translate_element" style="display:none;"></div>
+
                     @if (SignInManager.IsSignedIn(User))
                     {
                         <div class="dropdown">
                             <button class="btn btn-light btn-sm d-flex align-items-center gap-2 dropdown-toggle sr-user-btn border"
-                                    type="button" data-bs-toggle="dropdown" aria-expanded="false" style="max-width: 200px;">
-                                <div class="sr-avatar flex-shrink-0" style="width:24px; height:24px;">
-                                    <i class="bi bi-person-fill" style="font-size: 1rem;"></i>
+                                    type="button" data-bs-toggle="dropdown" aria-expanded="false" style="max-width:200px;">
+                                <div class="sr-avatar flex-shrink-0" style="width:24px;height:24px;">
+                                    <i class="bi bi-person-fill" style="font-size:1rem;"></i>
                                 </div>
-                                <span class="d-none d-md-inline text-truncate fw-medium" style="max-width: 130px;">@displayName</span>
+                                <span class="d-none d-md-inline text-truncate fw-medium" style="max-width:130px;">@displayName</span>
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                                 <li>
                                     <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
-                                        <i class="bi bi-person me-2"></i>Profile
+                                        <i class="bi bi-person me-2"></i>My Profile
                                     </a>
                                 </li>
                                 <li>
@@ -125,7 +156,7 @@
                                 <li>
                                     <form asp-controller="Account" asp-action="Logout" method="post">
                                         <button type="submit" class="dropdown-item text-danger">
-                                            <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                            <i class="bi bi-box-arrow-right me-2"></i>Log Out
                                         </button>
                                     </form>
                                 </li>
@@ -134,12 +165,8 @@
                     }
                     else
                     {
-                        <a class="btn btn-outline-success btn-sm px-3" asp-controller="Account" asp-action="Login">
-                            Log In
-                        </a>
-                        <a class="btn btn-success btn-sm px-3" asp-controller="Account" asp-action="Register">
-                            Register
-                        </a>
+                        <a class="btn btn-outline-success btn-sm px-3" asp-controller="Account" asp-action="Login">Log In</a>
+                        <a class="btn btn-success btn-sm px-3" asp-controller="Account" asp-action="Register">Register</a>
                     }
                 </div>
             </div>
@@ -147,112 +174,132 @@
     </nav>
 
     <!-- MAIN CONTENT -->
-    <main role="main">
+    <main role="main" class="sr-page-content">
         @RenderBody()
     </main>
 
-    <!-- FOOTER -->
-    <footer class="sr-footer" style="background-color: #1a1a1a; padding: 4rem 0 2rem;">
+    <!-- ════ FOOTER ════ -->
+    <footer class="sr-footer">
         <div class="container">
-            <div class="row align-items-start">
-                <!-- Column 1: Brand -->
-                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
+            <div class="row gy-5">
+                <!-- Brand -->
+                <div class="col-lg-4 col-md-6">
                     <div class="d-flex align-items-center mb-3">
                         <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" viewBox="0 0 24 24" fill="none"
                              stroke="#16a34a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="me-2">
-                            <circle cx="5.5" cy="17.5" r="3.5"/>
-                            <circle cx="18.5" cy="17.5" r="3.5"/>
+                            <circle cx="5.5" cy="17.5" r="3.5"/><circle cx="18.5" cy="17.5" r="3.5"/>
                             <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2"/>
                         </svg>
                         <span class="fs-5 fw-bold text-white">SaigonRide</span>
                     </div>
-                    <p class="text-white-50 small" style="line-height: 1.6;">
-                        Providing smart, genuine household and mobility solutions with the best value in the market.
+                    <p class="text-white-50 small" style="line-height:1.7;">
+                        Smart bike & e-scooter sharing network across Ho Chi Minh City.
+                        Green, convenient, and modern — move your way.
                     </p>
-                    <div class="d-flex gap-3 mt-3">
-                        <a href="#" class="text-white bg-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"><i class="bi bi-facebook"></i></a>
-                        <a href="#" class="text-white bg-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"><i class="bi bi-instagram"></i></a>
-                        <a href="#" class="text-white bg-dark rounded-circle d-flex align-items-center justify-content-center" style="width: 36px; height: 36px;"><i class="bi bi-youtube"></i></a>
+                    <div class="d-flex gap-2 mt-4">
+                        <a href="#" class="sr-social-btn" title="Facebook"><i class="bi bi-facebook"></i></a>
+                        <a href="#" class="sr-social-btn" title="Instagram"><i class="bi bi-instagram"></i></a>
+                        <a href="#" class="sr-social-btn" title="YouTube"><i class="bi bi-youtube"></i></a>
+                        <a href="#" class="sr-social-btn" title="TikTok"><i class="bi bi-tiktok"></i></a>
                     </div>
                 </div>
 
-                <!-- Column 2: Discover -->
-                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0 text-md-start">
-                    <h6 class="fw-bold mb-3" style="color: #16a34a;">Discover</h6>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a class="text-white-50 text-decoration-none small" href="/">Home</a></li>
-                        <li class="mb-2"><a class="text-white-50 text-decoration-none small" href="/#station-search">Best Products</a></li>
-                        <li class="mb-2"><a class="text-white-50 text-decoration-none small" href="/Home/Guide">Hot Promos</a></li>
-                        <li class="mb-2"><a class="text-white-50 text-decoration-none small" href="/">Track Order</a></li>
+                <!-- Explore -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="sr-footer-heading">Explore</h6>
+                    <ul class="list-unstyled sr-footer-links">
+                        <li><a href="/">Home</a></li>
+                        <li><a href="/#station-search">Find Stations</a></li>
+                        <li><a href="/Home/Guide">How It Works</a></li>
+                        <li><a href="/Home/About">About Us</a></li>
+                        <li><a href="/Home/FAQ">FAQ</a></li>
                     </ul>
                 </div>
 
-                <!-- Column 3: Support -->
-                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0 text-md-start">
-                    <h6 class="fw-bold mb-3" style="color: #16a34a;">Support</h6>
-                    <ul class="list-unstyled">
-                        <li class="mb-2"><a class="text-white-50 text-decoration-none small" href="/Home/Privacy">Help Center</a></li>
-                        <li class="mb-2"><a class="text-white-50 text-decoration-none small" href="/Home/Privacy">Warranty Policy</a></li>
-                        <li class="mb-2"><a class="text-white-50 text-decoration-none small" href="/Home/Privacy">Return Policy</a></li>
-                        <li class="mb-2"><a class="text-white-50 text-decoration-none small" href="/Home/Privacy">Privacy Policy</a></li>
+                <!-- Support -->
+                <div class="col-lg-2 col-md-6 col-6">
+                    <h6 class="sr-footer-heading">Support</h6>
+                    <ul class="list-unstyled sr-footer-links">
+                        <li><a href="/Home/Privacy">Privacy Policy</a></li>
+                        <li><a href="/Home/Privacy">Terms of Service</a></li>
+                        <li><a href="/Home/FAQ">Help Center</a></li>
+                        <li><a href="#">Contact Us</a></li>
+                        <li><a href="#">Report an Issue</a></li>
                     </ul>
                 </div>
 
-                <!-- Column 4: Contact -->
-                <div class="col-lg-3 col-md-6 mb-4 mb-lg-0 text-md-start">
-                    <h6 class="fw-bold mb-3" style="color: #16a34a;">Contact Us</h6>
+                <!-- Contact -->
+                <div class="col-lg-4 col-md-6">
+                    <h6 class="sr-footer-heading">Contact</h6>
                     <ul class="list-unstyled small text-white-50">
-                        <li class="mb-3 d-flex align-items-start">
-                            <i class="bi bi-geo-alt me-2 mt-1" style="color: #16a34a;"></i>
+                        <li class="d-flex align-items-start gap-2 mb-3">
+                            <i class="bi bi-geo-alt-fill mt-1" style="color:#16a34a;flex-shrink:0;"></i>
                             <span>Millenium Apartment 306F, District 4, Ho Chi Minh City</span>
                         </li>
-                        <li class="mb-3 d-flex align-items-center">
-                            <i class="bi bi-telephone me-2" style="color: #16a34a;"></i>
-                            <span>0932 013 424</span>
+                        <li class="d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-telephone-fill" style="color:#16a34a;"></i>
+                            <a href="tel:0932013424" class="text-white-50 text-decoration-none">0932 013 424</a>
                         </li>
-                        <li class="mb-3 d-flex align-items-center">
-                            <i class="bi bi-envelope me-2" style="color: #16a34a;"></i>
-                            <span>tt3145539@gmail.com</span>
+                        <li class="d-flex align-items-center gap-2 mb-3">
+                            <i class="bi bi-envelope-fill" style="color:#16a34a;"></i>
+                            <a href="mailto:tt3145539@gmail.com" class="text-white-50 text-decoration-none">tt3145539@gmail.com</a>
+                        </li>
+                        <li class="d-flex align-items-center gap-2">
+                            <i class="bi bi-clock-fill" style="color:#16a34a;"></i>
+                            <span>Available 24/7</span>
                         </li>
                     </ul>
+                    <div class="d-flex gap-2 mt-3 flex-wrap">
+                        <a href="#" class="sr-app-badge"><i class="bi bi-apple me-1"></i>App Store</a>
+                        <a href="#" class="sr-app-badge"><i class="bi bi-google-play me-1"></i>Google Play</a>
+                    </div>
                 </div>
             </div>
 
-            <hr class="my-4 border-secondary" />
-            <div class="text-center text-white-50 small pb-0">
-                &copy; 2026 SaigonRide. All rights reserved.
+            <hr class="my-4" style="border-color:rgba(255,255,255,0.1);" />
+
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 pb-3">
+                <p class="text-white-50 small mb-0">&copy; 2026 SaigonRide. All rights reserved.</p>
+                <div class="d-flex gap-3">
+                    <a href="/Home/Privacy" class="text-white-50 small text-decoration-none hover-green">Privacy</a>
+                    <a href="/Home/Privacy" class="text-white-50 small text-decoration-none hover-green">Terms</a>
+                    <a href="/Home/FAQ"     class="text-white-50 small text-decoration-none hover-green">FAQ</a>
+                </div>
             </div>
         </div>
     </footer>
 
-    <!-- Premium Expandable FAB Menu -->
+    <!-- FAB -->
     <div class="fab-wrapper">
         <input type="checkbox" id="fab-checkbox" class="fab-checkbox d-none" />
+        
+        <!-- Contact Message Bubble -->
+        <div class="fab-contact-msg">
+            <span class="fb-msg-text">Contact here!</span>
+            <div class="fb-msg-dots">
+                <span></span><span></span><span></span>
+            </div>
+        </div>
+
         <label class="fab-btn shadow-lg pulse-animation" for="fab-checkbox">
-            <i class="bi bi-chat-dots-fill fab-icon-main"></i>
+            <i class="bi bi-telephone-fill fab-icon-main"></i>
             <i class="bi bi-x-lg fab-icon-close"></i>
         </label>
-        
         <div class="fab-menu">
-            <!-- Item 1: Facebook -->
             <div class="fab-item-container">
                 <span class="fab-item-label">Messenger</span>
-                <a href="#" class="btn rounded-circle shadow-sm fab-item text-white" style="background-color: #0084FF;" title="Facebook">
+                <a href="#" class="btn rounded-circle shadow-sm fab-item text-white" style="background:#0084FF;" title="Messenger">
                     <i class="bi bi-messenger"></i>
                 </a>
             </div>
-
-            <!-- Item 2: Instagram -->
             <div class="fab-item-container">
                 <span class="fab-item-label">Instagram</span>
-                <a href="#" class="btn rounded-circle shadow-sm fab-item text-white" style="background: radial-gradient(circle at 30% 107%, #fdf497 0%, #fdf497 5%, #fd5949 45%,#d6249f 60%,#285AEB 90%);" title="Instagram">
-                    <i class="bi bi-instagram"></i>
-                </a>
+                <a href="#" class="btn rounded-circle shadow-sm fab-item text-white"
+                   style="background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%);"
+                   title="Instagram"><i class="bi bi-instagram"></i></a>
             </div>
-
-            <!-- Item 3: Hotline/Call -->
             <div class="fab-item-container">
-                <span class="fab-item-label">Gọi Hotline</span>
+                <span class="fab-item-label">Call Hotline</span>
                 <a href="tel:0932013424" class="btn rounded-circle shadow-sm fab-item bg-success text-white" title="Call Us">
                     <i class="bi bi-telephone-fill"></i>
                 </a>
@@ -260,29 +307,96 @@
         </div>
     </div>
 
-    <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <!-- SCRIPTS -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="https://cdn.jsdelivr.net/npm/nprogress@0.2.0/nprogress.min.js"></script>
 
-    <!-- Google Translate Script -->
-    <script type="text/javascript">
-        function googleTranslateElementInit() {
-            new google.translate.TranslateElement({
-                pageLanguage: 'en',
-                includedLanguages: 'en,vi',
-                autoDisplay: false
-            }, 'google_translate_element');
+    <script>
+        // NProgress
+        NProgress.configure({
+            showSpinner: false,
+            speed: 350,
+            minimum: 0.08,
+            trickle: true,
+            trickleSpeed: 180
+        });
+        NProgress.start();
+
+        let _npDone = false;
+        function _finishNProgress() {
+            if (_npDone) return;
+            _npDone = true;
+            NProgress.done(true);
         }
 
+        if (document.readyState === 'complete') {
+            _finishNProgress();
+        } else {
+            // { once: true } — fires EXACTLY once, auto-removes itself
+            window.addEventListener('load', _finishNProgress, { once: true });
+        }
+
+        // Start bar on navigation (guard: only real page links)
+        document.querySelectorAll(
+            'a[href]:not([href^="#"]):not([href^="javascript"]):not([href^="tel"]):not([href^="mailto"]):not([target="_blank"])'
+        ).forEach(a => {
+            a.addEventListener('click', function () {
+                // Only start if navigating away (same origin)
+                try {
+                    const url = new URL(this.href, location.origin);
+                    if (url.origin === location.origin) NProgress.start();
+                } catch (_) {}
+            });
+        });
+        document.querySelectorAll('form').forEach(f => {
+            f.addEventListener('submit', () => NProgress.start());
+        });
+
+        // Navbar scroll shrink
+        const nav = document.getElementById('mainNav');
+        if (nav) {
+            window.addEventListener('scroll', () => {
+                nav.classList.toggle('sr-navbar-scrolled', window.scrollY > 50);
+            }, { passive: true });
+        }
+
+        // Scroll-reveal
+        const srObserver = new IntersectionObserver((entries) => {
+            entries.forEach(e => {
+                if (e.isIntersecting) {
+                    e.target.classList.add('sr-revealed');
+                    srObserver.unobserve(e.target);
+                }
+            });
+        }, { threshold: 0.12 });
+        document.querySelectorAll('.sr-reveal').forEach(el => srObserver.observe(el));
+
+        // Google Translate
+        function googleTranslateElementInit() {
+            // Guard: initialise only once
+            if (window._gtInitDone) return;
+            window._gtInitDone = true;
+            new google.translate.TranslateElement(
+                { pageLanguage: 'en', includedLanguages: 'en,vi', autoDisplay: false },
+                'google_translate_element'
+            );
+        }
         function changeLanguage(langCode) {
-            // Set cookie for Google Translate
             document.cookie = `googtrans=/en/${langCode}; path=/`;
             document.cookie = `googtrans=/en/${langCode}; domain=.${location.hostname}; path=/`;
             window.location.reload();
         }
     </script>
-    <script type="text/javascript" src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit"></script>
+    <!--
+        async + defer: Google Translate script loads fully off the critical path.
+        This prevents its AJAX sub-requests from re-triggering load events.
+    -->
+    <script async defer
+            src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
+    </script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>
 </html>
+

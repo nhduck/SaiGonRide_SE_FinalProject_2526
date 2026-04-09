@@ -51,7 +51,7 @@ namespace RentalVehicleService.Controllers
         // POST: Stations/Create
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StationId,Name,Address,TotalCapacity,CurrentCount,IsActive")] Station station)
+        public async Task<IActionResult> Create([Bind("StationId,Name,Address,Latitude,Longitude,TotalCapacity,CurrentCount,IsActive")] Station station)
         {
             if (station.CurrentCount > station.TotalCapacity)
             {
@@ -62,7 +62,6 @@ namespace RentalVehicleService.Controllers
             {
                 _context.Add(station);
                 await _context.SaveChangesAsync();
-                // Sau khi tạo xong, thường sẽ load lại danh sách Index
                 return RedirectToAction(nameof(Index));
             }
             return PartialView($"{ViewPath}Create.cshtml", station);
@@ -82,7 +81,7 @@ namespace RentalVehicleService.Controllers
         // POST: Stations/Edit/5
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StationId,Name,Address,TotalCapacity,CurrentCount,IsActive")] Station station)
+        public async Task<IActionResult> Edit(int id, [Bind("StationId,Name,Address,Latitude,Longitude,TotalCapacity,CurrentCount,IsActive")] Station station)
         {
             if (id != station.StationId) return NotFound();
 
@@ -103,6 +102,7 @@ namespace RentalVehicleService.Controllers
                     if (!StationExists(station.StationId)) return NotFound();
                     else throw;
                 }
+                TempData["SuccessMessage"] = "Station updated successfully!";
                 return RedirectToAction(nameof(Index));
             }
             return PartialView($"{ViewPath}Edit.cshtml", station);
@@ -131,6 +131,7 @@ namespace RentalVehicleService.Controllers
             }
 
             await _context.SaveChangesAsync();
+            TempData["SuccessMessage"] = "Station deleted successfully!";
             return RedirectToAction(nameof(Index));
         }
 
