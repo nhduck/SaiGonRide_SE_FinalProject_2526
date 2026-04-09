@@ -32,7 +32,7 @@
     }
 }
 
-/* Whole-bike idle bob (wheels + body move together) */
+/* Whole-bike idle bob */
 @keyframes bike-idle-bob {
     0% {
         transform: translateX(0) translateY(0px);
