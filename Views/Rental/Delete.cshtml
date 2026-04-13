@@ -1,4 +1,4 @@
-﻿@model RentalVehicleService.Models.Rental
+@model RentalVehicleService.Models.Rental
 
 @{
     ViewData["Title"] = "Delete";
@@ -51,19 +51,19 @@
             @Html.DisplayNameFor(model => model.Vehicle)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.Vehicle.VehicleModel)
+            @Model.Vehicle?.VehicleModel
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.StartStation)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.StartStation.Address)
+            @Model.StartStation?.Address
         </dd>
         <dt class = "col-sm-2">
             @Html.DisplayNameFor(model => model.EndStation)
         </dt>
         <dd class = "col-sm-10">
-            @Html.DisplayFor(model => model.EndStation.Address)
+            @Model.EndStation?.Address
         </dd>
     </dl>
     

@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
@@ -22,8 +22,11 @@ namespace RentalVehicleService.Controllers
         public RentalController(ApplicationDbContext context, RentalService rentalService)
         {
             _context = context; 
-            _rentalService = rentalService; // Khởi tạo Service
+            _rentalService = rentalService;
         }
+
+        // Removed redundant constructor that caused CS8618
+
         // GET: Rental
         public async Task<IActionResult> Index()
         {
@@ -101,7 +104,7 @@ namespace RentalVehicleService.Controllers
                 StartStationId = startStationId,
                 StartTime = DateTime.Now,
                 Status = RentalStatus.Active,
-                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier),
+                UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty,
                 VehicleType = vehicle.Type
             };
 
@@ -223,6 +226,23 @@ namespace RentalVehicleService.Controllers
         private bool RentalExists(int id)
         {
             return _context.Rentals.Any(e => e.RentalId == id);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetAvailableVehicles(int stationId, string type)
+        {
+            var vehicleType = type?.Equals("Electric", StringComparison.OrdinalIgnoreCase) == true
+                              ? VehicleType.Electric
+                              : VehicleType.Standard;
+
+            var vehicles = await _context.Vehicles
+                .Where(v => v.CurrentStationId == stationId
+                         && v.Type == vehicleType
+                         && v.State == VehicleState.Available)
+                .ToListAsync();
+
+            ViewBag.StationId = stationId;
+            return PartialView("_VehicleListModal", vehicles);
         }
     }
 }

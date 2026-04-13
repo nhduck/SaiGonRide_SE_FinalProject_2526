@@ -9,6 +9,15 @@
     var metaDesc    = ViewData["MetaDescription"]?.ToString()
                       ?? "SaigonRide – Smart bike & e-scooter rental network across Ho Chi Minh City. Green, convenient, and affordable urban mobility.";
     var ogImage     = ViewData["OgImage"]?.ToString() ?? "https://i.imgur.com/placeholder.png";
+    var isHomePage  = ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && 
+                      ViewContext.RouteData.Values["action"]?.ToString() == "Index";
+
+    // Logic to show FAB only on specific pages
+    var currentCtrl = ViewContext.RouteData.Values["controller"]?.ToString();
+    var currentAct  = ViewContext.RouteData.Values["action"]?.ToString();
+    var showFab     = (currentCtrl == "Home" && (new[] { "Index", "About", "FAQ", "Guide" }).Contains(currentAct)) || 
+                      (currentCtrl == "Account" && currentAct == "Profile") ||
+                      (currentCtrl == "Payment");
 }
 <!DOCTYPE html>
 <html lang="en">
@@ -178,8 +187,10 @@
         @RenderBody()
     </main>
 
-    <!-- ════ FOOTER ════ -->
-    <footer class="sr-footer">
+    <!--FOOTER -->
+    @if (isHomePage)
+    {
+        <footer class="sr-footer">
         <div class="container">
             <div class="row gy-5">
                 <!-- Brand -->
@@ -268,8 +279,11 @@
             </div>
         </div>
     </footer>
+    }
 
     <!-- FAB -->
+    @if (showFab)
+    {
     <div class="fab-wrapper">
         <input type="checkbox" id="fab-checkbox" class="fab-checkbox d-none" />
         
@@ -306,6 +320,7 @@
             </div>
         </div>
     </div>
+    }
 
     <!-- SCRIPTS -->
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
