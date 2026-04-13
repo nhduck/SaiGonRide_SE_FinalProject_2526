@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using RentalVehicleService.Data;
 using RentalVehicleService.Models;
+using RentalVehicleService.Services;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -27,6 +28,8 @@ builder.Services.AddControllersWithViews()
         options.ViewLocationFormats.Add("/Views/Admin/{1}/{0}.cshtml");
         options.ViewLocationFormats.Add("/Views/Admin/Shared/{0}.cshtml");
     });
+
+builder.Services.AddScoped<RentalService>();
 
 var app = builder.Build();
 

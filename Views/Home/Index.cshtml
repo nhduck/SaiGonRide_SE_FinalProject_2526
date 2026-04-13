@@ -437,20 +437,21 @@
                             <div class="d-flex gap-2 flex-shrink-0 flex-wrap">
                                 @if (User.Identity?.IsAuthenticated == true)
                                 {
-                                    <a href="/Rentals/Checkout?stationId=@station.StationId&vehicleType=Standard"
-                                       class="btn btn-outline-success px-4 py-2 text-center d-flex flex-column align-items-center"
-                                       style="min-width:110px;border-radius:14px;">
+                                    <button type="button" class="btn btn-outline-success px-4 py-2 text-center d-flex flex-column align-items-center btn-open-modal"
+                                            data-station-id="@station.StationId" data-type="Standard"
+                                            style="min-width:110px;border-radius:14px;">
                                         <i class="bi bi-bicycle fs-4 mb-1"></i>
                                         <span class="fw-semibold" style="font-size:.82rem;">Standard</span>
                                         <small class="text-muted" style="font-size:.68rem;">500 VND/min</small>
-                                    </a>
-                                    <a href="/Rentals/Checkout?stationId=@station.StationId&vehicleType=Electric"
-                                       class="btn btn-outline-primary px-4 py-2 text-center d-flex flex-column align-items-center"
-                                       style="min-width:110px;border-radius:14px;">
+                                    </button>
+
+                                    <button type="button" class="btn btn-outline-primary px-4 py-2 text-center d-flex flex-column align-items-center btn-open-modal"
+                                            data-station-id="@station.StationId" data-type="Electric"
+                                            style="min-width:110px;border-radius:14px;">
                                         <i class="bi bi-lightning-charge-fill fs-4 mb-1"></i>
                                         <span class="fw-semibold" style="font-size:.82rem;">Electric</span>
                                         <small class="text-muted" style="font-size:.68rem;">1,500 VND/min</small>
-                                    </a>
+                                    </button>
                                 }
                                 else
                                 {
@@ -562,6 +563,18 @@
     </div>
 </section>
 
+<!--Test giao dien giao dich-->
+<div class="modal fade" id="dynamicVehicleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content sr-modal-content" style="border-radius: 20px; border: none; box-shadow: 0 15px 35px rgba(0,0,0,0.15);" id="modal-content-container">
+            <div class="text-center p-5">
+                <div class="spinner-border text-success" role="status"></div>
+                <p class="mt-3 text-muted fw-semibold">Đang tìm xe trống tại trạm...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
 <script>
     document.getElementById('liveSearchBox')?.addEventListener('input', function () {
@@ -591,5 +604,42 @@
         });
     }, { threshold: .5 });
     counters.forEach(c => countObs.observe(c));
+
+        $(document).ready(function () {
+            $('.btn-open-modal').click(function () {
+                var stationId = $(this).data('station-id');
+                var type = $(this).data('type');
+
+                // 1. Reset nội dung Modal về Loading và mở Modal
+                $('#modal-content-container').html(`
+                    <div class="text-center p-5">
+                        <div class="spinner-border text-success" role="status"></div>
+                        <p class="mt-3 text-muted fw-semibold">Đang tìm xe trống tại trạm...</p>
+                    </div>
+                `);
+                $('#dynamicVehicleModal').modal('show');
+
+                // 2. Gọi AJAX xuống Controller
+                $.ajax({
+                    url: '/Rental/GetAvailableVehicles',
+                    type: 'GET',
+                    data: { stationId: stationId, type: type },
+                    success: function (result) {
+                        // Nhận được PartialView (_VehicleListModal.cshtml) -> Nhét vào form
+                        $('#modal-content-container').html(result);
+                    },
+                    error: function () {
+                        $('#modal-content-container').html(`
+                            <div class="p-5 text-center">
+                                <i class="bi bi-x-circle text-danger fs-1 mb-2"></i>
+                                <h5 class="text-dark fw-bold">Lỗi kết nối</h5>
+                                <p class="text-muted">Không thể lấy dữ liệu lúc này. Vui lòng thử lại sau.</p>
+                                <button type="button" class="btn btn-outline-secondary rounded-pill px-4 mt-2" data-bs-dismiss="modal">Đóng</button>
+                            </div>
+                        `);
+                    }
+                });
+            });
+        });
 </script>
 }
