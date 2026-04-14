@@ -563,7 +563,7 @@
     </div>
 </section>
 
-<!--Test giao dien giao dich-->
+<!--Giao dien giao dich-->
 <div class="modal fade" id="dynamicVehicleModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
         <div class="modal-content sr-modal-content" style="border-radius: 20px; border: none; box-shadow: 0 15px 35px rgba(0,0,0,0.15);" id="modal-content-container">
@@ -625,7 +625,6 @@
                     type: 'GET',
                     data: { stationId: stationId, type: type },
                     success: function (result) {
-                        // Nhận được PartialView (_VehicleListModal.cshtml) -> Nhét vào form
                         $('#modal-content-container').html(result);
                     },
                     error: function () {
