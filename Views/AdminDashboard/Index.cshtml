@@ -3,52 +3,51 @@
 }
 <div class="container-fluid">
     <div class="row">
-        <div class="col-2 min-vh-100 p-0">
+        <div class="col-2 min-vh-100 p-0 bg-white border-end shadow-sm">
             <ul class="nav flex-column">
-                <li class="nav-item p-3">
-                    <h4 id="logo" class="mb-0 fw-bold d-flex align-items-center">
-                        <i class="bi bi-bicycle fs-1 me-2"></i>
-                        <span>Admin Dashboard</span>
-                    </h4>
+                <li class="nav-item p-4 border-bottom">
+                    <h4 id="logo" class="mb-0 fw-bold d-flex justify-content-center">Admin Control</h4>
                 </li>
                 <li class="p-0">
-                    <ul class="nav flex-column p-2 fs-5">
-                        <li class="nav-item my-2">
-                            <a class="nav-link text-dark text-decoration-none py-2 active-selected"
-                               href="#" data-url="/AdminDashboard/Dashboard"> @*url = controllerName + methodName*@
-                                <i class="bi bi-speedometer2 me-2 fs-5"></i> Control Panel
+                    <ul class="nav flex-column p-3 fs-6">
+                        <li class="nav-item mb-1">
+                            <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center active-selected"
+                               href="#" data-url="/AdminDashboard/Dashboard">
+                                <i class="bi bi-speedometer2 me-3 fs-5"></i> Dashboard
                             </a>
                         </li>
-                        <li class="nav-item my-2">
-                            <a class="nav-link text-dark text-decoration-none py-2"
+                        <li class="nav-item mb-1">
+                            <a class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center"
                                href="#" data-url="/Stations/Index">
-                                <i class="bi bi-geo-alt me-2 fs-5"></i> Station Management
+                                <i class="bi bi-geo-alt me-3 fs-5"></i> Station Management
                             </a>
                         </li>
-                        <li class="nav-item my-2">
-                            <a class="nav-link text-dark text-decoration-none py-2"
+                        <li class="nav-item mb-1">
+                            <a class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center"
                                href="#" data-url="/Vehicles/Index">
-                                <i class="bi bi-bicycle me-2 fs-5"></i> Vehicle Management
+                                <i class="bi bi-bicycle me-3 fs-5"></i> Vehicle Management
                             </a>
                         </li>
-                        <li class="nav-item my-2">
-                            <a class="nav-link text-dark text-decoration-none py-2"
+                        <li class="nav-item mb-1">
+                            <a class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center"
                                href="#" data-url="/AdminDashboard/UserManagement">
-                                <i class="bi bi-people me-2 fs-5"></i> User Management
+                                <i class="bi bi-people me-3 fs-5"></i> User Management
                             </a>
                         </li>
-                        <li class="nav-item my-2">
-                            <a class="nav-link text-dark text-decoration-none py-2"
+                        <li class="nav-item mb-1">
+                            <a class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center"
                                href="#" data-url="/AdminDashboard/Reports">
-                                <i class="bi bi-bar-chart-line me-2 fs-5"></i> Reports
+                                <i class="bi bi-bar-chart-line me-3 fs-5"></i> Reports
                             </a>
                         </li>
                     </ul>
                 </li>
             </ul>
         </div>
-        <div id="main" class="col-10">
-            <div class="p-4"></div>
+
+        <div id="main" class="col-10 bg-light">
+            <div class="p-4">
+            </div>
         </div>
     </div>
 </div>

@@ -1,60 +1,91 @@
 ﻿@model RentalVehicleService.Models.Vehicle
 
-<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="exampleModalLabel">Tạo mới phương tiện</h5>
-                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-            </div>
-            <form asp-action="Create" method="post">
-                <div class="modal-body">
-                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+<div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
 
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="VehicleModel" class="control-label fw-bold">Tên mẫu xe</label>
-                                <input asp-for="VehicleModel" class="form-control" placeholder="VD: VinFast Feliz" />
-                                <span asp-validation-for="VehicleModel" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label asp-for="Price" class="control-label fw-bold">Giá thuê (VNĐ)</label>
-                                <input asp-for="Price" class="form-control" type="number" />
-                                <span asp-validation-for="Price" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label asp-for="BatteryPercentage" class="control-label fw-bold">Phần trăm Pin (%)</label>
-                                <input asp-for="BatteryPercentage" class="form-control" type="number" />
-                                <span asp-validation-for="BatteryPercentage" class="text-danger"></span>
-                            </div>
-                        </div>
-
-                        <div class="col-md-6">
-                            <div class="form-group mb-3">
-                                <label asp-for="State" class="control-label fw-bold">Trạng thái xe</label>
-                                <select asp-for="State" class="form-control"
-                                        asp-items="Html.GetEnumSelectList<RentalVehicleService.Models.VehicleState>()">
-                                    <option value="">-- Chọn trạng thái --</option>
-                                </select>
-                                <span asp-validation-for="State" class="text-danger"></span>
-                            </div>
-
-                            <div class="form-group mb-3">
-                                <label asp-for="CurrentStationId" class="control-label fw-bold">Mã trạm hiện tại</label>
-                                <input asp-for="CurrentStationId" class="form-control" />
-                                <span asp-validation-for="CurrentStationId" class="text-danger"></span>
-                            </div>
-                        </div>
+            <div class="modal-header border-bottom px-4 py-3">
+                <div class="d-flex align-items-center gap-2">
+                    <div class="rounded-2 bg-primary bg-opacity-10 p-2">
+                        <i class="bi bi-ev-front text-primary"></i>
+                    </div>
+                    <div>
+                        <h5 class="modal-title mb-0 fw-500">Create New Vehicle</h5>
+                        <small class="text-muted">Please fill in all the required information below</small>
                     </div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form asp-action="Create" method="post">
+                <div class="modal-body px-4 py-3">
+                    <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label asp-for="VehicleModel" class="form-label fw-semibold small text-secondary">Vehicle Model</label>
+                            <input asp-for="VehicleModel" class="form-control form-control-sm" placeholder="e.g. VinFast Feliz" />
+                            <span asp-validation-for="VehicleModel" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="CurrentStationId" class="form-label fw-semibold small text-secondary">Current Station ID</label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt text-danger"></i></span>
+                                <input asp-for="CurrentStationId" class="form-control border-start-0" placeholder="e.g. ST001" />
+                            </div>
+                            <span asp-validation-for="CurrentStationId" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="Price" class="form-label fw-semibold small text-secondary">Rental Price (VND/hr)</label>
+                            <div class="input-group input-group-sm">
+                                <span class="input-group-text bg-light border-end-0">₫</span>
+                                <input asp-for="Price" class="form-control border-start-0" type="number" placeholder="0" />
+                            </div>
+                            <span asp-validation-for="Price" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label asp-for="State" class="form-label fw-semibold small text-secondary">Vehicle Status</label>
+                            <select asp-for="State" class="form-select form-select-sm"
+                                    asp-items="Html.GetEnumSelectList<RentalVehicleService.Models.VehicleState>()">
+                                <option value="">-- Select Status --</option>
+                            </select>
+                            <span asp-validation-for="State" class="text-danger small"></span>
+                        </div>
+
+                        <div class="col-12">
+                            <label asp-for="BatteryPercentage" class="form-label fw-semibold small text-secondary">
+                                Initial Battery: <span id="batteryLabel">80%</span>
+                            </label>
+                            <input asp-for="BatteryPercentage" type="range" class="form-range" min="0" max="100" value="80"
+                                   oninput="document.getElementById('batteryLabel').textContent = this.value + '%'" />
+                            <div class="progress mt-1" style="height: 5px;">
+                                <div class="progress-bar bg-success" id="batteryBar" style="width: 80%;"></div>
+                            </div>
+                            <span asp-validation-for="BatteryPercentage" class="text-danger small"></span>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer border-top px-4 py-3">
+                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+                    <button type="submit" class="btn btn-sm btn-primary px-4">
+                        <i class="bi bi-check2-circle me-1"></i> Save Changes
+                    </button>
                 </div>
             </form>
+
         </div>
     </div>
 </div>
+
+<script>
+    document.querySelector('#createModal input[type=range]').addEventListener('input', function () {
+      const bar = document.getElementById('batteryBar');
+      bar.style.width = this.value + '%';
+      bar.className = 'progress-bar ' + (this.value < 20 ? 'bg-danger' : 'bg-success');
+    });
+</script>
