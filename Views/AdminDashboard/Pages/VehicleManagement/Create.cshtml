@@ -1,56 +1,60 @@
 ﻿@model RentalVehicleService.Models.Vehicle
 
-@{
-    ViewData["Title"] = "Create";
-}
+<div class="modal fade" id="createModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Tạo mới phương tiện</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form asp-action="Create" method="post">
+                <div class="modal-body">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
 
-<h1>Create</h1>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="VehicleModel" class="control-label fw-bold">Tên mẫu xe</label>
+                                <input asp-for="VehicleModel" class="form-control" placeholder="VD: VinFast Feliz" />
+                                <span asp-validation-for="VehicleModel" class="text-danger"></span>
+                            </div>
 
-<h4>Vehicle</h4>
-<hr />
-<div class="row">
-    <div class="col-md-4">
-        <form asp-action="Create">
-            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-            <div class="form-group">
-                <label asp-for="VehicleModel" class="control-label"></label>
-                <input asp-for="VehicleModel" class="form-control" />
-                <span asp-validation-for="VehicleModel" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="Price" class="control-label"></label>
-                <input asp-for="Price" class="form-control" />
-                <span asp-validation-for="Price" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="BatteryPercentage" class="control-label"></label>
-                <input asp-for="BatteryPercentage" class="form-control" />
-                <span asp-validation-for="BatteryPercentage" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="State" class="control-label">Trạng thái xe</label>
-                <select asp-for="State" class="form-control"
-                        asp-items="Html.GetEnumSelectList<VehicleState>()">
-                    <option value="">-- Chọn trạng thái --</option>
-                </select>
-                <span asp-validation-for="State" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <label asp-for="CurrentStationId" class="control-label"></label>
-                <input asp-for="CurrentStationId" class="form-control" />
-                <span asp-validation-for="CurrentStationId" class="text-danger"></span>
-            </div>
-            <div class="form-group">
-                <input type="submit" value="Create" class="btn btn-primary" />
-            </div>
-        </form>
+                            <div class="form-group mb-3">
+                                <label asp-for="Price" class="control-label fw-bold">Giá thuê (VNĐ)</label>
+                                <input asp-for="Price" class="form-control" type="number" />
+                                <span asp-validation-for="Price" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="BatteryPercentage" class="control-label fw-bold">Phần trăm Pin (%)</label>
+                                <input asp-for="BatteryPercentage" class="form-control" type="number" />
+                                <span asp-validation-for="BatteryPercentage" class="text-danger"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <div class="form-group mb-3">
+                                <label asp-for="State" class="control-label fw-bold">Trạng thái xe</label>
+                                <select asp-for="State" class="form-control"
+                                        asp-items="Html.GetEnumSelectList<RentalVehicleService.Models.VehicleState>()">
+                                    <option value="">-- Chọn trạng thái --</option>
+                                </select>
+                                <span asp-validation-for="State" class="text-danger"></span>
+                            </div>
+
+                            <div class="form-group mb-3">
+                                <label asp-for="CurrentStationId" class="control-label fw-bold">Mã trạm hiện tại</label>
+                                <input asp-for="CurrentStationId" class="form-control" />
+                                <span asp-validation-for="CurrentStationId" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
+                    <button type="submit" class="btn btn-primary">Lưu thông tin</button>
+                </div>
+            </form>
+        </div>
     </div>
 </div>
-
-<div>
-    <a asp-action="Index">Back to List</a>
-</div>
-
-@section Scripts {
-    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
-}

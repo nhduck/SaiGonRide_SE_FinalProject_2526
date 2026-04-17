@@ -2,134 +2,192 @@
 @model IEnumerable<RentalVehicleService.Models.Vehicle>
 
 @{
-    ViewData["Title"] = "Vehicle Management";
-    }
+	ViewData["Title"] = "Vehicle Management";
+}
 
 <div class="container-fluid py-4 px-lg-5">
-    <div class="d-flex justify-content-between align-items-center mb-4">
-        <h1 class="fw-bold text-dark m-0">
-            <i class="bi bi-bicycle text-primary"></i> Vehicle Management
-        </h1>
-        <a asp-action="Create" class="btn btn-primary btn-lg shadow-sm">
-            <i class="bi bi-plus-lg"></i> Create New
-        </a>
-    </div>
+	<div class="d-flex justify-content-between align-items-center mb-4">
+		<h1 class="fw-bold text-dark m-0">
+			<i class="bi bi-bicycle text-primary"></i> Vehicle Management
+		</h1>
+		<button class="btn btn-primary btn-lg shadow-sm" onclick="ShowCreateModal()">
+			<i class="bi bi-plus-lg"></i> Create New
+		</button>
+	</div>
 
-    <div class="row g-3 mb-5">
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm stat-card border-start border-primary border-4">
-                <div class="card-body">
-                    <div class="text-muted small fw-bold text-uppercase">Total Vehicles</div>
-                    <div class="h3 fw-bold text-primary mb-0">@ViewBag.TotalVehicles</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm stat-card border-start border-success border-4">
-                <div class="card-body">
-                    <div class="text-muted small fw-bold text-uppercase">Available</div>
-                    <div class="h3 fw-bold text-success mb-0">@ViewBag.Available</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm stat-card border-start border-warning border-4">
-                <div class="card-body">
-                    <div class="text-muted small fw-bold text-uppercase">Charging</div>
-                    <div class="h3 fw-bold text-warning mb-0">@ViewBag.Charging</div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-3">
-            <div class="card border-0 shadow-sm stat-card border-start border-danger border-4">
-                <div class="card-body">
-                    <div class="text-muted small fw-bold text-uppercase">Maintenance</div>
-                    <div class="h3 fw-bold text-danger mb-0">@ViewBag.Maintenance</div>
-                </div>
-            </div>
-        </div>
-    </div>
+	<div class="row g-3 mb-5">
+		<div class="col-md-3">
+			<div class="card border-0 shadow-sm stat-card border-start border-primary border-4">
+				<div class="card-body">
+					<div class="text-muted small fw-bold text-uppercase">Total Vehicles</div>
+					<div class="h3 fw-bold text-primary mb-0">@ViewBag.TotalVehicles</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="card border-0 shadow-sm stat-card border-start border-success border-4">
+				<div class="card-body">
+					<div class="text-muted small fw-bold text-uppercase">Available</div>
+					<div class="h3 fw-bold text-success mb-0">@ViewBag.Available</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="card border-0 shadow-sm stat-card border-start border-warning border-4">
+				<div class="card-body">
+					<div class="text-muted small fw-bold text-uppercase">Charging</div>
+					<div class="h3 fw-bold text-warning mb-0">@ViewBag.Charging</div>
+				</div>
+			</div>
+		</div>
+		<div class="col-md-3">
+			<div class="card border-0 shadow-sm stat-card border-start border-danger border-4">
+				<div class="card-body">
+					<div class="text-muted small fw-bold text-uppercase">Maintenance</div>
+					<div class="h3 fw-bold text-danger mb-0">@ViewBag.Maintenance</div>
+				</div>
+			</div>
+		</div>
+	</div>
 
-    <div class="card border-0 shadow-sm mb-4">
-        <div class="card-body">
-            <form method="get" class="row g-2">
-                <div class="col-lg-4">
-                    <div class="input-group">
-                        <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-                        <input type="text" name="searchString" class="form-control border-start-0 ps-0" placeholder="Search by model or ID...">
-                    </div>
-                </div>
-                <div class="col-lg-8 d-flex gap-2 flex-wrap justify-content-lg-end">
-                    <button type="submit" class="btn btn-outline-secondary">Search</button>
-                    <a asp-action="Index" asp-route-status="Available" class="btn btn-outline-success">Available</a>
-                    <a asp-action="Index" asp-route-status="Charging" class="btn btn-outline-warning">Charging</a>
-                    <a asp-action="Index" asp-route-status="Maintenance" class="btn btn-outline-danger">Maintenance</a>
-                </div>
-            </form>
-        </div>
-    </div>
+	<div class="card border-0 shadow-sm mb-4">
+		<div class="card-body">
+			<form method="get" class="row g-2">
+				<div class="col-lg-4">
+					<div class="input-group">
+						<span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+						<input type="text" name="searchString" class="form-control border-start-0 ps-0" placeholder="Search by model or ID...">
+					</div>
+				</div>
+				<div class="col-lg-8 d-flex gap-2 flex-wrap justify-content-lg-end">
+					<button type="submit" class="btn btn-outline-secondary">Search</button>
+					<a asp-action="Index" asp-route-status="Available" class="btn btn-outline-success">Available</a>
+					<a asp-action="Index" asp-route-status="Charging" class="btn btn-outline-warning">Charging</a>
+					<a asp-action="Index" asp-route-status="Maintenance" class="btn btn-outline-danger">Maintenance</a>
+				</div>
+			</form>
+		</div>
+	</div>
 
-    <div class="card border-0 shadow-sm">
-        <div class="table-responsive">
-            <table class="table table-hover align-middle mb-0">
-                <thead class="bg-light">
-                    <tr>
-                        <th class="ps-4">Vehicle Id</th>
-                        <th>Type</th>
-                        <th>Model</th>
-                        <th>Current Station</th>
-                        <th>Battery</th>
-                        <th>Status</th>
-                        <th>Last Maintenance</th>
-                        <th class="text-center">Actions</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @foreach (var item in Model)
-                    {
-                        <tr>
-                            <td class="ps-4 fw-bold text-muted">#@item.VehicleId</td>
-                            <td><span class="badge bg-light text-dark border">@item.Type</span></td>
-                            <td>@item.VehicleModel</td>
-                            <td><i class="bi bi-geo-alt text-danger"></i> @item.CurrentStationId</td>
-                            <td>
-                                <div class="d-flex align-items-center">
-                                    <div class="progress flex-grow-1 me-2" style="height: 6px; min-width: 50px;">
-                                        <div class="progress-bar @(item.BatteryPercentage < 20 ? "bg-danger" : "bg-success")"
-                                             role="progressbar" style="width: @item.BatteryPercentage%"></div>
-                                    </div>
-                                    <small>@item.BatteryPercentage%</small>
-                                </div>
-                            </td>
-                            <td>
-                                @{
-                                    var stateStr = item.State.ToString();
-                                    var statusClass = stateStr == "Available" ? "success" :
-                                    stateStr == "Maintenance" ? "danger" : "warning";
-                                }
-                                <span class="badge rounded-pill bg-@statusClass-subtle text-@statusClass border border-@statusClass">
-                                    ● @stateStr
-                                </span>
-                            </td>
-                            <td class="text-muted small">@item.LastMaintenance.ToString("dd/MM/yyyy")</td>
-                            <td class="text-center">
-                                <div class="btn-group shadow-sm">
-                                    <a asp-action="Edit" asp-route-id="@item.VehicleId" class="btn btn-sm btn-white text-primary"><i class="bi bi-pencil-square"></i></a>
-                                    <a asp-action="Details" asp-route-id="@item.VehicleId" class="btn btn-sm btn-white text-info"><i class="bi bi-eye"></i></a>
-                                    <a asp-action="Delete" asp-route-id="@item.VehicleId" class="btn btn-sm btn-white text-danger"><i class="bi bi-trash"></i></a>
-                                    <button type="button"
-                                            class="btn btn-sm btn-outline-danger"
-                                            onclick="confirmDelete('@item.VehicleId', '@item.VehicleModel')">
-                                        <i class="fa fa-trash"></i> Xóa
-                                    </button>
-                                </div>
-                            </td>
-                        </tr>
-                    }
-                </tbody>
-            </table>
-        </div>
-    </div>
+	<div class="card border-0 shadow-sm">
+		<div class="table-responsive">
+			<table class="table table-hover align-middle mb-0">
+				<thead class="bg-light">
+					<tr>
+						<th class="ps-4">Vehicle Id</th>
+						<th>Type</th>
+						<th>Model</th>
+						<th>Current Station</th>
+						<th>Battery</th>
+						<th>Status</th>
+						<th>Last Maintenance</th>
+						<th class="text-center">Actions</th>
+					</tr>
+				</thead>
+				<tbody>
+					@foreach (var item in Model)
+					{
+						<tr data-id="@item.VehicleId">
+							<td class="ps-4 fw-bold text-muted">#@item.VehicleId</td>
+							<td><span class="badge bg-light text-dark border">@item.Type</span></td>
+							<td>@item.VehicleModel</td>
+							<td><i class="bi bi-geo-alt text-danger"></i> @item.CurrentStationId</td>
+							<td>
+								<div class="d-flex align-items-center">
+									<div class="progress flex-grow-1 me-2" style="height: 6px; min-width: 50px;">
+										<div class="progress-bar @(item.BatteryPercentage < 20 ? "bg-danger" : "bg-success")"
+											 role="progressbar" style="width: @item.BatteryPercentage%"></div>
+									</div>
+									<small>@item.BatteryPercentage%</small>
+								</div>
+							</td>
+							<td>
+								@{
+									var stateStr = item.State.ToString();
+									var statusClass = stateStr == "Available" ? "success" :
+									stateStr == "Maintenance" ? "danger" : "warning";
+								}
+								<span class="badge rounded-pill bg-@statusClass-subtle text-@statusClass border border-@statusClass">
+									● @stateStr
+								</span>
+							</td>
+							<td class="text-muted small">@item.LastMaintenance.ToString("dd/MM/yyyy")</td>
+							<td class="text-center">
+								<div class="btn-group shadow-sm">
+									<button class="btn btn-outline-primary btn-sm"
+											onclick="prepareDelete('@item.VehicleId', '@item.VehicleModel')">
+										<i class="bi bi-eye"></i>
+									</button>
+									<button class="btn btn-outline-warning btn-sm"
+											onclick="prepareDelete('@item.VehicleId', '@item.VehicleModel')">
+										<i class="bi bi-pencil-square"></i>
+									</button>
+									<button class="btn btn-outline-danger btn-sm"
+											onclick="prepareDelete('@item.VehicleId', '@item.VehicleModel')">
+										<i class="bi bi-trash"></i>
+									</button>
+								</div>
+							</td>
+						</tr>
+					}
+				</tbody>
+			</table>
+		</div>
+	</div>
 </div>
+
+<iframe name="hidden_frame" style="display:none;"></iframe>
+
+<partial name="~/Views/AdminDashboard/Pages/VehicleManagement/Delete.cshtml" />
+<partial name="~/Views/AdminDashboard/Pages/VehicleManagement/Create.cshtml" model="new RentalVehicleService.Models.Vehicle()" />
+
+<script>
+		function prepareDelete(id, name) {
+			$('#idToConfirm').val(id);
+			$('#idToDisplay').text(id);
+			$('#nameToDisplay').text(name);
+			$('#deleteModal').modal('show');
+		}
+
+		function ShowCreateModal() {
+		$('#createModal').modal('show');
+	}
+
+		function updateStats() {
+			const rows = document.querySelectorAll('tbody tr');
+			const total = rows.length;
+
+			let available = 0, charging = 0, maintenance = 0;
+			rows.forEach(row => {
+				const status = row.querySelector('.badge.rounded-pill').textContent.trim();
+				if (status.includes('Available')) available++;
+				else if (status.includes('Charging')) charging++;
+				else if (status.includes('Maintenance')) maintenance++;
+			});
+
+			document.querySelector('.text-primary.h3').textContent = total;
+			document.querySelector('.text-success.h3').textContent = available;
+			document.querySelector('.text-warning.h3').textContent = charging;
+			document.querySelector('.text-danger.h3').textContent = maintenance;
+		}
+
+		document.getElementById('confirmDeleteBtn').addEventListener('click', async function () {
+			const id = document.getElementById('idToConfirm').value;
+			const token = document.querySelector('input[name="__RequestVerificationToken"]').value;
+
+			const response = await fetch(`/Vehicles/DeleteConfirmed`, {
+				method: 'POST',
+				headers: {
+					'Content-Type': 'application/x-www-form-urlencoded',
+				},
+				body: `id=${id}&__RequestVerificationToken=${encodeURIComponent(token)}`
+			});
+
+			if (response.ok) {
+				$('#deleteModal').modal('hide');
+				document.querySelector(`tr[data-id="${id}"]`).remove();
+			}
+		});
+</script>
 
 <link rel="stylesheet" href="~/css/Vehicle/indexStyle.css" />
