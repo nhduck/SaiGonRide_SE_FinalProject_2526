@@ -1,0 +1,188 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="320" height="200">
+  <defs>
+    <!-- Green gradient for frame -->
+    <linearGradient id="frameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#22c55e;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#16a34a;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#166534;stop-opacity:1" />
+    </linearGradient>
+    <!-- Dark gradient for components -->
+    <linearGradient id="darkGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#374151;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#111827;stop-opacity:1" />
+    </linearGradient>
+    <!-- Rim gradient -->
+    <linearGradient id="rimGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1f2937;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#111827;stop-opacity:1" />
+    </linearGradient>
+    <!-- Tire gradient -->
+    <radialGradient id="tireGrad" cx="50%" cy="50%" r="50%">
+      <stop offset="75%" style="stop-color:#1f2937;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#111827;stop-opacity:1" />
+    </radialGradient>
+    <!-- Spoke gradient -->
+    <linearGradient id="spokeGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#6b7280;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#9ca3af;stop-opacity:1" />
+    </linearGradient>
+    <!-- Chain ring gradient -->
+    <linearGradient id="chainGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4b5563;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#1f2937;stop-opacity:1" />
+    </linearGradient>
+    <!-- Glow filter -->
+    <filter id="greenGlow" x="-20%" y="-20%" width="140%" height="140%">
+      <feGaussianBlur stdDeviation="3" result="blur"/>
+      <feComposite in="SourceGraphic" in2="blur" operator="over"/>
+    </filter>
+    <!-- Frame shadow -->
+    <filter id="frameShadow" x="-5%" y="-5%" width="110%" height="110%">
+      <feDropShadow dx="0" dy="2" stdDeviation="2" flood-color="#166534" flood-opacity="0.4"/>
+    </filter>
+  </defs>
+
+  <!-- === REAR WHEEL GROUP (rotates around its center) === -->
+  <g class="sr-wheel-rear" transform="translate(80, 148)">
+    <!-- Outer tire -->
+    <circle r="54" fill="#1f2937" stroke="#111827" stroke-width="2"/>
+    <!-- Inner tire wall -->
+    <circle r="48" fill="none" stroke="#374151" stroke-width="3"/>
+    <!-- Rim -->
+    <circle r="43" fill="#1f2937" stroke="#4b5563" stroke-width="1.5"/>
+    <!-- Tire text "RideToEveryWhere" -->
+    <text font-family="Arial Black, sans-serif" font-size="5.5" font-weight="900" fill="#6b7280" letter-spacing="1.5">
+      <textPath href="#rearTirePath" startOffset="0%">RideToEveryWhere · RideToEveryWhere</textPath>
+    </text>
+    <path id="rearTirePath" d="M 0,-48 A 48,48 0 1,1 -0.1,-48" fill="none"/>
+    <!-- Hub -->
+    <circle r="7" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+    <circle r="3.5" fill="#9ca3af"/>
+    <!-- Spokes - 12 spokes -->
+    <g stroke="#6b7280" stroke-width="1.2" opacity="0.85">
+      <line x1="0" y1="-7" x2="0" y2="-43"/>
+      <line x1="0" y1="7" x2="0" y2="43"/>
+      <line x1="-7" y1="0" x2="-43" y2="0"/>
+      <line x1="7" y1="0" x2="43" y2="0"/>
+      <line x1="-5" y1="-5" x2="-30" y2="-30"/>
+      <line x1="5" y1="-5" x2="30" y2="-30"/>
+      <line x1="-5" y1="5" x2="-30" y2="30"/>
+      <line x1="5" y1="5" x2="30" y2="30"/>
+      <line x1="-6.5" y1="2.5" x2="-40" y2="15"/>
+      <line x1="6.5" y1="-2.5" x2="40" y2="-15"/>
+      <line x1="2.5" y1="6.5" x2="15" y2="40"/>
+      <line x1="-2.5" y1="-6.5" x2="-15" y2="-40"/>
+    </g>
+    <!-- Brake disc -->
+    <circle r="16" fill="none" stroke="#374151" stroke-width="8" stroke-dasharray="6 4" opacity="0.6"/>
+  </g>
+
+  <!-- === FRONT WHEEL GROUP (rotates around its center) === -->
+  <g class="sr-wheel-front" transform="translate(240, 148)">
+    <!-- Outer tire -->
+    <circle r="54" fill="#1f2937" stroke="#111827" stroke-width="2"/>
+    <!-- Inner tire wall -->
+    <circle r="48" fill="none" stroke="#374151" stroke-width="3"/>
+    <!-- Rim -->
+    <circle r="43" fill="#1f2937" stroke="#4b5563" stroke-width="1.5"/>
+    <!-- Tire text -->
+    <text font-family="Arial Black, sans-serif" font-size="5.5" font-weight="900" fill="#6b7280" letter-spacing="1.5">
+      <textPath href="#frontTirePath" startOffset="0%">RideToEveryWhere · RideToEveryWhere</textPath>
+    </text>
+    <path id="frontTirePath" d="M 0,-48 A 48,48 0 1,1 -0.1,-48" fill="none"/>
+    <!-- Hub -->
+    <circle r="7" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+    <circle r="3.5" fill="#9ca3af"/>
+    <!-- Spokes -->
+    <g stroke="#6b7280" stroke-width="1.2" opacity="0.85">
+      <line x1="0" y1="-7" x2="0" y2="-43"/>
+      <line x1="0" y1="7" x2="0" y2="43"/>
+      <line x1="-7" y1="0" x2="-43" y2="0"/>
+      <line x1="7" y1="0" x2="43" y2="0"/>
+      <line x1="-5" y1="-5" x2="-30" y2="-30"/>
+      <line x1="5" y1="-5" x2="30" y2="-30"/>
+      <line x1="-5" y1="5" x2="-30" y2="30"/>
+      <line x1="5" y1="5" x2="30" y2="30"/>
+      <line x1="-6.5" y1="2.5" x2="-40" y2="15"/>
+      <line x1="6.5" y1="-2.5" x2="40" y2="-15"/>
+      <line x1="2.5" y1="6.5" x2="15" y2="40"/>
+      <line x1="-2.5" y1="-6.5" x2="-15" y2="-40"/>
+    </g>
+    <!-- Brake disc -->
+    <circle r="16" fill="none" stroke="#374151" stroke-width="8" stroke-dasharray="6 4" opacity="0.6"/>
+  </g>
+
+  <!-- === BIKE BODY GROUP (bobs up/down while idle) === -->
+  <g class="sr-bike-body-group">
+
+    <!-- Chain stay (rear to BB) -->
+    <line x1="80" y1="148" x2="158" y2="152" stroke="url(#frameGrad)" stroke-width="7" stroke-linecap="round" filter="url(#frameShadow)"/>
+    <!-- Bottom bracket area -->
+    <circle cx="158" cy="153" r="10" fill="url(#chainGrad)" stroke="#374151" stroke-width="2"/>
+    <!-- Chainring -->
+    <circle cx="158" cy="153" r="18" fill="none" stroke="#4b5563" stroke-width="3" stroke-dasharray="5 3"/>
+    <circle cx="158" cy="153" r="7" fill="#374151" stroke="#6b7280" stroke-width="1.5"/>
+    <!-- Chain visual -->
+    <path d="M 86 155 Q 120 162 150 155" fill="none" stroke="#4b5563" stroke-width="2.5" stroke-dasharray="3 2"/>
+
+    <!-- Seat tube (vertical-ish) -->
+    <line x1="158" y1="153" x2="148" y2="92" stroke="url(#frameGrad)" stroke-width="8" stroke-linecap="round" filter="url(#frameShadow)"/>
+
+    <!-- Down tube (head to BB) -->
+    <line x1="214" y1="98" x2="158" y2="153" stroke="url(#frameGrad)" stroke-width="8" stroke-linecap="round" filter="url(#frameShadow)"/>
+
+    <!-- Top tube -->
+    <line x1="148" y1="92" x2="214" y2="98" stroke="url(#frameGrad)" stroke-width="7" stroke-linecap="round" filter="url(#frameShadow)"/>
+
+    <!-- "SaigonRide" on down tube -->
+    <text x="175" y="132" font-family="Arial, sans-serif" font-size="9" font-weight="bold" fill="rgba(255,255,255,0.9)"
+          transform="rotate(-38, 175, 132)" letter-spacing="0.5">SaigonRide</text>
+
+    <!-- Seat stay (seat to rear hub) -->
+    <line x1="148" y1="92" x2="80" y2="148" stroke="url(#frameGrad)" stroke-width="6" stroke-linecap="round" filter="url(#frameShadow)"/>
+
+    <!-- Fork (head to front hub) -->
+    <line x1="214" y1="98" x2="240" y2="148" stroke="url(#frameGrad)" stroke-width="7" stroke-linecap="round" filter="url(#frameShadow)"/>
+
+    <!-- Head tube -->
+    <rect x="208" y="90" width="12" height="22" rx="5" fill="url(#frameGrad)" stroke="#166534" stroke-width="1" filter="url(#frameShadow)"/>
+
+    <!-- Water bottle cage -->
+    <rect x="168" y="110" width="6" height="18" rx="3" fill="#374151" stroke="#4b5563" stroke-width="1"/>
+    <rect x="166" y="108" width="10" height="22" rx="3" fill="none" stroke="#4b5563" stroke-width="1.5" stroke-dasharray="2 2"/>
+    <!-- Water bottle -->
+    <rect x="167" y="104" width="8" height="20" rx="3" fill="#64748b" stroke="#94a3b8" stroke-width="1"/>
+    <rect x="169" y="102" width="4" height="5" rx="2" fill="#94a3b8"/>
+
+    <!-- Seat post -->
+    <line x1="148" y1="92" x2="142" y2="72" stroke="#374151" stroke-width="5" stroke-linecap="round"/>
+    <!-- Saddle -->
+    <path d="M 126 71 Q 142 66 158 70 Q 150 75 142 74 Q 134 75 126 71 Z" fill="url(#darkGrad)" stroke="#4b5563" stroke-width="1.5"/>
+
+    <!-- Stem -->
+    <line x1="214" y1="94" x2="226" y2="80" stroke="#374151" stroke-width="5" stroke-linecap="round"/>
+    <!-- Handlebars drop bar -->
+    <path d="M 220 78 Q 226 74 232 76 Q 238 80 240 88 Q 238 92 234 90"
+          fill="none" stroke="#1f2937" stroke-width="5" stroke-linecap="round"/>
+    <path d="M 220 78 Q 218 74 216 76" fill="none" stroke="#1f2937" stroke-width="4" stroke-linecap="round"/>
+
+    <!-- Brake lever -->
+    <path d="M 234 80 Q 237 82 238 86" fill="none" stroke="#374151" stroke-width="3" stroke-linecap="round"/>
+
+    <!-- Pedal crank arm -->
+    <line x1="158" y1="153" x2="170" y2="168" stroke="#374151" stroke-width="5" stroke-linecap="round"/>
+    <rect x="167" y="167" width="12" height="4" rx="2" fill="#4b5563"/>
+    <line x1="158" y1="153" x2="146" y2="138" stroke="#374151" stroke-width="5" stroke-linecap="round"/>
+    <rect x="141" y="133" width="12" height="4" rx="2" fill="#4b5563"/>
+
+    <!-- Derailleur rear -->
+    <g transform="translate(88, 158)">
+      <circle r="6" fill="none" stroke="#374151" stroke-width="2.5"/>
+      <circle r="3" fill="#374151"/>
+    </g>
+
+    <!-- Frame logo highlight dot -->
+    <circle cx="190" cy="118" r="3" fill="rgba(74,222,128,0.6)" filter="url(#greenGlow)"/>
+
+  </g>
+</svg>

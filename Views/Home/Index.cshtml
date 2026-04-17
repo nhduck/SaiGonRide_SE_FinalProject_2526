@@ -63,13 +63,13 @@
                 </div>
             </div>
 
-            <!-- Right: PREMIUM SVG BIKE ANIMATION -->
+            <!-- Right: SVG BIKE ANIMATION -->
             <div class="col-lg-6 d-none d-lg-flex justify-content-center align-items-center">
                 <div class="position-relative" style="width:100%;max-width:480px;height:380px;">
 
                     <!-- STAIR 1: Zero CO2 -->
                     <div class="sr-glass position-absolute d-flex align-items-center gap-2 px-3 py-2 shadow"
-                         style="top: 10%; left: 15%; animation: hero-slide-up .5s .7s both; z-index: 10;">
+                         style="top: 18%; left: 42%; transform: translateX(-50%); animation: hero-slide-up .5s .7s both; z-index: 10; white-space: nowrap;">
                         <span style="font-size: 1.3rem;">🌿</span>
                         <div>
                             <div class="text-white fw-bold" style="font-size: .85rem;">Zero CO₂</div>
@@ -79,7 +79,7 @@
 
                     <!-- STAIR 2: E-Scooter -->
                     <div class="sr-glass position-absolute d-flex align-items-center gap-2 px-3 py-2 shadow"
-                         style="top: 23%; left: 28%; animation: hero-slide-up .5s .85s both; z-index: 10;">
+                         style="top: 48%; left: 5%; animation: hero-slide-up .5s .85s both; z-index: 10;">
                         <span style="font-size: 1.4rem;">⚡</span>
                         <div>
                             <div class="text-white fw-bold" style="font-size: .85rem;">E-Scooter</div>
@@ -89,7 +89,7 @@
 
                     <!-- STAIR 3: Instant unlock -->
                     <div class="sr-glass position-absolute d-flex align-items-center gap-2 px-3 py-2 shadow"
-                         style="top: 36%; left: 41%; animation: hero-slide-up .5s 1s both; z-index: 10;">
+                         style="top: 35%; right: -25%; animation: hero-slide-up .5s 1s both; z-index: 10;">
                         <div class="text-success fw-bold me-1" style="font-size: 1.7rem;">✓</div>
                         <div>
                             <div class="text-white fw-bold" style="font-size: .85rem;">Instant unlock</div>
@@ -97,10 +97,10 @@
                         </div>
                     </div>
 
-                    <!-- === SVG BIKE SCENE === -->
-                    <div class="sr-bike-scene position-absolute" style="bottom:0;right:0;width:340px;height:220px;">
+                        <!-- SVG BIKE SCENE -->
+                        <div class="sr-bike-scene position-absolute" style="bottom:40px;right:-10px;width:340px;height:220px;">
 
-                        <!-- Speed lines (visible during run-in) -->
+                        <!-- Speed lines -->
                         <div class="sr-speed-lines">
                             <svg width="80" height="60" viewBox="0 0 80 60" fill="none">
                                 <line x1="0" y1="10" x2="70" y2="10" stroke="rgba(74,222,128,0.5)" stroke-width="2" stroke-linecap="round"/>
@@ -208,8 +208,8 @@
                                     <line x1="148" y1="90" x2="82" y2="148" stroke="url(#bikeFrameGrad)" stroke-width="6" stroke-linecap="round" filter="url(#fShadow)"/>
                                     <line x1="212" y1="97" x2="238" y2="148" stroke="url(#bikeFrameGrad)" stroke-width="7" stroke-linecap="round" filter="url(#fShadow)"/>
                                     <rect x="206" y="89" width="12" height="22" rx="5" fill="url(#bikeFrameGrad)" stroke="#166534" stroke-width="1"/>
-                                    <text x="172" y="130" font-family="Arial" font-size="8.5" font-weight="900" fill="rgba(255,255,255,0.92)"
-                                          transform="rotate(-38,172,130)" letter-spacing="0.6">SaigonRide</text>
+                                    <text x="172" y="143" font-family="Arial" font-size="8.5" font-weight="900" fill="rgba(255,255,255,0.92)"
+                                          transform="rotate(-46,172,143)" letter-spacing="0.6">SaigonRide</text>
                                     <rect x="166" y="108" width="9" height="22" rx="3" fill="#475569" stroke="#94a3b8" stroke-width="1"/>
                                     <rect x="168" y="105" width="5" height="6" rx="2" fill="#94a3b8"/>
                                     <line x1="148" y1="90" x2="141" y2="70" stroke="#374151" stroke-width="5" stroke-linecap="round"/>
@@ -437,20 +437,21 @@
                             <div class="d-flex gap-2 flex-shrink-0 flex-wrap">
                                 @if (User.Identity?.IsAuthenticated == true)
                                 {
-                                    <a href="/Rentals/Checkout?stationId=@station.StationId&vehicleType=Standard"
-                                       class="btn btn-outline-success px-4 py-2 text-center d-flex flex-column align-items-center"
-                                       style="min-width:110px;border-radius:14px;">
+                                    <button type="button" class="btn btn-outline-success px-4 py-2 text-center d-flex flex-column align-items-center btn-open-modal"
+                                            data-station-id="@station.StationId" data-type="Standard"
+                                            style="min-width:110px;border-radius:14px;">
                                         <i class="bi bi-bicycle fs-4 mb-1"></i>
                                         <span class="fw-semibold" style="font-size:.82rem;">Standard</span>
                                         <small class="text-muted" style="font-size:.68rem;">500 VND/min</small>
-                                    </a>
-                                    <a href="/Rentals/Checkout?stationId=@station.StationId&vehicleType=Electric"
-                                       class="btn btn-outline-primary px-4 py-2 text-center d-flex flex-column align-items-center"
-                                       style="min-width:110px;border-radius:14px;">
+                                    </button>
+
+                                    <button type="button" class="btn btn-outline-primary px-4 py-2 text-center d-flex flex-column align-items-center btn-open-modal"
+                                            data-station-id="@station.StationId" data-type="Electric"
+                                            style="min-width:110px;border-radius:14px;">
                                         <i class="bi bi-lightning-charge-fill fs-4 mb-1"></i>
                                         <span class="fw-semibold" style="font-size:.82rem;">Electric</span>
                                         <small class="text-muted" style="font-size:.68rem;">1,500 VND/min</small>
-                                    </a>
+                                    </button>
                                 }
                                 else
                                 {
@@ -562,6 +563,18 @@
     </div>
 </section>
 
+<!--Giao dien giao dich-->
+<div class="modal fade" id="dynamicVehicleModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content sr-modal-content" style="border-radius: 20px; border: none; box-shadow: 0 15px 35px rgba(0,0,0,0.15);" id="modal-content-container">
+            <div class="text-center p-5">
+                <div class="spinner-border text-success" role="status"></div>
+                <p class="mt-3 text-muted fw-semibold">Đang tìm xe trống tại trạm...</p>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
 <script>
     document.getElementById('liveSearchBox')?.addEventListener('input', function () {
@@ -591,5 +604,41 @@
         });
     }, { threshold: .5 });
     counters.forEach(c => countObs.observe(c));
+
+        $(document).ready(function () {
+            $('.btn-open-modal').click(function () {
+                var stationId = $(this).data('station-id');
+                var type = $(this).data('type');
+
+                // 1. Reset nội dung Modal về Loading và mở Modal
+                $('#modal-content-container').html(`
+                    <div class="text-center p-5">
+                        <div class="spinner-border text-success" role="status"></div>
+                        <p class="mt-3 text-muted fw-semibold">Đang tìm xe trống tại trạm...</p>
+                    </div>
+                `);
+                $('#dynamicVehicleModal').modal('show');
+
+                // 2. Gọi AJAX xuống Controller
+                $.ajax({
+                    url: '/Rental/GetAvailableVehicles',
+                    type: 'GET',
+                    data: { stationId: stationId, type: type },
+                    success: function (result) {
+                        $('#modal-content-container').html(result);
+                    },
+                    error: function () {
+                        $('#modal-content-container').html(`
+                            <div class="p-5 text-center">
+                                <i class="bi bi-x-circle text-danger fs-1 mb-2"></i>
+                                <h5 class="text-dark fw-bold">Lỗi kết nối</h5>
+                                <p class="text-muted">Không thể lấy dữ liệu lúc này. Vui lòng thử lại sau.</p>
+                                <button type="button" class="btn btn-outline-secondary rounded-pill px-4 mt-2" data-bs-dismiss="modal">Đóng</button>
+                            </div>
+                        `);
+                    }
+                });
+            });
+        });
 </script>
 }

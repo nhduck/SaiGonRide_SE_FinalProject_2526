@@ -1,0 +1,56 @@
+﻿@model IEnumerable<RentalVehicleService.Models.Vehicle>
+@using RentalVehicleService.Models
+
+<div class="modal-header sr-modal-header border-0 pb-0">
+    <div>
+        <h5 class="modal-title fw-bold" id="vehicleModalLabel">
+            Chọn xe để bắt đầu
+        </h5>
+        <small class="text-muted">Danh sách xe đang có sẵn tại trạm.</small>
+    </div>
+    <button type="button" class="btn-close sr-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+</div>
+
+<div class="modal-body px-4">
+    @if (!Model.Any())
+    {
+        <div class="text-center py-4">
+            <i class="fa-solid fa-bicycle text-muted fs-1 mb-2 opacity-50"></i>
+            <p class="text-muted mb-0">Rất tiếc, loại xe này tại trạm đang tạm hết.</p>
+        </div>
+    }
+    else
+    {
+        <div class="list-group list-group-flush gap-2">
+            @foreach (var vehicle in Model)
+            {
+                <div class="list-group-item sr-info-card border rounded-3 d-flex justify-content-between align-items-center p-3">
+                    <div class="d-flex align-items-center">
+                        <div class="sr-icon-wrapper @(vehicle.Type == VehicleType.Electric ? "bg-light-blue text-primary" : "bg-light-green text-success") me-3">
+                            <i class="fa-solid @(vehicle.Type == VehicleType.Electric ? "fa-bolt" : "fa-bicycle")"></i>
+                        </div>
+                        <div>
+                            <h6 class="mb-0 fw-bold">Mã số: #@vehicle.VehicleId</h6>
+                            @if (vehicle.Type == VehicleType.Electric)
+                            {
+                                <small class="text-muted"><i class="fa-solid fa-battery-three-quarters text-success me-1"></i> Pin: Sẵn sàng</small>
+                            }
+                            else
+                            {
+                                <small class="text-muted"><i class="fa-solid fa-check text-success me-1"></i> Trạng thái tốt</small>
+                            }
+                        </div>
+                    </div>
+
+                    <form asp-controller="Rental" asp-action="Create" method="post" class="m-0">
+                        <input type="hidden" name="vehicleId" value="@vehicle.VehicleId" />
+                        <input type="hidden" name="startStationId" value="@ViewBag.StationId" />
+                        <button type="submit" class="btn btn-sm btn-success rounded-pill fw-bold px-3">
+                            Thuê ngay
+                        </button>
+                    </form>
+                </div>
+            }
+        </div>
+    }
+</div>

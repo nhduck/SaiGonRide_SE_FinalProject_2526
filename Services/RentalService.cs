@@ -1,4 +1,4 @@
-﻿using RentalVehicleService.Data;
+using RentalVehicleService.Data;
 
 namespace RentalVehicleService.Services
 {
@@ -43,7 +43,10 @@ namespace RentalVehicleService.Services
         public decimal ProcessFinalBill(int rentalId, int endStationId)
         {
             var rental = _context.Rentals.Find(rentalId);
+            if (rental == null) return 0m;
+
             var vehicle = _context.Vehicles.Find(rental.VehicleId);
+            if (vehicle == null) return 0m;
 
             decimal baseFare = CalculateFare(rental.StartTime, DateTime.Now, (decimal)vehicle.Price);
 

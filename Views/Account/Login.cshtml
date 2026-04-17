@@ -3,7 +3,7 @@
 @{
     ViewData["Title"] = "Log In";
     ViewData["MetaDescription"] = "Log in to your SaigonRide account to rent bikes and e-scooters across Ho Chi Minh City.";
-    Layout = "~/Views/Shared/_Layout.cshtml";
+    Layout = "~/Views/Shared/_AuthLayout.cshtml";
 }
 
 <style>
@@ -98,7 +98,7 @@
                 </div>
 
                 <!-- Bike SVG -->
-                <div class="sr-bike-svg-wrap" style="bottom:0;right:0;">
+                <div class="sr-bike-svg-wrap" style="bottom:20px;right:0;">
                     <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="260" height="165" style="overflow:visible;">
                         <defs>
                             <linearGradient id="loginFrameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
@@ -173,8 +173,8 @@
                             <line x1="148" y1="90" x2="82" y2="148" stroke="url(#loginFrameGrad)" stroke-width="6" stroke-linecap="round" filter="url(#loginShadow)"/>
                             <line x1="212" y1="97" x2="238" y2="148" stroke="url(#loginFrameGrad)" stroke-width="7" stroke-linecap="round" filter="url(#loginShadow)"/>
                             <rect x="206" y="89" width="12" height="22" rx="5" fill="url(#loginFrameGrad)" stroke="#166534" stroke-width="1"/>
-                            <text x="172" y="130" font-family="Arial" font-size="8.5" font-weight="900" fill="rgba(255,255,255,0.92)"
-                                  transform="rotate(-38,172,130)" letter-spacing="0.6">SaigonRide</text>
+                            <text x="175" y="141" font-family="Arial" font-size="8.5" font-weight="900" fill="rgba(255,255,255,0.92)"
+                                  transform="rotate(-46,175,141)" letter-spacing="0.6">SaigonRide</text>
                             <line x1="148" y1="90" x2="141" y2="70" stroke="#374151" stroke-width="5" stroke-linecap="round"/>
                             <path d="M 125 69 Q 141 64 157 68 Q 149 73 141 72 Q 133 73 125 69 Z" fill="#1f2937" stroke="#4b5563" stroke-width="1.5"/>
                             <line x1="212" y1="93" x2="224" y2="79" stroke="#374151" stroke-width="5" stroke-linecap="round"/>
@@ -187,19 +187,19 @@
                 <!-- Glow ring -->
                 <div class="sr-glow-ring"></div>
                 <!-- Lightning burst -->
-                <div class="sr-lightning-burst" style="top:-40px;right:70px;">
+                <div class="sr-lightning-burst" style="top:-15px;right:60px;">
                     <svg width="48" height="64" viewBox="0 0 60 80" fill="none">
                         <polygon points="35,0 20,38 32,38 18,80 50,28 36,28 52,0" fill="#facc15" opacity="0.95"/>
                     </svg>
                 </div>
                 <!-- Mini lightning -->
-                <div class="sr-mini-lightning" style="top:-35px;right:82px;">
+                <div class="sr-mini-lightning" style="top:-10px;right:72px;">
                     <svg width="22" height="30" viewBox="0 0 28 38" fill="none">
                         <polygon points="17,0 9,18 15,18 8,38 24,13 17,13 25,0" fill="#facc15"/>
                     </svg>
                 </div>
                 <!-- Sparks -->
-                <div class="sr-idle-sparks" style="top:-10px;right:65px;">
+                <div class="sr-idle-sparks" style="top:15px;right:55px;">
                     <div class="sr-spark"></div>
                     <div class="sr-spark"></div>
                     <div class="sr-spark"></div>
