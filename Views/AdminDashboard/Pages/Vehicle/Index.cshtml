@@ -154,6 +154,7 @@
 		// 4. Xử lý xóa xe bằng AJAX
 		$('#confirmDeleteBtn').on('click', function () {
 			const id = $('#idToConfirm').val();
+
 			const token = $('input[name="__RequestVerificationToken"]').val();
 
 			$.ajax({
