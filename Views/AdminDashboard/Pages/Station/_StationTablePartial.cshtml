@@ -1,0 +1,49 @@
+@model IEnumerable<RentalVehicleService.Models.Station>
+
+@foreach (var s in Model)
+{
+	var pct = (int)(s.FillRate * 100);
+	var barColorClass = pct < 60 ? "bg-success" : (pct < 85 ? "bg-warning" : "bg-danger");
+	var statusBadge = s.IsLowInventory ? "bg-warning text-dark" : (pct > 85 ? "bg-danger" : "bg-success");
+	var statusText = s.IsLowInventory ? "Low Stock" : (pct > 85 ? "Full" : "Normal");
+
+	<tr data-id="@s.StationId" class="station-row">
+		<td class="ps-4 fw-bold text-muted">@s.StationId</td>
+		<td class="fw-semibold">@s.Name</td>
+		<td class="small text-muted">
+			<i class="bi bi-geo-alt text-danger me-1"></i>@s.Address
+		</td>
+		<td class="text-center">@s.TotalCapacity</td>
+		<td class="text-center fw-semibold">@s.CurrentCount</td>
+		<td class="text-center">
+			<div class="d-flex align-items-center gap-2 justify-content-center">
+				<div class="progress" style="width:60px; height:6px;">
+					<div class="progress-bar @barColorClass" style="width:@pct%"></div>
+				</div>
+				<span class="small fw-bold">@pct%</span>
+			</div>
+		</td>
+		<td class="text-center">
+			<span class="badge @statusBadge rounded-pill px-2">@statusText</span>
+		</td>
+		<td class="text-center">
+			<span class="badge rounded-pill @(s.IsActive ? "bg-success-subtle text-success border border-success" : "bg-danger-subtle text-danger border border-danger")">
+				<i class="bi bi-circle-fill me-1" style="font-size: 0.4rem; vertical-align: middle;"></i>
+				@(s.IsActive ? "Active" : "Inactive")
+			</span>
+		</td>
+		<td class="text-center">
+			<div class="btn-group btn-group-sm shadow-sm">
+				<button class="btn btn-outline-primary btn-sm" onclick="loadPage('/Stations/Details/@s.StationId')" title="View Details">
+					<i class="bi bi-eye"></i>
+				</button>
+				<button class="btn btn-outline-warning btn-sm" onclick="loadPage('/Stations/Edit/@s.StationId')" title="Edit Station">
+					<i class="bi bi-pencil-square"></i>
+				</button>
+				<button class="btn btn-outline-danger btn-sm" onclick="prepareDeleteStation('@s.StationId', '@s.Name')" title="Delete Station">
+					<i class="bi bi-trash"></i>
+				</button>
+			</div>
+		</td>
+	</tr>
+}
