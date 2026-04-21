@@ -42,15 +42,14 @@
                         </div>
                     </div>
 
-                    <form asp-controller="Rental" asp-action="Create" method="post" class="m-0">
-                        <input type="hidden" name="vehicleId" value="@vehicle.VehicleId" />
-                        <input type="hidden" name="startStationId" value="@ViewBag.StationId" />
-                        <button type="submit" class="btn btn-sm btn-success rounded-pill fw-bold px-3">
-                            Thuê ngay
-                        </button>
-                    </form>
                 </div>
             }
         </div>
     }
+</div>
+
+<div class="modal-footer border-0 px-4 pb-4 d-flex justify-content-start">
+    <button type="button" class="btn btn-success rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center btn-open-scanner" data-station-id="@ViewBag.StationId">
+        <i class="bi bi-qr-code-scan fs-5 me-2"></i> Quét mã để thuê
+    </button>
 </div>
