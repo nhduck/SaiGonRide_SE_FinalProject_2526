@@ -16,7 +16,7 @@ namespace RentalVehicleService.Controllers
     {
         private readonly ApplicationDbContext _context;
         // Thêm dòng cấu hình đường dẫn ViewPath
-        private const string ViewPath = "~/Views/AdminDashboard/Pages/StationManagement/";
+        private const string ViewPath = "~/Views/AdminDashboard/Pages/Station/";
 
         public StationsController(ApplicationDbContext context)
         {
