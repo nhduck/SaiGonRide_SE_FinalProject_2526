@@ -1,227 +1,322 @@
-﻿	@using RentalVehicleService.Models
-	@model IEnumerable<RentalVehicleService.Models.Vehicle>
+﻿@using RentalVehicleService.Models
+@model IEnumerable<RentalVehicleService.Models.Vehicle>
 
-	@{
-		ViewData["Title"] = "Vehicle Management";
-	}
+@{
+    ViewData["Title"] = "Vehicle Management";
+}
 
-	<div class="m-3">
+<div class="m-3">
 
-		<div class="container-fluid py-4 px-lg-5">
-			<div class="d-flex justify-content-between align-items-center mb-4">
-				<div>
-					<h4 class="fw-bold mb-1"><i class="bi bi-bicycle"></i> Vehicle Management</h4>
-					<p class="text-muted small mb-0">Manage all vehicles in the network</p>
-				</div>
+    <div class="container-fluid py-4 px-lg-5">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold mb-1"><i class="bi bi-bicycle"></i> Vehicle Management</h4>
+                <p class="text-muted small mb-0">Manage all vehicles in the network</p>
+            </div>
 
-				<button class="btn btn-success" onclick="ShowCreateModal()">
-					<i class="bi bi-plus-lg"></i> Add Vehicle
-				</button>
-			</div>
+            <button class="btn btn-success" onclick="ShowCreateModal()">
+                <i class="bi bi-plus-lg"></i> Add Vehicle
+            </button>
+        </div>
 
-			<div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-3 mb-5">
-    
-				<div class="col">
-					<div class="card border-0 shadow-sm stat-card border-start border-primary border-4 h-100">
-						<div class="card-body">
-							<div class="text-muted small fw-bold text-uppercase">Total Vehicles</div>
-							<div id="totalCount" class="h3 fw-bold text-primary mb-0">@ViewBag.TotalVehicles</div>
-						</div>
-					</div>
-				</div>
+        <!-- Stats -->
+        <div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-3 mb-5">
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-primary border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Total Vehicles</div>
+                        <div id="totalCount" class="h3 fw-bold text-primary mb-0">@ViewBag.TotalVehicles</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-success border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Available</div>
+                        <div id="availableCount" class="h3 fw-bold text-success mb-0">@ViewBag.Available</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-warning border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Charging</div>
+                        <div id="chargingCount" class="h3 fw-bold text-warning mb-0">@ViewBag.Charging</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-danger border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Maintenance</div>
+                        <div id="maintenanceCount" class="h3 fw-bold text-danger mb-0">@ViewBag.Maintenance</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-purple border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Rented</div>
+                        <div id="rentedCount" class="h3 fw-bold text-purple mb-0">@ViewBag.Rented</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-				<div class="col">
-					<div class="card border-0 shadow-sm stat-card border-start border-success border-4 h-100">
-						<div class="card-body">
-							<div class="text-muted small fw-bold text-uppercase">Available</div>
-							<div id="availableCount" class="h3 fw-bold text-success mb-0">@ViewBag.Available</div>
-						</div>
-					</div>
-				</div>
+        <!-- Search & Filter -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <form method="get" class="row g-2">
+                    <div class="col-lg-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                            <input id="searchBar" type="text" name="searchString"
+                                   class="form-control border-start-0 ps-0"
+                                   placeholder="Search by model or ID...">
+                        </div>
+                    </div>
+                    <div class="col-lg-8 d-flex gap-2 flex-wrap justify-content-lg-end">
+                        <button id="availableBTN" class="sortBTN btn btn-outline-success">Available</button>
+                        <button id="ChargingBTN" class="sortBTN btn btn-outline-warning">Charging</button>
+                        <button id="MaintenanceBTN" class="sortBTN btn btn-outline-danger">Maintenance</button>
+                        <button id="RentedBTN" class="sortBTN btn btn-outline-purple">Rented</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-				<div class="col">
-					<div class="card border-0 shadow-sm stat-card border-start border-warning border-4 h-100">
-						<div class="card-body">
-							<div class="text-muted small fw-bold text-uppercase">Charging</div>
-							<div id="chargingCount" class="h3 fw-bold text-warning mb-0">@ViewBag.Charging</div>
-						</div>
-					</div>
-				</div>
+        <!-- Table -->
+        <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+                <div class="scroll-area">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light sticky-top">
+                            <tr>
+                                <th class="ps-4">Vehicle Id</th>
+                                <th>Type</th>
+                                <th>Model</th>
+                                <th>Current Station</th>
+                                <th>Battery</th>
+                                <th>Status</th>
+                                <th>Last Maintenance</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vehicleTableBody">
+                            <partial name="~/Views/AdminDashboard/Pages/Vehicle/_VehicleTablePartial.cshtml" />
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
 
-				<div class="col">
-					<div class="card border-0 shadow-sm stat-card border-start border-danger border-4 h-100">
-						<div class="card-body">
-							<div class="text-muted small fw-bold text-uppercase">Maintenance</div>
-							<div id="maintenanceCount" class="h3 fw-bold text-danger mb-0">@ViewBag.Maintenance</div>
-						</div>
-					</div>
-				</div>
+    <iframe name="hidden_frame" style="display:none;"></iframe>
 
-				<div class="col">
-					<div class="card border-0 shadow-sm stat-card border-start border-purple border-4 h-100">
-						<div class="card-body">
-							<div class="text-muted small fw-bold text-uppercase">Rented</div>
-							<div id="rentedCount" class="h3 fw-bold text-purple mb-0">@ViewBag.Rented</div>
-						</div>
-					</div>
-				</div>
+    <!-- Modals -->
+    <partial name="~/Views/AdminDashboard/Pages/Vehicle/Delete.cshtml" />
+    <partial name="~/Views/AdminDashboard/Pages/Vehicle/Create.cshtml" model="new RentalVehicleService.Models.Vehicle()" />
+    <partial name="~/Views/AdminDashboard/Pages/Vehicle/Edit.cshtml" model="new RentalVehicleService.Models.Vehicle()" />
+    <partial name="~/Views/AdminDashboard/Pages/Vehicle/Details.cshtml" />
 
-			</div>
+</div>
 
-			<div class="card border-0 shadow-sm mb-4">
-				<div class="card-body">
-					<form method="get" class="row g-2">
-						<div class="col-lg-4">
-							<div class="input-group">
-								<span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-								<input id="searchBar" type="text" name="searchString" class="form-control border-start-0 ps-0" placeholder="Search by model or ID...">
-							</div>
-						</div>
-						<div class="col-lg-8 d-flex gap-2 flex-wrap justify-content-lg-end">
-							<button id="availableBTN" class="sortBTN btn btn-outline-success">Available</button>
-							<button id="ChargingBTN" class="sortBTN btn btn-outline-warning">Charging</button>
-							<button id="MaintenanceBTN" class="sortBTN btn btn-outline-danger">Maintenance</button>
-							<button id="RentedBTN" class="sortBTN btn btn-outline-purple">Rented</button>
-						</div>
-					</form>
-				</div>
-			</div>
+<script>
+    {
+        // ── 1. Hiển thị modal Xóa ──────────────────────────────────
+        function prepareDelete(id, name) {
+            $('#idToConfirm').val(id);
+            $('#idToDisplay').text(id);
+            $('#nameToDisplay').text(name);
+            $('#deleteModal').modal('show');
+        }
 
-			<div class="card border-0 shadow-sm">
-				<div class="table-responsive">
-					<div class="scroll-area">
-						<table class="table table-hover align-middle mb-0">
-							<thead class="bg-light sticky-top">
-								<tr>
-									<th class="ps-4">Vehicle Id</th>
-									<th>Type</th>
-									<th>Model</th>
-									<th>Current Station</th>
-									<th>Battery</th>
-									<th>Status</th>
-									<th>Last Maintenance</th>
-									<th class="text-center">Actions</th>
-								</tr>
-							</thead>
-							<tbody id="vehicleTableBody">
-								<partial name="~/Views/AdminDashboard/Pages/Vehicle/_VehicleTablePartial.cshtml" />
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
+        // ── 2. Hiển thị modal Thêm mới ────────────────────────────
+        function ShowCreateModal() {
+            $('#createModal').modal('show');
+        }
 
-		<iframe name="hidden_frame" style="display:none;"></iframe>
+        // ── 3. Hiển thị modal Details ─────────────────────────────
+        function ShowDetailsModal(id) {
+            // Reset body về spinner
+            $('#detailsModalBody').html(`
+                <div class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2 text-muted">Loading...</p>
+                </div>`);
 
-		<partial name="~/Views/AdminDashboard/Pages/Vehicle/Delete.cshtml" />
-		<partial name="~/Views/AdminDashboard/Pages/Vehicle/Create.cshtml" model="new RentalVehicleService.Models.Vehicle()" />
-	</div>
+            // Lưu id để nút Edit dùng
+            $('#detailsEditBtn').data('id', id);
 
-	<script>
-		// 1. Hiển thị Modal xóa
-		function prepareDelete(id, name) {
-			$('#idToConfirm').val(id);
-			$('#idToDisplay').text(id);
-			$('#nameToDisplay').text(name);
-			$('#deleteModal').modal('show');
-		}
+            $('#detailsModal').modal('show');
 
-		// 2. Hiển thị Modal thêm mới
-		function ShowCreateModal() {
-			$('#createModal').modal('show');
-		}
+            $.ajax({
+                url: '/Vehicles/Details/' + id,
+                type: 'GET',
+                success: function (html) {
+                    $('#detailsModalBody').html(html);
+                },
+                error: function () {
+                    $('#detailsModalBody').html(
+                        '<div class="alert alert-danger">Cannot load vehicle details. Please try again.</div>');
+                }
+            });
+        }
 
-		// 3. Cập nhật thống kê
-		function updateStats() {
-			$.ajax({
-				url: '/Vehicles/GetAmountInfo',
-				type: 'GET',
-				dataType: 'json',
-				success: function(data) {
-					$("#totalCount").text(data.totalVehicles);
-					$("#availableCount").text(data.available);
-					$("#chargingCount").text(data.charging);
-					$("#maintenanceCount").text(data.maintenance);
-					$("#rentedCount").text(data.rented);
-				},
-				error: function(xhr) {
-					console.error("Lỗi cập nhật thống kê:", xhr.responseText);
-				}
-			});
-		}
+        // Nút Edit bên trong Details modal -> đóng Details, mở Edit
+        $('#detailsEditBtn').on('click', function () {
+            const id = $(this).data('id');
+            $('#detailsModal').modal('hide');
+            // Chờ animation đóng xong rồi mở Edit
+            $('#detailsModal').one('hidden.bs.modal', function () {
+                ShowEditModal(id);
+            });
+        });
 
-		// 4. Xử lý xóa xe bằng AJAX
-		$('#confirmDeleteBtn').on('click', function () {
-			const id = $('#idToConfirm').val();
-			const token = $('input[name="__RequestVerificationToken"]').val();
+        // ── 4. Hiển thị modal Edit ────────────────────────────────
+        function ShowEditModal(id) {
+            // Reset alert
+            $('#editAlertArea').html('');
+            $('#editForm')[0].reset();
 
-			$.ajax({
-				url: '/Vehicles/DeleteConfirmed',
-				type: 'POST',
-				data: {
-					id: id,
-					__RequestVerificationToken: token
-				},
-				success: function() {
-					$('#deleteModal').modal('hide');
-					// Tìm dòng có data-id tương ứng và xóa đi
-					$(`tr[data-id="${id}"]`).fadeOut(300, function() {
-						$(this).remove();
-						updateStats();
-					});
-				},
-				error: function(xhr) {
-					console.error("Lỗi khi xóa:", xhr.statusText);
-					alert("Không thể xóa phương tiện. Vui lòng thử lại.");
-				}
-			});
-		});
+            $.ajax({
+                url: '/Vehicles/Edit/' + id,
+                type: 'GET',
+                success: function (data) {
+                    // Điền dữ liệu vào form
+                    $('#editVehicleId').val(data.vehicleId);
+                    $('#editVehicleModel').val(data.vehicleModel);
+                    $('#editPrice').val(data.price);
+                    $('#editBattery').val(data.batteryPercentage);
+                    $('#editState').val(data.state);
+                    $('#editType').val(data.type);
+                    $('#editLastMaintenance').val(data.lastMaintenance);
+                    $('#editStationId').val(data.currentStationId ?? '');
 
-	// 5. Xử lý tìm kiếm
-	let selectedStatuses = [];
+                    $('#editModal').modal('show');
+                },
+                error: function () {
+                    alert('Cannot load vehicle data. Please try again.');
+                }
+            });
+        }
 
-	$("#searchBar").on("input", function() {
-		search();
-	});
+        // ── 5. Submit form Edit ───────────────────────────────────
+        $('#editForm').on('submit', function (e) {
+            e.preventDefault();
 
-	$('.sortBTN').on("click", function(e) {
-		e.preventDefault();
-		const status = $(this).text().trim();
-    
-		$(this).toggleClass('active-selected');
-    
-		toggleStatus(status);
-	});
+            const id    = $('#editVehicleId').val();
+            const token = $('input[name="__RequestVerificationToken"]').first().val();
+            const btn   = $('#editSubmitBtn');
 
-	function toggleStatus(statusName) {
-		const index = selectedStatuses.indexOf(statusName);
+            btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Saving...');
 
-		if (index > -1) {
-			selectedStatuses.splice(index, 1);
-		} else {
-			selectedStatuses.push(statusName);
-		}
-		search();
-	}
+            $.ajax({
+                url: '/Vehicles/Edit/' + id,
+                type: 'POST',
+                data: $(this).serialize() + '&__RequestVerificationToken=' + encodeURIComponent(token),
+                success: function () {
+                    $('#editModal').modal('hide');
+                    // Reload table + stats
+                    search();
+                    updateStats();
+                },
+                error: function (xhr) {
+                    let msg = 'An error occurred. Please try again.';
+                    try {
+                        const res = JSON.parse(xhr.responseText);
+                        if (res.errors) msg = res.errors.join('<br>');
+                    } catch (_) {}
 
-	function search() {
-		const keyword = $("#searchBar").val();
-    
-		$.ajax({
-			url: '/AdminDashboard/SearchVehicles',
-			type: 'GET',
-			data: {
-				searchTerm: keyword,
-				statuses: selectedStatuses
-			},
-			traditional: true,
-			success: function(response) {
-				$('#vehicleTableBody').html(response);
-				updateStats();
-			}
-		});
-	}
-	</script>
+                    $('#editAlertArea').html(
+                        `<div class="alert alert-danger alert-dismissible fade show py-2 small">
+                            <i class="bi bi-exclamation-triangle me-1"></i>${msg}
+                            <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>
+                        </div>`);
+                },
+                complete: function () {
+                    btn.prop('disabled', false).html('<i class="bi bi-floppy me-1"></i>Save Changes');
+                }
+            });
+        });
 
-	<link rel="stylesheet" href="~/css/Vehicle/indexStyle.css" />
+        // ── 6. Xóa xe ────────────────────────────────────────────
+        $('#confirmDeleteBtn').on('click', function () {
+            const id    = $('#idToConfirm').val();
+            const token = $('input[name="__RequestVerificationToken"]').first().val();
+
+            $.ajax({
+                url: '/Vehicles/DeleteConfirmed',
+                type: 'POST',
+                data: { id: id, __RequestVerificationToken: token },
+                success: function () {
+                    $('#deleteModal').modal('hide');
+                    $(`tr[data-id="${id}"]`).fadeOut(300, function () {
+                        $(this).remove();
+                        updateStats();
+                    });
+                },
+                error: function (xhr) {
+                    console.error('Delete error:', xhr.statusText);
+                    alert('Cannot delete vehicle. Please try again.');
+                }
+            });
+        });
+
+        // ── 7. Cập nhật thống kê ──────────────────────────────────
+        function updateStats() {
+            $.ajax({
+                url: '/Vehicles/GetAmountInfo',
+                type: 'GET',
+                success: function (data) {
+                    $('#totalCount').text(data.totalVehicles);
+                    $('#availableCount').text(data.available);
+                    $('#chargingCount').text(data.charging);
+                    $('#maintenanceCount').text(data.maintenance);
+                    $('#rentedCount').text(data.rented);
+                },
+                error: function (xhr) {
+                    console.error('Stats error:', xhr.responseText);
+                }
+            });
+        }
+
+        // ── 8. Tìm kiếm & lọc ────────────────────────────────────
+        let selectedStatuses = [];
+
+        $('#searchBar').on('input', function () { search(); });
+
+        $('.sortBTN').on('click', function (e) {
+            e.preventDefault();
+            $(this).toggleClass('active-selected');
+            toggleStatus($(this).text().trim());
+        });
+
+        function toggleStatus(statusName) {
+            const index = selectedStatuses.indexOf(statusName);
+            if (index > -1) selectedStatuses.splice(index, 1);
+            else selectedStatuses.push(statusName);
+            search();
+        }
+
+        function search() {
+            $.ajax({
+                url: '/AdminDashboard/SearchVehicles',
+                type: 'GET',
+                data: { searchTerm: $('#searchBar').val(), statuses: selectedStatuses },
+                traditional: true,
+                success: function (response) {
+                    $('#vehicleTableBody').html(response);
+                    updateStats();
+                }
+            });
+        }
+
+        // Expose ra global scope để các partial có thể gọi
+        window.prepareDelete    = prepareDelete;
+        window.ShowDetailsModal = ShowDetailsModal;
+        window.ShowEditModal    = ShowEditModal;
+    }
+</script>
+
+<link rel="stylesheet" href="~/css/Vehicle/indexStyle.css" />

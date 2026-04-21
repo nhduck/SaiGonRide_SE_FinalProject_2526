@@ -1,4 +1,137 @@
-﻿.bg-success-subtle {
+﻿/* ==========================================================================
+   1. STAT CARDS (Các thẻ thống kê trên cùng)
+   ========================================================================== */
+.stat-card {
+    transition: all 0.3s ease;
+    cursor: default;
+}
+
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    }
+
+.border-purple {
+    border-color: #6f42c1 !important;
+}
+
+.text-purple {
+    color: #6f42c1 !important;
+}
+
+/* ==========================================================================
+   2. CUSTOM SORT BUTTONS (Hỗ trợ Multi-select)
+   ========================================================================== */
+.sortBTN {
+    transition: all 0.2s ease-in-out !important;
+    font-weight: 500;
+    border-width: 1px;
+}
+
+#RentedBTN {
+    color: #6f42c1 !important;
+    border-color: #6f42c1 !important;
+    background-color: transparent !important;
+}
+
+/* Trạng thái Hover khi CHƯA chọn (Light background) */
+#availableBTN:not(.active-selected):hover {
+    background-color: rgba(25, 135, 84, 0.1) !important;
+    color: #198754 !important;
+}
+
+#ChargingBTN:not(.active-selected):hover {
+    background-color: rgba(255, 193, 7, 0.1) !important;
+    color: #664d03 !important;
+}
+
+#MaintenanceBTN:not(.active-selected):hover {
+    background-color: rgba(220, 53, 69, 0.1) !important;
+    color: #dc3545 !important;
+}
+
+#RentedBTN:not(.active-selected):hover {
+    background-color: rgba(111, 66, 193, 0.1) !important;
+    color: #6f42c1 !important;
+}
+
+/* Trạng thái ACTIVE-SELECTED (Khi đã nhấn chọn - Hiện màu đặc trưng) */
+#availableBTN.btn.active-selected,
+#availableBTN.btn.active-selected:hover,
+#availableBTN.btn.active-selected:focus,
+#availableBTN.btn.active-selected:active {
+    background-color: #198754 !important;
+    color: #fff !important;
+    border-color: #198754 !important;
+}
+
+#ChargingBTN.btn.active-selected,
+#ChargingBTN.btn.active-selected:hover,
+#ChargingBTN.btn.active-selected:focus,
+#ChargingBTN.btn.active-selected:active {
+    background-color: #ffc107 !important;
+    color: #000 !important;
+    border-color: #ffc107 !important;
+}
+
+#MaintenanceBTN.btn.active-selected,
+#MaintenanceBTN.btn.active-selected:hover,
+#MaintenanceBTN.btn.active-selected:focus,
+#MaintenanceBTN.btn.active-selected:active {
+    background-color: #dc3545 !important;
+    color: #fff !important;
+    border-color: #dc3545 !important;
+}
+
+#RentedBTN.btn.active-selected,
+#RentedBTN.btn.active-selected:hover,
+#RentedBTN.btn.active-selected:focus,
+#RentedBTN.btn.active-selected:active {
+    background-color: #6f42c1 !important;
+    color: #fff !important;
+    border-color: #6f42c1 !important;
+}
+
+/* ==========================================================================
+   3. TABLE & SCROLL AREA (Khu vực bảng dữ liệu)
+   ========================================================================== */
+.scroll-area {
+    max-height: 550px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+/* Giữ tiêu đề bảng đứng yên khi cuộn */
+.sticky-top {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background-color: #f8f9fa !important;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+}
+
+/* Tùy chỉnh thanh cuộn (Scrollbar) cho đẹp hơn */
+.scroll-area::-webkit-scrollbar {
+    width: 6px;
+}
+
+.scroll-area::-webkit-scrollbar-track {
+    background: #f1f1f1;
+}
+
+.scroll-area::-webkit-scrollbar-thumb {
+    background: #ccc;
+    border-radius: 10px;
+}
+
+    .scroll-area::-webkit-scrollbar-thumb:hover {
+        background: #888;
+    }
+
+/* ==========================================================================
+   4. UTILITY CLASSES (Màu nền phụ trợ)
+   ========================================================================== */
+.bg-success-subtle {
     background-color: #d1e7dd !important;
     color: #0f5132 !important;
 }
@@ -13,149 +146,7 @@
     color: #664d03 !important;
 }
 
-.stat-card {
-    transition: all 0.3s;
-}
-
-    .stat-card:hover {
-        transform: translateY(-3px);
-    }
-
-#availableBTN.sortBTN:not(.active-selected):hover,
-#availableBTN.sortBTN:not(.active-selected):focus,
-#availableBTN.sortBTN:not(.active-selected):active {
-    background-color: rgba(25, 135, 84, 0.1) !important;
-    color: #198754 !important;
-    border-color: #198754 !important;
-    box-shadow: none !important;
-}
-
-#ChargingBTN.sortBTN:not(.active-selected):hover,
-#ChargingBTN.sortBTN:not(.active-selected):focus,
-#ChargingBTN.sortBTN:not(.active-selected):active {
-    background-color: rgba(255, 193, 7, 0.1) !important;
-    color: #664d03 !important;
-    border-color: #ffc107 !important;
-    box-shadow: none !important;
-}
-
-#MaintenanceBTN.sortBTN:not(.active-selected):hover,
-#MaintenanceBTN.sortBTN:not(.active-selected):focus,
-#MaintenanceBTN.sortBTN:not(.active-selected):active {
-    background-color: rgba(220, 53, 69, 0.1) !important;
-    color: #dc3545 !important;
-    border-color: #dc3545 !important;
-    box-shadow: none !important;
-}
-
-
-/*============================SCROLL============================*/
-.scroll-area {
-    /* Thiết lập chiều cao tối đa cho vùng hiển thị (ví dụ 500px) */
-    max-height: 500px;
-    /* Cho phép cuộn dọc */
-    overflow-y: auto;
-    /* Đảm bảo thanh cuộn không đè lên nội dung */
-    overflow-x: hidden;
-}
-
-/* Giữ tiêu đề bảng đứng yên ở trên cùng khi cuộn xuống */
-.sticky-top {
-    position: sticky;7
-    top: 0;
-    z-index: 10;
-    background-color: #f8f9fa !important;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.scroll-area::-webkit-scrollbar {
-    width: 6px;
-}
-
-.scroll-area::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-.scroll-area::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-}
-
-    .scroll-area::-webkit-scrollbar-thumb:hover {
-        background: #555;
-    }
-
-/*==========================================================================
-   CUSTOM BUTTONS (SUCCESS, WARNING, DANGER, PURPLE)
-  ========================================================================== */
-
-/* --- Tinh chỉnh chung cho các nút Sort --- */
-.sortBTN {
-    transition: all 0.2s ease-in-out !important;
-    font-weight: 500;
-}
-
-/* 1. Purple Button (Rented - Tự định nghĩa hoàn toàn) */
-.btn-outline-purple {
-    color: #6f42c1;
-    border-color: #6f42c1;
-    background-color: transparent;
-}
-
-    .btn-outline-purple:hover {
-        color: #fff;
-        background-color: #6f42c1;
-        border-color: #6f42c1;
-    }
-
-    .btn-outline-purple:active, .btn-outline-purple.active {
-        background-color: #59359a !important;
-        border-color: #59359a !important;
-        color: #fff !important;
-    }
-
-/* 2. Ghi đè hiệu ứng cho Success (Available) */
-.btn-outline-success:active, .btn-outline-success.active {
-    background-color: #157347 !important;
-    border-color: #146c43 !important;
-    color: #fff !important;
-}
-
-/* 3. Ghi đè hiệu ứng cho Warning (Charging) */
-.btn-outline-warning:hover {
-    color: #000 !important; /* Chữ đen cho dễ nhìn trên nền vàng */
-}
-
-.btn-outline-warning:active, .btn-outline-warning.active {
-    background-color: #ffca2c !important;
-    border-color: #ffc720 !important;
-    color: #000 !important;
-}
-
-/* 4. Ghi đè hiệu ứng cho Danger (Maintenance) */
-.btn-outline-danger:active, .btn-outline-danger.active {
-    background-color: #bb2d3b !important;
-    border-color: #b02a37 !important;
-    color: #fff !important;
-}
-
-/* --- Các class bổ trợ cho Badge (Nếu cần dùng trong Card) --- */
 .bg-purple-subtle {
     background-color: #f1e9ff !important;
-}
-
-.bg-success-subtle {
-    background-color: #d1e7dd !important;
-}
-
-.bg-warning-subtle {
-    background-color: #fff3cd !important;
-}
-
-.bg-danger-subtle {
-    background-color: #f8d7da !important;
-}
-
-.text-purple {
     color: #6f42c1 !important;
 }

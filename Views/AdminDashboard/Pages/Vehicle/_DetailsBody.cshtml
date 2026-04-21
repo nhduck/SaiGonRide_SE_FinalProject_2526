@@ -1,0 +1,124 @@
+@model RentalVehicleService.Models.Vehicle
+
+@{
+    var stateBadge = Model.State switch
+    {
+        RentalVehicleService.Models.VehicleState.Available   => ("bg-success", "bi-check-circle"),
+        RentalVehicleService.Models.VehicleState.Rented      => ("bg-purple",  "bi-person-check"),
+        RentalVehicleService.Models.VehicleState.Charging    => ("bg-warning text-dark", "bi-lightning-charge"),
+        RentalVehicleService.Models.VehicleState.Maintenance => ("bg-danger",  "bi-wrench"),
+        _ => ("bg-secondary", "bi-question")
+    };
+
+    var batteryColor = Model.BatteryPercentage switch
+    {
+        > 60 => "bg-success",
+        > 20 => "bg-warning",
+        _    => "bg-danger"
+    };
+}
+
+<div class="row g-4">
+
+    <!-- Header info -->
+    <div class="col-12">
+        <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3">
+            <div class="fs-1">
+                @if (Model.Type == RentalVehicleService.Models.VehicleType.Electric)
+                {
+                    <i class="bi bi-ev-front text-success"></i>
+                }
+                else
+                {
+                    <i class="bi bi-bicycle text-primary"></i>
+                }
+            </div>
+            <div>
+                <h5 class="fw-bold mb-1">@Model.VehicleModel</h5>
+                <span class="text-muted small">ID: #@Model.VehicleId</span>
+                <span class="ms-2 badge @stateBadge.Item1">
+                    <i class="bi @stateBadge.Item2 me-1"></i>@Model.State
+                </span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Battery -->
+    <div class="col-12">
+        <label class="form-label fw-semibold text-muted small text-uppercase">
+            <i class="bi bi-battery-half me-1"></i>Battery Level
+        </label>
+        <div class="d-flex align-items-center gap-3">
+            <div class="progress flex-grow-1" style="height: 12px; border-radius: 6px;">
+                <div class="progress-bar @batteryColor"
+                     role="progressbar"
+                     style="width: @Model.BatteryPercentage%"
+                     aria-valuenow="@Model.BatteryPercentage"
+                     aria-valuemin="0"
+                     aria-valuemax="100">
+                </div>
+            </div>
+            <span class="fw-bold @(Model.BatteryPercentage > 60 ? "text-success" : Model.BatteryPercentage > 20 ? "text-warning" : "text-danger")">
+                @Model.BatteryPercentage%
+            </span>
+        </div>
+        @if (!Model.IsReadyForRent)
+        {
+            <div class="text-danger small mt-1">
+                <i class="bi bi-exclamation-triangle me-1"></i>Battery too low for rent
+            </div>
+        }
+    </div>
+
+    <!-- Info grid -->
+    <div class="col-md-6">
+        <div class="card border-0 bg-light h-100">
+            <div class="card-body">
+                <p class="text-muted small fw-bold text-uppercase mb-3">Vehicle Info</p>
+
+                <div class="mb-2 d-flex justify-content-between">
+                    <span class="text-muted"><i class="bi bi-lightning-charge me-1"></i>Type</span>
+                    <span class="fw-semibold">@Model.Type</span>
+                </div>
+
+                <div class="mb-2 d-flex justify-content-between">
+                    <span class="text-muted"><i class="bi bi-currency-dollar me-1"></i>Price</span>
+                    <span class="fw-semibold">@Model.Price.ToString("N0") VND/min</span>
+                </div>
+
+                <div class="mb-0 d-flex justify-content-between">
+                    <span class="text-muted"><i class="bi bi-check2-circle me-1"></i>Ready for Rent</span>
+                    @if (Model.IsReadyForRent)
+                    {
+                        <span class="badge bg-success">Yes</span>
+                    }
+                    else
+                    {
+                        <span class="badge bg-danger">No</span>
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-md-6">
+        <div class="card border-0 bg-light h-100">
+            <div class="card-body">
+                <p class="text-muted small fw-bold text-uppercase mb-3">Location & Maintenance</p>
+
+                <div class="mb-2 d-flex justify-content-between">
+                    <span class="text-muted"><i class="bi bi-geo-alt me-1"></i>Station</span>
+                    <span class="fw-semibold">
+                        @* @(Model.CurrentStation?.StationName ?? (Model.CurrentStationId.HasValue ? $"ID: {Model.CurrentStationId}" : "—")) *@
+                    </span>
+                </div>
+
+                <div class="mb-0 d-flex justify-content-between">
+                    <span class="text-muted"><i class="bi bi-wrench me-1"></i>Last Maintenance</span>
+                    <span class="fw-semibold">@Model.LastMaintenance.ToString("dd/MM/yyyy HH:mm")</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>

@@ -1,118 +1,168 @@
 ﻿@model RentalVehicleService.Models.Vehicle
 
 <div class="modal fade" id="createModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
+	<div class="modal-dialog modal-lg modal-dialog-centered">
+		<div class="modal-content border-0 shadow">
 
-            <div class="modal-header border-bottom px-4 py-3">
-                <div class="d-flex align-items-center gap-2">
-                    <div class="rounded-2 bg-primary bg-opacity-10 p-2">
-                        <i class="bi bi-ev-front text-primary"></i>
-                    </div>
-                    <div>
-                        <h5 class="modal-title mb-0 fw-500">Create New Vehicle</h5>
-                        <small class="text-muted">Please fill in all the required information below</small>
-                    </div>
-                </div>
-                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-            </div>
+			<div class="modal-header border-bottom px-4 py-3">
+				<div class="d-flex align-items-center gap-2">
+					<div class="rounded-2 bg-primary bg-opacity-10 p-2">
+						<i class="bi bi-ev-front text-primary"></i>
+					</div>
+					<div>
+						<h5 class="modal-title mb-0 fw-500">Create New Vehicle</h5>
+						<small class="text-muted">Please fill in all the required information below</small>
+					</div>
+				</div>
+				<button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+			</div>
 
-            <form asp-action="Create" method="post">
-                <div class="modal-body px-4 py-3">
-                    <div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
-                    <div class="row g-3">
+			<form asp-action="Create" method="post">
+				<div class="modal-body px-4 py-3">
+					<div asp-validation-summary="ModelOnly" class="text-danger small mb-3"></div>
+					<div class="row g-3">
 
-                        <div class="col-md-6">
-                            <label asp-for="VehicleModel" class="form-label fw-semibold small text-secondary">Vehicle Model</label>
-                            <input asp-for="VehicleModel" class="form-control form-control-sm" placeholder="e.g. VinFast Feliz" />
-                            <span asp-validation-for="VehicleModel" class="text-danger small"></span>
-                        </div>
+						<div class="col-md-6">
+							<label asp-for="VehicleModel" class="form-label fw-semibold small text-secondary">Vehicle Model</label>
+							<input asp-for="VehicleModel" id="VehicleModelInput" class="form-control form-control-sm" placeholder="e.g. VinFast Feliz" />
+							<span asp-validation-for="VehicleModel" class="text-danger small"></span>
+						</div>
 
-                        <div class="col-md-6">
-                            <label asp-for="CurrentStationId" class="form-label fw-semibold small text-secondary">Current Station ID</label>
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt text-danger"></i></span>
-                                <input asp-for="CurrentStationId" class="form-control border-start-0" placeholder="e.g. ST001" />
-                            </div>
-                            <span asp-validation-for="CurrentStationId" class="text-danger small"></span>
-                        </div>
+						<div class="col-md-6">
+							<label asp-for="CurrentStationId" class="form-label fw-semibold small text-secondary">Current Station ID</label>
+							<div class="input-group input-group-sm">
+								<span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt text-danger"></i></span>
+								<input asp-for="CurrentStationId" id="VehicleStationInput" class="form-control border-start-0" placeholder="e.g. ST001" />
+							</div>
+							<span asp-validation-for="CurrentStationId" class="text-danger small"></span>
+						</div>
 
-                        <div class="col-md-6">
-                            <label asp-for="Price" class="form-label fw-semibold small text-secondary">Rental Price (VND/hr)</label>
-                            <div class="input-group input-group-sm">
-                                <span class="input-group-text bg-light border-end-0">₫</span>
-                                <input asp-for="Price" class="form-control border-start-0" type="number" placeholder="0" />
-                            </div>
-                            <span asp-validation-for="Price" class="text-danger small"></span>
-                        </div>
+						<div class="col-md-6">
+							<label asp-for="Price" id="VehiclePriceInput" class="form-label fw-semibold small text-secondary">Rental Price (VND/hr)</label>
+							<div class="input-group input-group-sm">
+								<span class="input-group-text bg-light border-end-0">₫</span>
+								<input asp-for="Price" class="form-control border-start-0" type="number" placeholder="0" />
+							</div>
+							<span asp-validation-for="Price" class="text-danger small"></span>
+						</div>
 
-                        <div class="col-md-6">
-                            <label asp-for="State" class="form-label fw-semibold small text-secondary">Vehicle Status</label>
-                            <select asp-for="State" class="form-select form-select-sm"
-                                    asp-items="Html.GetEnumSelectList<RentalVehicleService.Models.VehicleState>()">
-                                <option value="">-- Select Status --</option>
-                            </select>
-                            <span asp-validation-for="State" class="text-danger small"></span>
-                        </div>
+						<div class="col-md-6">
+							<label asp-for="State" class="form-label fw-semibold small text-secondary">Vehicle Status</label>
+							<select asp-for="State" id="VehicleStateInput" class="form-select form-select-sm"
+									asp-items="Html.GetEnumSelectList<RentalVehicleService.Models.VehicleState>()">
+								<option value="">-- Select Status --</option>
+							</select>
+							<span asp-validation-for="State" class="text-danger small"></span>
+						</div>
 
-                        <div class="col-12">
-                            <label asp-for="BatteryPercentage" class="form-label fw-semibold small text-secondary">
-                                Mức độ pin (%)
-                            </label>
+						<div class="col-12">
+							<label asp-for="BatteryPercentage" class="form-label fw-semibold small text-secondary">
+								Mức độ pin (%)
+							</label>
     
-                            <div class="d-flex align-items-center gap-3">
-                                <input type="range"
-                                       class="form-range"
-                                       min="0" max="100"
-                                       id="batteryRange"
-                                       value="80"
-                                       oninput="batteryNumber.value = this.value" />
+							<div class="d-flex align-items-center gap-3">
+								<input type="range"
+									   class="form-range"
+									   min="0" max="100"
+									   id="batteryRange"
+									   value="80"
+									   oninput="batteryNumber.value = this.value" />
 
-                                <input asp-for="BatteryPercentage"
-                                       type="number"
-                                       class="form-control"
-                                       style="width: 80px;"
-                                       id="batteryNumber"
-                                       min="0" max="100"
-                                       value="80"
-                                       oninput="batteryRange.value = this.value" />
-                            </div>
+								<input asp-for="BatteryPercentage"
+									   type="number"
+									   class="form-control"
+									   style="width: 80px;"
+									   id="batteryNumber"
+									   min="0" max="100"
+									   value="80"
+									   oninput="batteryRange.value = this.value" />
+							</div>
 
-                            <span asp-validation-for="BatteryPercentage" class="text-danger small"></span>
-                        </div>
-                    </div>
-                </div>
+							<span asp-validation-for="BatteryPercentage" class="text-danger small"></span>
+						</div>
+					</div>
+				</div>
 
-                <div class="modal-footer border-top px-4 py-3">
-                    <button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
+				<div class="modal-footer border-top px-4 py-3">
+					<button type="button" class="btn btn-sm btn-outline-secondary" data-bs-dismiss="modal">Close</button>
     
-                    <button type="submit" id="sunmitBtn" class="btn btn-sm btn-primary px-4">
-                        <i class="bi bi-check2-circle me-1"></i> Save Changes
-                    </button>
-                </div>
-            </form>
+					<button type="submit" id="sunmitBtn" class="btn btn-sm btn-primary px-4">
+						<i class="bi bi-check2-circle me-1"></i> Create
+					</button>
+				</div>
+			</form>
 
-        </div>
-    </div>
+		</div>
+	</div>
 </div>
 
 <script>
-    const pinSo = document.getElementById('batteryNumber');
-    const pinCay = document.getElementById('batteryRange');
-    const nutLuu = document.getElementById('sunmitBtn');
+	$(document).ready(function () {
+		// Khai báo các biến jQuery
+		const $form = $('#createModal form');
+		const $nutLuu = $('#sunmitBtn');
+		const $pinSo = $('#batteryNumber');
+		const $pinCay = $('#batteryRange');
+		const $modelInput = $('#VehicleModelInput');
+		const $stationInput = $('#VehicleStationInput');
+		const $priceInput = $('input[name="Price"]');
 
-    function kiemTraPin() {
-        let giaTri = pinSo.value;
+		// 1. Hàm kiểm tra hợp lệ để bật/tắt nút Lưu
+		function validationForm() {
+			const isModel = $.trim($modelInput.val()) !== "";
+			const isStation = $.trim($stationInput.val()) !== "";
+			const isPrice = $priceInput.val() !== "" && parseFloat($priceInput.val()) >= 0;
+			const isPin = $pinSo.val() !== "" && $pinSo.val() >= 0 && $pinSo.val() <= 100;
 
-        if (giaTri >= 0 && giaTri <= 100 && giaTri !== "") {
-            nutLuu.disabled = false;
-            nutLuu.className = "btn btn-sm btn-primary px-4";
-        } else {
-            nutLuu.disabled = true;
-            nutLuu.className = "btn btn-sm btn-secondary px-4";
-        }
-    }
+			if (isModel && isStation && isPrice && isPin) {
+				$nutLuu.prop('disabled', false).removeClass('btn-secondary').addClass('btn-primary');
+			} else {
+				$nutLuu.prop('disabled', true).removeClass('btn-primary').addClass('btn-secondary');
+			}
+		}
 
-    pinSo.addEventListener('input', kiemTraPin);
-    pinCay.addEventListener('input', kiemTraPin);
+		// 2. Đồng bộ thanh kéo Pin và ô nhập số
+		$pinSo.on('input', function() {
+			$pinCay.val($(this).val());
+			validationForm();
+		});
+
+		$pinCay.on('input', function() {
+			$pinSo.val($(this).val());
+			validationForm();
+		});
+
+		// 3. Lắng nghe thay đổi trên các trường khác
+		$form.find('input, select').on('input change', validationForm);
+
+		// 4. Xử lý gửi AJAX khi nhấn Submit
+		$form.on('submit', function (e) {
+		e.preventDefault();
+
+		$.ajax({
+			url: $(this).attr('action'),
+			type: 'POST',
+			data: $(this).serialize(),
+			success: function (res) {
+				$('#createModal').modal('hide');
+
+				$.get('/AdminDashboard/SearchVehicles', { searchTerm: '', statuses: [] }, function (html) {
+					$('#vehicleTableBody').html(html);
+					updateStats();
+				});
+
+				$form[0].reset();
+				$('#batteryRange').val(80);
+				$('#batteryNumber').val(80);
+				validationForm();
+			},
+			error: function (xhr) {
+				console.error("Lỗi khi tạo xe:", xhr.responseText);
+				alert("Không thể tạo xe. Vui lòng thử lại.");
+			}
+		});
+	});
+
+		validationForm();
+	});
 </script>

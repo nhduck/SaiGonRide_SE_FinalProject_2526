@@ -29,20 +29,26 @@ namespace RentalVehicleService.Controllers
             return PartialView($"{ViewPath}Index.cshtml", vehicles);
         }
 
-        // GET: Vehicles/Details/5
+        // ─────────────────────────────────────────────
+        // DETAILS — trả về PartialView để load vào modal
+        // ─────────────────────────────────────────────
+        [HttpGet]
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null) return NotFound();
 
             var vehicle = await _context.Vehicles
-                .FirstOrDefaultAsync(m => m.VehicleId == id);
+                .Include(v => v.CurrentStation)   // load navigation để hiển thị tên station
+                .FirstOrDefaultAsync(v => v.VehicleId == id);
 
             if (vehicle == null) return NotFound();
 
-            return View($"{ViewPath}Details.cshtml", vehicle);
+            return PartialView($"{ViewPath}_DetailsBody.cshtml", vehicle);
         }
 
-        // GET: Vehicles/Create
+        // ─────────────────────────────────────────────
+        // CREATE
+        // ─────────────────────────────────────────────
         public IActionResult Create()
         {
             return View($"{ViewPath}Create.cshtml");
@@ -50,18 +56,24 @@ namespace RentalVehicleService.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("VehicleId,VehicleModel,Price,BatteryPercentage,State,CurrentStationId")] Vehicle vehicle)
+        public async Task<IActionResult> Create(
+            [Bind("VehicleModel,Price,BatteryPercentage,State,Type,LastMaintenance,CurrentStationId")] Vehicle vehicle)
         {
             if (ModelState.IsValid)
             {
                 _context.Add(vehicle);
                 await _context.SaveChangesAsync();
-                return RedirectToAction(nameof(Index));
+                return Ok(new { success = true });
             }
-            return View($"{ViewPath}Create.cshtml", vehicle);
+
+            var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+            return BadRequest(new { success = false, errors });
         }
 
-        // GET: Vehicles/Edit/5
+        // ─────────────────────────────────────────────
+        // EDIT GET — trả về JSON data để điền vào form
+        // ─────────────────────────────────────────────
+        [HttpGet]
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null) return NotFound();
@@ -69,39 +81,65 @@ namespace RentalVehicleService.Controllers
             var vehicle = await _context.Vehicles.FindAsync(id);
             if (vehicle == null) return NotFound();
 
-            return View($"{ViewPath}Edit.cshtml", vehicle);
+            // Trả JSON để JS điền vào form trong modal
+            return Ok(new
+            {
+                vehicleId = vehicle.VehicleId,
+                vehicleModel = vehicle.VehicleModel,
+                price = vehicle.Price,
+                batteryPercentage = vehicle.BatteryPercentage,
+                state = (int)vehicle.State,
+                type = (int)vehicle.Type,
+                lastMaintenance = vehicle.LastMaintenance.ToString("yyyy-MM-ddTHH:mm"),
+                currentStationId = vehicle.CurrentStationId
+            });
         }
 
+        // ─────────────────────────────────────────────
+        // EDIT POST — nhận form data từ AJAX
+        // ─────────────────────────────────────────────
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("VehicleId,VehicleModel,Price,BatteryPercentage,State,CurrentStationId")] Vehicle vehicle)
+        public async Task<IActionResult> Edit(
+            int id,
+            [Bind("VehicleId,VehicleModel,Price,BatteryPercentage,State,Type,LastMaintenance,CurrentStationId")] Vehicle vehicle)
         {
             if (id != vehicle.VehicleId) return NotFound();
 
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                try
-                {
-                    _context.Update(vehicle);
-                    await _context.SaveChangesAsync();
-                }
-                catch (DbUpdateConcurrencyException)
-                {
-                    if (!VehicleExists(vehicle.VehicleId)) return NotFound();
-                    else throw;
-                }
-                return RedirectToAction(nameof(Index));
+                var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
+                return BadRequest(new { success = false, errors });
             }
-            return View($"{ViewPath}Edit.cshtml", vehicle);
+
+            try
+            {
+                _context.Update(vehicle);
+                await _context.SaveChangesAsync();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                if (!VehicleExists(vehicle.VehicleId)) return NotFound();
+                throw;
+            }
+
+            // Trả về row HTML mới để JS cập nhật bảng không reload trang
+            var updated = await _context.Vehicles
+                .Include(v => v.CurrentStation)
+                .FirstOrDefaultAsync(v => v.VehicleId == id);
+
+            return Ok(new { success = true });
         }
 
-        // POST: Vehicles/Delete/
+        // ─────────────────────────────────────────────
+        // DELETE
+        // ─────────────────────────────────────────────
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var vehicle = await _context.Vehicles.FindAsync(id);
-            if (vehicle != null)    
+            if (vehicle != null)
             {
                 _context.Vehicles.Remove(vehicle);
                 await _context.SaveChangesAsync();
@@ -109,12 +147,11 @@ namespace RentalVehicleService.Controllers
             return Ok();
         }
 
-        private bool VehicleExists(int id)
-        {
-            return _context.Vehicles.Any(e => e.VehicleId == id);
-        }
-
-        public async Task<IActionResult> getAmountInfo()
+        // ─────────────────────────────────────────────
+        // STATS
+        // ─────────────────────────────────────────────
+        [HttpGet]
+        public async Task<IActionResult> GetAmountInfo()
         {
             var vehicles = await _context.Vehicles.ToListAsync();
 
@@ -123,8 +160,12 @@ namespace RentalVehicleService.Controllers
                 totalVehicles = vehicles.Count,
                 available = vehicles.Count(v => v.State == VehicleState.Available),
                 charging = vehicles.Count(v => v.State == VehicleState.Charging),
-                maintenance = vehicles.Count(v => v.State == VehicleState.Maintenance)
+                maintenance = vehicles.Count(v => v.State == VehicleState.Maintenance),
+                rented = vehicles.Count(v => v.State == VehicleState.Rented)
             });
         }
+
+        private bool VehicleExists(int id) =>
+            _context.Vehicles.Any(e => e.VehicleId == id);
     }
 }
