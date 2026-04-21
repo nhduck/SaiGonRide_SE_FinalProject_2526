@@ -8,7 +8,7 @@ namespace RentalVehicleService.Controllers
     public class VehiclesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private const string ViewPath = "~/Views/AdminDashboard/Pages/VehicleManagement/";
+        private const string ViewPath = "~/Views/AdminDashboard/Pages/Vehicle/";
 
         public VehiclesController(ApplicationDbContext context)
         {
@@ -21,9 +21,10 @@ namespace RentalVehicleService.Controllers
             var vehicles = await _context.Vehicles.ToListAsync();
 
             ViewBag.TotalVehicles = vehicles.Count;
-            ViewBag.TotalRentable = vehicles.Count(v => v.BatteryPercentage > 20);
-            ViewBag.TotalCharging = vehicles.Count(v => v.State == VehicleState.Charging);
-            ViewBag.TotalMaintenance = vehicles.Count(v => v.State == VehicleState.Maintenance);
+            ViewBag.Available = vehicles.Count(v => v.State == VehicleState.Available);
+            ViewBag.Charging = vehicles.Count(v => v.State == VehicleState.Charging);
+            ViewBag.Maintenance = vehicles.Count(v => v.State == VehicleState.Maintenance);
+            ViewBag.Rented = vehicles.Count(v => v.State == VehicleState.Rented);
 
             return PartialView($"{ViewPath}Index.cshtml", vehicles);
         }
@@ -94,36 +95,36 @@ namespace RentalVehicleService.Controllers
             return View($"{ViewPath}Edit.cshtml", vehicle);
         }
 
-        // GET: Vehicles/Delete/5
-        public async Task<IActionResult> Delete(int? id)
-        {
-            if (id == null) return NotFound();
-
-            var vehicle = await _context.Vehicles
-                .FirstOrDefaultAsync(m => m.VehicleId == id);
-
-            if (vehicle == null) return NotFound();
-
-            return View($"{ViewPath}Delete.cshtml", vehicle);
-        }
-
-        [HttpPost, ActionName("Delete")]
+        // POST: Vehicles/Delete/
+        [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var vehicle = await _context.Vehicles.FindAsync(id);
-            if (vehicle != null)
+            if (vehicle != null)    
             {
                 _context.Vehicles.Remove(vehicle);
+                await _context.SaveChangesAsync();
             }
-
-            await _context.SaveChangesAsync();
-            return RedirectToAction(nameof(Index));
+            return Ok();
         }
 
         private bool VehicleExists(int id)
         {
             return _context.Vehicles.Any(e => e.VehicleId == id);
+        }
+
+        public async Task<IActionResult> getAmountInfo()
+        {
+            var vehicles = await _context.Vehicles.ToListAsync();
+
+            return Ok(new
+            {
+                totalVehicles = vehicles.Count,
+                available = vehicles.Count(v => v.State == VehicleState.Available),
+                charging = vehicles.Count(v => v.State == VehicleState.Charging),
+                maintenance = vehicles.Count(v => v.State == VehicleState.Maintenance)
+            });
         }
     }
 }
