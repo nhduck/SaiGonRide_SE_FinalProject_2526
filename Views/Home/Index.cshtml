@@ -575,8 +575,77 @@
     </div>
 </div>
 
+<div class="modal fade" id="qrScannerModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content sr-modal-content border-0 rounded-4">
+            <div class="modal-header border-0 pb-0">
+                <h5 class="fw-bold"><i class="bi bi-camera me-2"></i> Quét mã trên xe</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" id="stop-scan"></button>
+            </div>
+            <div class="modal-body p-4 text-center">
+                <div id="reader" style="width: 100%; border-radius: 15px; overflow: hidden; box-shadow: 0 4px 12px rgba(0,0,0,0.1);"></div>
+                <div class="mt-3 text-muted small"><i class="bi bi-info-circle me-1"></i>Vui lòng đưa mã QR vào trung tâm khung hình</div>
+            </div>
+        </div>
+    </div>
+</div>
+
 @section Scripts {
+    <script src="https://unpkg.com/html5-qrcode"></script>
+
 <script>
+
+        let html5QrCode;
+        $(document).ready(function () {
+            let html5QrCode = null;
+
+            function stopCamera() {
+                if (html5QrCode) {
+                    html5QrCode.stop().then(() => {
+                        html5QrCode.clear();
+                        html5QrCode = null;
+                        console.log("Đã giải phóng Camera thành công.");
+                    }).catch(err => {
+                        console.log("Camera đã tắt hoặc có lỗi khi tắt: ", err);
+                        html5QrCode = null;
+                    });
+                }
+            }
+
+            // Mở Modal Camera
+            $(document).on('click', '.btn-open-scanner', function () {
+                var stationId = $(this).data('station-id');
+                $('#dynamicVehicleModal').modal('hide');
+
+                setTimeout(function () {
+                    $('#qrScannerModal').modal('show');
+                    stopCamera();
+
+                    html5QrCode = new Html5Qrcode("reader");
+
+                    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+
+                    html5QrCode.start({ facingMode: "user" }, config,
+                        (decodedText, decodedResult) => {
+                            stopCamera();
+
+                            window.location.href = decodedText + "&startStationId=" + stationId;
+                        },
+                        (errorMessage) => {
+                        }
+                    ).catch(err => {
+                        console.error("Không thể mở Camera: ", err);
+                        alert("Lỗi Camera: Hãy đảm bảo bạn đã cấp quyền và không có app nào khác đang dùng Webcam.");
+                    });
+
+                }, 400);
+            });
+
+            $('#qrScannerModal').on('hidden.bs.modal', function () {
+                stopCamera();
+            });
+        });
+
     document.getElementById('liveSearchBox')?.addEventListener('input', function () {
         const q = this.value.toLowerCase().trim();
         document.querySelectorAll('.station-item').forEach(el => {
