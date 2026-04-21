@@ -6,19 +6,19 @@
     var pbColor = fillRateValue > 90 ? "bg-danger" : (fillRateValue < 20 ? "bg-warning" : "bg-success");
 }
 
-<div class="container-fluid py-4">
+<div class="container-fluid py-4 px-lg-5">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
             <h1 class="h3 mb-1 text-gray-800 fw-bold"><i class="bi bi-info-circle-fill text-info me-2"></i>Station Details</h1>
             <p class="text-muted mb-0">Detailed view of station information and capacity metrics.</p>
         </div>
         <div class="d-flex gap-2">
-            <a asp-action="Edit" asp-route-id="@Model?.StationId" class="btn btn-primary rounded-pill px-4 shadow-sm hover-lift">
+            <button onclick="loadPage('/Stations/Edit/@Model?.StationId')" class="btn btn-primary rounded-pill px-4 shadow-sm hover-lift">
                 <i class="bi bi-pencil-square me-2"></i>Edit
-            </a>
-            <a asp-action="Index" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm hover-lift">
+            </button>
+            <button onclick="loadPage('/Stations/Index')" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm hover-lift">
                 <i class="bi bi-arrow-left me-2"></i>Back
-            </a>
+            </button>
         </div>
     </div>
 
@@ -67,12 +67,19 @@
             <!-- Map Card -->
             <div class="card border-0 shadow-sm rounded-4 mb-4 overflow-hidden">
                 <div class="card-body p-0">
-                    <div id="map" style="height: 250px; z-index: 1;"></div>
+                    <div id="detailsMap" style="height: 250px; z-index: 1;"></div>
                     <div class="p-3 bg-light text-center small text-muted font-monospace">
                         @Model.Latitude.ToString("0.00000"), @Model.Longitude.ToString("0.00000")
                     </div>
+                    <!-- View on Google Maps link -->
+                    <div class="px-3 pb-3">
+                        <a href="https://www.google.com/maps?q=@Model.Latitude,@Model.Longitude" target="_blank" class="btn btn-outline-primary btn-sm w-100 rounded-pill">
+                            <i class="bi bi-box-arrow-up-right me-1"></i>Open in Google Maps
+                        </a>
+                    </div>
                 </div>
             </div>
+
             <!-- Capacity Card -->
             <div class="card border-0 shadow-sm rounded-4 mb-4">
                 <div class="card-body p-4">
@@ -100,9 +107,9 @@
                 <div class="card-body p-4">
                     <h6 class="fw-bold text-danger mb-3"><i class="bi bi-shield-x me-2"></i>Danger Zone</h6>
                     <p class="small text-danger opacity-75 mb-4 fw-medium">Deleting this station will permanently remove it from the system. Ensure all vehicles are relocated first.</p>
-                    <a asp-action="Delete" asp-route-id="@Model.StationId" class="btn btn-outline-danger w-100 rounded-pill fw-bold border-2 hover-lift shadow-sm">
-                        Proceed to Delete
-                    </a>
+                    <button onclick="if(confirm('Are you sure you want to delete station @Model.Name?')) { deleteStationDirect(@Model.StationId); }" class="btn btn-outline-danger w-100 rounded-pill fw-bold border-2 hover-lift shadow-sm">
+                        <i class="bi bi-trash-fill me-2"></i>Proceed to Delete
+                    </button>
                 </div>
             </div>
         </div>
@@ -114,22 +121,65 @@
     .hover-lift:hover { transform: translateY(-2px); box-shadow: 0 0.25rem 0.5rem rgba(0,0,0,0.1) !important;}
 </style>
 
-@section Scripts {
-    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
-    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
-    <script>
-        document.addEventListener('DOMContentLoaded', function() {
-            var lat = @Model.Latitude;
-            var lng = @Model.Longitude;
-            
-            // If completely 0,0, map won't look great, but it's read-only anyway.
-            var map = L.map('map').setView([lat, lng], 15);
-            L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-                attribution: '© OpenStreetMap contributors'
-            }).addTo(map);
+<script>
+    // Load Leaflet dynamically if not already loaded
+    function loadLeaflet(callback) {
+        if (window.L) { callback(); return; }
+        
+        var link = document.createElement('link');
+        link.rel = 'stylesheet';
+        link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+        document.head.appendChild(link);
+        
+        var script = document.createElement('script');
+        script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+        script.onload = callback;
+        document.head.appendChild(script);
+    }
 
-            L.marker([lat, lng]).addTo(map)
-                .bindPopup('<b>@Model.Name</b><br>@Model.Address').openPopup();
+    loadLeaflet(function() {
+        var lat = @Model.Latitude;
+        var lng = @Model.Longitude;
+        
+        var map = L.map('detailsMap').setView([lat, lng], 15);
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; OpenStreetMap contributors'
+        }).addTo(map);
+
+        L.marker([lat, lng]).addTo(map)
+            .bindPopup('<b>@Model.Name</b><br>@Model.Address').openPopup();
+
+        setTimeout(function() { map.invalidateSize(); }, 200);
+    });
+
+    function deleteStationDirect(id) {
+        var token = $('input[name="__RequestVerificationToken"]').val();
+        if (!token) {
+            $.get('/Stations/Create', function(html) {
+                var tempDiv = $('<div>').html(html);
+                token = tempDiv.find('input[name="__RequestVerificationToken"]').val();
+                performDelete(id, token);
+            });
+        } else {
+            performDelete(id, token);
+        }
+    }
+
+    function performDelete(id, token) {
+        $.ajax({
+            url: '/Stations/DeleteConfirmed',
+            type: 'POST',
+            data: {
+                id: id,
+                __RequestVerificationToken: token
+            },
+            success: function() {
+                loadPage('/Stations/Index');
+            },
+            error: function(xhr) {
+                console.error("Error deleting:", xhr.statusText);
+                alert("Unable to delete station. Please try again.");
+            }
         });
-    </script>
-}
+    }
+</script>
