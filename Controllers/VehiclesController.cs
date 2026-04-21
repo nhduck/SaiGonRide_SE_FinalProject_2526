@@ -8,7 +8,7 @@ namespace RentalVehicleService.Controllers
     public class VehiclesController : Controller
     {
         private readonly ApplicationDbContext _context;
-        private const string ViewPath = "~/Views/AdminDashboard/Pages/VehicleManagement/";
+        private const string ViewPath = "~/Views/AdminDashboard/Pages/Vehicle/";
 
         public VehiclesController(ApplicationDbContext context)
         {
@@ -24,6 +24,7 @@ namespace RentalVehicleService.Controllers
             ViewBag.Available = vehicles.Count(v => v.State == VehicleState.Available);
             ViewBag.Charging = vehicles.Count(v => v.State == VehicleState.Charging);
             ViewBag.Maintenance = vehicles.Count(v => v.State == VehicleState.Maintenance);
+            ViewBag.Rented = vehicles.Count(v => v.State == VehicleState.Rented);
 
             return PartialView($"{ViewPath}Index.cshtml", vehicles);
         }
@@ -111,6 +112,19 @@ namespace RentalVehicleService.Controllers
         private bool VehicleExists(int id)
         {
             return _context.Vehicles.Any(e => e.VehicleId == id);
+        }
+
+        public async Task<IActionResult> getAmountInfo()
+        {
+            var vehicles = await _context.Vehicles.ToListAsync();
+
+            return Ok(new
+            {
+                totalVehicles = vehicles.Count,
+                available = vehicles.Count(v => v.State == VehicleState.Available),
+                charging = vehicles.Count(v => v.State == VehicleState.Charging),
+                maintenance = vehicles.Count(v => v.State == VehicleState.Maintenance)
+            });
         }
     }
 }

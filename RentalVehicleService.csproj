@@ -45,8 +45,4 @@
     <None Include="wwwroot\css\Vehicle\indexStyle.css" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="wwwroot\css\Station\" />
-  </ItemGroup>
-
 </Project>
