@@ -24,6 +24,7 @@
             @{
                 var stateStr = item.State.ToString();
                 var statusClass = stateStr == "Available" ? "success" :
+                                stateStr == "UnAvailable" ? "secondary" :
                                   stateStr == "Rented" ? "purple" :
                                   stateStr == "Maintenance" ? "danger" : "warning";
             }

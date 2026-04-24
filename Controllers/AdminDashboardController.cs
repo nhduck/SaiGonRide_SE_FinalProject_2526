@@ -34,7 +34,7 @@ namespace RentalVehicleService.Controllers
                     v.VehicleId.ToString().Contains(st) ||
                     v.VehicleModel.ToLower().Contains(st) ||
                     v.Type.ToString().ToLower().Contains(st)
-                ).ToList();
+                    ).ToList();
             }
 
             if (statuses != null && statuses.Any())

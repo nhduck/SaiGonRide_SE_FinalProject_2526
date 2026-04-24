@@ -40,6 +40,11 @@
     color: #198754 !important;
 }
 
+#UnAvailableBTN:not(.active-selected):hover {
+    background-color: rgba(108, 117, 125, 0.1) !important;
+    color: #6c757d !important;
+}
+
 #ChargingBTN:not(.active-selected):hover {
     background-color: rgba(255, 193, 7, 0.1) !important;
     color: #664d03 !important;
@@ -56,40 +61,44 @@
 }
 
 /* Trạng thái ACTIVE-SELECTED (Khi đã nhấn chọn - Hiện màu đặc trưng) */
-#availableBTN.btn.active-selected,
-#availableBTN.btn.active-selected:hover,
-#availableBTN.btn.active-selected:focus,
-#availableBTN.btn.active-selected:active {
+#availableBTN.btn.btn-outline-success.active-selected,
+#availableBTN.btn.btn-outline-success.active-selected:hover,
+#availableBTN.btn.btn-outline-success.active-selected:focus,
+#availableBTN.btn.btn-outline-success.active-selected:active {
     background-color: #198754 !important;
     color: #fff !important;
     border-color: #198754 !important;
+    box-shadow: none !important;
 }
 
-#ChargingBTN.btn.active-selected,
-#ChargingBTN.btn.active-selected:hover,
-#ChargingBTN.btn.active-selected:focus,
-#ChargingBTN.btn.active-selected:active {
+#UnAvailableBTN.btn.btn-outline-secondary.active-selected,
+#UnAvailableBTN.btn.btn-outline-secondary.active-selected:hover,
+#UnAvailableBTN.btn.btn-outline-secondary.active-selected:focus,
+#UnAvailableBTN.btn.btn-outline-secondary.active-selected:active {
+    background-color: #6c757d !important;
+    color: #fff !important;
+    border-color: #6c757d !important;
+    box-shadow: none !important;
+}
+
+#ChargingBTN.btn.btn-outline-warning.active-selected,
+#ChargingBTN.btn.btn-outline-warning.active-selected:hover,
+#ChargingBTN.btn.btn-outline-warning.active-selected:focus,
+#ChargingBTN.btn.btn-outline-warning.active-selected:active {
     background-color: #ffc107 !important;
     color: #000 !important;
     border-color: #ffc107 !important;
+    box-shadow: none !important;
 }
 
-#MaintenanceBTN.btn.active-selected,
-#MaintenanceBTN.btn.active-selected:hover,
-#MaintenanceBTN.btn.active-selected:focus,
-#MaintenanceBTN.btn.active-selected:active {
+#MaintenanceBTN.btn.btn-outline-danger.active-selected,
+#MaintenanceBTN.btn.btn-outline-danger.active-selected:hover,
+#MaintenanceBTN.btn.btn-outline-danger.active-selected:focus,
+#MaintenanceBTN.btn.btn-outline-danger.active-selected:active {
     background-color: #dc3545 !important;
     color: #fff !important;
     border-color: #dc3545 !important;
-}
-
-#RentedBTN.btn.active-selected,
-#RentedBTN.btn.active-selected:hover,
-#RentedBTN.btn.active-selected:focus,
-#RentedBTN.btn.active-selected:active {
-    background-color: #6f42c1 !important;
-    color: #fff !important;
-    border-color: #6f42c1 !important;
+    box-shadow: none !important;
 }
 
 /* ==========================================================================

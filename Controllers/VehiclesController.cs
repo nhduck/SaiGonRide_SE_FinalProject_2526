@@ -22,6 +22,7 @@ namespace RentalVehicleService.Controllers
 
             ViewBag.TotalVehicles = vehicles.Count;
             ViewBag.Available = vehicles.Count(v => v.State == VehicleState.Available);
+            ViewBag.UnAvailable = vehicles.Count(v => v.State == VehicleState.UnAvailable);
             ViewBag.Charging = vehicles.Count(v => v.State == VehicleState.Charging);
             ViewBag.Maintenance = vehicles.Count(v => v.State == VehicleState.Maintenance);
             ViewBag.Rented = vehicles.Count(v => v.State == VehicleState.Rented);
@@ -159,6 +160,7 @@ namespace RentalVehicleService.Controllers
             {
                 totalVehicles = vehicles.Count,
                 available = vehicles.Count(v => v.State == VehicleState.Available),
+                unAvailable = vehicles.Count(v => v.State == VehicleState.UnAvailable),
                 charging = vehicles.Count(v => v.State == VehicleState.Charging),
                 maintenance = vehicles.Count(v => v.State == VehicleState.Maintenance),
                 rented = vehicles.Count(v => v.State == VehicleState.Rented)

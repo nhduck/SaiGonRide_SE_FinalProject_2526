@@ -7,6 +7,7 @@ namespace RentalVehicleService.Models
     public enum VehicleState
     {
         Available,    // Sẵn sàng
+        UnAvailable,    // Không sẵn sàng
         Rented,       // Đang thuê
         Charging,     // Đang sạc
         Maintenance   // Bảo trì
