@@ -30,10 +30,9 @@
 
 						<div class="col-md-6">
 							<label asp-for="CurrentStationId" class="form-label fw-semibold small text-secondary">Current Station ID</label>
-							<div class="input-group input-group-sm">
-								<span class="input-group-text bg-light border-end-0"><i class="bi bi-geo-alt text-danger"></i></span>
-								<input asp-for="CurrentStationId" id="VehicleStationInput" class="form-control border-start-0" placeholder="e.g. ST001" />
-							</div>
+							<select asp-for="CurrentStationId" id="createStationId" class="form-select form-select-sm">
+								<option value="">-- No Station --</option>
+							</select>
 							<span asp-validation-for="CurrentStationId" class="text-danger small"></span>
 						</div>
 
@@ -108,18 +107,18 @@
 		const $priceInput = $('input[name="Price"]');
 
 		// 1. Hàm kiểm tra hợp lệ để bật/tắt nút Lưu
-		function validationForm() {
-			const isModel = $.trim($modelInput.val()) !== "";
-			const isStation = $.trim($stationInput.val()) !== "";
-			const isPrice = $priceInput.val() !== "" && parseFloat($priceInput.val()) >= 0;
-			const isPin = $pinSo.val() !== "" && $pinSo.val() >= 0 && $pinSo.val() <= 100;
+	function validationForm() {
+		const isModel = $.trim($modelInput.val()) !== "";
+		const isPrice = $priceInput.val() !== "" && parseFloat($priceInput.val()) >= 0;
+		const isPin   = $pinSo.val() !== "" && $pinSo.val() >= 0 && $pinSo.val() <= 100;
 
-			if (isModel && isStation && isPrice && isPin) {
-				$nutLuu.prop('disabled', false).removeClass('btn-secondary').addClass('btn-primary');
-			} else {
-				$nutLuu.prop('disabled', true).removeClass('btn-primary').addClass('btn-secondary');
-			}
+		// Bỏ isStation vì CurrentStationId là nullable trong model
+		if (isModel && isPrice && isPin) {
+			$nutLuu.prop('disabled', false).removeClass('btn-secondary').addClass('btn-primary');
+		} else {
+			$nutLuu.prop('disabled', true).removeClass('btn-primary').addClass('btn-secondary');
 		}
+	}
 
 		// 2. Đồng bộ thanh kéo Pin và ô nhập số
 		$pinSo.on('input', function() {

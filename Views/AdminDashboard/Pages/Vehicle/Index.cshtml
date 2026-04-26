@@ -6,15 +6,15 @@
 }
 
 <div class="m-3">
-
     <div class="container-fluid py-4 px-lg-5">
+
+        <!-- Header -->
         <div class="d-flex justify-content-between align-items-center mb-4">
             <div>
                 <h4 class="fw-bold mb-1"><i class="bi bi-bicycle"></i> Vehicle Management</h4>
                 <p class="text-muted small mb-0">Manage all vehicles in the network</p>
             </div>
-
-            <button class="btn btn-success" onclick="ShowCreateModal()">
+            <button class="btn btn-success" id="openCreateBtn">
                 <i class="bi bi-plus-lg"></i> Add Vehicle
             </button>
         </div>
@@ -77,14 +77,16 @@
                 <form method="get" class="row g-2">
                     <div class="col-lg-4">
                         <div class="input-group">
-                            <span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="bi bi-search text-muted"></i>
+                            </span>
                             <input id="searchBar" type="text" name="searchString"
                                    class="form-control border-start-0 ps-0"
                                    placeholder="Search by model or ID...">
                         </div>
                     </div>
                     <div class="col-lg-8 d-flex gap-2 flex-wrap justify-content-lg-end">
-                        <button id="clearBTN" class="clearBTN btn btn-outline-primary d-none">Clear Sort</button>
+                        <button id="clearBTN" class="btn btn-outline-primary d-none">Clear Sort</button>
                         <button id="availableBTN" class="sortBTN btn btn-outline-success">Available</button>
                         <button id="UnAvailableBTN" class="sortBTN btn btn-outline-secondary">UnAvailable</button>
                         <button id="ChargingBTN" class="sortBTN btn btn-outline-warning">Charging</button>
@@ -119,78 +121,176 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     <iframe name="hidden_frame" style="display:none;"></iframe>
 
-    <!-- Modals -->
+    <!-- Station data từ server — các modal dùng chung qua fillStationDropdown() -->
+    <script>
+            var stationList = [
+                @foreach (var s in ViewBag.Stations as List<RentalVehicleService.Models.Station>)
+                {
+                        @:{ id: @s.StationId, name: "@Html.Raw(s.Name)", address: "@Html.Raw(s.Address)" },
+                }
+            ];
+    </script>
+
+    <!-- Modals — đặt SAU stationList để JS trong modal có thể dùng -->
     <partial name="~/Views/AdminDashboard/Pages/Vehicle/Delete.cshtml" />
     <partial name="~/Views/AdminDashboard/Pages/Vehicle/Create.cshtml" model="new RentalVehicleService.Models.Vehicle()" />
-    @* <partial name="~/Views/AdminDashboard/Pages/Vehicle/Edit.cshtml" model="new RentalVehicleService.Models.Vehicle()" /> *@
-    @* <partial name="~/Views/AdminDashboard/Pages/Vehicle/Details.cshtml" /> *@
+    <partial name="~/Views/AdminDashboard/Pages/Vehicle/Edit.cshtml" model="new RentalVehicleService.Models.Vehicle()" />
+    <partial name="~/Views/AdminDashboard/Pages/Vehicle/Details.cshtml" model="new RentalVehicleService.Models.Vehicle()" />
 
 </div>
 
 <script>
-    {
-        // ── 1. Hiển thị modal Xóa ──────────────────────────────────
-        function prepareDelete(id, name) {
-            $('#idToConfirm').val(id);
-            $('#idToDisplay').text(id);
-            $('#nameToDisplay').text(name);
+         $(document).ready(function () {
+
+        // ════════════════════════════════════════════════════════
+        // STATION - các hàm liên quan đến station
+        // ════════════════════════════════════════════════════════
+
+        // Đổ danh sách station vào thẻ <select>
+        function fillStationDropdown(selectId, selectedId) {
+            var $select = $(selectId);
+            $select.empty();
+            $select.append('<option value="">-- No Station --</option>');
+
+            $.each(stationList, function (i, station) {
+                var option = $('<option>')
+                    .val(station.id)
+                    .text('#' + station.id + ' — ' + station.name + ' (' + station.address + ')');
+
+                if (station.id == selectedId) {
+                    option.prop('selected', true);
+                }
+
+                $select.append(option);
+            });
+        }
+
+        // Tìm tên station theo id
+        function getStationName(stationId) {
+            var result = 'No Station';
+            $.each(stationList, function (i, station) {
+                if (station.id == stationId) {
+                    result = station.name;
+                    return false; // dừng vòng lặp
+                }
+            });
+            return result;
+        }
+
+        // Hiển thị tên station trong bảng (thay id bằng tên)
+        function renderStationNames() {
+            $('[data-station-id]').each(function () {
+                var stationId = $(this).data('station-id');
+                var name      = getStationName(stationId);
+                $(this).html('<i class="bi bi-geo-alt text-danger"></i> ' + name);
+            });
+        }
+
+
+        // ════════════════════════════════════════════════════════
+        // MODAL XÓA
+        // ════════════════════════════════════════════════════════
+
+        function prepareDelete(vehicleId, vehicleName) {
+            $('#idToConfirm').val(vehicleId);
+            $('#idToDisplay').text(vehicleId);
+            $('#nameToDisplay').text(vehicleName);
             $('#deleteModal').modal('show');
         }
 
-        // ── 2. Hiển thị modal Thêm mới ────────────────────────────
+        $('#confirmDeleteBtn').on('click', function () {
+            var id    = $('#idToConfirm').val();
+            var token = $('input[name="__RequestVerificationToken"]').first().val();
+
+            $.ajax({
+                url: '/Vehicles/DeleteConfirmed',
+                type: 'POST',
+                data: { id: id, __RequestVerificationToken: token },
+                success: function () {
+                    $('#deleteModal').modal('hide');
+                    // Xóa dòng khỏi bảng với hiệu ứng mờ dần
+                    $('tr[data-id="' + id + '"]').fadeOut(300, function () {
+                        $(this).remove();
+                        updateStats();
+                    });
+                },
+                error: function () {
+                    alert('Cannot delete vehicle. Please try again.');
+                }
+            });
+        });
+
+
+        // ════════════════════════════════════════════════════════
+        // MODAL THÊM MỚI
+        // ════════════════════════════════════════════════════════
+
         function ShowCreateModal() {
+            fillStationDropdown('#createStationId', null);
             $('#createModal').modal('show');
         }
 
-        // ── 3. Hiển thị modal Details ─────────────────────────────
-        function ShowDetailsModal(id) {
-            // Reset body về spinner
-            $('#detailsModalBody').html(`
-                <div class="text-center py-4">
-                    <div class="spinner-border text-primary" role="status"></div>
-                    <p class="mt-2 text-muted">Loading...</p>
-                </div>`);
+        $('#openCreateBtn').on('click', function () {
+            ShowCreateModal();
+        });
+
+
+        // ════════════════════════════════════════════════════════
+        // MODAL CHI TIẾT
+        // ════════════════════════════════════════════════════════
+
+        function ShowDetailsModal(vehicleId) {
+            // Hiển thị spinner trong lúc chờ load
+            $('#detailsModalBody').html(
+                '<div class="text-center py-4">' +
+                '  <div class="spinner-border text-primary" role="status"></div>' +
+                '  <p class="mt-2 text-muted">Loading...</p>' +
+                '</div>'
+            );
 
             // Lưu id để nút Edit dùng
-            $('#detailsEditBtn').data('id', id);
-
+            $('#detailsEditBtn').data('id', vehicleId);
             $('#detailsModal').modal('show');
 
             $.ajax({
-                url: '/Vehicles/Details/' + id,
+                url: '/Vehicles/Details/' + vehicleId,
                 type: 'GET',
                 success: function (html) {
                     $('#detailsModalBody').html(html);
                 },
                 error: function () {
                     $('#detailsModalBody').html(
-                        '<div class="alert alert-danger">Cannot load vehicle details. Please try again.</div>');
+                        '<div class="alert alert-danger">Cannot load vehicle details. Please try again.</div>'
+                    );
                 }
             });
         }
 
-        // Nút Edit bên trong Details modal -> đóng Details, mở Edit
+        // Nút Edit trong modal Details → đóng Details rồi mở Edit
         $('#detailsEditBtn').on('click', function () {
-            const id = $(this).data('id');
+            var id = $(this).data('id');
             $('#detailsModal').modal('hide');
-            // Chờ animation đóng xong rồi mở Edit
             $('#detailsModal').one('hidden.bs.modal', function () {
                 ShowEditModal(id);
             });
         });
 
-        // ── 4. Hiển thị modal Edit ────────────────────────────────
-        function ShowEditModal(id) {
-            // Reset alert
+
+        // ════════════════════════════════════════════════════════
+        // MODAL CHỈNH SỬA
+        // ════════════════════════════════════════════════════════
+
+        function ShowEditModal(vehicleId) {
             $('#editAlertArea').html('');
             $('#editForm')[0].reset();
 
             $.ajax({
-                url: '/Vehicles/Edit/' + id,
+                url: '/Vehicles/Edit/' + vehicleId,
                 type: 'GET',
                 success: function (data) {
                     // Điền dữ liệu vào form
@@ -201,7 +301,9 @@
                     $('#editState').val(data.state);
                     $('#editType').val(data.type);
                     $('#editLastMaintenance').val(data.lastMaintenance);
-                    $('#editStationId').val(data.currentStationId ?? '');
+
+                    // Đổ dropdown station và chọn sẵn station hiện tại
+                    fillStationDropdown('#editStationId', data.currentStationId);
 
                     $('#editModal').modal('show');
                 },
@@ -211,69 +313,53 @@
             });
         }
 
-        // ── 5. Submit form Edit ───────────────────────────────────
+        // Submit form Edit
         $('#editForm').on('submit', function (e) {
             e.preventDefault();
 
-            const id    = $('#editVehicleId').val();
-            const token = $('input[name="__RequestVerificationToken"]').first().val();
-            const btn   = $('#editSubmitBtn');
+            var vehicleId = $('#editVehicleId').val();
+            var $btn      = $('#editSubmitBtn');
 
-            btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>Saving...');
+            // Disable nút, hiện spinner
+            $btn.prop('disabled', true)
+                .html('<span class="spinner-border spinner-border-sm me-1"></span>Saving...');
 
             $.ajax({
-                url: '/Vehicles/Edit/' + id,
+                url: '/Vehicles/Edit/' + vehicleId,
                 type: 'POST',
-                data: $(this).serialize() + '&__RequestVerificationToken=' + encodeURIComponent(token),
+                data: $(this).serialize(),
                 success: function () {
                     $('#editModal').modal('hide');
-                    // Reload table + stats
                     search();
-                    updateStats();
                 },
                 error: function (xhr) {
-                    let msg = 'An error occurred. Please try again.';
+                    // Hiển thị lỗi trả về từ server
+                    var msg = 'An error occurred. Please try again.';
                     try {
-                        const res = JSON.parse(xhr.responseText);
+                        var res = JSON.parse(xhr.responseText);
                         if (res.errors) msg = res.errors.join('<br>');
-                    } catch (_) {}
+                    } catch (e) {}
 
                     $('#editAlertArea').html(
-                        `<div class="alert alert-danger alert-dismissible fade show py-2 small">
-                            <i class="bi bi-exclamation-triangle me-1"></i>${msg}
-                            <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>
-                        </div>`);
+                        '<div class="alert alert-danger alert-dismissible fade show py-2 small">' +
+                        '  <i class="bi bi-exclamation-triangle me-1"></i>' + msg +
+                        '  <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>' +
+                        '</div>'
+                    );
                 },
                 complete: function () {
-                    btn.prop('disabled', false).html('<i class="bi bi-floppy me-1"></i>Save Changes');
+                    // Bật lại nút dù thành công hay lỗi
+                    $btn.prop('disabled', false)
+                        .html('<i class="bi bi-floppy me-1"></i>Save Changes');
                 }
             });
         });
 
-        // ── 6. Xóa xe ────────────────────────────────────────────
-        $('#confirmDeleteBtn').on('click', function () {
-            const id    = $('#idToConfirm').val();
-            const token = $('input[name="__RequestVerificationToken"]').first().val();
 
-            $.ajax({
-                url: '/Vehicles/DeleteConfirmed',
-                type: 'POST',
-                data: { id: id, __RequestVerificationToken: token },
-                success: function () {
-                    $('#deleteModal').modal('hide');
-                    $(`tr[data-id="${id}"]`).fadeOut(300, function () {
-                        $(this).remove();
-                        updateStats();
-                    });
-                },
-                error: function (xhr) {
-                    console.error('Delete error:', xhr.statusText);
-                    alert('Cannot delete vehicle. Please try again.');
-                }
-            });
-        });
+        // ════════════════════════════════════════════════════════
+        // THỐNG KÊ
+        // ════════════════════════════════════════════════════════
 
-        // ── 7. Cập nhật thống kê ──────────────────────────────────
         function updateStats() {
             $.ajax({
                 url: '/Vehicles/GetAmountInfo',
@@ -281,73 +367,109 @@
                 success: function (data) {
                     $('#totalCount').text(data.totalVehicles);
                     $('#availableCount').text(data.available);
-                    $('#rentedCount').text(data.rented);
+                    $('#unavailableCount').text(data.unAvailable);
                     $('#chargingCount').text(data.charging);
                     $('#maintenanceCount').text(data.maintenance);
                     $('#rentedCount').text(data.rented);
-                },
-                error: function (xhr) {
-                    console.error('Stats error:', xhr.responseText);
                 }
             });
         }
 
-        // ── 8. Tìm kiếm & lọc ────────────────────────────────────
-        let selectedStatuses = [];
 
-        $("#clearBTN").on('click', function(e){ clearSortStatus(e); });
+        // ════════════════════════════════════════════════════════
+        // TÌM KIẾM & LỌC
+        // ════════════════════════════════════════════════════════
 
+        var selectedStatuses = [];
 
-        $('#searchBar').on('input', function () { search(); });
+        // Ô tìm kiếm
+        $('#searchBar').on('input', function () {
+            search();
+        });
 
+        // Nút lọc theo trạng thái
         $('.sortBTN').on('click', function (e) {
             e.preventDefault();
+
+            var statusName = $(this).text().trim();
             $(this).toggleClass('active-selected');
-            toggleStatus($(this).text().trim());
-            if (selectedStatuses.length >1){
-                $("#clearBTN").removeClass("d-none");
-            } else{
-                $("#clearBTN").addClass("d-none");
+
+            // Thêm hoặc bỏ khỏi danh sách lọc
+            var index = $.inArray(statusName, selectedStatuses);
+            if (index > -1) {
+                selectedStatuses.splice(index, 1);
+            } else {
+                selectedStatuses.push(statusName);
             }
 
-            if (selectedStatuses.length == 5){
-                clearSortStatus(e);
+            // Hiện/ẩn nút Clear
+            if (selectedStatuses.length > 1) {
+                $('#clearBTN').removeClass('d-none');
+            } else {
+                $('#clearBTN').addClass('d-none');
+            }
+
+            // Nếu chọn hết thì tự clear
+            if (selectedStatuses.length === 5) {
+                clearSort(e);
+            } else {
+                search();
             }
         });
 
-        function clearSortStatus(e){
+        // Nút Clear Sort
+        $('#clearBTN').on('click', function (e) {
+            clearSort(e);
+        });
+
+        function clearSort(e) {
             e.preventDefault();
             selectedStatuses = [];
-            $("#clearBTN").addClass("d-none");
-            $(".sortBTN").removeClass("active-selected")
+            $('.sortBTN').removeClass('active-selected');
+            $('#clearBTN').addClass('d-none');
             search();
         }
 
-        function toggleStatus(statusName) {
-            const index = selectedStatuses.indexOf(statusName);
-            if (index > -1) selectedStatuses.splice(index, 1);
-            else selectedStatuses.push(statusName);
-            search();
-        }
-
+        // Gọi API tìm kiếm và reload bảng
         function search() {
             $.ajax({
                 url: '/AdminDashboard/SearchVehicles',
                 type: 'GET',
                 data: { searchTerm: $('#searchBar').val(), statuses: selectedStatuses },
                 traditional: true,
-                success: function (response) {
-                    $('#vehicleTableBody').html(response);
+                success: function (html) {
+                    $('#vehicleTableBody').html(html);
+                    renderStationNames();
                     updateStats();
                 }
             });
         }
 
-        // Expose ra global scope để các partial có thể gọi
-        window.prepareDelete    = prepareDelete;
-        window.ShowDetailsModal = ShowDetailsModal;
-        window.ShowEditModal    = ShowEditModal;
-    }
+
+        // ════════════════════════════════════════════════════════
+        // KHỞI ĐỘNG
+        // ════════════════════════════════════════════════════════
+
+        // Hiển thị tên station ngay khi trang vừa load
+        renderStationNames();
+
+        // Expose ra global scope để onclick trong partial gọi được
+        window.prepareDelete       = prepareDelete;
+        window.ShowCreateModal     = ShowCreateModal;
+        window.ShowDetailsModal    = ShowDetailsModal;
+        window.ShowEditModal       = ShowEditModal;
+        window.fillStationDropdown = fillStationDropdown;
+        window.getStationName      = getStationName;
+
+    }); // end document.ready
 </script>
 
 <link rel="stylesheet" href="~/css/Vehicle/indexStyle.css" />
+
+<style>
+    #RentedBTN.active-selected {
+        background-color: #6f42c1 !important;
+        border-color: #6f42c1 !important;
+        color: #ffffff !important;
+    }
+</style>

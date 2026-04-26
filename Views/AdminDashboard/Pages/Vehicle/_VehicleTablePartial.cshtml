@@ -10,7 +10,9 @@
             </span>
         </td>
         <td>@item.VehicleModel</td>
-        <td><i class="bi bi-geo-alt text-danger"></i> @item.CurrentStationId</td>
+        <td data-station-id="@item.CurrentStationId">
+            <i class="bi bi-geo-alt text-danger"></i> @item.CurrentStationId
+        </td>
         <td>
             <div class="d-flex align-items-center">
                 <div class="progress flex-grow-1 me-2" style="height: 6px; min-width: 50px;">

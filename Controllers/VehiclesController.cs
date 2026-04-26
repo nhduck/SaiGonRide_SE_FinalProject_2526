@@ -19,7 +19,12 @@ namespace RentalVehicleService.Controllers
         public async Task<IActionResult> Index()
         {
             var vehicles = await _context.Vehicles.ToListAsync();
+            var stations = await _context.Stations
+                .Where(s => s.IsActive)
+                .OrderBy(s => s.StationId)
+                .ToListAsync();
 
+            ViewBag.Stations = stations;
             ViewBag.TotalVehicles = vehicles.Count;
             ViewBag.Available = vehicles.Count(v => v.State == VehicleState.Available);
             ViewBag.UnAvailable = vehicles.Count(v => v.State == VehicleState.UnAvailable);
@@ -101,12 +106,17 @@ namespace RentalVehicleService.Controllers
         // ─────────────────────────────────────────────
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(
-            int id,
-            [Bind("VehicleId,VehicleModel,Price,BatteryPercentage,State,Type,LastMaintenance,CurrentStationId")] Vehicle vehicle)
+        public async Task<IActionResult> Edit(int id, [Bind("VehicleId,VehicleModel,Price,BatteryPercentage,State,Type,LastMaintenance,CurrentStationId")] Vehicle vehicle)
         {
-            if (id != vehicle.VehicleId) return NotFound();
+            if (id != vehicle.VehicleId) return BadRequest();
 
+            // 1. Xử lý DateTime: Nếu ngày bị mặc định là MinValue, hãy gán ngày hiện tại
+            if (vehicle.LastMaintenance == DateTime.MinValue)
+            {
+                vehicle.LastMaintenance = DateTime.Now;
+            }
+
+            // 2. Kiểm tra ModelState
             if (!ModelState.IsValid)
             {
                 var errors = ModelState.Values.SelectMany(v => v.Errors).Select(e => e.ErrorMessage);
@@ -117,19 +127,12 @@ namespace RentalVehicleService.Controllers
             {
                 _context.Update(vehicle);
                 await _context.SaveChangesAsync();
+                return Ok(new { success = true });
             }
-            catch (DbUpdateConcurrencyException)
+            catch (DbUpdateException)
             {
-                if (!VehicleExists(vehicle.VehicleId)) return NotFound();
-                throw;
+                return BadRequest(new { success = false, errors = new[] { "Lỗi Foreign Key: Station ID không tồn tại." } });
             }
-
-            // Trả về row HTML mới để JS cập nhật bảng không reload trang
-            var updated = await _context.Vehicles
-                .Include(v => v.CurrentStation)
-                .FirstOrDefaultAsync(v => v.VehicleId == id);
-
-            return Ok(new { success = true });
         }
 
         // ─────────────────────────────────────────────
@@ -159,7 +162,7 @@ namespace RentalVehicleService.Controllers
             return Ok(new
             {
                 totalVehicles = vehicles.Count,
-                available = vehicles.Count(v => v.State == VehicleState.Available),
+                available = vehicles.Count(v => v.State == VehicleState.Available), 
                 unAvailable = vehicles.Count(v => v.State == VehicleState.UnAvailable),
                 charging = vehicles.Count(v => v.State == VehicleState.Charging),
                 maintenance = vehicles.Count(v => v.State == VehicleState.Maintenance),

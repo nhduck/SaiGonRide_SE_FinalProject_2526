@@ -1,74 +1,77 @@
 ﻿<!-- Details Modal -->
 <div class="modal fade" id="detailsModal" tabindex="-1" aria-labelledby="detailsModalLabel" aria-hidden="true">
-    <div class="modal-dialog modal-lg modal-dialog-centered">
-        <div class="modal-content border-0 shadow">
+	<div class="modal-dialog modal-lg modal-dialog-centered">
+		<div class="modal-content border-0 shadow">
 
-            <div class="modal-header bg-dark text-white">
-                <h5 class="modal-title fw-bold" id="detailsModalLabel">
-                    <i class="bi bi-info-circle me-2"></i>Vehicle Details
-                </h5>
-                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
-            </div>
+			<div class="modal-header bg-dark text-white">
+				<h5 class="modal-title fw-bold" id="detailsModalLabel">
+					<i class="bi bi-info-circle me-2"></i>Vehicle Details
+				</h5>
+				<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+			</div>
 
-            <div class="modal-body p-4" id="detailsModalBody">
-                <!-- Nội dung load bằng AJAX -->
-                <div class="text-center py-4">
-                    <div class="spinner-border text-primary" role="status"></div>
-                    <p class="mt-2 text-muted">Loading...</p>
-                </div>
-            </div>
+			<div class="modal-body p-4" id="detailsModalBody">
+				<!-- Nội dung load bằng AJAX -->
+				<div class="text-center py-4">
+					<div class="spinner-border text-primary" role="status"></div>
+					<p class="mt-2 text-muted">Loading...</p>
+				</div>
+			</div>
 
-            <div class="modal-footer border-0 pt-0 px-4 pb-4">
-                <button type="button" class="btn btn-light" data-bs-dismiss="modal">
-                    <i class="bi bi-x-lg me-1"></i>Close
-                </button>
-                <button type="button" class="btn btn-primary px-4" id="detailsEditBtn">
-                    <i class="bi bi-pencil-square me-1"></i>Edit
-                </button>
-            </div>
+			<div class="modal-footer border-0 pt-0 px-4 pb-4">
+				<button type="button" class="btn btn-light" data-bs-dismiss="modal">
+					<i class="bi bi-x-lg me-1"></i>Close
+				</button>
+				<button type="button" class="btn btn-primary px-4" id="detailsEditBtn">
+					<i class="bi bi-pencil-square me-1"></i>Edit
+				</button>
+			</div>
 
-        </div>
-    </div>
+		</div>
+	</div>
 </div>
 
 <div class="card border-0 shadow-sm text-center sr-reveal" style="max-width: 300px; border-radius: 1.5rem; background: #f8fafc; border: 2px dashed #16a34a !important; margin: 2rem auto;">
-    <div class="card-body p-4">
-        <h5 class="fw-bold mb-1" style="color: #064e3b;">
-            <i class="bi bi-bicycle me-1"></i> SaigonRide
-        </h5>
-        <p class="text-muted small mb-3">Quét mã để mở khóa hành trình</p>
+	<div class="card-body p-4">
+		<h5 class="fw-bold mb-1" style="color: #064e3b;">
+			<i class="bi bi-bicycle me-1"></i> SaigonRide
+		</h5>
+		<p class="text-muted small mb-3">Quét mã để mở khóa hành trình</p>
 
-        <div class="bg-white p-2 rounded-3 shadow-sm mx-auto mb-3" style="width: fit-content;">
-            <div id="qrcode-container"></div>
-        </div>
+		<div class="bg-white p-2 rounded-3 shadow-sm mx-auto mb-3" style="width: fit-content;">
+			<div id="qrcode-container"></div>
+		</div>
 
-        <div class="fw-bold fs-3" style="letter-spacing: 2px; color: #0f172a;">
-            #@Model.VehicleId
-        </div>
-        <div class="badge mt-2 px-3 py-2" style="background: rgba(22, 163, 74, 0.1); color: #16a34a;">
-            @Model.Type
-        </div>
-    </div>
+		<div class="fw-bold fs-3" style="letter-spacing: 2px; color: #0f172a;">
+			#@Model.VehicleId
+		</div>
+		<div class="badge mt-2 px-3 py-2" style="background: rgba(22, 163, 74, 0.1); color: #16a34a;">
+			@Model.Type
+		</div>
+	</div>
 </div>
 
-@section Scripts {
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 
-    <script>
-        $(document).ready(function () {
-            var currentDomain = window.location.origin;
-            var unlockUrl = currentDomain + "/Rental/Create?vehicleId=@Model.VehicleId";
-            var qrContainer = document.getElementById("qrcode-container");
-            if (qrContainer) {
-                new QRCode(qrContainer, {
-                    text: unlockUrl,
-                    width: 160,
-                    height: 160,
-                    colorDark : "#064e3b",
-                    colorLight : "#ffffff",
-                    correctLevel : QRCode.CorrectLevel.H
-                });
-            }
-        });
-    </script>
-}
+<script>
+	$(document).ready(function () {
+	const currentDomain = window.location.origin;
+	const unlockUrl = `${currentDomain}/Rental/Create?vehicleId=@Model.VehicleId`;
+    
+	// Sử dụng selector của jQuery để tìm container
+	const $qrContainer = $("#qrcode-container");
+
+	// Kiểm tra xem phần tử có tồn tại không (.length > 0)
+	if ($qrContainer.length) {
+	// Truy xuất phần tử DOM thuần bằng [0] để thư viện QRCode có thể nhận diện
+	new QRCode($qrContainer[0], {
+	text: unlockUrl,
+	width: 160,
+	height: 160,
+	colorDark: "#064e3b",
+	colorLight: "#ffffff",
+	correctLevel: QRCode.CorrectLevel.H
+	});
+	}
+	});
+</script>

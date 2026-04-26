@@ -1,12 +1,12 @@
 ﻿@model RentalVehicleService.Models.Vehicle
 
 <!-- Edit Modal -->
-<div class="modal fade" id="editModal" tabindex="-1" aria-labelledby="editModalLabel" aria-hidden="true">
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered">
         <div class="modal-content border-0 shadow">
 
             <div class="modal-header bg-primary text-white">
-                <h5 class="modal-title fw-bold" id="editModalLabel">
+                <h5 class="modal-title fw-bold">
                     <i class="bi bi-pencil-square me-2"></i>Edit Vehicle
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
@@ -18,19 +18,16 @@
 
                 <div class="modal-body p-4">
                     <div id="editAlertArea"></div>
-
                     <div class="row g-3">
-                        <!-- Vehicle Model -->
+
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">
                                 <i class="bi bi-tag me-1 text-primary"></i>Vehicle Model
                             </label>
-                            <input type="text" class="form-control" id="editVehicleModel" name="VehicleModel"
-                                   placeholder="e.g. Honda Vision" required />
-                            <div class="invalid-feedback">Vehicle model cannot be empty.</div>
+                            <input type="text" class="form-control" id="editVehicleModel"
+                                   name="VehicleModel" placeholder="e.g. Honda Vision" required />
                         </div>
 
-                        <!-- Type -->
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">
                                 <i class="bi bi-lightning-charge me-1 text-primary"></i>Type
@@ -38,35 +35,30 @@
                             <select class="form-select" id="editType" name="Type">
                                 @foreach (var t in Enum.GetValues(typeof(RentalVehicleService.Models.VehicleType)))
                                 {
-                                    <option value="@t">@t</option>
+                                    <option value="@((int)t)">@t</option>
                                 }
                             </select>
                         </div>
 
-                        <!-- Price -->
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">
                                 <i class="bi bi-currency-dollar me-1 text-primary"></i>Rental Price (VND/min)
                             </label>
-                            <input type="number" class="form-control" id="editPrice" name="Price"
-                                   min="0" step="any" placeholder="e.g. 500" required />
-                            <div class="invalid-feedback">Price is required.</div>
+                            <input type="number" class="form-control" id="editPrice"
+                                   name="Price" min="0" step="any" placeholder="e.g. 500" required />
                         </div>
 
-                        <!-- Battery -->
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">
                                 <i class="bi bi-battery-half me-1 text-primary"></i>Battery (%)
                             </label>
                             <div class="input-group">
-                                <input type="number" class="form-control" id="editBattery" name="BatteryPercentage"
-                                       min="0" max="100" placeholder="0 - 100" required />
+                                <input type="number" class="form-control" id="editBattery"
+                                       name="BatteryPercentage" min="0" max="100" required />
                                 <span class="input-group-text">%</span>
                             </div>
-                            <div class="invalid-feedback">Battery must be between 0 and 100.</div>
                         </div>
 
-                        <!-- State -->
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">
                                 <i class="bi bi-activity me-1 text-primary"></i>State
@@ -74,28 +66,29 @@
                             <select class="form-select" id="editState" name="State">
                                 @foreach (var s in Enum.GetValues(typeof(RentalVehicleService.Models.VehicleState)))
                                 {
-                                    <option value="@s">@s</option>
+                                    <option value="@((int)s)">@s</option>
                                 }
                             </select>
                         </div>
 
-                        <!-- Current Station -->
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">
-                                <i class="bi bi-geo-alt me-1 text-primary"></i>Current Station ID
+                                <i class="bi bi-geo-alt me-1 text-primary"></i>Current Station
                             </label>
-                            <input type="number" class="form-control" id="editStationId" name="CurrentStationId"
-                                   placeholder="Leave empty if none" />
+                            <!-- JS fillStationDropdown() trong Index.cshtml sẽ tự điền -->
+                            <select class="form-select" id="editStationId" name="CurrentStationId">
+                                <option value="">-- No Station --</option>
+                            </select>
                         </div>
 
-                        <!-- Last Maintenance -->
                         <div class="col-md-6">
                             <label class="form-label fw-semibold">
                                 <i class="bi bi-wrench me-1 text-primary"></i>Last Maintenance Date
                             </label>
-                            <input type="datetime-local" class="form-control" id="editLastMaintenance"
-                                   name="LastMaintenance" />
+                            <input type="datetime-local" class="form-control"
+                                   id="editLastMaintenance" name="LastMaintenance" />
                         </div>
+
                     </div>
                 </div>
 

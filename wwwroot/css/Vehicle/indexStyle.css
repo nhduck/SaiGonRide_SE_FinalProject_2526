@@ -1,161 +1,68 @@
-﻿/* ==========================================================================
-   1. STAT CARDS (Các thẻ thống kê trên cùng)
-   ========================================================================== */
+﻿/* --- Stat Cards --- */
 .stat-card {
     transition: all 0.3s ease;
     cursor: default;
 }
-
-    .stat-card:hover {
-        transform: translateY(-3px);
-        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
-    }
-
-.border-purple {
-    border-color: #6f42c1 !important;
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
 }
+.border-purple { border-color: #6f42c1 !important; }
+.text-purple { color: #6f42c1 !important; }
 
-.text-purple {
-    color: #6f42c1 !important;
-}
-
-/* ==========================================================================
-   2. CUSTOM SORT BUTTONS (Hỗ trợ Multi-select)
-   ========================================================================== */
+/* --- Base Sort Buttons --- */
 .sortBTN {
     transition: all 0.2s ease-in-out !important;
     font-weight: 500;
+    border-style: solid;
     border-width: 1px;
+    background-color: transparent;
 }
 
-#RentedBTN {
-    color: #6f42c1 !important;
-    border-color: #6f42c1 !important;
-    background-color: transparent !important;
-}
+/* --- Colors for each button --- */
+#availableBTN   { color: #198754; border-color: #198754; }
+#UnAvailableBTN { color: #6c757d; border-color: #6c757d; }
+#ChargingBTN    { color: #ffc107; border-color: #ffc107; }
+#MaintenanceBTN { color: #dc3545; border-color: #dc3545; }
+#RentedBTN      { color: #6f42c1; border-color: #6f42c1; }
 
-/* Trạng thái Hover khi CHƯA chọn (Light background) */
-#availableBTN:not(.active-selected):hover {
-    background-color: rgba(25, 135, 84, 0.1) !important;
-    color: #198754 !important;
-}
-
-#UnAvailableBTN:not(.active-selected):hover {
-    background-color: rgba(108, 117, 125, 0.1) !important;
-    color: #6c757d !important;
-}
-
-#ChargingBTN:not(.active-selected):hover {
-    background-color: rgba(255, 193, 7, 0.1) !important;
-    color: #664d03 !important;
-}
-
-#MaintenanceBTN:not(.active-selected):hover {
-    background-color: rgba(220, 53, 69, 0.1) !important;
-    color: #dc3545 !important;
-}
-
-#RentedBTN:not(.active-selected):hover {
-    background-color: rgba(111, 66, 193, 0.1) !important;
-    color: #6f42c1 !important;
-}
-
-/* Trạng thái ACTIVE-SELECTED (Khi đã nhấn chọn - Hiện màu đặc trưng) */
-#availableBTN.btn.btn-outline-success.active-selected,
-#availableBTN.btn.btn-outline-success.active-selected:hover,
-#availableBTN.btn.btn-outline-success.active-selected:focus,
-#availableBTN.btn.btn-outline-success.active-selected:active {
+/* --- Active/Selected State (Đã sửa lỗi Rented) --- */
+#availableBTN.active-selected {
     background-color: #198754 !important;
-    color: #fff !important;
     border-color: #198754 !important;
-    box-shadow: none !important;
+    color: #ffffff !important;
 }
 
-#UnAvailableBTN.btn.btn-outline-secondary.active-selected,
-#UnAvailableBTN.btn.btn-outline-secondary.active-selected:hover,
-#UnAvailableBTN.btn.btn-outline-secondary.active-selected:focus,
-#UnAvailableBTN.btn.btn-outline-secondary.active-selected:active {
+#UnAvailableBTN.active-selected {
     background-color: #6c757d !important;
-    color: #fff !important;
     border-color: #6c757d !important;
-    box-shadow: none !important;
+    color: #ffffff !important;
 }
 
-#ChargingBTN.btn.btn-outline-warning.active-selected,
-#ChargingBTN.btn.btn-outline-warning.active-selected:hover,
-#ChargingBTN.btn.btn-outline-warning.active-selected:focus,
-#ChargingBTN.btn.btn-outline-warning.active-selected:active {
+#ChargingBTN.active-selected {
     background-color: #ffc107 !important;
-    color: #000 !important;
     border-color: #ffc107 !important;
-    box-shadow: none !important;
+    color: #000000 !important;
 }
 
-#MaintenanceBTN.btn.btn-outline-danger.active-selected,
-#MaintenanceBTN.btn.btn-outline-danger.active-selected:hover,
-#MaintenanceBTN.btn.btn-outline-danger.active-selected:focus,
-#MaintenanceBTN.btn.btn-outline-danger.active-selected:active {
+#MaintenanceBTN.active-selected {
     background-color: #dc3545 !important;
-    color: #fff !important;
     border-color: #dc3545 !important;
-    box-shadow: none !important;
+    color: #ffffff !important;
 }
 
-/* ==========================================================================
-   3. TABLE & SCROLL AREA (Khu vực bảng dữ liệu)
-   ========================================================================== */
-.scroll-area {
-    max-height: 550px;
-    overflow-y: auto;
-    overflow-x: hidden;
+#RentedBTN.active-selected {
+    background-color: #6f42c1 !important;
+    border-color: #6f42c1 !important;
+    color: #ffffff !important;
 }
 
-/* Giữ tiêu đề bảng đứng yên khi cuộn */
-.sticky-top {
-    position: sticky;
-    top: 0;
-    z-index: 10;
-    background-color: #f8f9fa !important;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
+/* --- Scroll & Table --- */
+.scroll-area { max-height: 550px; overflow-y: auto; }
+.sticky-top { position: sticky; top: 0; z-index: 10; background-color: #f8f9fa !important; }
 
-/* Tùy chỉnh thanh cuộn (Scrollbar) cho đẹp hơn */
-.scroll-area::-webkit-scrollbar {
-    width: 6px;
-}
-
-.scroll-area::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-.scroll-area::-webkit-scrollbar-thumb {
-    background: #ccc;
-    border-radius: 10px;
-}
-
-    .scroll-area::-webkit-scrollbar-thumb:hover {
-        background: #888;
-    }
-
-/* ==========================================================================
-   4. UTILITY CLASSES (Màu nền phụ trợ)
-   ========================================================================== */
-.bg-success-subtle {
-    background-color: #d1e7dd !important;
-    color: #0f5132 !important;
-}
-
-.bg-danger-subtle {
-    background-color: #f8d7da !important;
-    color: #842029 !important;
-}
-
-.bg-warning-subtle {
-    background-color: #fff3cd !important;
-    color: #664d03 !important;
-}
-
-.bg-purple-subtle {
-    background-color: #f1e9ff !important;
-    color: #6f42c1 !important;
-}
+/* --- Subtle Backgrounds --- */
+.bg-success-subtle { background-color: #d1e7dd !important; color: #0f5132 !important; }
+.bg-danger-subtle  { background-color: #f8d7da !important; color: #842029 !important; }
+.bg-warning-subtle { background-color: #fff3cd !important; color: #664d03 !important; }
+.bg-purple-subtle  { background-color: #f1e9ff !important; color: #6f42c1 !important; }
