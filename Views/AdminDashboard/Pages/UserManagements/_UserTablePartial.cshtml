@@ -1,0 +1,130 @@
+@using RentalVehicleService.Models.ViewModels
+@model IEnumerable<RentalVehicleService.Models.ViewModels.UserManagement>
+
+@if (!Model.Any())
+{
+    <tr>
+        <td colspan="9" class="text-center text-muted py-5">
+            <i class="bi bi-person-x fs-2 d-block mb-2"></i>
+            No users found.
+        </td>
+    </tr>
+}
+else
+{
+    foreach (var user in Model)
+    {
+        <tr data-id="@user.Id">
+            <!-- User ID -->
+            <td class="ps-4">
+                <span class="badge bg-light text-dark border font-monospace">
+                    @user.Id.Substring(0, Math.Min(8, user.Id.Length))…
+                </span>
+            </td>
+
+            <!-- Full Name -->
+            <td>
+                <div class="d-flex align-items-center gap-2">
+                    <div class="avatar-circle bg-primary bg-opacity-10 text-primary">
+                        @(string.IsNullOrEmpty(user.FullName) ? "?" : user.FullName[0].ToString().ToUpper())
+                    </div>
+                    <span class="fw-semibold">@(user.FullName ?? "—")</span>
+                </div>
+            </td>
+
+            <!-- Username -->
+            <td class="text-muted small">@@user.UserName</td>
+
+            <!-- Email -->
+            <td>
+                <a href="mailto:@user.Email" class="text-decoration-none text-dark small">
+                    <i class="bi bi-envelope text-muted me-1"></i>@user.Email
+                </a>
+            </td>
+
+            <!-- Phone -->
+            <td class="small text-muted">
+                @(string.IsNullOrEmpty(user.PhoneNumber) ? "—" : user.PhoneNumber)
+            </td>
+
+            <!-- User Type -->
+            <td>
+                @{
+                    var typeClass = user.UserType switch
+                    {
+                        "Admin"    => "bg-warning text-dark",
+                        "Staff"    => "bg-purple text-white",
+                        "Customer" => "bg-info text-dark",
+                        _          => "bg-secondary text-white"
+                    };
+                }
+                <span class="badge @typeClass">@(user.UserType ?? "—")</span>
+            </td>
+
+            <!-- Roles -->
+            <td>
+                @if (user.Roles != null && user.Roles.Any())
+                {
+                    foreach (var role in user.Roles)
+                    {
+                        <span class="badge bg-light text-dark border me-1">@role</span>
+                    }
+                }
+                else
+                {
+                    <span class="text-muted small">No roles</span>
+                }
+            </td>
+
+            <!-- Status -->
+            <td>
+                @if (user.IsLockedOut)
+                {
+                    <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
+                        <i class="bi bi-lock-fill me-1"></i>Locked
+                    </span>
+                }
+                else
+                {
+                    <span class="badge bg-success-subtle text-success border border-success-subtle">
+                        <i class="bi bi-check-circle-fill me-1"></i>Active
+                    </span>
+                }
+            </td>
+
+            <!-- Actions -->
+            <td class="text-center">
+                <div class="d-flex justify-content-center gap-1">
+                    <!-- Details -->
+                    <button class="btn btn-sm btn-outline-primary px-2"
+                            title="Details"
+                            onclick="ShowUserDetailsModal('@user.Id')">
+                        <i class="bi bi-eye"></i>
+                    </button>
+
+                    <!-- Edit -->
+                    <button class="btn btn-sm btn-outline-secondary px-2"
+                            title="Edit"
+                            onclick="ShowUserEditModal('@user.Id')">
+                        <i class="bi bi-pencil"></i>
+                    </button>
+
+                    <!-- Lock / Unlock -->
+                    <button class="btn btn-sm @(user.IsLockedOut ? "btn-outline-success" : "btn-outline-warning") px-2 toggleLockBtn"
+                            title="@(user.IsLockedOut ? "Unlock" : "Lock")"
+                            data-id="@user.Id"
+                            data-locked="@user.IsLockedOut.ToString().ToLower()">
+                        <i class="bi @(user.IsLockedOut ? "bi-unlock" : "bi-lock")"></i>
+                    </button>
+
+                    <!-- Delete -->
+                    <button class="btn btn-sm btn-outline-danger px-2"
+                            title="Delete"
+                            onclick="prepareUserDelete('@user.Id', '@Html.Raw(user.FullName ?? user.UserName)')">
+                        <i class="bi bi-trash"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    }
+}

@@ -1,0 +1,96 @@
+/* ═══════════════════════════════════════════════
+   User Management — indexStyle.css
+   Mirror of Vehicle Management styles
+   ═══════════════════════════════════════════════ */
+
+/* Scroll area for the table */
+.scroll-area {
+    max-height: 520px;
+    overflow-y: auto;
+}
+
+/* Stat card hover lift */
+.stat-card {
+    transition: transform 0.18s ease, box-shadow 0.18s ease;
+    cursor: default;
+}
+
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 24px rgba(0, 0, 0, 0.10) !important;
+}
+
+/* Purple color utilities (mirrors Vehicle page) */
+.text-purple {
+    color: #6f42c1 !important;
+}
+
+.btn-outline-purple {
+    color: #6f42c1;
+    border-color: #6f42c1;
+}
+
+.btn-outline-purple:hover,
+.btn-outline-purple.active-selected {
+    background-color: #6f42c1;
+    border-color: #6f42c1;
+    color: #fff;
+}
+
+.border-purple {
+    border-color: #6f42c1 !important;
+}
+
+.bg-purple {
+    background-color: #6f42c1 !important;
+}
+
+/* Active sort button highlight */
+.userSortBTN.active-selected {
+    opacity: 1;
+    font-weight: 600;
+}
+
+/* Avatar circle in table rows */
+.avatar-circle {
+    width: 34px;
+    height: 34px;
+    min-width: 34px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: 0.9rem;
+}
+
+/* Sticky table header */
+.table thead.sticky-top th {
+    background-color: #f8f9fa;
+    z-index: 1;
+}
+
+/* Action buttons spacing */
+.table td .btn-sm {
+    min-width: 32px;
+}
+
+/* Modal form labels */
+.modal .form-label {
+    font-size: 0.85rem;
+    margin-bottom: 0.3rem;
+}
+
+/* Smooth row removal */
+tbody tr {
+    transition: opacity 0.3s ease;
+}
+
+/* Badge — subtle success/danger (fallback for older BS versions) */
+.bg-success-subtle {
+    background-color: rgba(25, 135, 84, 0.12) !important;
+}
+
+.bg-danger-subtle {
+    background-color: rgba(220, 53, 69, 0.12) !important;
+}

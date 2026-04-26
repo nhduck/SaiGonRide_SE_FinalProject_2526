@@ -1,0 +1,140 @@
+@using RentalVehicleService.Models.ViewModels
+@model RentalVehicleService.Models.ViewModels.UserManagement
+
+<!-- Edit User Modal -->
+<div class="modal fade" id="editUserModal" tabindex="-1" aria-labelledby="editUserModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow">
+
+            <div class="modal-header bg-secondary text-white">
+                <h5 class="modal-title" id="editUserModalLabel">
+                    <i class="bi bi-pencil-square me-2"></i>Edit User
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body py-4">
+                <div id="editUserAlertArea"></div>
+
+                <form id="editUserForm" novalidate>
+                    @Html.AntiForgeryToken()
+
+                    <!-- Hidden ID -->
+                    <input type="hidden" id="editUserId" name="Id" />
+
+                    <!-- Section: Account Info -->
+                    <p class="text-muted small fw-bold text-uppercase mb-3 border-bottom pb-2">
+                        <i class="bi bi-person-badge me-1"></i>Account Information
+                    </p>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+                            <input type="text" id="editUserFullName" name="FullName" class="form-control" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Username <span class="text-danger">*</span></label>
+                            <div class="input-group">
+                                <span class="input-group-text">@@</span>
+                                <input type="text" id="editUserName" name="UserName" class="form-control" required />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+                            <input type="email" id="editUserEmail" name="Email" class="form-control" required />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Phone Number</label>
+                            <input type="text" id="editUserPhone" name="PhoneNumber" class="form-control" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">User Type <span class="text-danger">*</span></label>
+                            <select id="editUserType" name="UserType" class="form-select" required>
+                                <option value="">-- Select Type --</option>
+                                <option value="Admin">Admin</option>
+                                <option value="Staff">Staff</option>
+                                <option value="Customer">Customer</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 d-flex align-items-end">
+                            <div class="form-check form-switch mb-2">
+                                <input class="form-check-input" type="checkbox" role="switch"
+                                       id="editUserIsLockedOut" name="IsLockedOut" value="true" />
+                                <label class="form-check-label fw-semibold" for="editUserIsLockedOut">
+                                    <i class="bi bi-lock me-1 text-danger"></i>Lock Account
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Section: Identity Documents -->
+                    <p class="text-muted small fw-bold text-uppercase mb-3 border-bottom pb-2">
+                        <i class="bi bi-card-text me-1"></i>Identity Documents
+                    </p>
+
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">CCCD / National ID</label>
+                            <input type="text" id="editUserCCCD" name="CCCD" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Passport Number</label>
+                            <input type="text" id="editUserPassport" name="PassportNumber" class="form-control" />
+                        </div>
+                        <div class="col-md-4">
+                            <label class="form-label fw-semibold">Nationality</label>
+                            <input type="text" id="editUserNationality" name="Nationality" class="form-control" />
+                        </div>
+                    </div>
+
+                    <!-- Section: Roles -->
+                    <p class="text-muted small fw-bold text-uppercase mb-3 border-bottom pb-2">
+                        <i class="bi bi-shield-check me-1"></i>Roles
+                    </p>
+
+                    <div id="editUserRolesContainer" class="d-flex gap-3 flex-wrap mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="Roles" value="Admin" id="editRoleAdmin" />
+                            <label class="form-check-label" for="editRoleAdmin">Admin</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="Roles" value="Staff" id="editRoleStaff" />
+                            <label class="form-check-label" for="editRoleStaff">Staff</label>
+                        </div>
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="Roles" value="Customer" id="editRoleCustomer" />
+                            <label class="form-check-label" for="editRoleCustomer">Customer</label>
+                        </div>
+                    </div>
+
+                    <!-- Section: Change Password (optional) -->
+                    <p class="text-muted small fw-bold text-uppercase mb-3 border-bottom pb-2 mt-4">
+                        <i class="bi bi-key me-1"></i>Change Password <span class="fw-normal text-muted">(leave blank to keep current)</span>
+                    </p>
+
+                    <div class="row g-3">
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">New Password</label>
+                            <input type="password" name="NewPassword" class="form-control" placeholder="Min. 8 characters" />
+                        </div>
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">Confirm Password</label>
+                            <input type="password" name="ConfirmPassword" class="form-control" placeholder="Repeat new password" />
+                        </div>
+                    </div>
+
+                </form>
+            </div>
+
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-1"></i>Cancel
+                </button>
+                <button type="submit" form="editUserForm" class="btn btn-secondary" id="editUserSubmitBtn">
+                    <i class="bi bi-floppy me-1"></i>Save Changes
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

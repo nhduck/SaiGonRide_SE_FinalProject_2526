@@ -1,0 +1,29 @@
+﻿using System.ComponentModel.DataAnnotations;
+
+namespace RentalVehicleService.Models
+{
+    public class BugReport
+    {
+        public enum BugStatus
+        {
+            New,
+            InProgress,
+            Resolved,
+            Closed
+        }
+
+        [Key]
+        public int Id { get; set; }
+
+        [Required(ErrorMessage = "Vui lòng nhập tiêu đề lỗi")]
+        [StringLength(100)]
+        public string Title { get; set; }
+
+        [Required]
+        public string Description { get; set; }
+
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+
+        public BugStatus Status { get; set; } = BugStatus.New;
+    }
+}
