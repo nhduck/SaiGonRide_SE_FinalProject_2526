@@ -22,26 +22,27 @@ namespace RentalVehicleService.Controllers
         }
 
         public IActionResult SearchVehicles(string searchTerm, List<string> statuses)
-        {   
-            var query = _context.Vehicles.AsQueryable();
+        {
+            var query = _context.Vehicles.Include(v => v.CurrentStation).AsQueryable();
+
+            var allVehicles = query.ToList();
 
             if (!string.IsNullOrEmpty(searchTerm))
             {
                 string st = searchTerm.ToLower();
-                query = query.Where(v =>
+                allVehicles = allVehicles.Where(v =>
                     v.VehicleId.ToString().Contains(st) ||
-                    v.VehicleModel.ToLower().Contains(st)
-                );
+                    v.VehicleModel.ToLower().Contains(st) ||
+                    v.Type.ToString().ToLower().Contains(st)
+                    ).ToList();
             }
-
-            var model = query.ToList();
 
             if (statuses != null && statuses.Any())
             {
-                model = model.Where(v => statuses.Contains(v.State.ToString())).ToList();
+                allVehicles = allVehicles.Where(v => statuses.Contains(v.State.ToString())).ToList();
             }
 
-            return PartialView("~/Views/AdminDashboard/Pages/Vehicle/_VehicleTablePartial.cshtml", model);
+            return PartialView("~/Views/AdminDashboard/Pages/Vehicle/_VehicleTablePartial.cshtml", allVehicles);
         }
     }
 }

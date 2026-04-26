@@ -1,161 +1,68 @@
-﻿.bg-success-subtle {
-    background-color: #d1e7dd !important;
-    color: #0f5132 !important;
-}
-
-.bg-danger-subtle {
-    background-color: #f8d7da !important;
-    color: #842029 !important;
-}
-
-.bg-warning-subtle {
-    background-color: #fff3cd !important;
-    color: #664d03 !important;
-}
-
+﻿/* --- Stat Cards --- */
 .stat-card {
-    transition: all 0.3s;
+    transition: all 0.3s ease;
+    cursor: default;
 }
-
-    .stat-card:hover {
-        transform: translateY(-3px);
-    }
-
-#availableBTN.sortBTN:not(.active-selected):hover,
-#availableBTN.sortBTN:not(.active-selected):focus,
-#availableBTN.sortBTN:not(.active-selected):active {
-    background-color: rgba(25, 135, 84, 0.1) !important;
-    color: #198754 !important;
-    border-color: #198754 !important;
-    box-shadow: none !important;
+.stat-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
 }
+.border-purple { border-color: #6f42c1 !important; }
+.text-purple { color: #6f42c1 !important; }
 
-#ChargingBTN.sortBTN:not(.active-selected):hover,
-#ChargingBTN.sortBTN:not(.active-selected):focus,
-#ChargingBTN.sortBTN:not(.active-selected):active {
-    background-color: rgba(255, 193, 7, 0.1) !important;
-    color: #664d03 !important;
-    border-color: #ffc107 !important;
-    box-shadow: none !important;
-}
-
-#MaintenanceBTN.sortBTN:not(.active-selected):hover,
-#MaintenanceBTN.sortBTN:not(.active-selected):focus,
-#MaintenanceBTN.sortBTN:not(.active-selected):active {
-    background-color: rgba(220, 53, 69, 0.1) !important;
-    color: #dc3545 !important;
-    border-color: #dc3545 !important;
-    box-shadow: none !important;
-}
-
-
-/*============================SCROLL============================*/
-.scroll-area {
-    /* Thiết lập chiều cao tối đa cho vùng hiển thị (ví dụ 500px) */
-    max-height: 500px;
-    /* Cho phép cuộn dọc */
-    overflow-y: auto;
-    /* Đảm bảo thanh cuộn không đè lên nội dung */
-    overflow-x: hidden;
-}
-
-/* Giữ tiêu đề bảng đứng yên ở trên cùng khi cuộn xuống */
-.sticky-top {
-    position: sticky;7
-    top: 0;
-    z-index: 10;
-    background-color: #f8f9fa !important;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.05);
-}
-
-.scroll-area::-webkit-scrollbar {
-    width: 6px;
-}
-
-.scroll-area::-webkit-scrollbar-track {
-    background: #f1f1f1;
-}
-
-.scroll-area::-webkit-scrollbar-thumb {
-    background: #888;
-    border-radius: 10px;
-}
-
-    .scroll-area::-webkit-scrollbar-thumb:hover {
-        background: #555;
-    }
-
-/*==========================================================================
-   CUSTOM BUTTONS (SUCCESS, WARNING, DANGER, PURPLE)
-  ========================================================================== */
-
-/* --- Tinh chỉnh chung cho các nút Sort --- */
+/* --- Base Sort Buttons --- */
 .sortBTN {
     transition: all 0.2s ease-in-out !important;
     font-weight: 500;
-}
-
-/* 1. Purple Button (Rented - Tự định nghĩa hoàn toàn) */
-.btn-outline-purple {
-    color: #6f42c1;
-    border-color: #6f42c1;
+    border-style: solid;
+    border-width: 1px;
     background-color: transparent;
 }
 
-    .btn-outline-purple:hover {
-        color: #fff;
-        background-color: #6f42c1;
-        border-color: #6f42c1;
-    }
+/* --- Colors for each button --- */
+#availableBTN   { color: #198754; border-color: #198754; }
+#UnAvailableBTN { color: #6c757d; border-color: #6c757d; }
+#ChargingBTN    { color: #ffc107; border-color: #ffc107; }
+#MaintenanceBTN { color: #dc3545; border-color: #dc3545; }
+#RentedBTN      { color: #6f42c1; border-color: #6f42c1; }
 
-    .btn-outline-purple:active, .btn-outline-purple.active {
-        background-color: #59359a !important;
-        border-color: #59359a !important;
-        color: #fff !important;
-    }
-
-/* 2. Ghi đè hiệu ứng cho Success (Available) */
-.btn-outline-success:active, .btn-outline-success.active {
-    background-color: #157347 !important;
-    border-color: #146c43 !important;
-    color: #fff !important;
+/* --- Active/Selected State (Đã sửa lỗi Rented) --- */
+#availableBTN.active-selected {
+    background-color: #198754 !important;
+    border-color: #198754 !important;
+    color: #ffffff !important;
 }
 
-/* 3. Ghi đè hiệu ứng cho Warning (Charging) */
-.btn-outline-warning:hover {
-    color: #000 !important; /* Chữ đen cho dễ nhìn trên nền vàng */
+#UnAvailableBTN.active-selected {
+    background-color: #6c757d !important;
+    border-color: #6c757d !important;
+    color: #ffffff !important;
 }
 
-.btn-outline-warning:active, .btn-outline-warning.active {
-    background-color: #ffca2c !important;
-    border-color: #ffc720 !important;
-    color: #000 !important;
+#ChargingBTN.active-selected {
+    background-color: #ffc107 !important;
+    border-color: #ffc107 !important;
+    color: #000000 !important;
 }
 
-/* 4. Ghi đè hiệu ứng cho Danger (Maintenance) */
-.btn-outline-danger:active, .btn-outline-danger.active {
-    background-color: #bb2d3b !important;
-    border-color: #b02a37 !important;
-    color: #fff !important;
+#MaintenanceBTN.active-selected {
+    background-color: #dc3545 !important;
+    border-color: #dc3545 !important;
+    color: #ffffff !important;
 }
 
-/* --- Các class bổ trợ cho Badge (Nếu cần dùng trong Card) --- */
-.bg-purple-subtle {
-    background-color: #f1e9ff !important;
+#RentedBTN.active-selected {
+    background-color: #6f42c1 !important;
+    border-color: #6f42c1 !important;
+    color: #ffffff !important;
 }
 
-.bg-success-subtle {
-    background-color: #d1e7dd !important;
-}
+/* --- Scroll & Table --- */
+.scroll-area { max-height: 550px; overflow-y: auto; }
+.sticky-top { position: sticky; top: 0; z-index: 10; background-color: #f8f9fa !important; }
 
-.bg-warning-subtle {
-    background-color: #fff3cd !important;
-}
-
-.bg-danger-subtle {
-    background-color: #f8d7da !important;
-}
-
-.text-purple {
-    color: #6f42c1 !important;
-}
+/* --- Subtle Backgrounds --- */
+.bg-success-subtle { background-color: #d1e7dd !important; color: #0f5132 !important; }
+.bg-danger-subtle  { background-color: #f8d7da !important; color: #842029 !important; }
+.bg-warning-subtle { background-color: #fff3cd !important; color: #664d03 !important; }
+.bg-purple-subtle  { background-color: #f1e9ff !important; color: #6f42c1 !important; }

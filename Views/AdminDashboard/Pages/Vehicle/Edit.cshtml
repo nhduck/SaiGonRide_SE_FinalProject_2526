@@ -1,44 +1,107 @@
 ﻿@model RentalVehicleService.Models.Vehicle
 
-<form id="editVehicleForm">
-    @Html.AntiForgeryToken()
-    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
-    <input type="hidden" asp-for="VehicleId" />
+<!-- Edit Modal -->
+<div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-content border-0 shadow">
 
-    <div class="row g-3">
-        <div class="col-md-6">
-            <label asp-for="VehicleModel" class="form-label fw-bold"></label>
-            <input asp-for="VehicleModel" class="form-control" />
-            <span asp-validation-for="VehicleModel" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="Price" class="form-label fw-bold"></label>
-            <input asp-for="Price" class="form-control" />
-            <span asp-validation-for="Price" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="BatteryPercentage" class="form-label fw-bold"></label>
-            <input asp-for="BatteryPercentage" class="form-control" type="number" />
-            <span asp-validation-for="BatteryPercentage" class="text-danger"></span>
-        </div>
-        <div class="col-md-6">
-            <label asp-for="State" class="form-label fw-bold"></label>
-            <input asp-for="State" class="form-control" />
-            <span asp-validation-for="State" class="text-danger"></span>
-        </div>
-        <div class="col-12">
-            <label asp-for="CurrentStationId" class="form-label fw-bold"></label>
-            <input asp-for="CurrentStationId" class="form-control" />
-            <span asp-validation-for="CurrentStationId" class="text-danger"></span>
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title fw-bold">
+                    <i class="bi bi-pencil-square me-2"></i>Edit Vehicle
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <form id="editForm">
+                @Html.AntiForgeryToken()
+                <input type="hidden" id="editVehicleId" name="VehicleId" />
+
+                <div class="modal-body p-4">
+                    <div id="editAlertArea"></div>
+                    <div class="row g-3">
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-tag me-1 text-primary"></i>Vehicle Model
+                            </label>
+                            <input type="text" class="form-control" id="editVehicleModel"
+                                   name="VehicleModel" placeholder="e.g. Honda Vision" required />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-lightning-charge me-1 text-primary"></i>Type
+                            </label>
+                            <select class="form-select" id="editType" name="Type">
+                                @foreach (var t in Enum.GetValues(typeof(RentalVehicleService.Models.VehicleType)))
+                                {
+                                    <option value="@((int)t)">@t</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-currency-dollar me-1 text-primary"></i>Rental Price (VND/min)
+                            </label>
+                            <input type="number" class="form-control" id="editPrice"
+                                   name="Price" min="0" step="any" placeholder="e.g. 500" required />
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-battery-half me-1 text-primary"></i>Battery (%)
+                            </label>
+                            <div class="input-group">
+                                <input type="number" class="form-control" id="editBattery"
+                                       name="BatteryPercentage" min="0" max="100" required />
+                                <span class="input-group-text">%</span>
+                            </div>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-activity me-1 text-primary"></i>State
+                            </label>
+                            <select class="form-select" id="editState" name="State">
+                                @foreach (var s in Enum.GetValues(typeof(RentalVehicleService.Models.VehicleState)))
+                                {
+                                    <option value="@((int)s)">@s</option>
+                                }
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-geo-alt me-1 text-primary"></i>Current Station
+                            </label>
+                            <!-- JS fillStationDropdown() trong Index.cshtml sẽ tự điền -->
+                            <select class="form-select" id="editStationId" name="CurrentStationId">
+                                <option value="">-- No Station --</option>
+                            </select>
+                        </div>
+
+                        <div class="col-md-6">
+                            <label class="form-label fw-semibold">
+                                <i class="bi bi-wrench me-1 text-primary"></i>Last Maintenance Date
+                            </label>
+                            <input type="datetime-local" class="form-control"
+                                   id="editLastMaintenance" name="LastMaintenance" />
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="modal-footer border-0 pt-0 px-4 pb-4">
+                    <button type="button" class="btn btn-light" data-bs-dismiss="modal">
+                        <i class="bi bi-x-lg me-1"></i>Cancel
+                    </button>
+                    <button type="submit" class="btn btn-primary px-4" id="editSubmitBtn">
+                        <i class="bi bi-floppy me-1"></i>Save Changes
+                    </button>
+                </div>
+            </form>
+
         </div>
     </div>
-
-    <div class="modal-footer px-0 pb-0 mt-4">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
-        <button type="button" onclick="submitEditForm()" class="btn btn-primary px-4">Lưu thay đổi</button>
-    </div>
-</form>
-
-@{
-    await Html.RenderPartialAsync("_ValidationScriptsPartial");
-}
+</div>

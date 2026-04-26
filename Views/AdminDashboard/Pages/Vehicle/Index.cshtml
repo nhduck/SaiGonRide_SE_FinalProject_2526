@@ -1,228 +1,475 @@
-﻿	@using RentalVehicleService.Models
-	@model IEnumerable<RentalVehicleService.Models.Vehicle>
+﻿@using RentalVehicleService.Models
+@model IEnumerable<RentalVehicleService.Models.Vehicle>
 
-	@{
-		ViewData["Title"] = "Vehicle Management";
-	}
+@{
+    ViewData["Title"] = "Vehicle Management";
+}
 
-	<div class="m-3">
+<div class="m-3">
+    <div class="container-fluid py-4 px-lg-5">
 
-		<div class="container-fluid py-4 px-lg-5">
-			<div class="d-flex justify-content-between align-items-center mb-4">
-				<div>
-					<h4 class="fw-bold mb-1"><i class="bi bi-bicycle"></i> Vehicle Management</h4>
-					<p class="text-muted small mb-0">Manage all vehicles in the network</p>
-				</div>
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold mb-1"><i class="bi bi-bicycle"></i> Vehicle Management</h4>
+                <p class="text-muted small mb-0">Manage all vehicles in the network</p>
+            </div>
+            <button class="btn btn-success" id="openCreateBtn">
+                <i class="bi bi-plus-lg"></i> Add Vehicle
+            </button>
+        </div>
 
-				<button class="btn btn-success" onclick="ShowCreateModal()">
-					<i class="bi bi-plus-lg"></i> Add Vehicle
-				</button>
-			</div>
+        <!-- Stats -->
+        <div class="row row-cols-1 row-cols-md-3 g-3 mb-5">
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-primary border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Total Vehicles</div>
+                        <div id="totalCount" class="h3 fw-bold text-primary mb-0">@ViewBag.TotalVehicles</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-success border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Available</div>
+                        <div id="availableCount" class="h3 fw-bold text-success mb-0">@ViewBag.Available</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-secondary border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Unavailable</div>
+                        <div id="unavailableCount" class="h3 fw-bold text-secondary mb-0">@ViewBag.UnAvailable</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-warning border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Charging</div>
+                        <div id="chargingCount" class="h3 fw-bold text-warning mb-0">@ViewBag.Charging</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-danger border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Maintenance</div>
+                        <div id="maintenanceCount" class="h3 fw-bold text-danger mb-0">@ViewBag.Maintenance</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-purple border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Rented</div>
+                        <div id="rentedCount" class="h3 fw-bold text-purple mb-0">@ViewBag.Rented</div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-			<div class="row row-cols-1 row-cols-md-3 row-cols-lg-5 g-3 mb-5">
-    
-				<div class="col">
-					<div class="card border-0 shadow-sm stat-card border-start border-primary border-4 h-100">
-						<div class="card-body">
-							<div class="text-muted small fw-bold text-uppercase">Total Vehicles</div>
-							<div id="totalCount" class="h3 fw-bold text-primary mb-0">@ViewBag.TotalVehicles</div>
-						</div>
-					</div>
-				</div>
+        <!-- Search & Filter -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <form method="get" class="row g-2">
+                    <div class="col-lg-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="bi bi-search text-muted"></i>
+                            </span>
+                            <input id="searchBar" type="text" name="searchString"
+                                   class="form-control border-start-0 ps-0"
+                                   placeholder="Search by model or ID...">
+                        </div>
+                    </div>
+                    <div class="col-lg-8 d-flex gap-2 flex-wrap justify-content-lg-end">
+                        <button id="clearBTN" class="btn btn-outline-primary d-none">Clear Sort</button>
+                        <button id="availableBTN" class="sortBTN btn btn-outline-success">Available</button>
+                        <button id="UnAvailableBTN" class="sortBTN btn btn-outline-secondary">UnAvailable</button>
+                        <button id="ChargingBTN" class="sortBTN btn btn-outline-warning">Charging</button>
+                        <button id="MaintenanceBTN" class="sortBTN btn btn-outline-danger">Maintenance</button>
+                        <button id="RentedBTN" class="sortBTN btn btn-outline-purple">Rented</button>
+                    </div>
+                </form>
+            </div>
+        </div>
 
-				<div class="col">
-					<div class="card border-0 shadow-sm stat-card border-start border-success border-4 h-100">
-						<div class="card-body">
-							<div class="text-muted small fw-bold text-uppercase">Available</div>
-							<div id="availableCount" class="h3 fw-bold text-success mb-0">@ViewBag.Available</div>
-						</div>
-					</div>
-				</div>
+        <!-- Table -->
+        <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+                <div class="scroll-area">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light sticky-top">
+                            <tr>
+                                <th class="ps-4">Vehicle Id</th>
+                                <th>Type</th>
+                                <th>Model</th>
+                                <th>Current Station</th>
+                                <th>Battery</th>
+                                <th>Status</th>
+                                <th>Last Maintenance</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="vehicleTableBody">
+                            <partial name="~/Views/AdminDashboard/Pages/Vehicle/_VehicleTablePartial.cshtml" />
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
 
-				<div class="col">
-					<div class="card border-0 shadow-sm stat-card border-start border-warning border-4 h-100">
-						<div class="card-body">
-							<div class="text-muted small fw-bold text-uppercase">Charging</div>
-							<div id="chargingCount" class="h3 fw-bold text-warning mb-0">@ViewBag.Charging</div>
-						</div>
-					</div>
-				</div>
+    </div>
 
-				<div class="col">
-					<div class="card border-0 shadow-sm stat-card border-start border-danger border-4 h-100">
-						<div class="card-body">
-							<div class="text-muted small fw-bold text-uppercase">Maintenance</div>
-							<div id="maintenanceCount" class="h3 fw-bold text-danger mb-0">@ViewBag.Maintenance</div>
-						</div>
-					</div>
-				</div>
+    <iframe name="hidden_frame" style="display:none;"></iframe>
 
-				<div class="col">
-					<div class="card border-0 shadow-sm stat-card border-start border-purple border-4 h-100">
-						<div class="card-body">
-							<div class="text-muted small fw-bold text-uppercase">Rented</div>
-							<div id="rentedCount" class="h3 fw-bold text-purple mb-0">@ViewBag.Rented</div>
-						</div>
-					</div>
-				</div>
+    <!-- Station data từ server — các modal dùng chung qua fillStationDropdown() -->
+    <script>
+            var stationList = [
+                @foreach (var s in ViewBag.Stations as List<RentalVehicleService.Models.Station>)
+                {
+                        @:{ id: @s.StationId, name: "@Html.Raw(s.Name)", address: "@Html.Raw(s.Address)" },
+                }
+            ];
+    </script>
 
-			</div>
+    <!-- Modals — đặt SAU stationList để JS trong modal có thể dùng -->
+    <partial name="~/Views/AdminDashboard/Pages/Vehicle/Delete.cshtml" />
+    <partial name="~/Views/AdminDashboard/Pages/Vehicle/Create.cshtml" model="new RentalVehicleService.Models.Vehicle()" />
+    <partial name="~/Views/AdminDashboard/Pages/Vehicle/Edit.cshtml" model="new RentalVehicleService.Models.Vehicle()" />
+    <partial name="~/Views/AdminDashboard/Pages/Vehicle/Details.cshtml" model="new RentalVehicleService.Models.Vehicle()" />
 
-			<div class="card border-0 shadow-sm mb-4">
-				<div class="card-body">
-					<form method="get" class="row g-2">
-						<div class="col-lg-4">
-							<div class="input-group">
-								<span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-								<input id="searchBar" type="text" name="searchString" class="form-control border-start-0 ps-0" placeholder="Search by model or ID...">
-							</div>
-						</div>
-						<div class="col-lg-8 d-flex gap-2 flex-wrap justify-content-lg-end">
-							<button id="availableBTN" class="sortBTN btn btn-outline-success">Available</button>
-							<button id="ChargingBTN" class="sortBTN btn btn-outline-warning">Charging</button>
-							<button id="MaintenanceBTN" class="sortBTN btn btn-outline-danger">Maintenance</button>
-							<button id="RentedBTN" class="sortBTN btn btn-outline-purple">Rented</button>
-						</div>
-					</form>
-				</div>
-			</div>
+</div>
 
-			<div class="card border-0 shadow-sm">
-				<div class="table-responsive">
-					<div class="scroll-area">
-						<table class="table table-hover align-middle mb-0">
-							<thead class="bg-light sticky-top">
-								<tr>
-									<th class="ps-4">Vehicle Id</th>
-									<th>Type</th>
-									<th>Model</th>
-									<th>Current Station</th>
-									<th>Battery</th>
-									<th>Status</th>
-									<th>Last Maintenance</th>
-									<th class="text-center">Actions</th>
-								</tr>
-							</thead>
-							<tbody id="vehicleTableBody">
-								<partial name="~/Views/AdminDashboard/Pages/Vehicle/_VehicleTablePartial.cshtml" />
-							</tbody>
-						</table>
-					</div>
-				</div>
-			</div>
-		</div>
+<script>
+         $(document).ready(function () {
 
-		<iframe name="hidden_frame" style="display:none;"></iframe>
+        // ════════════════════════════════════════════════════════
+        // STATION - các hàm liên quan đến station
+        // ════════════════════════════════════════════════════════
 
-		<partial name="~/Views/AdminDashboard/Pages/Vehicle/Delete.cshtml" />
-		<partial name="~/Views/AdminDashboard/Pages/Vehicle/Create.cshtml" model="new RentalVehicleService.Models.Vehicle()" />
-	</div>
+        // Đổ danh sách station vào thẻ <select>
+        function fillStationDropdown(selectId, selectedId) {
+            var $select = $(selectId);
+            $select.empty();
+            $select.append('<option value="">-- No Station --</option>');
 
-	<script>
-		// 1. Hiển thị Modal xóa
-		function prepareDelete(id, name) {
-			$('#idToConfirm').val(id);
-			$('#idToDisplay').text(id);
-			$('#nameToDisplay').text(name);
-			$('#deleteModal').modal('show');
-		}
+            $.each(stationList, function (i, station) {
+                var option = $('<option>')
+                    .val(station.id)
+                    .text('#' + station.id + ' — ' + station.name + ' (' + station.address + ')');
 
-		// 2. Hiển thị Modal thêm mới
-		function ShowCreateModal() {
-			$('#createModal').modal('show');
-		}
+                if (station.id == selectedId) {
+                    option.prop('selected', true);
+                }
 
-		// 3. Cập nhật thống kê
-		function updateStats() {
-			$.ajax({
-				url: '/Vehicles/GetAmountInfo',
-				type: 'GET',
-				dataType: 'json',
-				success: function(data) {
-					$("#totalCount").text(data.totalVehicles);
-					$("#availableCount").text(data.available);
-					$("#chargingCount").text(data.charging);
-					$("#maintenanceCount").text(data.maintenance);
-					$("#rentedCount").text(data.rented);
-				},
-				error: function(xhr) {
-					console.error("Lỗi cập nhật thống kê:", xhr.responseText);
-				}
-			});
-		}
+                $select.append(option);
+            });
+        }
 
-		// 4. Xử lý xóa xe bằng AJAX
-		$('#confirmDeleteBtn').on('click', function () {
-			const id = $('#idToConfirm').val();
+        // Tìm tên station theo id
+        function getStationName(stationId) {
+            var result = 'No Station';
+            $.each(stationList, function (i, station) {
+                if (station.id == stationId) {
+                    result = station.name;
+                    return false; // dừng vòng lặp
+                }
+            });
+            return result;
+        }
 
-			const token = $('input[name="__RequestVerificationToken"]').val();
+        // Hiển thị tên station trong bảng (thay id bằng tên)
+        function renderStationNames() {
+            $('[data-station-id]').each(function () {
+                var stationId = $(this).data('station-id');
+                var name      = getStationName(stationId);
+                $(this).html('<i class="bi bi-geo-alt text-danger"></i> ' + name);
+            });
+        }
 
-			$.ajax({
-				url: '/Vehicles/DeleteConfirmed',
-				type: 'POST',
-				data: {
-					id: id,
-					__RequestVerificationToken: token
-				},
-				success: function() {
-					$('#deleteModal').modal('hide');
-					// Tìm dòng có data-id tương ứng và xóa đi
-					$(`tr[data-id="${id}"]`).fadeOut(300, function() {
-						$(this).remove();
-						updateStats();
-					});
-				},
-				error: function(xhr) {
-					console.error("Lỗi khi xóa:", xhr.statusText);
-					alert("Không thể xóa phương tiện. Vui lòng thử lại.");
-				}
-			});
-		});
 
-	// 5. Xử lý tìm kiếm
-	let selectedStatuses = [];
+        // ════════════════════════════════════════════════════════
+        // MODAL XÓA
+        // ════════════════════════════════════════════════════════
 
-	$("#searchBar").on("input", function() {
-		search();
-	});
+        function prepareDelete(vehicleId, vehicleName) {
+            $('#idToConfirm').val(vehicleId);
+            $('#idToDisplay').text(vehicleId);
+            $('#nameToDisplay').text(vehicleName);
+            $('#deleteModal').modal('show');
+        }
 
-	$('.sortBTN').on("click", function(e) {
-		e.preventDefault();
-		const status = $(this).text().trim();
-    
-		$(this).toggleClass('active-selected');
-    
-		toggleStatus(status);
-	});
+        $('#confirmDeleteBtn').on('click', function () {
+            var id    = $('#idToConfirm').val();
+            var token = $('input[name="__RequestVerificationToken"]').first().val();
 
-	function toggleStatus(statusName) {
-		const index = selectedStatuses.indexOf(statusName);
+            $.ajax({
+                url: '/Vehicles/DeleteConfirmed',
+                type: 'POST',
+                data: { id: id, __RequestVerificationToken: token },
+                success: function () {
+                    $('#deleteModal').modal('hide');
+                    // Xóa dòng khỏi bảng với hiệu ứng mờ dần
+                    $('tr[data-id="' + id + '"]').fadeOut(300, function () {
+                        $(this).remove();
+                        updateStats();
+                    });
+                },
+                error: function () {
+                    alert('Cannot delete vehicle. Please try again.');
+                }
+            });
+        });
 
-		if (index > -1) {
-			selectedStatuses.splice(index, 1);
-		} else {
-			selectedStatuses.push(statusName);
-		}
-		search();
-	}
 
-	function search() {
-		const keyword = $("#searchBar").val();
-    
-		$.ajax({
-			url: '/AdminDashboard/SearchVehicles',
-			type: 'GET',
-			data: {
-				searchTerm: keyword,
-				statuses: selectedStatuses
-			},
-			traditional: true,
-			success: function(response) {
-				$('#vehicleTableBody').html(response);
-				updateStats();
-			}
-		});
-	}
-	</script>
+        // ════════════════════════════════════════════════════════
+        // MODAL THÊM MỚI
+        // ════════════════════════════════════════════════════════
 
-	<link rel="stylesheet" href="~/css/Vehicle/indexStyle.css" />
+        function ShowCreateModal() {
+            fillStationDropdown('#createStationId', null);
+            $('#createModal').modal('show');
+        }
+
+        $('#openCreateBtn').on('click', function () {
+            ShowCreateModal();
+        });
+
+
+        // ════════════════════════════════════════════════════════
+        // MODAL CHI TIẾT
+        // ════════════════════════════════════════════════════════
+
+        function ShowDetailsModal(vehicleId) {
+            // Hiển thị spinner trong lúc chờ load
+            $('#detailsModalBody').html(
+                '<div class="text-center py-4">' +
+                '  <div class="spinner-border text-primary" role="status"></div>' +
+                '  <p class="mt-2 text-muted">Loading...</p>' +
+                '</div>'
+            );
+
+            // Lưu id để nút Edit dùng
+            $('#detailsEditBtn').data('id', vehicleId);
+            $('#detailsModal').modal('show');
+
+            $.ajax({
+                url: '/Vehicles/Details/' + vehicleId,
+                type: 'GET',
+                success: function (html) {
+                    $('#detailsModalBody').html(html);
+                },
+                error: function () {
+                    $('#detailsModalBody').html(
+                        '<div class="alert alert-danger">Cannot load vehicle details. Please try again.</div>'
+                    );
+                }
+            });
+        }
+
+        // Nút Edit trong modal Details → đóng Details rồi mở Edit
+        $('#detailsEditBtn').on('click', function () {
+            var id = $(this).data('id');
+            $('#detailsModal').modal('hide');
+            $('#detailsModal').one('hidden.bs.modal', function () {
+                ShowEditModal(id);
+            });
+        });
+
+
+        // ════════════════════════════════════════════════════════
+        // MODAL CHỈNH SỬA
+        // ════════════════════════════════════════════════════════
+
+        function ShowEditModal(vehicleId) {
+            $('#editAlertArea').html('');
+            $('#editForm')[0].reset();
+
+            $.ajax({
+                url: '/Vehicles/Edit/' + vehicleId,
+                type: 'GET',
+                success: function (data) {
+                    // Điền dữ liệu vào form
+                    $('#editVehicleId').val(data.vehicleId);
+                    $('#editVehicleModel').val(data.vehicleModel);
+                    $('#editPrice').val(data.price);
+                    $('#editBattery').val(data.batteryPercentage);
+                    $('#editState').val(data.state);
+                    $('#editType').val(data.type);
+                    $('#editLastMaintenance').val(data.lastMaintenance);
+
+                    // Đổ dropdown station và chọn sẵn station hiện tại
+                    fillStationDropdown('#editStationId', data.currentStationId);
+
+                    $('#editModal').modal('show');
+                },
+                error: function () {
+                    alert('Cannot load vehicle data. Please try again.');
+                }
+            });
+        }
+
+        // Submit form Edit
+        $('#editForm').on('submit', function (e) {
+            e.preventDefault();
+
+            var vehicleId = $('#editVehicleId').val();
+            var $btn      = $('#editSubmitBtn');
+
+            // Disable nút, hiện spinner
+            $btn.prop('disabled', true)
+                .html('<span class="spinner-border spinner-border-sm me-1"></span>Saving...');
+
+            $.ajax({
+                url: '/Vehicles/Edit/' + vehicleId,
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function () {
+                    $('#editModal').modal('hide');
+                    search();
+                },
+                error: function (xhr) {
+                    // Hiển thị lỗi trả về từ server
+                    var msg = 'An error occurred. Please try again.';
+                    try {
+                        var res = JSON.parse(xhr.responseText);
+                        if (res.errors) msg = res.errors.join('<br>');
+                    } catch (e) {}
+
+                    $('#editAlertArea').html(
+                        '<div class="alert alert-danger alert-dismissible fade show py-2 small">' +
+                        '  <i class="bi bi-exclamation-triangle me-1"></i>' + msg +
+                        '  <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>' +
+                        '</div>'
+                    );
+                },
+                complete: function () {
+                    // Bật lại nút dù thành công hay lỗi
+                    $btn.prop('disabled', false)
+                        .html('<i class="bi bi-floppy me-1"></i>Save Changes');
+                }
+            });
+        });
+
+
+        // ════════════════════════════════════════════════════════
+        // THỐNG KÊ
+        // ════════════════════════════════════════════════════════
+
+        function updateStats() {
+            $.ajax({
+                url: '/Vehicles/GetAmountInfo',
+                type: 'GET',
+                success: function (data) {
+                    $('#totalCount').text(data.totalVehicles);
+                    $('#availableCount').text(data.available);
+                    $('#unavailableCount').text(data.unAvailable);
+                    $('#chargingCount').text(data.charging);
+                    $('#maintenanceCount').text(data.maintenance);
+                    $('#rentedCount').text(data.rented);
+                }
+            });
+        }
+
+
+        // ════════════════════════════════════════════════════════
+        // TÌM KIẾM & LỌC
+        // ════════════════════════════════════════════════════════
+
+        var selectedStatuses = [];
+
+        // Ô tìm kiếm
+        $('#searchBar').on('input', function () {
+            search();
+        });
+
+        // Nút lọc theo trạng thái
+        $('.sortBTN').on('click', function (e) {
+            e.preventDefault();
+
+            var statusName = $(this).text().trim();
+            $(this).toggleClass('active-selected');
+
+            // Thêm hoặc bỏ khỏi danh sách lọc
+            var index = $.inArray(statusName, selectedStatuses);
+            if (index > -1) {
+                selectedStatuses.splice(index, 1);
+            } else {
+                selectedStatuses.push(statusName);
+            }
+
+            // Hiện/ẩn nút Clear
+            if (selectedStatuses.length > 1) {
+                $('#clearBTN').removeClass('d-none');
+            } else {
+                $('#clearBTN').addClass('d-none');
+            }
+
+            // Nếu chọn hết thì tự clear
+            if (selectedStatuses.length === 5) {
+                clearSort(e);
+            } else {
+                search();
+            }
+        });
+
+        // Nút Clear Sort
+        $('#clearBTN').on('click', function (e) {
+            clearSort(e);
+        });
+
+        function clearSort(e) {
+            e.preventDefault();
+            selectedStatuses = [];
+            $('.sortBTN').removeClass('active-selected');
+            $('#clearBTN').addClass('d-none');
+            search();
+        }
+
+        // Gọi API tìm kiếm và reload bảng
+        function search() {
+            $.ajax({
+                url: '/AdminDashboard/SearchVehicles',
+                type: 'GET',
+                data: { searchTerm: $('#searchBar').val(), statuses: selectedStatuses },
+                traditional: true,
+                success: function (html) {
+                    $('#vehicleTableBody').html(html);
+                    renderStationNames();
+                    updateStats();
+                }
+            });
+        }
+
+
+        // ════════════════════════════════════════════════════════
+        // KHỞI ĐỘNG
+        // ════════════════════════════════════════════════════════
+
+        // Hiển thị tên station ngay khi trang vừa load
+        renderStationNames();
+
+        // Expose ra global scope để onclick trong partial gọi được
+        window.prepareDelete       = prepareDelete;
+        window.ShowCreateModal     = ShowCreateModal;
+        window.ShowDetailsModal    = ShowDetailsModal;
+        window.ShowEditModal       = ShowEditModal;
+        window.fillStationDropdown = fillStationDropdown;
+        window.getStationName      = getStationName;
+
+    }); // end document.ready
+</script>
+
+<link rel="stylesheet" href="~/css/Vehicle/indexStyle.css" />
+
+<style>
+    #RentedBTN.active-selected {
+        background-color: #6f42c1 !important;
+        border-color: #6f42c1 !important;
+        color: #ffffff !important;
+    }
+</style>
