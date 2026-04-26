@@ -37,7 +37,7 @@
 
                     <li class="nav-item mb-1">
                         <a class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center"
-                               href="#" data-url="/AdminDashboard/UserManagement">
+                               href="#" data-url="/UserManagements/Index">
                             <i class="bi bi-people me-3 fs-5"></i>
                             <span>User Management</span>
                         </a>
@@ -95,14 +95,15 @@
 
         function loadPage(url) {
             if (!url) return;
-    
-            console.log("Đang tải trang từ URL:", url);
+
+            $('.modal').modal('hide');
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
 
             $('#main').html('<div class="h1 p-4 text-center align-self-center"><span>Loading...</span></div>');
 
             $('#main').load(url, function (response, status, xhr) {
                 if (status === 'error') {
-                    console.error("Lỗi tải trang:", xhr.status, xhr.statusText);
                     $('#main').html('<div class="h1 p-4 text-center align-self-center text-danger">Lỗi ' + xhr.status + ': Không tìm thấy trang</div>');
                 }
             });

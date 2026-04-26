@@ -1,0 +1,35 @@
+@using RentalVehicleService.Models.ViewModels
+@model RentalVehicleService.Models.ViewModels.UserManagement
+
+<!-- Details User Modal -->
+<div class="modal fade" id="userDetailsModal" tabindex="-1" aria-labelledby="userDetailsModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg">
+        <div class="modal-content border-0 shadow">
+
+            <div class="modal-header bg-primary text-white">
+                <h5 class="modal-title" id="userDetailsModalLabel">
+                    <i class="bi bi-person-lines-fill me-2"></i>User Details
+                </h5>
+                <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+            </div>
+
+            <!-- Body is loaded via AJAX into this container -->
+            <div class="modal-body py-4" id="userDetailsModalBody">
+                <div class="text-center py-4">
+                    <div class="spinner-border text-primary" role="status"></div>
+                    <p class="mt-2 text-muted">Loading...</p>
+                </div>
+            </div>
+
+            <div class="modal-footer border-0 pt-0">
+                <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
+                    <i class="bi bi-x-lg me-1"></i>Close
+                </button>
+                <button type="button" class="btn btn-primary" id="userDetailsEditBtn">
+                    <i class="bi bi-pencil me-1"></i>Edit
+                </button>
+            </div>
+
+        </div>
+    </div>
+</div>

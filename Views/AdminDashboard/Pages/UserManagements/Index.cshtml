@@ -1,0 +1,484 @@
+﻿@using RentalVehicleService.Models.ViewModels
+@model IEnumerable<RentalVehicleService.Models.ViewModels.UserManagement>
+
+@{
+    ViewData["Title"] = "User Management";
+}
+
+<div class="m-3">
+    <div class="container-fluid py-4 px-lg-5">
+
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold mb-1"><i class="bi bi-people-fill"></i> User Management</h4>
+                <p class="text-muted small mb-0">Manage all registered users in the system</p>
+            </div>
+            <button class="btn btn-success" id="openCreateUserBtn">
+                <i class="bi bi-person-plus-fill"></i> Add User
+            </button>
+        </div>
+
+        <!-- Stats -->
+        <div class="row row-cols-1 row-cols-md-3 g-3 mb-5">
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-primary border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Total Users</div>
+                        <div id="totalUserCount" class="h3 fw-bold text-primary mb-0">@ViewBag.TotalUsers</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-success border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Active</div>
+                        <div id="activeUserCount" class="h3 fw-bold text-success mb-0">@ViewBag.ActiveUsers</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-danger border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Locked Out</div>
+                        <div id="lockedUserCount" class="h3 fw-bold text-danger mb-0">@ViewBag.LockedUsers</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-warning border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Admins</div>
+                        <div id="adminUserCount" class="h3 fw-bold text-warning mb-0">@ViewBag.Admins</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-info border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Customers</div>
+                        <div id="customerUserCount" class="h3 fw-bold text-info mb-0">@ViewBag.Customers</div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-purple border-4 h-100">
+                    <div class="card-body">
+                        <div class="text-muted small fw-bold text-uppercase">Staff</div>
+                        <div id="staffUserCount" class="h3 fw-bold text-purple mb-0">@ViewBag.Staff</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search & Filter -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <form method="get" class="row g-2">
+                    <div class="col-lg-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="bi bi-search text-muted"></i>
+                            </span>
+                            <input id="userSearchBar" type="text" name="searchString"
+                                   class="form-control border-start-0 ps-0"
+                                   placeholder="Search by name, email or ID...">
+                        </div>
+                    </div>
+                    <div class="col-lg-8 d-flex gap-2 flex-wrap justify-content-lg-end">
+                        <button id="userClearBTN" class="btn btn-outline-primary d-none">Clear Sort</button>
+                        <button id="activeBTN" class="userSortBTN btn btn-outline-success">Active</button>
+                        <button id="lockedBTN" class="userSortBTN btn btn-outline-danger">Locked</button>
+                        <button id="adminBTN" class="userSortBTN btn btn-outline-warning">Admin</button>
+                        <button id="customerBTN" class="userSortBTN btn btn-outline-info">Customer</button>
+                        <button id="staffBTN" class="userSortBTN btn btn-outline-purple">Staff</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+                <div class="scroll-area">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light sticky-top">
+                            <tr>
+                                <th class="ps-4">User ID</th>
+                                <th>Full Name</th>
+                                <th>Username</th>
+                                <th>Email</th>
+                                <th>Phone</th>
+                                <th>User Type</th>
+                                <th>Roles</th>
+                                <th>Status</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="userTableBody">
+                            <partial name="~/Views/AdminDashboard/Pages/UserManagements/_UserTablePartial.cshtml" />
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <iframe name="hidden_frame" style="display:none;"></iframe>
+
+    <!-- Modals -->
+    <partial name="~/Views/AdminDashboard/Pages/UserManagements/Delete.cshtml" />
+    <partial name="~/Views/AdminDashboard/Pages/UserManagements/Create.cshtml" model="new RentalVehicleService.Models.ViewModels.UserManagement()" />
+    <partial name="~/Views/AdminDashboard/Pages/UserManagements/Edit.cshtml" model="new RentalVehicleService.Models.ViewModels.UserManagement()" />
+    <partial name="~/Views/AdminDashboard/Pages/UserManagements/Details.cshtml" model="new RentalVehicleService.Models.ViewModels.UserManagement()" />
+
+</div>
+
+<script>
+    (function ($) {
+
+        // ════════════════════════════════════════════════════════
+        // MODAL DELETE
+        // ════════════════════════════════════════════════════════
+
+        function prepareUserDelete(userId, userName) {
+            $('#userIdToConfirm').val(userId);
+            $('#userIdToDisplay').text(userId);
+            $('#userNameToDisplay').text(userName);
+            $('#deleteUserModal').modal('show');
+        }
+
+        $('#confirmUserDeleteBtn').on('click', function () {
+            var id    = $('#userIdToConfirm').val();
+            var token = $('input[name="__RequestVerificationToken"]').first().val();
+
+            $.ajax({
+                url: '/Users/DeleteConfirmed',
+                type: 'POST',
+                data: { id: id, __RequestVerificationToken: token },
+                success: function () {
+                    $('#deleteUserModal').modal('hide');
+                    $('tr[data-id="' + id + '"]').fadeOut(300, function () {
+                        $(this).remove();
+                        updateUserStats();
+                    });
+                },
+                error: function () {
+                    alert('Cannot delete user. Please try again.');
+                }
+            });
+        });
+
+
+        // ════════════════════════════════════════════════════════
+        // MODAL CREATE
+        // ════════════════════════════════════════════════════════
+
+        function ShowCreateUserModal() {
+            $('#createUserForm')[0].reset();
+            $('#createUserAlertArea').html('');
+            $('#createUserModal').modal('show');
+        }
+
+        $('#openCreateUserBtn').on('click', function () {
+            ShowCreateUserModal();
+        });
+
+        $('#createUserForm').on('submit', function (e) {
+            e.preventDefault();
+            var $btn = $('#createUserSubmitBtn');
+
+            $btn.prop('disabled', true)
+                .html('<span class="spinner-border spinner-border-sm me-1"></span>Creating...');
+
+            $.ajax({
+                url: '/Users/Create',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function () {
+                    $('#createUserModal').modal('hide');
+                    userSearch();
+                },
+                error: function (xhr) {
+                    var msg = 'An error occurred. Please try again.';
+                    try {
+                        var res = JSON.parse(xhr.responseText);
+                        if (res.errors) msg = res.errors.join('<br>');
+                    } catch (ex) {}
+
+                    $('#createUserAlertArea').html(
+                        '<div class="alert alert-danger alert-dismissible fade show py-2 small">' +
+                        '  <i class="bi bi-exclamation-triangle me-1"></i>' + msg +
+                        '  <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>' +
+                        '</div>'
+                    );
+                },
+                complete: function () {
+                    $btn.prop('disabled', false)
+                        .html('<i class="bi bi-person-plus-fill me-1"></i>Create User');
+                }
+            });
+        });
+
+
+        // ════════════════════════════════════════════════════════
+        // MODAL DETAILS
+        // ════════════════════════════════════════════════════════
+
+        function ShowUserDetailsModal(userId) {
+            $('#userDetailsModalBody').html(
+                '<div class="text-center py-4">' +
+                '  <div class="spinner-border text-primary" role="status"></div>' +
+                '  <p class="mt-2 text-muted">Loading...</p>' +
+                '</div>'
+            );
+
+            $('#userDetailsEditBtn').data('id', userId);
+            $('#userDetailsModal').modal('show');
+
+            $.ajax({
+                url: '/Users/Details/' + userId,
+                type: 'GET',
+                success: function (html) {
+                    $('#userDetailsModalBody').html(html);
+                },
+                error: function () {
+                    $('#userDetailsModalBody').html(
+                        '<div class="alert alert-danger">Cannot load user details. Please try again.</div>'
+                    );
+                }
+            });
+        }
+
+        $('#userDetailsEditBtn').on('click', function () {
+            var id = $(this).data('id');
+            $('#userDetailsModal').modal('hide');
+            $('#userDetailsModal').one('hidden.bs.modal', function () {
+                ShowUserEditModal(id);
+            });
+        });
+
+
+        // ════════════════════════════════════════════════════════
+        // MODAL EDIT
+        // ════════════════════════════════════════════════════════
+
+        function ShowUserEditModal(userId) {
+            $('#editUserAlertArea').html('');
+            $('#editUserForm')[0].reset();
+
+            $.ajax({
+                url: '/Users/Edit/' + userId,
+                type: 'GET',
+                success: function (data) {
+                    $('#editUserId').val(data.id);
+                    $('#editUserFullName').val(data.fullName);
+                    $('#editUserName').val(data.userName);
+                    $('#editUserEmail').val(data.email);
+                    $('#editUserPhone').val(data.phoneNumber);
+                    $('#editUserType').val(data.userType);
+                    $('#editUserCCCD').val(data.cccd);
+                    $('#editUserPassport').val(data.passportNumber);
+                    $('#editUserNationality').val(data.nationality);
+                    $('#editUserIsLockedOut').prop('checked', data.isLockedOut);
+
+                    // Tick role checkboxes
+                    $('#editUserRolesContainer input[type="checkbox"]').prop('checked', false);
+                    if (data.roles && data.roles.length > 0) {
+                        $.each(data.roles, function (i, role) {
+                            $('#editUserRolesContainer input[value="' + role + '"]').prop('checked', true);
+                        });
+                    }
+
+                    $('#editUserModal').modal('show');
+                },
+                error: function () {
+                    alert('Cannot load user data. Please try again.');
+                }
+            });
+        }
+
+        $('#editUserForm').on('submit', function (e) {
+            e.preventDefault();
+            var userId = $('#editUserId').val();
+            var $btn   = $('#editUserSubmitBtn');
+
+            $btn.prop('disabled', true)
+                .html('<span class="spinner-border spinner-border-sm me-1"></span>Saving...');
+
+            $.ajax({
+                url: '/Users/Edit/' + userId,
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function () {
+                    $('#editUserModal').modal('hide');
+                    userSearch();
+                },
+                error: function (xhr) {
+                    var msg = 'An error occurred. Please try again.';
+                    try {
+                        var res = JSON.parse(xhr.responseText);
+                        if (res.errors) msg = res.errors.join('<br>');
+                    } catch (ex) {}
+
+                    $('#editUserAlertArea').html(
+                        '<div class="alert alert-danger alert-dismissible fade show py-2 small">' +
+                        '  <i class="bi bi-exclamation-triangle me-1"></i>' + msg +
+                        '  <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>' +
+                        '</div>'
+                    );
+                },
+                complete: function () {
+                    $btn.prop('disabled', false)
+                        .html('<i class="bi bi-floppy me-1"></i>Save Changes');
+                }
+            });
+        });
+
+
+        // ════════════════════════════════════════════════════════
+        // LOCK / UNLOCK QUICK ACTION
+        // ════════════════════════════════════════════════════════
+
+        $(document).on('click', '.toggleLockBtn', function () {
+            var userId = $(this).data('id');
+            var token  = $('input[name="__RequestVerificationToken"]').first().val();
+            var $btn   = $(this);
+
+            $btn.prop('disabled', true);
+
+            $.ajax({
+                url: '/Users/ToggleLock',
+                type: 'POST',
+                data: { id: userId, __RequestVerificationToken: token },
+                success: function () {
+                    userSearch();
+                    updateUserStats();
+                },
+                error: function () {
+                    alert('Cannot update lock status. Please try again.');
+                    $btn.prop('disabled', false);
+                }
+            });
+        });
+
+
+        // ════════════════════════════════════════════════════════
+        // STATS
+        // ════════════════════════════════════════════════════════
+
+        function updateUserStats() {
+            $.ajax({
+                url: '/Users/GetAmountInfo',
+                type: 'GET',
+                success: function (data) {
+                    $('#totalUserCount').text(data.totalUsers);
+                    $('#activeUserCount').text(data.activeUsers);
+                    $('#lockedUserCount').text(data.lockedUsers);
+                    $('#adminUserCount').text(data.admins);
+                    $('#customerUserCount').text(data.customers);
+                    $('#staffUserCount').text(data.staff);
+                }
+            });
+        }
+
+
+        // ════════════════════════════════════════════════════════
+        // SEARCH & FILTER
+        // ════════════════════════════════════════════════════════
+
+        var selectedUserFilters = [];
+
+        $('#userSearchBar').on('input', function () {
+            userSearch();
+        });
+
+        $('.userSortBTN').on('click', function (e) {
+            e.preventDefault();
+
+            var filterName = $(this).text().trim();
+            $(this).toggleClass('active-selected');
+
+            var index = $.inArray(filterName, selectedUserFilters);
+            if (index > -1) {
+                selectedUserFilters.splice(index, 1);
+            } else {
+                selectedUserFilters.push(filterName);
+            }
+
+            if (selectedUserFilters.length > 1) {
+                $('#userClearBTN').removeClass('d-none');
+            } else {
+                $('#userClearBTN').addClass('d-none');
+            }
+
+            if (selectedUserFilters.length === 5) {
+                clearUserSort(e);
+            } else {
+                userSearch();
+            }
+        });
+
+        $('#userClearBTN').on('click', function (e) {
+            clearUserSort(e);
+        });
+
+        function clearUserSort(e) {
+            e.preventDefault();
+            selectedUserFilters = [];
+            $('.userSortBTN').removeClass('active-selected');
+            $('#userClearBTN').addClass('d-none');
+            userSearch();
+        }
+
+        function userSearch() {
+            $.ajax({
+                url: '/AdminDashboard/SearchUsers',
+                type: 'GET',
+                data: { searchTerm: $('#userSearchBar').val(), filters: selectedUserFilters },
+                traditional: true,
+                success: function (html) {
+                    $('#userTableBody').html(html);
+                    updateUserStats();
+                }
+            });
+        }
+
+        function loadPage(url) {
+            if (!url) return;
+
+            // Dọn backdrop còn sót nếu modal đang mở
+            $('.modal').modal('hide');
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+
+            $('#main').html('<div class="h1 p-4 text-center align-self-center"><span>Loading...</span></div>');
+            $('#main').load(url, function (response, status, xhr) {
+                if (status === 'error') {
+                    $('#main').html('<div class="h1 p-4 text-center align-self-center text-danger">Error ' + xhr.status + ': Page not found</div>');
+                }
+            });
+        }
+
+        // ════════════════════════════════════════════════════════
+        // INIT — expose globals for partial onclick handlers
+        // ════════════════════════════════════════════════════════
+
+        window.prepareUserDelete    = prepareUserDelete;
+        window.ShowCreateUserModal  = ShowCreateUserModal;
+        window.ShowUserDetailsModal = ShowUserDetailsModal;
+        window.ShowUserEditModal    = ShowUserEditModal;
+
+    })(jQuery);
+</script>
+
+<link rel="stylesheet" href="~/css/User/indexStyle.css" />
+
+<style>
+    #staffBTN.active-selected {
+        background-color: #6f42c1 !important;
+        border-color: #6f42c1 !important;
+        color: #ffffff !important;
+    }
+</style>
