@@ -79,26 +79,6 @@
                         </div>
                     </div>
 
-                    <!-- Section: Roles -->
-                    <p class="text-muted small fw-bold text-uppercase mb-3 border-bottom pb-2">
-                        <i class="bi bi-shield-check me-1"></i>Assign Roles
-                    </p>
-
-                    <div class="d-flex gap-3 flex-wrap mb-2">
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="Roles" value="Admin" id="createRoleAdmin" />
-                            <label class="form-check-label" for="createRoleAdmin">Admin</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="Roles" value="Staff" id="createRoleStaff" />
-                            <label class="form-check-label" for="createRoleStaff">Staff</label>
-                        </div>
-                        <div class="form-check">
-                            <input class="form-check-input" type="checkbox" name="Roles" value="Customer" id="createRoleCustomer" />
-                            <label class="form-check-label" for="createRoleCustomer">Customer</label>
-                        </div>
-                    </div>
-
                 </form>
             </div>
 
@@ -114,3 +94,42 @@
         </div>
     </div>
 </div>
+
+<script>
+            $('#editUserForm').on('submit', function (e) {
+        e.preventDefault();
+        var userId = $('#editUserId').val();
+        var $btn   = $('#editUserSubmitBtn');
+
+        $btn.prop('disabled', true)
+            .html('<span class="spinner-border spinner-border-sm me-1"></span>Saving...');
+
+        $.ajax({
+            url: '/Users/Edit/' + userId,
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function () {
+                $('#editUserModal').modal('hide');
+                userSearch();
+            },
+            error: function (xhr) {
+                var msg = 'An error occurred. Please try again.';
+                try {
+                    var res = JSON.parse(xhr.responseText);
+                    if (res.errors) msg = res.errors.join('<br>');
+                } catch (ex) {}
+
+                $('#editUserAlertArea').html(
+                    '<div class="alert alert-danger alert-dismissible fade show py-2 small">' +
+                    '  <i class="bi bi-exclamation-triangle me-1"></i>' + msg +
+                    '  <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>' +
+                    '</div>'
+                );
+            },
+            complete: function () {
+                $btn.prop('disabled', false)
+                    .html('<i class="bi bi-floppy me-1"></i>Save Changes');
+            }
+        });
+    });
+</script>
