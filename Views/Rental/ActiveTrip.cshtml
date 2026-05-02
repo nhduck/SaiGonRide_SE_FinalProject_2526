@@ -1,0 +1,87 @@
+﻿@{
+    ViewData["Title"] = "Active Trip - SaigonRide";
+    Layout = "_Layout";
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Vehicle/activeTrip.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+}
+
+<div class="active-trip-container">
+    <div class="container py-4">
+        <!-- Status Header -->
+        <div class="trip-header mb-4">
+            <h1 class="fw-bold">Current Rental</h1>
+            <div class="d-flex align-items-center gap-3 mt-2">
+                <span class="status-badge">
+                    <span class="dot">●</span> TRIP IN PROGRESS
+                </span>
+                <span class="trip-id text-white-50">#SR-1234</span>
+            </div>
+        </div>
+
+        <div class="row g-4">
+            <!-- Left Column: Main Dashboard -->
+            <div class="col-lg-8">
+                <div class="main-dashboard-card text-center">
+                    <div class="timer-display" id="timer">00 : 00 : 00</div>
+
+                    <div class="row stats-row mt-4">
+                        <div class="col-6 border-end">
+                            <p class="stat-label">Distance</p>
+                            <p class="stat-sub-label">Trip Length</p>
+                            <h3 class="stat-value" id="distance">0.00 km</h3>
+                        </div>
+                        <div class="col-6">
+                            <p class="stat-label">Estimated Cost</p>
+                            <p class="stat-sub-label">Current Charges</p>
+                            <h3 class="stat-value" id="cost">0 VND</h3>
+                        </div>
+                    </div>
+
+                    <div class="action-buttons mt-5">
+                        <button class="btn btn-end-trip w-100 mb-3 py-3">
+                            <i class="fa-regular fa-circle-stop me-2"></i> FINISH TRIP
+                        </button>
+                        <button class="btn btn-lock-temporary w-100 py-3">
+                            <i class="fa-solid fa-lock me-2"></i> Temporary Lock
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column: Bike Info & Map -->
+            <div class="col-lg-4">
+                <!-- Bike Preview Card -->
+                <div class="info-card bike-preview-card mb-4">
+                    <span class="bike-tag">SR-2024</span>
+                    <img src="~/img/green-bike-side.png" alt="SaigonRide Bike" class="img-fluid bike-img">
+                </div>
+
+                <!-- Battery Status Card -->
+                <div class="info-card battery-card mb-4">
+                    <div class="d-flex justify-content-between align-items-center mb-2">
+                        <span class="fw-bold">Battery Level</span>
+                        <span class="fw-bold">85%</span>
+                    </div>
+                    <div class="progress mb-2" style="height: 10px;">
+                        <div class="progress-bar bg-success" style="width: 85%"></div>
+                    </div>
+                    <small class="text-muted">Approx. 30 km left</small>
+                </div>
+
+                <!-- Live Map Card -->
+                <div class="info-card map-card p-0 overflow-hidden">
+                    <div id="trip-map" style="height: 200px; background: #e9ecef;">
+                        <img src="~/img/map-mockup.png" class="w-100 h-100" style="object-fit: cover;" alt="Route Map" />
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script src="~/js/rentalManager.js"></script>
+}

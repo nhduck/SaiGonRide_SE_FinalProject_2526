@@ -74,7 +74,7 @@ namespace RentalVehicleService.Controllers
             ViewData["EndStationId"] = new SelectList(_context.Stations, "StationId", "Address");
             ViewData["StartStationId"] = new SelectList(_context.Stations, "StationId", "Address");
             ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "VehicleModel");
-            return View();
+            return View("ActiveTrip");
         }
 
         // POST: Rental/Create
@@ -118,7 +118,7 @@ namespace RentalVehicleService.Controllers
                 _context.Add(rental);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("Details", new { id = rental.RentalId });
+                return RedirectToAction("ActiveTrip", new { id = rental.RentalId });
             }
             catch (Exception)
             {
@@ -243,6 +243,10 @@ namespace RentalVehicleService.Controllers
 
             ViewBag.StationId = stationId;
             return PartialView("_VehicleListModal", vehicles);
+        }
+        public IActionResult ActiveTrip(int id)
+        {
+            return View();
         }
     }
 }
