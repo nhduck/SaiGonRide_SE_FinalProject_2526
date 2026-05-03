@@ -48,7 +48,23 @@ using (var scope = app.Services.CreateScope())
         var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
         var roleManager = services.GetRequiredService<RoleManager<IdentityRole>>();
 
-        await context.Database.MigrateAsync();
+        // Retry logic for Docker DB startup
+        int retries = 5;
+        while (retries > 0)
+        {
+            try
+            {
+                await context.Database.MigrateAsync();
+                break;
+            }
+            catch (Exception ex)
+            {
+                retries--;
+                if (retries == 0) throw;
+                Console.WriteLine($"Database not ready, retrying in 5s... ({retries} retries left)");
+                await Task.Delay(5000);
+            }
+        }
 
         // Seed Roles
         string[] roles = { "Admin", "LocalUser", "Tourist" };
