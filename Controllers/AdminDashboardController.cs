@@ -136,5 +136,108 @@ namespace RentalVehicleService.Controllers
 
             return PartialView("~/Views/AdminDashboard/Pages/Vehicle/_VehicleTablePartial.cshtml", allVehicles);
         }
+
+        [HttpGet]
+        public async Task<IActionResult> GetNotifications()
+        {
+            var recentRentals = await _context.Rentals
+                .Include(r => r.Vehicle)
+                .OrderByDescending(r => r.StartTime)
+                .Take(5)
+                .Select(r => new {
+                    Type = "Rental",
+                    TitleKey = r.Status == RentalStatus.Active ? "admin_activity_rental_started" : "admin_activity_rental_completed",
+                    DescriptionKey = r.Status == RentalStatus.Active ? "admin_activity_rental_started_desc" : "admin_activity_rental_completed_desc",
+                    Param1 = r.UserId.Substring(0, Math.Min(5, r.UserId.Length)) + "...",
+                    Param2 = (r.Vehicle != null ? r.Vehicle.VehicleModel : "Unknown"),
+                    Time = r.StartTime,
+                    IconClass = r.Status == RentalStatus.Active ? "bg-primary" : "bg-success",
+                    Icon = r.Status == RentalStatus.Active ? "bi-bicycle" : "bi-check-lg"
+                })
+                .ToListAsync();
+
+            var recentUsers = await _context.Users
+                .OrderByDescending(u => u.Id)
+                .Take(3)
+                .Select(u => new {
+                    Type = "User",
+                    TitleKey = "admin_activity_new_user",
+                    DescriptionKey = "admin_activity_new_user_desc",
+                    Param1 = u.UserName,
+                    Param2 = "",
+                    Time = DateTime.Now.AddHours(-1),
+                    IconClass = "bg-warning",
+                    Icon = "bi-person-plus"
+                })
+                .ToListAsync();
+
+            var activities = recentRentals.Cast<dynamic>()
+                .Concat(recentUsers.Cast<dynamic>())
+                .OrderByDescending(a => a.Time)
+                .Take(6)
+                .ToList();
+
+            return Json(activities);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> GetStats()
+        {
+            var totalVehicles = await _context.Vehicles.CountAsync();
+            var activeRentals = await _context.Rentals.CountAsync(r => r.Status == RentalStatus.Active);
+            var totalUsers = await _context.Users.CountAsync();
+            var totalRevenue = await _context.Rentals
+                .Where(r => r.Status == RentalStatus.Completed)
+                .SumAsync(r => r.FinalFare);
+
+            return Json(new {
+                totalVehicles,
+                activeRentals,
+                totalUsers,
+                totalRevenue = totalRevenue.ToString("N0")
+            });
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Notifications()
+        {
+            var recentRentals = await _context.Rentals
+                .Include(r => r.Vehicle)
+                .OrderByDescending(r => r.StartTime)
+                .Take(20)
+                .Select(r => new {
+                    Type = "Rental",
+                    TitleKey = r.Status == RentalStatus.Active ? "admin_activity_rental_started" : "admin_activity_rental_completed",
+                    DescriptionKey = r.Status == RentalStatus.Active ? "admin_activity_rental_started_desc" : "admin_activity_rental_completed_desc",
+                    Param1 = r.UserId.Substring(0, Math.Min(5, r.UserId.Length)) + "...",
+                    Param2 = (r.Vehicle != null ? r.Vehicle.VehicleModel : "Unknown"),
+                    Time = r.StartTime,
+                    IconClass = r.Status == RentalStatus.Active ? "bg-primary" : "bg-success",
+                    Icon = r.Status == RentalStatus.Active ? "bi-bicycle" : "bi-check-lg"
+                })
+                .ToListAsync();
+
+            var recentUsers = await _context.Users
+                .OrderByDescending(u => u.Id)
+                .Take(10)
+                .Select(u => new {
+                    Type = "User",
+                    TitleKey = "admin_activity_new_user",
+                    DescriptionKey = "admin_activity_new_user_desc",
+                    Param1 = u.UserName,
+                    Param2 = "",
+                    Time = DateTime.Now.AddHours(-1),
+                    IconClass = "bg-warning",
+                    Icon = "bi-person-plus"
+                })
+                .ToListAsync();
+
+            ViewBag.AllActivities = recentRentals.Cast<dynamic>()
+                .Concat(recentUsers.Cast<dynamic>())
+                .OrderByDescending(a => a.Time)
+                .ToList();
+
+            return PartialView("~/Views/AdminDashboard/Pages/Notifications/Index.cshtml");
+        }
     }
 }
