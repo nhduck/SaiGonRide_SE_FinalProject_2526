@@ -114,3 +114,55 @@
         </div>
     </div>
 </div>
+
+<script>
+    (function ($) {
+
+        // ════════════════════════════════════════════════════════
+        // MODAL CREATE
+        // ════════════════════════════════════════════════════════
+
+        window.ShowCreateUserModal = function () {
+            $('#createUserForm')[0].reset();
+            $('#createUserAlertArea').html('');
+            $('#createUserModal').modal('show');
+        };
+
+        $('#createUserForm').on('submit', function (e) {
+            e.preventDefault();
+            var $btn = $('#createUserSubmitBtn');
+
+            $btn.prop('disabled', true)
+                .html('<span class="spinner-border spinner-border-sm me-1"></span>Creating...');
+
+            $.ajax({
+                url: '/Admin/UserManagements/Create',
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function () {
+                    $('#createUserModal').modal('hide');
+                    if (typeof userSearch === 'function') userSearch();
+                },
+                error: function (xhr) {
+                    var msg = 'An error occurred. Please try again.';
+                    try {
+                        var res = JSON.parse(xhr.responseText);
+                        if (res.errors) msg = res.errors.join('<br>');
+                    } catch (ex) {}
+
+                    $('#createUserAlertArea').html(
+                        '<div class="alert alert-danger alert-dismissible fade show py-2 small">' +
+                        '  <i class="bi bi-exclamation-triangle me-1"></i>' + msg +
+                        '  <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>' +
+                        '</div>'
+                    );
+                },
+                complete: function () {
+                    $btn.prop('disabled', false)
+                        .html('<i class="bi bi-person-plus-fill me-1"></i>Create User');
+                }
+            });
+        });
+
+    })(jQuery);
+</script>

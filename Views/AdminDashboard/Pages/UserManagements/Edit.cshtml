@@ -141,7 +141,17 @@
 </div>
 
 <script>
-    $.ajax({
+    (function ($) {
+
+        // ════════════════════════════════════════════════════════
+        // MODAL EDIT
+        // ════════════════════════════════════════════════════════
+
+        window.ShowUserEditModal = function (userId) {
+            $('#editUserAlertArea').html('');
+            $('#editUserForm')[0].reset();
+
+            $.ajax({
                 url: '/Admin/UserManagements/Edit/' + userId,
                 type: 'GET',
                 success: function (data) {
@@ -156,7 +166,6 @@
                     $('#editUserNationality').val(data.nationality);
                     $('#editUserIsLockedOut').prop('checked', data.isLockedOut);
 
-                    // Tick role checkboxes
                     $('#editUserRolesContainer input[type="checkbox"]').prop('checked', false);
                     if (data.roles && data.roles.length > 0) {
                         $.each(data.roles, function (i, role) {
@@ -170,7 +179,7 @@
                     alert('Cannot load user data. Please try again.');
                 }
             });
-        }
+        };
 
         $('#editUserForm').on('submit', function (e) {
             e.preventDefault();
@@ -186,7 +195,7 @@
                 data: $(this).serialize(),
                 success: function () {
                     $('#editUserModal').modal('hide');
-                    userSearch();
+                    if (typeof userSearch === 'function') userSearch();
                 },
                 error: function (xhr) {
                     var msg = 'An error occurred. Please try again.';
@@ -207,4 +216,7 @@
                         .html('<i class="bi bi-floppy me-1"></i>Save Changes');
                 }
             });
+        });
+
+    })(jQuery);
 </script>
