@@ -6,7 +6,7 @@
     <tr>
         <td colspan="9" class="text-center text-muted py-5">
             <i class="bi bi-person-x fs-2 d-block mb-2"></i>
-            No users found.
+            <span data-i18n="admin_no_users">No users found.</span>
         </td>
     </tr>
 }
@@ -58,7 +58,9 @@ else
                         _          => "bg-secondary text-white"
                     };
                 }
-                <span class="badge @typeClass">@(user.UserType ?? "—")</span>
+                <span class="badge @typeClass">
+                    <span data-i18n="admin_@(user.UserType?.ToLower() ?? "unknown")">@(user.UserType ?? "—")</span>
+                </span>
             </td>
 
             <!-- Roles -->
@@ -72,7 +74,7 @@ else
                 }
                 else
                 {
-                    <span class="text-muted small">No roles</span>
+                    <span class="text-muted small" data-i18n="admin_no_roles">No roles</span>
                 }
             </td>
 
@@ -81,13 +83,13 @@ else
                 @if (user.IsLockedOut)
                 {
                     <span class="badge bg-danger-subtle text-danger border border-danger-subtle">
-                        <i class="bi bi-lock-fill me-1"></i>Locked
+                        <i class="bi bi-lock-fill me-1"></i><span data-i18n="admin_locked">Locked</span>
                     </span>
                 }
                 else
                 {
                     <span class="badge bg-success-subtle text-success border border-success-subtle">
-                        <i class="bi bi-check-circle-fill me-1"></i>Active
+                        <i class="bi bi-check-circle-fill me-1"></i><span data-i18n="admin_active">Active</span>
                     </span>
                 }
             </td>
@@ -97,6 +99,7 @@ else
                 <div class="d-flex justify-content-center gap-1">
                     <!-- Details -->
                     <button class="btn btn-sm btn-outline-primary px-2"
+                            data-i18n="[title]admin_details"
                             title="Details"
                             onclick="ShowUserDetailsModal('@user.Id')">
                         <i class="bi bi-eye"></i>
@@ -104,6 +107,7 @@ else
 
                     <!-- Edit -->
                     <button class="btn btn-sm btn-outline-secondary px-2"
+                            data-i18n="[title]admin_edit"
                             title="Edit"
                             onclick="ShowUserEditModal('@user.Id')">
                         <i class="bi bi-pencil"></i>
@@ -111,6 +115,7 @@ else
 
                     <!-- Lock / Unlock -->
                     <button class="btn btn-sm @(user.IsLockedOut ? "btn-outline-success" : "btn-outline-warning") px-2 toggleLockBtn"
+                            data-i18n="[title]admin_@(user.IsLockedOut ? "unlock" : "lock")"
                             title="@(user.IsLockedOut ? "Unlock" : "Lock")"
                             data-id="@user.Id"
                             data-locked="@user.IsLockedOut.ToString().ToLower()">
@@ -119,6 +124,7 @@ else
 
                     <!-- Delete -->
                     <button class="btn btn-sm btn-outline-danger px-2"
+                            data-i18n="[title]admin_delete"
                             title="Delete"
                             onclick="prepareUserDelete('@user.Id', '@Html.Raw(user.FullName ?? user.UserName)')">
                         <i class="bi bi-trash"></i>

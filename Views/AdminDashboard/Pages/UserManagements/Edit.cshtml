@@ -8,7 +8,7 @@
 
             <div class="modal-header bg-secondary text-white">
                 <h5 class="modal-title" id="editUserModalLabel">
-                    <i class="bi bi-pencil-square me-2"></i>Edit User
+                    <i class="bi bi-pencil-square me-2"></i><span data-i18n="admin_edit_user">Edit User</span>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -24,33 +24,33 @@
 
                     <!-- Section: Account Info -->
                     <p class="text-muted small fw-bold text-uppercase mb-3 border-bottom pb-2">
-                        <i class="bi bi-person-badge me-1"></i>Account Information
+                        <i class="bi bi-person-badge me-1"></i><span data-i18n="admin_account_info">Account Information</span>
                     </p>
 
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
+                            <label class="form-label fw-semibold"><span data-i18n="admin_fullname">Full Name</span> <span class="text-danger">*</span></label>
                             <input type="text" id="editUserFullName" name="FullName" class="form-control" required />
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Username <span class="text-danger">*</span></label>
+                            <label class="form-label fw-semibold"><span data-i18n="admin_username">Username</span> <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text">@@</span>
                                 <input type="text" id="editUserName" name="UserName" class="form-control" required />
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+                            <label class="form-label fw-semibold"><span data-i18n="admin_email">Email</span> <span class="text-danger">*</span></label>
                             <input type="email" id="editUserEmail" name="Email" class="form-control" required />
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Phone Number</label>
+                            <label class="form-label fw-semibold" data-i18n="admin_phone">Phone Number</label>
                             <input type="text" id="editUserPhone" name="PhoneNumber" class="form-control" />
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">User Type <span class="text-danger">*</span></label>
+                            <label class="form-label fw-semibold"><span data-i18n="admin_user_type">User Type</span> <span class="text-danger">*</span></label>
                             <select id="editUserType" name="UserType" class="form-select" required>
-                                <option value="">-- Select Type --</option>
+                                <option value="" data-i18n="admin_select_type">-- Select Type --</option>
                                 <option value="Admin">Admin</option>
                                 <option value="Staff">Staff</option>
                                 <option value="Customer">Customer</option>
@@ -62,7 +62,7 @@
                                 <input class="form-check-input" type="checkbox" role="switch"
                                        id="editUserIsLockedOut" name="IsLockedOut" value="true" />
                                 <label class="form-check-label fw-semibold" for="editUserIsLockedOut">
-                                    <i class="bi bi-lock me-1 text-danger"></i>Lock Account
+                                    <i class="bi bi-lock me-1 text-danger"></i><span data-i18n="admin_lock_account">Lock Account</span>
                                 </label>
                             </div>
                         </div>
@@ -70,27 +70,27 @@
 
                     <!-- Section: Identity Documents -->
                     <p class="text-muted small fw-bold text-uppercase mb-3 border-bottom pb-2">
-                        <i class="bi bi-card-text me-1"></i>Identity Documents
+                        <i class="bi bi-card-text me-1"></i><span data-i18n="admin_identity_docs">Identity Documents</span>
                     </p>
 
                     <div class="row g-3 mb-4">
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">CCCD / National ID</label>
+                            <label class="form-label fw-semibold" data-i18n="admin_cccd">CCCD / National ID</label>
                             <input type="text" id="editUserCCCD" name="CCCD" class="form-control" />
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">Passport Number</label>
+                            <label class="form-label fw-semibold" data-i18n="admin_passport">Passport Number</label>
                             <input type="text" id="editUserPassport" name="PassportNumber" class="form-control" />
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">Nationality</label>
+                            <label class="form-label fw-semibold" data-i18n="admin_nationality">Nationality</label>
                             <input type="text" id="editUserNationality" name="Nationality" class="form-control" />
                         </div>
                     </div>
 
                     <!-- Section: Roles -->
                     <p class="text-muted small fw-bold text-uppercase mb-3 border-bottom pb-2">
-                        <i class="bi bi-shield-check me-1"></i>Roles
+                        <i class="bi bi-shield-check me-1"></i><span data-i18n="admin_roles">Roles</span>
                     </p>
 
                     <div id="editUserRolesContainer" class="d-flex gap-3 flex-wrap mb-2">
@@ -110,17 +110,17 @@
 
                     <!-- Section: Change Password (optional) -->
                     <p class="text-muted small fw-bold text-uppercase mb-3 border-bottom pb-2 mt-4">
-                        <i class="bi bi-key me-1"></i>Change Password <span class="fw-normal text-muted">(leave blank to keep current)</span>
+                        <i class="bi bi-key me-1"></i><span data-i18n="admin_change_password">Change Password</span> <span class="fw-normal text-muted" data-i18n="admin_leave_blank_keep">(leave blank to keep current)</span>
                     </p>
 
                     <div class="row g-3">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">New Password</label>
-                            <input type="password" name="NewPassword" class="form-control" placeholder="Min. 8 characters" />
+                            <label class="form-label fw-semibold" data-i18n="admin_new_password">New Password</label>
+                            <input type="password" name="NewPassword" class="form-control" placeholder="Min. 8 characters" data-i18n="[placeholder]admin_new_password_placeholder" />
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Confirm Password</label>
-                            <input type="password" name="ConfirmPassword" class="form-control" placeholder="Repeat new password" />
+                            <label class="form-label fw-semibold" data-i18n="admin_confirm_password">Confirm Password</label>
+                            <input type="password" name="ConfirmPassword" class="form-control" placeholder="Repeat new password" data-i18n="[placeholder]admin_confirm_password_placeholder" />
                         </div>
                     </div>
 
@@ -129,10 +129,10 @@
 
             <div class="modal-footer border-0 pt-0">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-lg me-1"></i>Cancel
+                    <i class="bi bi-x-lg me-1"></i><span data-i18n="admin_cancel">Cancel</span>
                 </button>
                 <button type="submit" form="editUserForm" class="btn btn-secondary" id="editUserSubmitBtn">
-                    <i class="bi bi-floppy me-1"></i>Save Changes
+                    <i class="bi bi-floppy me-1"></i><span data-i18n="admin_save_changes">Save Changes</span>
                 </button>
             </div>
 
@@ -142,11 +142,7 @@
 
 <script>
     (function ($) {
-
-        // ════════════════════════════════════════════════════════
-        // MODAL EDIT
-        // ════════════════════════════════════════════════════════
-
+        // EDIT MODAL
         window.ShowUserEditModal = function (userId) {
             $('#editUserAlertArea').html('');
             $('#editUserForm')[0].reset();
@@ -176,7 +172,8 @@
                     $('#editUserModal').modal('show');
                 },
                 error: function () {
-                    alert('Cannot load user data. Please try again.');
+                    const errorMsg = (window.getI18nText && window.getI18nText('admin_error_occurred')) || 'Cannot load user data. Please try again.';
+                    alert(errorMsg);
                 }
             });
         };
@@ -186,8 +183,9 @@
             var userId = $('#editUserId').val();
             var $btn   = $('#editUserSubmitBtn');
 
+            const savingText = (window.getI18nText && window.getI18nText('admin_saving')) || 'Saving...';
             $btn.prop('disabled', true)
-                .html('<span class="spinner-border spinner-border-sm me-1"></span>Saving...');
+                .html('<span class="spinner-border spinner-border-sm me-1"></span>' + savingText);
 
             $.ajax({
                 url: '/Admin/UserManagements/Edit/' + userId,
@@ -198,7 +196,7 @@
                     if (typeof userSearch === 'function') userSearch();
                 },
                 error: function (xhr) {
-                    var msg = 'An error occurred. Please try again.';
+                    var msg = (window.getI18nText && window.getI18nText('admin_error_occurred')) || 'An error occurred. Please try again.';
                     try {
                         var res = JSON.parse(xhr.responseText);
                         if (res.errors) msg = res.errors.join('<br>');
@@ -212,8 +210,9 @@
                     );
                 },
                 complete: function () {
+                    const saveText = (window.getI18nText && window.getI18nText('admin_save_changes')) || 'Save Changes';
                     $btn.prop('disabled', false)
-                        .html('<i class="bi bi-floppy me-1"></i>Save Changes');
+                        .html('<i class="bi bi-floppy me-1"></i>' + saveText);
                 }
             });
         });

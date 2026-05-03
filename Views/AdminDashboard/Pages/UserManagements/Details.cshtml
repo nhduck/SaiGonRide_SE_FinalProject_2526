@@ -8,7 +8,7 @@
 
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title" id="userDetailsModalLabel">
-                    <i class="bi bi-person-lines-fill me-2"></i>User Details
+                    <i class="bi bi-person-lines-fill me-2"></i><span data-i18n="admin_user_details">User Details</span>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -17,16 +17,16 @@
             <div class="modal-body py-4" id="userDetailsModalBody">
                 <div class="text-center py-4">
                     <div class="spinner-border text-primary" role="status"></div>
-                    <p class="mt-2 text-muted">Loading...</p>
+                    <p class="mt-2 text-muted" data-i18n="admin_loading">Loading...</p>
                 </div>
             </div>
 
             <div class="modal-footer border-0 pt-0">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-lg me-1"></i>Close
+                    <i class="bi bi-x-lg me-1"></i><span data-i18n="admin_close">Close</span>
                 </button>
                 <button type="button" class="btn btn-primary" id="userDetailsEditBtn">
-                    <i class="bi bi-pencil me-1"></i>Edit
+                    <i class="bi bi-pencil me-1"></i><span data-i18n="admin_edit">Edit</span>
                 </button>
             </div>
 
@@ -42,10 +42,11 @@
         // ════════════════════════════════════════════════════════
 
         window.ShowUserDetailsModal = function (userId) {
+            const loadingText = (window.getI18nText && window.getI18nText('admin_loading')) || 'Loading...';
             $('#userDetailsModalBody').html(
                 '<div class="text-center py-4">' +
                 '  <div class="spinner-border text-primary" role="status"></div>' +
-                '  <p class="mt-2 text-muted">Loading...</p>' +
+                '  <p class="mt-2 text-muted">' + loadingText + '</p>' +
                 '</div>'
             );
 
@@ -59,8 +60,9 @@
                     $('#userDetailsModalBody').html(html);
                 },
                 error: function () {
+                    const errorMsg = (window.getI18nText && window.getI18nText('admin_details_error')) || 'Cannot load user details. Please try again.';
                     $('#userDetailsModalBody').html(
-                        '<div class="alert alert-danger">Cannot load user details. Please try again.</div>'
+                        '<div class="alert alert-danger">' + errorMsg + '</div>'
                     );
                 }
             });

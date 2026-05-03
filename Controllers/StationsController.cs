@@ -15,7 +15,7 @@ namespace RentalVehicleService.Controllers
     public class StationsController : Controller
     {
         private readonly ApplicationDbContext _context;
-        // Thêm dòng cấu hình đường dẫn ViewPath
+        // Configure the view path for partial views
         private const string ViewPath = "~/Views/AdminDashboard/Pages/Station/";
 
         public StationsController(ApplicationDbContext context)
@@ -34,7 +34,7 @@ namespace RentalVehicleService.Controllers
             ViewBag.Inactive = stations.Count(s => !s.IsActive);
             ViewBag.TotalActive = stations.Count(s => s.IsActive);
 
-            // Trả về PartialView theo đường dẫn cụ thể
+            // Return PartialView with specific path
             return PartialView($"{ViewPath}Index.cshtml", stations);
         }
 
@@ -62,7 +62,7 @@ namespace RentalVehicleService.Controllers
         {
             if (station.CurrentCount > station.TotalCapacity)
             {
-                ModelState.AddModelError("CurrentCount", "Lỗi: Số xe hiện tại không thể lớn hơn sức chứa tối đa!");
+                ModelState.AddModelError("CurrentCount", "Error: Current vehicle count cannot exceed total capacity!");
             }
 
             if (ModelState.IsValid)
@@ -94,7 +94,7 @@ namespace RentalVehicleService.Controllers
 
             if (station.CurrentCount > station.TotalCapacity)
             {
-                ModelState.AddModelError("CurrentCount", "Lỗi: Số xe hiện tại không thể lớn hơn sức chứa tối đa!");
+                ModelState.AddModelError("CurrentCount", "Error: Current vehicle count cannot exceed total capacity!");
             }
 
             if (ModelState.IsValid)

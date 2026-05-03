@@ -18,9 +18,7 @@ namespace RentalVehicleService.Controllers
             _roleManager = roleManager;
         }
 
-        // ════════════════════════════════════════════════════════
         // HELPER — chuyển ApplicationUser → UserManagement ViewModel
-        // ════════════════════════════════════════════════════════
 
         private async Task<UserManagement> MapToViewModel(ApplicationUser u)
         {
@@ -54,11 +52,7 @@ namespace RentalVehicleService.Controllers
             return result;
         }
 
-
-        // ════════════════════════════════════════════════════════
         // INDEX
-        // ════════════════════════════════════════════════════════
-
         public async Task<IActionResult> Index()
         {
             var users = await GetAllViewModels();
@@ -75,10 +69,7 @@ namespace RentalVehicleService.Controllers
         }
 
 
-        // ════════════════════════════════════════════════════════
         // SEARCH (gọi từ AdminDashboard/SearchUsers hoặc trực tiếp)
-        // ════════════════════════════════════════════════════════
-
         [HttpGet]
         public async Task<IActionResult> SearchUsers(string searchTerm, List<string> filters)
         {
@@ -113,11 +104,7 @@ namespace RentalVehicleService.Controllers
                 users.AsEnumerable());
         }
 
-
-        // ════════════════════════════════════════════════════════
         // GET AMOUNT INFO — cập nhật stats card sau mỗi thao tác
-        // ════════════════════════════════════════════════════════
-
         [HttpGet]
         public async Task<IActionResult> GetAmountInfo()
         {
@@ -135,10 +122,7 @@ namespace RentalVehicleService.Controllers
         }
 
 
-        // ════════════════════════════════════════════════════════
         // DETAILS — trả HTML partial load vào modal body
-        // ════════════════════════════════════════════════════════
-
         [HttpGet]
         public async Task<IActionResult> Details(string id)
         {
@@ -156,9 +140,7 @@ namespace RentalVehicleService.Controllers
         }
 
 
-        // ════════════════════════════════════════════════════════
         // CREATE — GET trả JSON (không dùng), POST xử lý form
-        // ════════════════════════════════════════════════════════
 
         [HttpPost]
         [ValidateAntiForgeryToken]
@@ -218,11 +200,7 @@ namespace RentalVehicleService.Controllers
             return Ok();
         }
 
-
-        // ════════════════════════════════════════════════════════
         // EDIT GET — trả JSON cho JS điền vào form
-        // ════════════════════════════════════════════════════════
-
         [HttpGet]
         public async Task<IActionResult> Edit(string id)
         {
@@ -252,10 +230,7 @@ namespace RentalVehicleService.Controllers
         }
 
 
-        // ════════════════════════════════════════════════════════
         // EDIT POST — lưu thay đổi
-        // ════════════════════════════════════════════════════════
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Edit(
@@ -335,10 +310,7 @@ namespace RentalVehicleService.Controllers
         }
 
 
-        // ════════════════════════════════════════════════════════
         // DELETE
-        // ════════════════════════════════════════════════════════
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(string id)
@@ -360,11 +332,7 @@ namespace RentalVehicleService.Controllers
             return Ok();
         }
 
-
-        // ════════════════════════════════════════════════════════
         // TOGGLE LOCK — quick action từ bảng
-        // ════════════════════════════════════════════════════════
-
         [HttpPost]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> ToggleLock(string id)

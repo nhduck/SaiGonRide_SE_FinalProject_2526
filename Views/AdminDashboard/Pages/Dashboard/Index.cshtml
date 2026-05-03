@@ -1,92 +1,383 @@
-﻿@{
-    ViewData["Title"] = "Dashboard";
+@using RentalVehicleService.Models
+@{
+    ViewData["Title"] = "Dashboard Overview";
+    var totalVehicles = ViewBag.TotalVehicles ?? 0;
+    var activeRentals = ViewBag.ActiveRentals ?? 0;
+    var totalUsers = ViewBag.TotalUsers ?? 0;
+    var totalRevenue = ViewBag.TotalRevenue ?? 0;
+    var revenueLabels = ViewBag.RevenueLabels as List<string> ?? new List<string>();
+    var revenueValues = ViewBag.RevenueValues as List<decimal> ?? new List<decimal>();
+    var topVehicles = ViewBag.TopVehicles as dynamic;
+    var lowBatteryVehicles = ViewBag.LowBatteryVehicles as List<Vehicle> ?? new List<Vehicle>();
 }
 
-<body class="bg-gray-100 font-sans">
+<div class="container-fluid p-0">
+    <!-- Header -->
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h4 class="fw-bold mb-0" data-i18n="admin_dashboard_title">Dashboard Overview</h4>
+            <p class="text-muted small mb-0" data-i18n="admin_dashboard_subtitle">Monitor your system performance and activities.</p>
+        </div>
+        <div class="d-flex gap-2">
+            <button class="btn btn-white border shadow-sm btn-sm d-flex align-items-center gap-2">
+                <i class="bi bi-calendar3 text-success"></i>
+                <span class="small fw-medium" data-i18n="admin_last_7_days">Last 7 Days</span>
+            </button>
+            <button class="btn btn-success shadow-sm btn-sm px-3" onclick="loadPage('/AdminDashboard/Dashboard')">
+                <i class="bi bi-arrow-clockwise me-1"></i> <span data-i18n="admin_refresh">Refresh</span>
+            </button>
+        </div>
+    </div>
 
-    <div class="flex h-screen">
-        <aside class="w-64 bg-slate-900 text-white hidden md:flex flex-col">
-            <div class="p-6 text-2xl font-bold text-blue-400">CAR-RENTAL</div>
-            <nav class="flex-1 px-4 space-y-2">
-                <a href="#" class="block py-2.5 px-4 rounded bg-blue-600"> <i class="fas fa-home mr-2"></i> Dashboard</a>
-                <a href="#" class="block py-2.5 px-4 rounded hover:bg-slate-800 transition"> <i class="fas fa-car mr-2"></i> Đội xe</a>
-                <a href="#" class="block py-2.5 px-4 rounded hover:bg-slate-800 transition"> <i class="fas fa-calendar-alt mr-2"></i> Đặt chỗ</a>
-                <a href="#" class="block py-2.5 px-4 rounded hover:bg-slate-800 transition"> <i class="fas fa-users mr-2"></i> Khách hàng</a>
-                <a href="#" class="block py-2.5 px-4 rounded hover:bg-slate-800 transition"> <i class="fas fa-chart-line mr-2"></i> Báo cáo</a>
-            </nav>
-        </aside>
-
-        <main class="flex-1 flex flex-col overflow-y-auto">
-            <header class="bg-white shadow px-6 py-4 flex justify-between items-center">
-                <h1 class="text-xl font-semibold text-gray-800">Tổng quan hệ thống</h1>
-                <div class="flex items-center space-x-4">
-                    <button class="text-gray-500 hover:text-blue-600"><i class="fas fa-bell"></i></button>
-                    <div class="w-10 h-10 bg-gray-300 rounded-full border border-gray-400"></div>
-                </div>
-            </header>
-
-            <div class="p-6">
-                <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-6">
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-blue-500">
-                        <p class="text-sm text-gray-500 font-medium uppercase">Tổng số xe</p>
-                        <p class="text-2xl font-bold">128</p>
+    <!-- Stats Row -->
+    <div class="row g-4 mb-4">
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="sr-stat-card shadow-sm h-100">
+                <div class="d-flex align-items-center">
+                    <div class="sr-stat-icon bg-primary-subtle text-primary">
+                        <i class="bi bi-bicycle"></i>
                     </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-green-500">
-                        <p class="text-sm text-gray-500 font-medium uppercase">Đang thuê</p>
-                        <p class="text-2xl font-bold">42</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-yellow-500">
-                        <p class="text-sm text-gray-500 font-medium uppercase">Cần bảo trì</p>
-                        <p class="text-2xl font-bold">05</p>
-                    </div>
-                    <div class="bg-white p-6 rounded-xl shadow-sm border-l-4 border-purple-500">
-                        <p class="text-sm text-gray-500 font-medium uppercase">Doanh thu ngày</p>
-                        <p class="text-2xl font-bold">4.5M VNĐ</p>
+                    <div class="ms-3">
+                        <p class="text-muted small mb-0" data-i18n="admin_total_vehicles">Total Vehicles</p>
+                        <h3 class="fw-bold mb-0">@totalVehicles</h3>
                     </div>
                 </div>
-
-                <div class="bg-white rounded-xl shadow-sm overflow-hidden">
-                    <div class="p-4 border-b border-gray-100 flex justify-between items-center">
-                        <h2 class="font-bold text-gray-700">Đơn thuê xe gần đây</h2>
-                        <button class="text-blue-600 text-sm hover:underline">Xem tất cả</button>
+                <div class="mt-3 pt-3 border-top">
+                    <span class="text-success small fw-medium"><i class="bi bi-arrow-up-short"></i> +2.4%</span>
+                    <span class="text-muted small ms-1" data-i18n="admin_vs_last_month">vs last month</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="sr-stat-card shadow-sm h-100">
+                <div class="d-flex align-items-center">
+                    <div class="sr-stat-icon bg-success-subtle text-success">
+                        <i class="bi bi-lightning-charge"></i>
                     </div>
-                    <div class="overflow-x-auto">
-                        <table class="w-full text-left">
-                            <thead class="bg-gray-50 text-gray-600 text-sm uppercase">
-                                <tr>
-                                    <th class="px-6 py-3">Khách hàng</th>
-                                    <th class="px-6 py-3">Mẫu xe</th>
-                                    <th class="px-6 py-3">Ngày thuê</th>
-                                    <th class="px-6 py-3">Trạng thái</th>
-                                    <th class="px-6 py-3 text-right">Giá</th>
+                    <div class="ms-3">
+                        <p class="text-muted small mb-0" data-i18n="admin_active_rentals">Active Rentals</p>
+                        <h3 class="fw-bold mb-0">@activeRentals</h3>
+                    </div>
+                </div>
+                <div class="mt-3 pt-3 border-top">
+                    <span class="text-success small fw-medium"><i class="bi bi-arrow-up-short"></i> +12%</span>
+                    <span class="text-muted small ms-1" data-i18n="admin_vs_last_week">vs last week</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="sr-stat-card shadow-sm h-100">
+                <div class="d-flex align-items-center">
+                    <div class="sr-stat-icon bg-info-subtle text-info">
+                        <i class="bi bi-people"></i>
+                    </div>
+                    <div class="ms-3">
+                        <p class="text-muted small mb-0" data-i18n="admin_total_users">Total Users</p>
+                        <h3 class="fw-bold mb-0">@totalUsers</h3>
+                    </div>
+                </div>
+                <div class="mt-3 pt-3 border-top">
+                    <span class="text-success small fw-medium"><i class="bi bi-arrow-up-short"></i> +5.7%</span>
+                    <span class="text-muted small ms-1" data-i18n="admin_new_registrations">new registrations</span>
+                </div>
+            </div>
+        </div>
+        <div class="col-12 col-sm-6 col-xl-3">
+            <div class="sr-stat-card shadow-sm h-100">
+                <div class="d-flex align-items-center">
+                    <div class="sr-stat-icon bg-warning-subtle text-warning">
+                        <i class="bi bi-currency-dollar"></i>
+                    </div>
+                    <div class="ms-3">
+                        <p class="text-muted small mb-0" data-i18n="admin_total_revenue">Total Revenue</p>
+                        <h3 class="fw-bold mb-0">@totalRevenue.ToString("N0") <span class="small">₫</span></h3>
+                    </div>
+                </div>
+                <div class="mt-3 pt-3 border-top">
+                    <span class="text-danger small fw-medium"><i class="bi bi-arrow-down-short"></i> -1.2%</span>
+                    <span class="text-muted small ms-1" data-i18n="admin_vs_yesterday">vs yesterday</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4 mb-4">
+        <!-- Revenue Chart -->
+        <div class="col-12 col-xl-8">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold mb-0" data-i18n="admin_revenue_trend">Revenue Trend (Last 7 Days)</h6>
+                    <div class="dropdown">
+                        <button class="btn btn-link btn-sm text-muted p-0" type="button" data-bs-toggle="dropdown">
+                            <i class="bi bi-three-dots-vertical"></i>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end">
+                            <li><a class="dropdown-item small" href="#" data-i18n="admin_export_csv">Export CSV</a></li>
+                            <li><a class="dropdown-item small" href="#" data-i18n="admin_print_report">Print Report</a></li>
+                        </ul>
+                    </div>
+                </div>
+                <div class="card-body px-4 pb-4">
+                    <div style="height: 300px;">
+                        <canvas id="revenueChart"></canvas>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Right Side: Top Vehicles or Health -->
+        <div class="col-12 col-xl-4">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h6 class="fw-bold mb-0" data-i18n="admin_top_vehicles">Top Performing Vehicles</h6>
+                </div>
+                <div class="card-body px-4">
+                    <div class="list-group list-group-flush">
+                        @if (topVehicles != null) {
+                            foreach (var item in topVehicles) {
+                                <div class="list-group-item px-0 py-3 border-bottom-0">
+                                    <div class="d-flex align-items-center">
+                                        <div class="flex-shrink-0">
+                                            <div class="bg-light rounded-3 p-2">
+                                                <i class="bi bi-bicycle text-success"></i>
+                                            </div>
+                                        </div>
+                                        <div class="flex-grow-1 ms-3">
+                                            <h6 class="mb-0 small fw-bold">@item.VehicleModel</h6>
+                                            <small class="text-muted"><span data-i18n="admin_id">ID</span>: #V@(item.VehicleModel.GetHashCode().ToString().Substring(0,4))</small>
+                                        </div>
+                                        <div class="text-end">
+                                            <span class="badge bg-success-subtle text-success rounded-pill px-2 py-1" style="font-size: 0.7rem;">@item.Count <span data-i18n="admin_rentals_count">rentals</span></span>
+                                        </div>
+                                    </div>
+                                </div>
+                            }
+                        } else {
+                             <p class="text-muted small text-center py-4" data-i18n="admin_no_data">No data available</p>
+                        }
+                    </div>
+                    <div class="mt-auto pt-3 text-center border-top">
+                        <a href="#" class="text-decoration-none small text-success fw-bold" onclick="loadPage('/Vehicles/Index')"><span data-i18n="admin_view_all_vehicles">View All Vehicles</span> <i class="bi bi-chevron-right ms-1"></i></a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Bottom Row: Alerts and Recent Activities -->
+    <div class="row g-4">
+        <!-- Low Battery Alert -->
+        <div class="col-12 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4 d-flex justify-content-between align-items-center">
+                    <h6 class="fw-bold mb-0 text-danger" data-i18n="admin_battery_alerts"><i class="bi bi-exclamation-triangle-fill me-2"></i>Critical Battery Alerts</h6>
+                    <span class="badge bg-danger rounded-pill">@lowBatteryVehicles.Count</span>
+                </div>
+                <div class="card-body px-4">
+                    <div class="table-responsive">
+                        <table class="table table-hover align-middle mb-0">
+                            <thead class="table-light">
+                                <tr style="font-size: 0.75rem;">
+                                    <th data-i18n="admin_vehicle_id">Vehicle ID</th>
+                                    <th data-i18n="admin_model">Model</th>
+                                    <th data-i18n="admin_battery">Battery</th>
+                                    <th data-i18n="admin_status">Status</th>
                                 </tr>
                             </thead>
-                            <tbody class="divide-y divide-gray-100">
-                                <tr>
-                                    <td class="px-6 py-4 font-medium text-gray-900">Nguyễn Văn A</td>
-                                    <td class="px-6 py-4">VinFast VF8</td>
-                                    <td class="px-6 py-4 text-gray-500">29/04/2024</td>
-                                    <td class="px-6 py-4">
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-green-100 text-green-700">Đã trả</span>
-                                    </td>
-                                    <td class="px-6 py-4 text-right font-bold">1.200.000đ</td>
-                                </tr>
-                                <tr>
-                                    <td class="px-6 py-4 font-medium text-gray-900">Trần Thị B</td>
-                                    <td class="px-6 py-4">Toyota Cross</td>
-                                    <td class="px-6 py-4 text-gray-500">30/04/2024</td>
-                                    <td class="px-6 py-4">
-                                        <span class="px-2 py-1 text-xs font-semibold rounded-full bg-yellow-100 text-yellow-700">Đang đi</span>
-                                    </td>
-                                    <td class="px-6 py-4 text-right font-bold">900.000đ</td>
-                                </tr>
+                            <tbody>
+                                @foreach (var v in lowBatteryVehicles) {
+                                    <tr>
+                                        <td class="small fw-bold">#V@v.VehicleId</td>
+                                        <td class="small text-muted">@v.VehicleModel</td>
+                                        <td>
+                                            <div class="d-flex align-items-center gap-2">
+                                                <div class="progress flex-grow-1" style="height: 4px; width: 60px;">
+                                                    <div class="progress-bar bg-danger" style="width: @v.BatteryPercentage%"></div>
+                                                </div>
+                                                <span class="small fw-bold text-danger">@v.BatteryPercentage%</span>
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <span class="badge bg-danger-subtle text-danger small" data-i18n="admin_charging_required">Charging Required</span>
+                                        </td>
+                                    </tr>
+                                }
+                                @if (!lowBatteryVehicles.Any()) {
+                                    <tr>
+                                        <td colspan="4" class="text-center py-3 text-muted small" data-i18n="admin_all_healthy">All vehicles are healthy!</td>
+                                    </tr>
+                                }
                             </tbody>
                         </table>
                     </div>
                 </div>
             </div>
-        </main>
-    </div>
+        </div>
 
-</body>
-</html>
+        <!-- Recent Rentals (Simulated) -->
+        <div class="col-12 col-md-6">
+            <div class="card border-0 shadow-sm rounded-4 h-100">
+                <div class="card-header bg-transparent border-0 pt-4 px-4">
+                    <h6 class="fw-bold mb-0" data-i18n="admin_recent_activity">Recent System Activity</h6>
+                </div>
+                <div class="card-body px-4">
+                    <div class="sr-activity-timeline">
+                        @if (ViewBag.RecentActivities != null) {
+                            foreach (var act in ViewBag.RecentActivities) {
+                                <div class="sr-activity-item">
+                                    <div class="sr-activity-icon @act.IconClass"><i class="bi @act.Icon"></i></div>
+                                    <div class="sr-activity-content">
+                                        <h6 class="mb-0 small fw-bold" data-i18n="@act.TitleKey">@act.TitleKey</h6>
+                                        <p class="text-muted small mb-0" 
+                                           data-i18n="@act.DescriptionKey" 
+                                           data-i18n-param1="@act.Param1" 
+                                           data-i18n-param2="@act.Param2">
+                                            @act.DescriptionKey
+                                        </p>
+                                        <small class="text-muted" style="font-size: 0.7rem;">@act.Time.ToString("HH:mm, dd/MM/yyyy")</small>
+                                    </div>
+                                </div>
+                            }
+                        } else {
+                            <p class="text-muted small text-center py-4" data-i18n="admin_no_activity">No recent activity</p>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Initialize Revenue Chart
+    (function() {
+        const ctx = document.getElementById('revenueChart').getContext('2d');
+        const labels = @Html.Raw(Json.Serialize(revenueLabels));
+        const values = @Html.Raw(Json.Serialize(revenueValues));
+        
+        // Use i18n for chart labels
+        const revenueLabel = (window.getI18nText && window.getI18nText('admin_revenue_label')) || 'Revenue';
+        const revenueUnit = (window.getI18nText && window.getI18nText('admin_revenue_unit')) || 'Revenue (₫)';
+        
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [{
+                    label: revenueUnit,
+                    data: values,
+                    borderColor: '#16a34a',
+                    backgroundColor: 'rgba(22, 163, 74, 0.05)',
+                    fill: true,
+                    tension: 0.4,
+                    borderWidth: 3,
+                    pointBackgroundColor: '#16a34a',
+                    pointBorderColor: '#fff',
+                    pointBorderWidth: 2,
+                    pointRadius: 4,
+                    pointHoverRadius: 6
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: {
+                    legend: { display: false },
+                    tooltip: {
+                        mode: 'index',
+                        intersect: false,
+                        backgroundColor: '#fff',
+                        titleColor: '#212529',
+                        bodyColor: '#6c757d',
+                        borderColor: '#edf2f9',
+                        borderWidth: 1,
+                        padding: 10,
+                        displayColors: false,
+                        callbacks: {
+                            label: function(context) {
+                                return revenueLabel + ': ' + context.parsed.y.toLocaleString() + ' ₫';
+                            }
+                        }
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: { font: { size: 11 }, color: '#adb5bd' }
+                    },
+                    y: {
+                        grid: { borderDash: [5, 5], color: '#edf2f9', drawBorder: false },
+                        ticks: { font: { size: 11 }, color: '#adb5bd' }
+                    }
+                }
+            }
+        });
+    })();
+
+    // Ensure translations are applied to newly loaded partial content
+    if (window.changeLanguage && window.getCurrentLang) {
+        window.changeLanguage(window.getCurrentLang());
+    }
+</script>
+
+<style>
+    .sr-stat-card {
+        background: #fff;
+        border-radius: 1rem;
+        padding: 1.5rem;
+        border: 1px solid #edf2f9;
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+    .sr-stat-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.05) !important;
+    }
+    .sr-stat-icon {
+        width: 48px;
+        height: 48px;
+        border-radius: 0.75rem;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+    }
+    
+    /* Timeline styles */
+    .sr-activity-timeline {
+        position: relative;
+        padding-left: 1.5rem;
+    }
+    .sr-activity-timeline::before {
+        content: '';
+        position: absolute;
+        left: 7px;
+        top: 0;
+        bottom: 0;
+        width: 2px;
+        background: #edf2f9;
+    }
+    .sr-activity-item {
+        position: relative;
+        padding-bottom: 1.5rem;
+    }
+    .sr-activity-icon {
+        position: absolute;
+        left: -1.5rem;
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #fff;
+        font-size: 0.6rem;
+        z-index: 1;
+        border: 2px solid #fff;
+    }
+    .sr-activity-content {
+        padding-left: 0.5rem;
+    }
+    .sr-activity-item:last-child {
+        padding-bottom: 0;
+    }
+</style>

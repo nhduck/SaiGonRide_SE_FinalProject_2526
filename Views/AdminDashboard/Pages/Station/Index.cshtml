@@ -9,11 +9,11 @@
 		<!-- Header -->
 		<div class="d-flex justify-content-between align-items-center mb-4">
 			<div>
-				<h4 class="fw-bold mb-1"><i class="bi bi-geo-alt-fill text-success me-2"></i>Station Management</h4>
-				<p class="text-muted small mb-0">Manage all rental stations in the network</p>
+				<h4 class="fw-bold mb-1"><i class="bi bi-geo-alt-fill text-success me-2"></i><span data-i18n="admin_station_management">Station Management</span></h4>
+				<p class="text-muted small mb-0" data-i18n="admin_station_management_subtitle">Manage all rental stations in the network</p>
 			</div>
 			<button class="btn btn-success shadow-sm" onclick="loadPage('/Stations/Create')">
-				<i class="bi bi-plus-lg me-1"></i> Add Station
+				<i class="bi bi-plus-lg me-1"></i> <span data-i18n="admin_add_station">Add Station</span>
 			</button>
 		</div>
 
@@ -24,7 +24,7 @@
 					<div class="card-body">
 						<div class="d-flex justify-content-between align-items-center">
 							<div>
-								<div class="text-muted small fw-bold text-uppercase">Total Stations</div>
+								<div class="text-muted small fw-bold text-uppercase" data-i18n="admin_total_stations">Total Stations</div>
 								<div id="totalStationCount" class="h3 fw-bold text-primary mb-0">@ViewBag.TotalStations</div>
 							</div>
 							<div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
@@ -40,7 +40,7 @@
 					<div class="card-body">
 						<div class="d-flex justify-content-between align-items-center">
 							<div>
-								<div class="text-muted small fw-bold text-uppercase">Active</div>
+								<div class="text-muted small fw-bold text-uppercase" data-i18n="admin_active">Active</div>
 								<div id="activeCount" class="h3 fw-bold text-success mb-0">@ViewBag.Active</div>
 							</div>
 							<div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
@@ -56,7 +56,7 @@
 					<div class="card-body">
 						<div class="d-flex justify-content-between align-items-center">
 							<div>
-								<div class="text-muted small fw-bold text-uppercase">Low Stock</div>
+								<div class="text-muted small fw-bold text-uppercase" data-i18n="admin_low_stock">Low Stock</div>
 								<div id="lowStockCount" class="h3 fw-bold text-warning mb-0">@ViewBag.LowStock</div>
 							</div>
 							<div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
@@ -72,7 +72,7 @@
 					<div class="card-body">
 						<div class="d-flex justify-content-between align-items-center">
 							<div>
-								<div class="text-muted small fw-bold text-uppercase">Inactive</div>
+								<div class="text-muted small fw-bold text-uppercase" data-i18n="admin_inactive">Inactive</div>
 								<div id="inactiveCount" class="h3 fw-bold text-danger mb-0">@ViewBag.Inactive</div>
 							</div>
 							<div class="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
@@ -91,14 +91,14 @@
 					<div class="col-lg-4">
 						<div class="input-group">
 							<span class="input-group-text bg-white border-end-0"><i class="bi bi-search text-muted"></i></span>
-							<input id="stationSearchBar" type="text" class="form-control border-start-0 ps-0" placeholder="Search by name, address or ID...">
+							<input id="stationSearchBar" type="text" class="form-control border-start-0 ps-0" placeholder="Search by name, address or ID..." data-i18n="[placeholder]admin_search_placeholder">
 						</div>
 					</div>
 					<div class="col-lg-8 d-flex gap-2 flex-wrap justify-content-lg-end">
-						<button id="activeBTN" class="stationSortBTN btn btn-outline-success">Active</button>
-						<button id="lowStockBTN" class="stationSortBTN btn btn-outline-warning">Low Stock</button>
-						<button id="fullBTN" class="stationSortBTN btn btn-outline-danger">Full</button>
-						<button id="inactiveBTN" class="stationSortBTN btn btn-outline-secondary">Inactive</button>
+						<button id="activeBTN" class="stationSortBTN btn btn-outline-success" data-i18n="admin_active">Active</button>
+						<button id="lowStockBTN" class="stationSortBTN btn btn-outline-warning" data-i18n="admin_low_stock">Low Stock</button>
+						<button id="fullBTN" class="stationSortBTN btn btn-outline-danger" data-i18n="admin_full">Full</button>
+						<button id="inactiveBTN" class="stationSortBTN btn btn-outline-secondary" data-i18n="admin_inactive">Inactive</button>
 					</div>
 				</form>
 			</div>
@@ -112,14 +112,14 @@
 						<thead class="bg-light sticky-top">
 							<tr>
 								<th class="ps-4" style="width:50px">#</th>
-								<th>Station Name</th>
-								<th>Address</th>
-								<th class="text-center">Capacity</th>
-								<th class="text-center">Current</th>
-								<th class="text-center" style="width:140px">Fill Rate</th>
-								<th class="text-center">Inventory</th>
-								<th class="text-center">Status</th>
-								<th class="text-center" style="width:140px">Actions</th>
+								<th data-i18n="admin_name">Station Name</th>
+								<th data-i18n="admin_address">Address</th>
+								<th class="text-center" data-i18n="admin_capacity">Capacity</th>
+								<th class="text-center" data-i18n="admin_current">Current</th>
+								<th class="text-center" style="width:140px" data-i18n="admin_fill_rate">Fill Rate</th>
+								<th class="text-center" data-i18n="admin_inventory">Inventory</th>
+								<th class="text-center" data-i18n="admin_status">Status</th>
+								<th class="text-center" style="width:140px" data-i18n="admin_actions">Actions</th>
 							</tr>
 						</thead>
 						<tbody id="stationTableBody">
@@ -134,8 +134,8 @@
 		{
 			<div class="text-center py-5">
 				<i class="bi bi-geo fs-1 text-muted d-block mb-2"></i>
-				<h6 class="text-muted">No stations found</h6>
-				<button onclick="loadPage('/Stations/Create')" class="btn btn-sm btn-success mt-2">Add your first station</button>
+				<h6 class="text-muted" data-i18n="admin_no_stations">No stations found</h6>
+				<button onclick="loadPage('/Stations/Create')" class="btn btn-sm btn-success mt-2" data-i18n="admin_add_station">Add your first station</button>
 			</div>
 		}
 	</div>
@@ -147,7 +147,7 @@
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content">
 				<div class="modal-header bg-danger text-white">
-					<h5 class="modal-title"><i class="bi bi-exclamation-octagon"></i> Confirm Delete</h5>
+					<h5 class="modal-title"><i class="bi bi-exclamation-octagon"></i> <span data-i18n="admin_confirm_delete">Confirm Delete</span></h5>
 					<button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 
@@ -156,22 +156,22 @@
 						<input type="hidden" id="stationIdToConfirm" name="id" />
 
 						<i class="bi bi-trash3 text-danger" style="font-size: 3rem;"></i>
-						<h4 class="mt-3">Are you sure?</h4>
+						<h4 class="mt-3" data-i18n="admin_sure">Are you sure?</h4>
 						<p class="text-muted">
 							You are about to delete station: <br />
 							<div>
 								Id: <span class="fw-bold" id="stationIdToDisplay"></span>
 							</div>
 							<div>
-								Name:
+								<span data-i18n="admin_name">Name</span>:
 								<span class="fw-bold" id="stationNameToDisplay"></span>
 							</div>
 						</p>
-						<small class="text-danger">This action cannot be undone!</small>
+						<small class="text-danger" data-i18n="admin_delete_warning">This action cannot be undone!</small>
 					</div>
 					<div class="modal-footer justify-content-center">
-						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-						<button id="confirmDeleteStationBtn" type="button" class="btn btn-danger">Yes, Delete it!</button>
+						<button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="admin_cancel">Cancel</button>
+						<button id="confirmDeleteStationBtn" type="button" class="btn btn-danger" data-i18n="admin_yes_delete">Yes, Delete it!</button>
 					</div>
 				</div>
 			</div>
@@ -183,7 +183,7 @@
 		<div class="modal-dialog modal-dialog-centered">
 			<div class="modal-content border-0 shadow">
 				<div class="modal-header bg-warning text-dark border-0">
-					<h5 class="modal-title"><i class="bi bi-shield-exclamation me-2"></i>Cannot Delete Station</h5>
+					<h5 class="modal-title"><i class="bi bi-shield-exclamation me-2"></i><span data-i18n="admin_cannot_delete_station">Cannot Delete Station</span></h5>
 					<button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 				</div>
 				<div class="modal-body text-center py-4">
@@ -192,11 +192,11 @@
 							<i class="bi bi-exclamation-triangle-fill text-warning" style="font-size: 2.5rem;"></i>
 						</div>
 					</div>
-					<h5 class="fw-bold mb-2">Deletion Blocked</h5>
+					<h5 class="fw-bold mb-2" data-i18n="admin_deletion_blocked">Deletion Blocked</h5>
 					<p id="stationWarningMessage" class="text-muted mb-0 px-3"></p>
 				</div>
 				<div class="modal-footer justify-content-center border-0 pt-0">
-					<button type="button" class="btn btn-warning px-4" data-bs-dismiss="modal">
+					<button type="button" class="btn btn-warning px-4" data-bs-dismiss="modal" data-i18n="admin_understood">
 						<i class="bi bi-check-lg me-1"></i>Understood
 					</button>
 				</div>
@@ -283,7 +283,7 @@
 				},
 				error: function(xhr) {
 					$('#deleteStationModal').modal('hide');
-					var msg = "Unable to delete station. Please try again.";
+					var msg = (window.getI18nText && window.getI18nText('admin_error_occurred')) || "Unable to delete station. Please try again.";
 					try {
 						var resp = JSON.parse(xhr.responseText);
 						if (resp.message) msg = resp.message;

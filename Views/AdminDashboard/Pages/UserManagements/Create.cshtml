@@ -8,7 +8,7 @@
 
             <div class="modal-header bg-success text-white">
                 <h5 class="modal-title" id="createUserModalLabel">
-                    <i class="bi bi-person-plus-fill me-2"></i>Add New User
+                    <i class="bi bi-person-plus-fill me-2"></i><span data-i18n="admin_add_new_user">Add New User</span>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -21,37 +21,37 @@
 
                     <!-- Section: Account Info -->
                     <p class="text-muted small fw-bold text-uppercase mb-3 border-bottom pb-2">
-                        <i class="bi bi-person-badge me-1"></i>Account Information
+                        <i class="bi bi-person-badge me-1"></i><span data-i18n="admin_account_info">Account Information</span>
                     </p>
 
                     <div class="row g-3 mb-4">
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Full Name <span class="text-danger">*</span></label>
-                            <input type="text" name="FullName" class="form-control" placeholder="e.g. Nguyen Van A" required />
+                            <label class="form-label fw-semibold"><span data-i18n="admin_fullname">Full Name</span> <span class="text-danger">*</span></label>
+                            <input type="text" name="FullName" class="form-control" placeholder="e.g. Nguyen Van A" data-i18n="[placeholder]admin_fullname" required />
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Username <span class="text-danger">*</span></label>
+                            <label class="form-label fw-semibold"><span data-i18n="admin_username">Username</span> <span class="text-danger">*</span></label>
                             <div class="input-group">
                                 <span class="input-group-text">@@</span>
                                 <input type="text" name="UserName" class="form-control" placeholder="username" required />
                             </div>
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
-                            <input type="email" name="Email" class="form-control" placeholder="user@example.com" required />
+                            <label class="form-label fw-semibold"><span data-i18n="admin_email">Email</span> <span class="text-danger">*</span></label>
+                            <input type="email" name="Email" class="form-control" placeholder="user@example.com" data-i18n="[placeholder]admin_email" required />
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Phone Number</label>
-                            <input type="text" name="PhoneNumber" class="form-control" placeholder="+84..." />
+                            <label class="form-label fw-semibold" data-i18n="admin_phone">Phone Number</label>
+                            <input type="text" name="PhoneNumber" class="form-control" placeholder="+84..." data-i18n="[placeholder]admin_phone" />
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">Password <span class="text-danger">*</span></label>
+                            <label class="form-label fw-semibold"><span data-i18n="nav_login">Password</span> <span class="text-danger">*</span></label>
                             <input type="password" name="Password" class="form-control" placeholder="Min. 8 characters" required />
                         </div>
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">User Type <span class="text-danger">*</span></label>
+                            <label class="form-label fw-semibold"><span data-i18n="admin_user_type">User Type</span> <span class="text-danger">*</span></label>
                             <select name="UserType" class="form-select" required>
-                                <option value="">-- Select Type --</option>
+                                <option value="" data-i18n="admin_select_type">-- Select Type --</option>
                                 <option value="Admin">Admin</option>
                                 <option value="Staff">Staff</option>
                                 <option value="Customer">Customer</option>
@@ -61,27 +61,27 @@
 
                     <!-- Section: Identity Documents -->
                     <p class="text-muted small fw-bold text-uppercase mb-3 border-bottom pb-2">
-                        <i class="bi bi-card-text me-1"></i>Identity Documents
+                        <i class="bi bi-card-text me-1"></i><span data-i18n="admin_identity_docs">Identity Documents</span>
                     </p>
 
                     <div class="row g-3 mb-4">
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">CCCD / National ID</label>
-                            <input type="text" name="CCCD" class="form-control" placeholder="12-digit number" />
+                            <label class="form-label fw-semibold" data-i18n="admin_cccd">CCCD / National ID</label>
+                            <input type="text" name="CCCD" class="form-control" placeholder="12-digit number" data-i18n="[placeholder]admin_cccd" />
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">Passport Number</label>
-                            <input type="text" name="PassportNumber" class="form-control" placeholder="e.g. B1234567" />
+                            <label class="form-label fw-semibold" data-i18n="admin_passport">Passport Number</label>
+                            <input type="text" name="PassportNumber" class="form-control" placeholder="e.g. B1234567" data-i18n="[placeholder]admin_passport" />
                         </div>
                         <div class="col-md-4">
-                            <label class="form-label fw-semibold">Nationality</label>
-                            <input type="text" name="Nationality" class="form-control" placeholder="e.g. Vietnamese" />
+                            <label class="form-label fw-semibold" data-i18n="admin_nationality">Nationality</label>
+                            <input type="text" name="Nationality" class="form-control" placeholder="e.g. Vietnamese" data-i18n="[placeholder]admin_nationality" />
                         </div>
                     </div>
 
                     <!-- Section: Roles -->
                     <p class="text-muted small fw-bold text-uppercase mb-3 border-bottom pb-2">
-                        <i class="bi bi-shield-check me-1"></i>Assign Roles
+                        <i class="bi bi-shield-check me-1"></i><span data-i18n="admin_assign_roles">Assign Roles</span>
                     </p>
 
                     <div class="d-flex gap-3 flex-wrap mb-2">
@@ -104,10 +104,10 @@
 
             <div class="modal-footer border-0 pt-0">
                 <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">
-                    <i class="bi bi-x-lg me-1"></i>Cancel
+                    <i class="bi bi-x-lg me-1"></i><span data-i18n="admin_cancel">Cancel</span>
                 </button>
                 <button type="submit" form="createUserForm" class="btn btn-success" id="createUserSubmitBtn">
-                    <i class="bi bi-person-plus-fill me-1"></i>Create User
+                    <i class="bi bi-person-plus-fill me-1"></i><span data-i18n="admin_create_user">Create User</span>
                 </button>
             </div>
 
@@ -117,11 +117,7 @@
 
 <script>
     (function ($) {
-
-        // ════════════════════════════════════════════════════════
-        // MODAL CREATE
-        // ════════════════════════════════════════════════════════
-
+        // CREATE MODAL
         window.ShowCreateUserModal = function () {
             $('#createUserForm')[0].reset();
             $('#createUserAlertArea').html('');
@@ -132,8 +128,9 @@
             e.preventDefault();
             var $btn = $('#createUserSubmitBtn');
 
+            const creatingText = (window.getI18nText && window.getI18nText('admin_creating')) || 'Creating...';
             $btn.prop('disabled', true)
-                .html('<span class="spinner-border spinner-border-sm me-1"></span>Creating...');
+                .html('<span class="spinner-border spinner-border-sm me-1"></span>' + creatingText);
 
             $.ajax({
                 url: '/Admin/UserManagements/Create',
@@ -144,7 +141,7 @@
                     if (typeof userSearch === 'function') userSearch();
                 },
                 error: function (xhr) {
-                    var msg = 'An error occurred. Please try again.';
+                    var msg = (window.getI18nText && window.getI18nText('admin_error_occurred')) || 'An error occurred. Please try again.';
                     try {
                         var res = JSON.parse(xhr.responseText);
                         if (res.errors) msg = res.errors.join('<br>');
@@ -158,8 +155,9 @@
                     );
                 },
                 complete: function () {
+                    const createUserText = (window.getI18nText && window.getI18nText('admin_create_user')) || 'Create User';
                     $btn.prop('disabled', false)
-                        .html('<i class="bi bi-person-plus-fill me-1"></i>Create User');
+                        .html('<i class="bi bi-person-plus-fill me-1"></i>' + createUserText);
                 }
             });
         });

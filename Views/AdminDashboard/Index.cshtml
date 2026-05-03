@@ -19,12 +19,11 @@
 	<script>
 		$(document).ready(function () {
 			// Initially load the first active tab (e.g., Dashboard or Stations)
-            // By default, maybe load Stations since we don't have a Dashboard/Index yet
-			loadPage('/Stations/Index');
+			loadPage('/AdminDashboard/Dashboard');
             
-            // Mark the stations link as active initially
+            // Mark the dashboard link as active initially
             $('.nav-ajax-link').removeClass('active');
-            $('[data-url="/Stations/Index"]').addClass('active');
+            $('[data-url="/AdminDashboard/Dashboard"]').addClass('active');
 		});
 	</script>
 }
