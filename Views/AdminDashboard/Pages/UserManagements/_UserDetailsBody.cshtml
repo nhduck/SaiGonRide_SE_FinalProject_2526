@@ -57,16 +57,7 @@
 
     <div class="col-md-6">
         <label class="text-muted small d-block">User Type</label>
-        @{
-            var typeClass = Model.UserType switch
-            {
-                "Admin"    => "bg-warning text-dark",
-                "Staff"    => "bg-purple text-white",
-                "Customer" => "bg-info text-dark",
-                _          => "bg-secondary text-white"
-            };
-        }
-        <span class="badge @typeClass">@(Model.UserType ?? "—")</span>
+        <span class="badge bg-secondary text-white">@(Model.UserType ?? "—")</span>
     </div>
 
     <div class="col-md-6">

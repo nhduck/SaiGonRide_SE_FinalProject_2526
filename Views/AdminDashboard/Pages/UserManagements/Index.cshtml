@@ -139,238 +139,12 @@
     (function ($) {
 
         // ════════════════════════════════════════════════════════
-        // MODAL DELETE
+        // STATS — dùng chung bởi các modal khác qua window.updateUserStats
         // ════════════════════════════════════════════════════════
 
-        function prepareUserDelete(userId, userName) {
-            $('#userIdToConfirm').val(userId);
-            $('#userIdToDisplay').text(userId);
-            $('#userNameToDisplay').text(userName);
-            $('#deleteUserModal').modal('show');
-        }
-
-        $('#confirmUserDeleteBtn').on('click', function () {
-            var id    = $('#userIdToConfirm').val();
-            var token = $('input[name="__RequestVerificationToken"]').first().val();
-
+        window.updateUserStats = function () {
             $.ajax({
-                url: '/Users/DeleteConfirmed',
-                type: 'POST',
-                data: { id: id, __RequestVerificationToken: token },
-                success: function () {
-                    $('#deleteUserModal').modal('hide');
-                    $('tr[data-id="' + id + '"]').fadeOut(300, function () {
-                        $(this).remove();
-                        updateUserStats();
-                    });
-                },
-                error: function () {
-                    alert('Cannot delete user. Please try again.');
-                }
-            });
-        });
-
-
-        // ════════════════════════════════════════════════════════
-        // MODAL CREATE
-        // ════════════════════════════════════════════════════════
-
-        function ShowCreateUserModal() {
-            $('#createUserForm')[0].reset();
-            $('#createUserAlertArea').html('');
-            $('#createUserModal').modal('show');
-        }
-
-        $('#openCreateUserBtn').on('click', function () {
-            ShowCreateUserModal();
-        });
-
-        $('#createUserForm').on('submit', function (e) {
-            e.preventDefault();
-            var $btn = $('#createUserSubmitBtn');
-
-            $btn.prop('disabled', true)
-                .html('<span class="spinner-border spinner-border-sm me-1"></span>Creating...');
-
-            $.ajax({
-                url: '/Users/Create',
-                type: 'POST',
-                data: $(this).serialize(),
-                success: function () {
-                    $('#createUserModal').modal('hide');
-                    userSearch();
-                },
-                error: function (xhr) {
-                    var msg = 'An error occurred. Please try again.';
-                    try {
-                        var res = JSON.parse(xhr.responseText);
-                        if (res.errors) msg = res.errors.join('<br>');
-                    } catch (ex) {}
-
-                    $('#createUserAlertArea').html(
-                        '<div class="alert alert-danger alert-dismissible fade show py-2 small">' +
-                        '  <i class="bi bi-exclamation-triangle me-1"></i>' + msg +
-                        '  <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>' +
-                        '</div>'
-                    );
-                },
-                complete: function () {
-                    $btn.prop('disabled', false)
-                        .html('<i class="bi bi-person-plus-fill me-1"></i>Create User');
-                }
-            });
-        });
-
-
-        // ════════════════════════════════════════════════════════
-        // MODAL DETAILS
-        // ════════════════════════════════════════════════════════
-
-        function ShowUserDetailsModal(userId) {
-            $('#userDetailsModalBody').html(
-                '<div class="text-center py-4">' +
-                '  <div class="spinner-border text-primary" role="status"></div>' +
-                '  <p class="mt-2 text-muted">Loading...</p>' +
-                '</div>'
-            );
-
-            $('#userDetailsEditBtn').data('id', userId);
-            $('#userDetailsModal').modal('show');
-
-            $.ajax({
-                url: '/Users/Details/' + userId,
-                type: 'GET',
-                success: function (html) {
-                    $('#userDetailsModalBody').html(html);
-                },
-                error: function () {
-                    $('#userDetailsModalBody').html(
-                        '<div class="alert alert-danger">Cannot load user details. Please try again.</div>'
-                    );
-                }
-            });
-        }
-
-        $('#userDetailsEditBtn').on('click', function () {
-            var id = $(this).data('id');
-            $('#userDetailsModal').modal('hide');
-            $('#userDetailsModal').one('hidden.bs.modal', function () {
-                ShowUserEditModal(id);
-            });
-        });
-
-
-        // ════════════════════════════════════════════════════════
-        // MODAL EDIT
-        // ════════════════════════════════════════════════════════
-
-        function ShowUserEditModal(userId) {
-            $('#editUserAlertArea').html('');
-            $('#editUserForm')[0].reset();
-
-            $.ajax({
-                url: '/Users/Edit/' + userId,
-                type: 'GET',
-                success: function (data) {
-                    $('#editUserId').val(data.id);
-                    $('#editUserFullName').val(data.fullName);
-                    $('#editUserName').val(data.userName);
-                    $('#editUserEmail').val(data.email);
-                    $('#editUserPhone').val(data.phoneNumber);
-                    $('#editUserType').val(data.userType);
-                    $('#editUserCCCD').val(data.cccd);
-                    $('#editUserPassport').val(data.passportNumber);
-                    $('#editUserNationality').val(data.nationality);
-                    $('#editUserIsLockedOut').prop('checked', data.isLockedOut);
-
-                    // Tick role checkboxes
-                    $('#editUserRolesContainer input[type="checkbox"]').prop('checked', false);
-                    if (data.roles && data.roles.length > 0) {
-                        $.each(data.roles, function (i, role) {
-                            $('#editUserRolesContainer input[value="' + role + '"]').prop('checked', true);
-                        });
-                    }
-
-                    $('#editUserModal').modal('show');
-                },
-                error: function () {
-                    alert('Cannot load user data. Please try again.');
-                }
-            });
-        }
-
-        $('#editUserForm').on('submit', function (e) {
-            e.preventDefault();
-            var userId = $('#editUserId').val();
-            var $btn   = $('#editUserSubmitBtn');
-
-            $btn.prop('disabled', true)
-                .html('<span class="spinner-border spinner-border-sm me-1"></span>Saving...');
-
-            $.ajax({
-                url: '/Users/Edit/' + userId,
-                type: 'POST',
-                data: $(this).serialize(),
-                success: function () {
-                    $('#editUserModal').modal('hide');
-                    userSearch();
-                },
-                error: function (xhr) {
-                    var msg = 'An error occurred. Please try again.';
-                    try {
-                        var res = JSON.parse(xhr.responseText);
-                        if (res.errors) msg = res.errors.join('<br>');
-                    } catch (ex) {}
-
-                    $('#editUserAlertArea').html(
-                        '<div class="alert alert-danger alert-dismissible fade show py-2 small">' +
-                        '  <i class="bi bi-exclamation-triangle me-1"></i>' + msg +
-                        '  <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>' +
-                        '</div>'
-                    );
-                },
-                complete: function () {
-                    $btn.prop('disabled', false)
-                        .html('<i class="bi bi-floppy me-1"></i>Save Changes');
-                }
-            });
-        });
-
-
-        // ════════════════════════════════════════════════════════
-        // LOCK / UNLOCK QUICK ACTION
-        // ════════════════════════════════════════════════════════
-
-        $(document).on('click', '.toggleLockBtn', function () {
-            var userId = $(this).data('id');
-            var token  = $('input[name="__RequestVerificationToken"]').first().val();
-            var $btn   = $(this);
-
-            $btn.prop('disabled', true);
-
-            $.ajax({
-                url: '/Users/ToggleLock',
-                type: 'POST',
-                data: { id: userId, __RequestVerificationToken: token },
-                success: function () {
-                    userSearch();
-                    updateUserStats();
-                },
-                error: function () {
-                    alert('Cannot update lock status. Please try again.');
-                    $btn.prop('disabled', false);
-                }
-            });
-        });
-
-
-        // ════════════════════════════════════════════════════════
-        // STATS
-        // ════════════════════════════════════════════════════════
-
-        function updateUserStats() {
-            $.ajax({
-                url: '/Users/GetAmountInfo',
+                url: '/Admin/UserManagements/GetAmountInfo',
                 type: 'GET',
                 success: function (data) {
                     $('#totalUserCount').text(data.totalUsers);
@@ -381,17 +155,30 @@
                     $('#staffUserCount').text(data.staff);
                 }
             });
-        }
+        };
 
 
         // ════════════════════════════════════════════════════════
-        // SEARCH & FILTER
+        // SEARCH & FILTER — dùng chung bởi các modal khác qua window.userSearch
         // ════════════════════════════════════════════════════════
 
         var selectedUserFilters = [];
 
+        window.userSearch = function () {
+            $.ajax({
+                url: '/Admin/UserManagements/SearchUsers',
+                type: 'GET',
+                data: { searchTerm: $('#userSearchBar').val(), filters: selectedUserFilters },
+                traditional: true,
+                success: function (html) {
+                    $('#userTableBody').html(html);
+                    window.updateUserStats();
+                }
+            });
+        };
+
         $('#userSearchBar').on('input', function () {
-            userSearch();
+            window.userSearch();
         });
 
         $('.userSortBTN').on('click', function (e) {
@@ -407,16 +194,12 @@
                 selectedUserFilters.push(filterName);
             }
 
-            if (selectedUserFilters.length > 1) {
-                $('#userClearBTN').removeClass('d-none');
-            } else {
-                $('#userClearBTN').addClass('d-none');
-            }
+            $('#userClearBTN').toggleClass('d-none', selectedUserFilters.length <= 1);
 
             if (selectedUserFilters.length === 5) {
                 clearUserSort(e);
             } else {
-                userSearch();
+                window.userSearch();
             }
         });
 
@@ -429,56 +212,46 @@
             selectedUserFilters = [];
             $('.userSortBTN').removeClass('active-selected');
             $('#userClearBTN').addClass('d-none');
-            userSearch();
+            window.userSearch();
         }
 
-        function userSearch() {
+
+        // ════════════════════════════════════════════════════════
+        // LOCK / UNLOCK QUICK ACTION — thuộc về bảng, nằm ở Index
+        // ════════════════════════════════════════════════════════
+
+        $(document).on('click', '.toggleLockBtn', function () {
+            var userId = $(this).data('id');
+            var token  = $('input[name="__RequestVerificationToken"]').first().val();
+            var $btn   = $(this);
+
+            $btn.prop('disabled', true);
+
             $.ajax({
-                url: '/AdminDashboard/SearchUsers',
-                type: 'GET',
-                data: { searchTerm: $('#userSearchBar').val(), filters: selectedUserFilters },
-                traditional: true,
-                success: function (html) {
-                    $('#userTableBody').html(html);
-                    updateUserStats();
+                url: '/Admin/UserManagements/ToggleLock',
+                type: 'POST',
+                data: { id: userId, __RequestVerificationToken: token },
+                success: function () {
+                    window.userSearch();
+                },
+                error: function () {
+                    alert('Cannot update lock status. Please try again.');
+                    $btn.prop('disabled', false);
                 }
             });
-        }
+        });
 
-        function loadPage(url) {
-            if (!url) return;
-
-            // Dọn backdrop còn sót nếu modal đang mở
-            $('.modal').modal('hide');
-            $('body').removeClass('modal-open');
-            $('.modal-backdrop').remove();
-
-            $('#main').html('<div class="h1 p-4 text-center align-self-center"><span>Loading...</span></div>');
-            $('#main').load(url, function (response, status, xhr) {
-                if (status === 'error') {
-                    $('#main').html('<div class="h1 p-4 text-center align-self-center text-danger">Error ' + xhr.status + ': Page not found</div>');
-                }
-            });
-        }
 
         // ════════════════════════════════════════════════════════
-        // INIT — expose globals for partial onclick handlers
+        // NÚT ADD USER — kích hoạt modal Create
         // ════════════════════════════════════════════════════════
 
-        window.prepareUserDelete    = prepareUserDelete;
-        window.ShowCreateUserModal  = ShowCreateUserModal;
-        window.ShowUserDetailsModal = ShowUserDetailsModal;
-        window.ShowUserEditModal    = ShowUserEditModal;
+        $('#openCreateUserBtn').on('click', function () {
+            if (typeof window.ShowCreateUserModal === 'function') {
+                window.ShowCreateUserModal();
+            }
+        });
 
     })(jQuery);
 </script>
-
-<link rel="stylesheet" href="~/css/User/indexStyle.css" />
-
-<style>
-    #staffBTN.active-selected {
-        background-color: #6f42c1 !important;
-        border-color: #6f42c1 !important;
-        color: #ffffff !important;
-    }
-</style>
+<link rel="stylesheet" href="~/css/User/indexStyle.css?v=1.1" />

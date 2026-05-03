@@ -33,3 +33,46 @@
         </div>
     </div>
 </div>
+
+<script>
+    (function ($) {
+
+        // ════════════════════════════════════════════════════════
+        // MODAL DETAILS
+        // ════════════════════════════════════════════════════════
+
+        window.ShowUserDetailsModal = function (userId) {
+            $('#userDetailsModalBody').html(
+                '<div class="text-center py-4">' +
+                '  <div class="spinner-border text-primary" role="status"></div>' +
+                '  <p class="mt-2 text-muted">Loading...</p>' +
+                '</div>'
+            );
+
+            $('#userDetailsEditBtn').data('id', userId);
+            $('#userDetailsModal').modal('show');
+
+            $.ajax({
+                url: '/Admin/UserManagements/Details/' + userId,
+                type: 'GET',
+                success: function (html) {
+                    $('#userDetailsModalBody').html(html);
+                },
+                error: function () {
+                    $('#userDetailsModalBody').html(
+                        '<div class="alert alert-danger">Cannot load user details. Please try again.</div>'
+                    );
+                }
+            });
+        };
+
+        $('#userDetailsEditBtn').on('click', function () {
+            var id = $(this).data('id');
+            $('#userDetailsModal').modal('hide');
+            $('#userDetailsModal').one('hidden.bs.modal', function () {
+                if (typeof ShowUserEditModal === 'function') ShowUserEditModal(id);
+            });
+        });
+
+    })(jQuery);
+</script>

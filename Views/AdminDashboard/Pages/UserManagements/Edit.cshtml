@@ -58,6 +58,7 @@
                         </div>
                         <div class="col-md-6 d-flex align-items-end">
                             <div class="form-check form-switch mb-2">
+                                <input type="hidden" name="IsLockedOut" value="false" />
                                 <input class="form-check-input" type="checkbox" role="switch"
                                        id="editUserIsLockedOut" name="IsLockedOut" value="true" />
                                 <label class="form-check-label fw-semibold" for="editUserIsLockedOut">
@@ -138,3 +139,84 @@
         </div>
     </div>
 </div>
+
+<script>
+    (function ($) {
+
+        // ════════════════════════════════════════════════════════
+        // MODAL EDIT
+        // ════════════════════════════════════════════════════════
+
+        window.ShowUserEditModal = function (userId) {
+            $('#editUserAlertArea').html('');
+            $('#editUserForm')[0].reset();
+
+            $.ajax({
+                url: '/Admin/UserManagements/Edit/' + userId,
+                type: 'GET',
+                success: function (data) {
+                    $('#editUserId').val(data.id);
+                    $('#editUserFullName').val(data.fullName);
+                    $('#editUserName').val(data.userName);
+                    $('#editUserEmail').val(data.email);
+                    $('#editUserPhone').val(data.phoneNumber);
+                    $('#editUserType').val(data.userType);
+                    $('#editUserCCCD').val(data.cccd);
+                    $('#editUserPassport').val(data.passportNumber);
+                    $('#editUserNationality').val(data.nationality);
+                    $('#editUserIsLockedOut').prop('checked', data.isLockedOut);
+
+                    $('#editUserRolesContainer input[type="checkbox"]').prop('checked', false);
+                    if (data.roles && data.roles.length > 0) {
+                        $.each(data.roles, function (i, role) {
+                            $('#editUserRolesContainer input[value="' + role + '"]').prop('checked', true);
+                        });
+                    }
+
+                    $('#editUserModal').modal('show');
+                },
+                error: function () {
+                    alert('Cannot load user data. Please try again.');
+                }
+            });
+        };
+
+        $('#editUserForm').on('submit', function (e) {
+            e.preventDefault();
+            var userId = $('#editUserId').val();
+            var $btn   = $('#editUserSubmitBtn');
+
+            $btn.prop('disabled', true)
+                .html('<span class="spinner-border spinner-border-sm me-1"></span>Saving...');
+
+            $.ajax({
+                url: '/Admin/UserManagements/Edit/' + userId,
+                type: 'POST',
+                data: $(this).serialize(),
+                success: function () {
+                    $('#editUserModal').modal('hide');
+                    if (typeof userSearch === 'function') userSearch();
+                },
+                error: function (xhr) {
+                    var msg = 'An error occurred. Please try again.';
+                    try {
+                        var res = JSON.parse(xhr.responseText);
+                        if (res.errors) msg = res.errors.join('<br>');
+                    } catch (ex) {}
+
+                    $('#editUserAlertArea').html(
+                        '<div class="alert alert-danger alert-dismissible fade show py-2 small">' +
+                        '  <i class="bi bi-exclamation-triangle me-1"></i>' + msg +
+                        '  <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>' +
+                        '</div>'
+                    );
+                },
+                complete: function () {
+                    $btn.prop('disabled', false)
+                        .html('<i class="bi bi-floppy me-1"></i>Save Changes');
+                }
+            });
+        });
+
+    })(jQuery);
+</script>
