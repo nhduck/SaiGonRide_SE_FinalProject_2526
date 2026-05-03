@@ -18,17 +18,17 @@
                 <span class="badge mb-4 hero-animate-1"
                       style="background:rgba(22,163,74,.2);color:#4ade80;border:1px solid rgba(74,222,128,.3);
                              font-weight:600;font-size:.82rem;padding:.45rem 1rem;border-radius:999px;letter-spacing:.04em;">
-                    <i class="bi bi-lightning-charge-fill me-1"></i> #1 Bike Sharing in Ho Chi Minh City
+                    <i class="bi bi-lightning-charge-fill me-1"></i> <span data-i18n="hero_badge">#1 Bike Sharing in Ho Chi Minh City</span>
                 </span>
 
                 <h1 class="display-4 fw-bold text-white mb-4 hero-animate-2" style="line-height:1.15;letter-spacing:-.02em;">
-                    Move green,<br/>
-                    <span style="background:linear-gradient(90deg,#4ade80,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">
+                    <span data-i18n="hero_title_1">Move green,</span><br/>
+                    <span style="background:linear-gradient(90deg,#4ade80,#22d3ee);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;" data-i18n="hero_title_2">
                         go anywhere
                     </span>
                 </h1>
 
-                <p class="text-white-50 mb-5 hero-animate-3" style="font-size:1.1rem;line-height:1.75;max-width:480px;">
+                <p class="text-white-50 mb-5 hero-animate-3" style="font-size:1.1rem;line-height:1.75;max-width:480px;" data-i18n-html="hero_desc">
                     A network of over <strong class="text-white">50 stations</strong> covering all of HCMC.
                     Book a bike in 30 seconds — no cash, no traffic jams.
                 </p>
@@ -37,12 +37,12 @@
                     <a href="/#station-search"
                        class="btn btn-success btn-lg px-5 fw-bold"
                        style="border-radius:999px;box-shadow:0 8px 24px rgba(22,163,74,.4);">
-                        <i class="bi bi-geo-alt-fill me-2"></i>Find a Station
+                        <i class="bi bi-geo-alt-fill me-2"></i><span data-i18n="hero_btn_find">Find a Station</span>
                     </a>
                     <a href="/Home/Guide"
                        class="btn btn-lg px-5 fw-semibold"
                        style="border-radius:999px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:#fff;backdrop-filter:blur(8px);">
-                        <i class="bi bi-play-circle me-2"></i>How It Works
+                        <i class="bi bi-play-circle me-2"></i><span data-i18n="hero_btn_how">How It Works</span>
                     </a>
                 </div>
 
@@ -50,15 +50,15 @@
                 <div class="d-flex gap-5 mt-5 hero-animate-4 pt-2">
                     <div>
                         <div class="sr-stat-number" data-target="50">0</div>
-                        <div class="text-white-50 small mt-1">Stations</div>
+                        <div class="text-white-50 small mt-1" data-i18n="stat_stations">Stations</div>
                     </div>
                     <div style="border-left:1px solid rgba(255,255,255,.15);padding-left:2rem;">
                         <div class="sr-stat-number" data-target="500">0</div>
-                        <div class="text-white-50 small mt-1">Vehicles</div>
+                        <div class="text-white-50 small mt-1" data-i18n="stat_vehicles">Vehicles</div>
                     </div>
                     <div style="border-left:1px solid rgba(255,255,255,.15);padding-left:2rem;">
                         <div class="sr-stat-number" data-target="10000">0</div>
-                        <div class="text-white-50 small mt-1">Total Rides</div>
+                        <div class="text-white-50 small mt-1" data-i18n="stat_rides">Total Rides</div>
                     </div>
                 </div>
             </div>
@@ -72,8 +72,8 @@
                          style="top: 18%; left: 42%; transform: translateX(-50%); animation: hero-slide-up .5s .7s both; z-index: 10; white-space: nowrap;">
                         <span style="font-size: 1.3rem;">🌿</span>
                         <div>
-                            <div class="text-white fw-bold" style="font-size: .85rem;">Zero CO₂</div>
-                            <div style="font-size: .72rem; color: rgba(255, 255, 255, .6);">100% green</div>
+                            <div class="text-white fw-bold" style="font-size: .85rem;" data-i18n="glass_zero_co2">Zero CO₂</div>
+                            <div style="font-size: .72rem; color: rgba(255, 255, 255, .6);" data-i18n="glass_green">100% green</div>
                         </div>
                     </div>
 
@@ -82,8 +82,8 @@
                          style="top: 48%; left: 5%; animation: hero-slide-up .5s .85s both; z-index: 10;">
                         <span style="font-size: 1.4rem;">⚡</span>
                         <div>
-                            <div class="text-white fw-bold" style="font-size: .85rem;">E-Scooter</div>
-                            <div style="font-size: .72rem; color: rgba(255, 255, 255, .6);">1,500 VND/min</div>
+                            <div class="text-white fw-bold" style="font-size: .85rem;" data-i18n="glass_escooter">E-Scooter</div>
+                            <div style="font-size: .72rem; color: rgba(255, 255, 255, .6);" data-i18n="glass_escooter_price">1,500 VND/min</div>
                         </div>
                     </div>
 
@@ -92,8 +92,8 @@
                          style="top: 35%; right: -25%; animation: hero-slide-up .5s 1s both; z-index: 10;">
                         <div class="text-success fw-bold me-1" style="font-size: 1.7rem;">✓</div>
                         <div>
-                            <div class="text-white fw-bold" style="font-size: .85rem;">Instant unlock</div>
-                            <div style="font-size: .72rem; color: rgba(255, 255, 255, .6);">No cash needed</div>
+                            <div class="text-white fw-bold" style="font-size: .85rem;" data-i18n="glass_instant">Instant unlock</div>
+                            <div style="font-size: .72rem; color: rgba(255, 255, 255, .6);" data-i18n="glass_no_cash">No cash needed</div>
                         </div>
                     </div>
 
@@ -272,9 +272,9 @@
 <section class="sr-section" style="background:#fff;">
     <div class="container">
         <div class="text-center mb-5 sr-reveal">
-            <span class="sr-price-badge mb-3">Why SaigonRide?</span>
-            <h2 class="fw-bold mt-3" style="font-size:2.2rem;">Smarter urban mobility</h2>
-            <p class="text-muted mt-2" style="max-width:520px;margin:auto;">
+            <span class="sr-price-badge mb-3" data-i18n="feat_badge">Why SaigonRide?</span>
+            <h2 class="fw-bold mt-3" style="font-size:2.2rem;" data-i18n="feat_title">Smarter urban mobility</h2>
+            <p class="text-muted mt-2" style="max-width:520px;margin:auto;" data-i18n="feat_desc">
                 Designed for the busy city lifestyle — fast, green, and effortlessly convenient.
             </p>
         </div>
@@ -311,8 +311,8 @@
 <section class="sr-section" style="background:var(--sr-gray-50);">
     <div class="container">
         <div class="text-center mb-5 sr-reveal">
-            <span class="sr-price-badge mb-3">Simple 3-step process</span>
-            <h2 class="fw-bold mt-3" style="font-size:2.2rem;">Start riding in seconds</h2>
+            <span class="sr-price-badge mb-3" data-i18n="steps_badge">Simple 3-step process</span>
+            <h2 class="fw-bold mt-3" style="font-size:2.2rem;" data-i18n="steps_title">Start riding in seconds</h2>
         </div>
 
         <div class="row g-4 justify-content-center">
@@ -351,7 +351,7 @@
 
         <div class="text-center mt-4 sr-reveal">
             <a href="/Home/Guide" class="btn btn-outline-success px-5 rounded-pill fw-semibold">
-                <i class="bi bi-book me-2"></i>View Detailed Guide
+                <i class="bi bi-book me-2"></i><span data-i18n="steps_btn_guide">View Detailed Guide</span>
             </a>
         </div>
     </div>
@@ -362,13 +362,13 @@
     <div class="container">
         <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3 sr-reveal">
             <div>
-                <h2 class="fw-bold mb-1" style="font-size:2rem;">📍 Stations Near You</h2>
-                <p class="text-muted mb-0">Pick a station, pick a ride, start your journey</p>
+                <h2 class="fw-bold mb-1" style="font-size:2rem;" data-i18n="stations_title">📍 Stations Near You</h2>
+                <p class="text-muted mb-0" data-i18n="stations_desc">Pick a station, pick a ride, start your journey</p>
             </div>
             <div class="d-flex gap-3 align-items-center flex-shrink-0">
                 <div class="input-group shadow-sm rounded-pill overflow-hidden bg-white border" style="min-width:260px;">
                     <span class="input-group-text bg-white border-0 ps-3 text-muted"><i class="bi bi-search"></i></span>
-                    <input type="text" id="liveSearchBox" class="form-control border-0 shadow-none ps-1" placeholder="Search by name or address...">
+                    <input type="text" id="liveSearchBox" class="form-control border-0 shadow-none ps-1" placeholder="Search by name or address..." data-i18n-placeholder="stations_search_placeholder">
                 </div>
             </div>
         </div>
@@ -492,8 +492,8 @@
 <section class="sr-section" style="background:var(--sr-gray-50);">
     <div class="container">
         <div class="text-center mb-5 sr-reveal">
-            <span class="sr-price-badge mb-3">What riders say</span>
-            <h2 class="fw-bold mt-3" style="font-size:2rem;">Thousands already trust us</h2>
+            <span class="sr-price-badge mb-3" data-i18n="testimonials_badge">What riders say</span>
+            <h2 class="fw-bold mt-3" style="font-size:2rem;" data-i18n="testimonials_title">Thousands already trust us</h2>
         </div>
         <div class="row g-4">
             @{
@@ -541,22 +541,22 @@
             <div style="position:absolute;bottom:-40px;left:-40px;width:200px;height:200px;
                         border-radius:50%;background:rgba(14,165,233,.12);filter:blur(40px);"></div>
 
-            <h2 class="fw-bold mb-3 position-relative" style="font-size:2.2rem;">
+            <h2 class="fw-bold mb-3 position-relative" style="font-size:2.2rem;" data-i18n="cta_title">
                 Ready to start your ride?
             </h2>
-            <p class="text-white-50 mb-4 position-relative" style="max-width:480px;margin:auto;font-size:1.05rem;">
+            <p class="text-white-50 mb-4 position-relative" style="max-width:480px;margin:auto;font-size:1.05rem;" data-i18n="cta_desc">
                 Sign up free and get 15% off your first 3 rides.
             </p>
             <div class="d-flex justify-content-center gap-3 flex-wrap position-relative">
                 <a asp-controller="Account" asp-action="Register"
                    class="btn btn-success btn-lg px-5 fw-bold rounded-pill"
                    style="box-shadow:0 8px 24px rgba(22,163,74,.4);">
-                    <i class="bi bi-person-plus me-2"></i>Register Free
+                    <i class="bi bi-person-plus me-2"></i><span data-i18n="cta_register">Register Free</span>
                 </a>
                 <a href="/#station-search"
                    class="btn btn-lg px-5 fw-semibold rounded-pill"
                    style="background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.25);color:#fff;">
-                    <i class="bi bi-map me-2"></i>View Station Map
+                    <i class="bi bi-map me-2"></i><span data-i18n="cta_map">View Station Map</span>
                 </a>
             </div>
         </div>

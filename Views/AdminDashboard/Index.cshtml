@@ -1,113 +1,30 @@
-﻿@{
+@{
+	Layout = "~/Views/Shared/_AdminLayout.cshtml";
 	ViewData["Title"] = "Admin Dashboard";
 }
 
-<div class="container-fluid">
-    <div class="row">
-        <nav id="sidebarMenu" class="col-md-3 col-lg-2 d-md-block bg-white border-end shadow-sm sidebar collapse min-vh-100 p-0">
-            <div class="position-sticky">
-                <div class="p-4 border-bottom d-none d-md-block text-center">
-                    <h4 id="logo" class="mb-0 fw-bold">Admin Control</h4>
-                </div>
-
-                <ul class="nav flex-column p-3 fs-6">
-                    <li class="nav-item mb-1">
-                        <a class="nav-link rounded-3 px-3 py-2 d-flex align-items-center active-selected"
-                               href="#" data-url="/Dashboard/Index.cshtml">
-                            <i class="bi bi-speedometer2 me-3 fs-5"></i>
-                            <span>Dashboard</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item mb-1">
-                        <a class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center"
-                               href="#" data-url="/Stations/Index">
-                            <i class="bi bi-geo-alt me-3 fs-5"></i>
-                            <span>Station Management</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item mb-1">
-                        <a class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center"
-                               href="#" data-url="/Vehicles/Index">
-                            <i class="bi bi-bicycle me-3 fs-5"></i>
-                            <span>Vehicle Management</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item mb-1">
-                        <a class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center"
-                               href="#" data-url="/UserManagements/Index">
-                            <i class="bi bi-people me-3 fs-5"></i>
-                            <span>User Management</span>
-                        </a>
-                    </li>
-
-                    <li class="nav-item mb-1">
-                        <a class="nav-link text-secondary rounded-3 px-3 py-2 d-flex align-items-center"
-                               href="#" data-url="/AdminDashboard/Reports">
-                            <i class="bi bi-flag me-3 fs-5"></i>
-                            <span>Reports</span>
-                        </a>
-                    </li>
-                </ul>
-            </div>
-        </nav>
-
-        <header class="navbar navbar-dark sticky-top bg-dark d-md-none shadow-sm">
-            <a class="navbar-brand px-3" href="#">Admin Control</a>
-            <button class="navbar-toggler me-3" type="button" data-bs-toggle="collapse" data-bs-target="#sidebarMenu">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-        </header>
-
-        <main id="main" class="col-md-9 ms-sm-auto col-lg-10 px-md-4 bg-light min-vh-100">
-            <div class="p-4">
-            </div>
-        </main>
+<div id="main" class="container-fluid p-4 min-vh-100 bg-light">
+    <!-- Default initial content load (e.g. Dashboard view) -->
+    <div class="h1 text-center align-self-center mt-5 text-muted">
+        <i class="bi bi-arrow-clockwise me-2" style="display:inline-block; animation: spin 1s linear infinite;"></i>
+        <span data-i18n="admin_loading">Loading...</span>
     </div>
 </div>
 
-<link rel="stylesheet" href="~/css/AdminDashboard/indexStyle.css" />
+<style>
+    @@keyframes spin { 100% { transform: rotate(360deg); } }
+</style>
 
 @section Scripts {
 	<script>
-		const navLinks = document.querySelectorAll('.nav-link');
-
 		$(document).ready(function () {
-
-			loadPage($('.nav-link.active-selected').data('url'));
-
-			$('.nav-link').click(function (e) {
-				e.preventDefault();
-
-				navLinks.forEach(item => item.classList.remove('active-selected'));
-
-				$(this).addClass('active-selected');
-				const url = $(this).data('url');
-				loadPage(url);
-
-				if (window.innerWidth < 768) {
-					$('.collapse').collapse('hide');
-				}
-			});
+			// Initially load the first active tab (e.g., Dashboard or Stations)
+            // By default, maybe load Stations since we don't have a Dashboard/Index yet
+			loadPage('/Stations/Index');
+            
+            // Mark the stations link as active initially
+            $('.nav-ajax-link').removeClass('active');
+            $('[data-url="/Stations/Index"]').addClass('active');
 		});
-
-        function loadPage(url) {
-            if (!url) return;
-
-            $('.modal').modal('hide');
-            $('body').removeClass('modal-open');
-            $('.modal-backdrop').remove();
-
-            $('#main').html('<div class="h1 p-4 text-center align-self-center"><span>Loading...</span></div>');
-
-            $('#main').load(url, function (response, status, xhr) {
-                if (status === 'error') {
-                    $('#main').html('<div class="h1 p-4 text-center align-self-center text-danger">Lỗi ' + xhr.status + ': Không tìm thấy trang</div>');
-                }
-            });
-        }
-
 	</script>
 }
