@@ -22,6 +22,11 @@ builder.Services.ConfigureApplicationCookie(options =>
     options.AccessDeniedPath = "/Account/AccessDenied";
 });
 
+// Email service
+builder.Services.Configure<RentalVehicleService.Models.EmailSettings>(
+    builder.Configuration.GetSection("EmailSettings"));
+builder.Services.AddTransient<RentalVehicleService.Services.IEmailService, RentalVehicleService.Services.SmtpEmailService>();
+
 builder.Services.AddControllersWithViews()
     .AddRazorOptions(options =>
     {
