@@ -97,7 +97,7 @@ namespace RentalVehicleService.Controllers
                 var verificationCode = new Random().Next(100000, 999999).ToString();
                 
                 user.EmailVerificationCode = verificationCode;
-                user.VerificationCodeExpires = DateTime.UtcNow.AddMinutes(15);
+                user.VerificationCodeExpires = DateTime.UtcNow.AddMinutes(3);
                 await _userManager.UpdateAsync(user);
 
                 // Send verification email
@@ -112,7 +112,7 @@ namespace RentalVehicleService.Controllers
                         <div style='text-align:center;margin:24px 0;'>
                             <span style='display:inline-block;font-size:32px;font-weight:700;letter-spacing:8px;background:#f0fdf4;color:#16a34a;padding:16px 32px;border-radius:12px;border:2px dashed #16a34a;'>{verificationCode}</span>
                         </div>
-                        <p style='color:#ef4444;font-size:14px;text-align:center;'>⏰ This code will expire in <strong>15 minutes</strong>.</p>
+                        <p style='color:#ef4444;font-size:14px;text-align:center;'>⏰ This code will expire in <strong>3 minutes</strong>.</p>
                         <hr style='border:none;border-top:1px solid #e5e7eb;margin:20px 0;'/>
                         <p style='color:#9ca3af;font-size:12px;text-align:center;'>If you didn't request this, please ignore this email.</p>
                     </div>";
@@ -206,7 +206,7 @@ namespace RentalVehicleService.Controllers
             var newCode = new Random().Next(100000, 999999).ToString();
             
             user.EmailVerificationCode = newCode;
-            user.VerificationCodeExpires = DateTime.UtcNow.AddMinutes(15);
+            user.VerificationCodeExpires = DateTime.UtcNow.AddMinutes(3);
             await _userManager.UpdateAsync(user);
 
             var emailBody = $@"
@@ -220,7 +220,7 @@ namespace RentalVehicleService.Controllers
                     <div style='text-align:center;margin:24px 0;'>
                         <span style='display:inline-block;font-size:32px;font-weight:700;letter-spacing:8px;background:#f0fdf4;color:#16a34a;padding:16px 32px;border-radius:12px;border:2px dashed #16a34a;'>{newCode}</span>
                     </div>
-                    <p style='color:#ef4444;font-size:14px;text-align:center;'>⏰ This code will expire in <strong>15 minutes</strong>.</p>
+                    <p style='color:#ef4444;font-size:14px;text-align:center;'>⏰ This code will expire in <strong>3 minutes</strong>.</p>
                 </div>";
 
             try
