@@ -154,7 +154,7 @@
             var token = $('input[name="__RequestVerificationToken"]').first().val();
 
             $.ajax({
-                url: '/Users/DeleteConfirmed',
+                url: '/Admin/UserManagements/DeleteConfirmed',
                 type: 'POST',
                 data: { id: id, __RequestVerificationToken: token },
                 success: function () {
@@ -193,7 +193,7 @@
                 .html('<span class="spinner-border spinner-border-sm me-1"></span>Creating...');
 
             $.ajax({
-                url: '/Users/Create',
+                url: '/Admin/UserManagements/Create',
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function () {
@@ -238,7 +238,7 @@
             $('#userDetailsModal').modal('show');
 
             $.ajax({
-                url: '/Users/Details/' + userId,
+                url: '/Admin/UserManagements/Details/' + userId,
                 type: 'GET',
                 success: function (html) {
                     $('#userDetailsModalBody').html(html);
@@ -269,7 +269,7 @@
             $('#editUserForm')[0].reset();
 
             $.ajax({
-                url: '/Users/Edit/' + userId,
+                url: '/Admin/UserManagements/Edit/' + userId,
                 type: 'GET',
                 success: function (data) {
                     $('#editUserId').val(data.id);
@@ -308,7 +308,7 @@
                 .html('<span class="spinner-border spinner-border-sm me-1"></span>Saving...');
 
             $.ajax({
-                url: '/Users/Edit/' + userId,
+                url: '/Admin/UserManagements/Edit/' + userId,
                 type: 'POST',
                 data: $(this).serialize(),
                 success: function () {
@@ -349,7 +349,7 @@
             $btn.prop('disabled', true);
 
             $.ajax({
-                url: '/Users/ToggleLock',
+                url: '/Admin/UserManagements/ToggleLock',
                 type: 'POST',
                 data: { id: userId, __RequestVerificationToken: token },
                 success: function () {
@@ -370,7 +370,7 @@
 
         function updateUserStats() {
             $.ajax({
-                url: '/Users/GetAmountInfo',
+                url: '/Admin/UserManagements/GetAmountInfo',
                 type: 'GET',
                 success: function (data) {
                     $('#totalUserCount').text(data.totalUsers);
@@ -434,7 +434,7 @@
 
         function userSearch() {
             $.ajax({
-                url: '/AdminDashboard/SearchUsers',
+                url: '/Admin/UserManagements/SearchUsers',
                 type: 'GET',
                 data: { searchTerm: $('#userSearchBar').val(), filters: selectedUserFilters },
                 traditional: true,
