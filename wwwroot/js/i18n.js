@@ -28,45 +28,60 @@
     function applyTranslations(dict) {
         if (!dict) return;
 
-        // data-i18n  →  textContent
+        // Unified processor for data-i18n
         document.querySelectorAll('[data-i18n]').forEach(el => {
-            const key = el.getAttribute('data-i18n');
+            const raw = el.getAttribute('data-i18n');
+            let key = raw;
+            let attr = null;
+
+            // Check for [attr]key syntax
+            const match = raw.match(/^\[(.*)\](.*)$/);
+            if (match) {
+                attr = match[1];
+                key = match[2];
+            }
+
             if (dict[key] !== undefined) {
-                // preserve inner HTML structure for elements with icons
-                const icon = el.querySelector('i, svg');
-                if (icon) {
-                    // Keep the icon, replace only the text node(s)
-                    const nodes = el.childNodes;
-                    let replaced = false;
-                    for (let i = nodes.length - 1; i >= 0; i--) {
-                        if (nodes[i].nodeType === Node.TEXT_NODE && nodes[i].textContent.trim()) {
-                            nodes[i].textContent = dict[key];
-                            replaced = true;
-                            break;
-                        }
-                    }
-                    if (!replaced) {
-                        el.append(document.createTextNode(dict[key]));
-                    }
+                let text = dict[key];
+
+                // Check for parameters {0}, {1}
+                const p1 = el.getAttribute('data-i18n-param1');
+                const p2 = el.getAttribute('data-i18n-param2');
+                if (p1 !== null) text = text.replace('{0}', p1);
+                if (p2 !== null) text = text.replace('{1}', p2);
+
+                if (attr) {
+                    el.setAttribute(attr, text);
                 } else {
-                    el.textContent = dict[key];
+                    // textContent (preserving icons)
+                    const icon = el.querySelector('i, svg');
+                    if (icon) {
+                        const nodes = el.childNodes;
+                        let replaced = false;
+                        for (let i = nodes.length - 1; i >= 0; i--) {
+                            if (nodes[i].nodeType === Node.TEXT_NODE && nodes[i].textContent.trim()) {
+                                nodes[i].textContent = text;
+                                replaced = true;
+                                break;
+                            }
+                        }
+                        if (!replaced) el.append(document.createTextNode(text));
+                    } else {
+                        el.textContent = text;
+                    }
                 }
             }
         });
 
-        // data-i18n-placeholder  →  placeholder
+        // Backward compatibility / legacy attributes
         document.querySelectorAll('[data-i18n-placeholder]').forEach(el => {
             const key = el.getAttribute('data-i18n-placeholder');
             if (dict[key] !== undefined) el.placeholder = dict[key];
         });
-
-        // data-i18n-title  →  title attribute
         document.querySelectorAll('[data-i18n-title]').forEach(el => {
             const key = el.getAttribute('data-i18n-title');
             if (dict[key] !== undefined) el.title = dict[key];
         });
-
-        // data-i18n-html  →  innerHTML
         document.querySelectorAll('[data-i18n-html]').forEach(el => {
             const key = el.getAttribute('data-i18n-html');
             if (dict[key] !== undefined) el.innerHTML = dict[key];
@@ -82,24 +97,12 @@
 
         const flags = {
             'en': '🇬🇧',
-            'vi': '🇻🇳',
-            'ja': '🇯🇵',
-            'ko': '🇰🇷',
-            'zh': '🇨🇳',
-            'fr': '🇫🇷',
-            'de': '🇩🇪',
-            'es': '🇪🇸'
+            'vi': '🇻🇳'
         };
 
         const names = {
             'en': 'English',
-            'vi': 'Tiếng Việt',
-            'ja': '日本語',
-            'ko': '한국어',
-            'zh': '中文',
-            'fr': 'Français',
-            'de': 'Deutsch',
-            'es': 'Español'
+            'vi': 'Tiếng Việt'
         };
 
         const flag = flags[code] || '🌐';
@@ -140,6 +143,17 @@
         updateLangButton(code);
     }
 
+    /** Get current translation dictionary. */
+    function getDict() {
+        return _cache[_currentLang] || {};
+    }
+
+    /** Get a translated string by key. */
+    function getI18nText(key) {
+        const dict = getDict();
+        return dict[key] || key;
+    }
+
     /** Get the current active language code. */
     function getCurrentLang() {
         return _currentLang;
@@ -160,4 +174,5 @@
     // Expose globally
     window.changeLanguage = changeLanguage;
     window.getCurrentLang = getCurrentLang;
+    window.getI18nText = getI18nText;
 })();

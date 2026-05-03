@@ -9,7 +9,7 @@
 }
 
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"] - SaigonRide Admin</title>
@@ -24,7 +24,7 @@
 </head>
 <body>
     <div class="d-flex">
-        <!-- SIDEBAR -->
+        <!-- Sidebar Navigation -->
         <aside class="sr-sidebar" id="adminSidebar">
             <!-- Brand -->
             <div class="sr-sidebar-brand">
@@ -39,7 +39,7 @@
 
             <!-- Navigation -->
             <nav class="sr-sidebar-nav">
-                <a href="#" data-url="/Dashboard/Index.cshtml" class="sr-sidebar-link active nav-ajax-link">
+                <a href="#" data-url="/AdminDashboard/Dashboard" class="sr-sidebar-link active nav-ajax-link">
                     <i class="bi bi-speedometer2"></i>
                     <span data-i18n="admin_dashboard">Dashboard</span>
                 </a>
@@ -70,7 +70,7 @@
             </nav>
         </aside>
 
-        <!-- MAIN AREA -->
+        <!-- Main Content Area -->
         <div class="sr-admin-main">
             <!-- Top bar -->
             <header class="sr-admin-topbar">
@@ -86,7 +86,7 @@
                     <div class="dropdown me-3">
                         <button class="btn btn-light dropdown-toggle d-flex align-items-center gap-1"
                                 type="button" id="adminLangDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-translate text-success"></i><span class="d-none d-md-inline small text-dark">🇬🇧 English</span>
+                            <i class="bi bi-translate text-success"></i><span class="d-none d-md-inline small text-dark">English</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                             <li><a class="dropdown-item sr-lang-item d-flex align-items-center gap-2" href="javascript:void(0);" data-lang="en" onclick="changeLanguage('en')">🇬🇧 English</a></li>
@@ -104,34 +104,27 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-end shadow-sm p-0" style="width: 320px; border-radius: 0.5rem; overflow: hidden;">
                             <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light">
-                                <h6 class="mb-0 fw-bold text-dark fs-6">Notifications</h6>
+                                <h6 class="mb-0 fw-bold text-dark fs-6" data-i18n="admin_notifications">Notifications</h6>
                                 <span class="badge bg-success rounded-pill px-2 py-1" style="font-size: 0.7rem;">3 new</span>
                             </div>
                             <div class="list-group list-group-flush" style="max-height: 350px; overflow-y: auto;">
-                                <a href="#" class="list-group-item list-group-item-action border-bottom-0 border-top-0 px-3 py-3" style="background-color: #f8fff9;">
+                                <div class="list-group-item border-bottom-0 border-top-0 px-3 py-3" style="background-color: #f8fff9;">
                                     <div class="d-flex w-100 justify-content-between mb-1">
-                                        <span class="fw-semibold text-dark" style="font-size: 0.85rem;"><i class="bi bi-bicycle text-success me-2"></i>New Rental Started</span>
-                                        <small class="text-success fw-medium">Just now</small>
+                                        <span class="fw-semibold text-dark" style="font-size: 0.85rem;"><i class="bi bi-bicycle text-success me-2"></i><span data-i18n="admin_activity_rental_started">New Rental Started</span></span>
+                                        <small class="text-success fw-medium" data-i18n="admin_just_now">Just now</small>
                                     </div>
-                                    <p class="mb-0 text-muted" style="font-size: 0.8rem; line-height: 1.4;">User <strong>Nguyen Van A</strong> started a ride from Station Bến Thành.</p>
-                                </a>
-                                <a href="#" class="list-group-item list-group-item-action border-bottom-0 px-3 py-3" style="background-color: #fffaf0;">
+                                    <p class="mb-0 text-muted" style="font-size: 0.8rem; line-height: 1.4;" data-i18n="admin_activity_rental_started_mock">User <strong>Nguyen Van A</strong> started a ride from Station Bến Thành.</p>
+                                </div>
+                                <div class="list-group-item border-bottom-0 px-3 py-3" style="background-color: #fffaf0;">
                                     <div class="d-flex w-100 justify-content-between mb-1">
-                                        <span class="fw-semibold text-dark" style="font-size: 0.85rem;"><i class="bi bi-exclamation-triangle text-warning me-2"></i>Low Battery Alert</span>
+                                        <span class="fw-semibold text-dark" style="font-size: 0.85rem;"><i class="bi bi-exclamation-triangle text-warning me-2"></i><span data-i18n="admin_battery_alerts">Low Battery Alert</span></span>
                                         <small class="text-muted">10m ago</small>
                                     </div>
-                                    <p class="mb-0 text-muted" style="font-size: 0.8rem; line-height: 1.4;">E-Scooter #104 at Station Nhà Rồng is below 15% battery.</p>
-                                </a>
-                                <a href="#" class="list-group-item list-group-item-action border-bottom-0 px-3 py-3">
-                                    <div class="d-flex w-100 justify-content-between mb-1">
-                                        <span class="fw-semibold text-dark" style="font-size: 0.85rem;"><i class="bi bi-person-plus text-primary me-2"></i>New User Registered</span>
-                                        <small class="text-muted">1 hr ago</small>
-                                    </div>
-                                    <p class="mb-0 text-muted" style="font-size: 0.8rem; line-height: 1.4;"><strong>Trần Thị B</strong> has successfully registered a new account.</p>
-                                </a>
+                                    <p class="mb-0 text-muted" style="font-size: 0.8rem; line-height: 1.4;" data-i18n="admin_activity_low_battery_mock">E-Scooter #104 at Station Nhà Rồng is below 15% battery.</p>
+                                </div>
                             </div>
                             <div class="p-2 border-top bg-light text-center">
-                                <a href="#" class="text-decoration-none small text-success fw-semibold hover-green">View All Notifications</a>
+                                <a href="#" class="text-decoration-none small text-success fw-semibold" data-i18n="admin_view_all_notifications">View All Notifications</a>
                             </div>
                         </div>
                     </div>
@@ -175,6 +168,7 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
     <script src="~/js/i18n.js" asp-append-version="true"></script>
     <script>
