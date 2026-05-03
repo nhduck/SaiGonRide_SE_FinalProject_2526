@@ -1,0 +1,31 @@
+services:
+  db:
+    image: mcr.microsoft.com/mssql/server:2022-latest
+    container_name: saigonride-db
+    environment:
+      - ACCEPT_EULA=Y
+      - MSSQL_SA_PASSWORD=SaigonRide@123
+    ports:
+      - "1433:1433"
+    networks:
+      - saigonride-network
+
+  app:
+    image: saigonride-app
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: saigonride-web
+    environment:
+      - ASPNETCORE_ENVIRONMENT=Development
+      - ConnectionStrings__DefaultConnection=Server=db;Database=SaigonRideDB;User Id=sa;Password=SaigonRide@123;TrustServerCertificate=True
+    ports:
+      - "5000:8080"
+    depends_on:
+      - db
+    networks:
+      - saigonride-network
+
+networks:
+  saigonride-network:
+    driver: bridge

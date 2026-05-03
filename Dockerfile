@@ -1,31 +1,23 @@
-# See https://aka.ms/customizecontainer to learn how to customize your debug container and how Visual Studio uses this Dockerfile to build your images for faster debugging.
-
-# Depending on the operating system of the host machines(s) that will build or run the containers, the image specified in the FROM Statement may need to be changed.
-# For more information, please see https://aka.ms/containercompat
-
-# This stage is used when running from VS in fast mode (Default for Debug configuration)
-FROM mcr.microsoft.com/dotnet/aspnet:8.0-nanoserver-1809 AS base
+# Stage 1: Base Runtime
+FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
-EXPOSE 8080
-EXPOSE 8081
+EXPOSE 80
+EXPOSE 443
 
-
-# This stage is used to build the service project
-FROM mcr.microsoft.com/dotnet/sdk:8.0-nanoserver-1809 AS build
-ARG BUILD_CONFIGURATION=Release
+# Stage 2: Build
+FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 WORKDIR /src
-COPY ["RentalVehicleService.csproj", "."]
-RUN dotnet restore "./RentalVehicleService.csproj"
+COPY ["RentalVehicleService.csproj", "./"]
+RUN dotnet restore "RentalVehicleService.csproj"
 COPY . .
 WORKDIR "/src/."
-RUN dotnet build "./RentalVehicleService.csproj" -c %BUILD_CONFIGURATION% -o /app/build
+RUN dotnet build "RentalVehicleService.csproj" -c Release -o /app/build
 
-# This stage is used to publish the service project to be copied to the final stage
+# Stage 3: Publish
 FROM build AS publish
-ARG BUILD_CONFIGURATION=Release
-RUN dotnet publish "./RentalVehicleService.csproj" -c %BUILD_CONFIGURATION% -o /app/publish /p:UseAppHost=false
+RUN dotnet publish "RentalVehicleService.csproj" -c Release -o /app/publish /p:UseAppHost=false
 
-# This stage is used in production or when running from VS in regular mode (Default when not using the Debug configuration)
+# Stage 4: Final Stage
 FROM base AS final
 WORKDIR /app
 COPY --from=publish /app/publish .
