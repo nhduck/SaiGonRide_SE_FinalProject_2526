@@ -64,13 +64,13 @@
             @{
                 var values = new[] {
                     new { Icon="🌿", Color="#dcfce7", Title="Green & Sustainable",
-                          Desc="Every decision we make is guided by reducing CO₂ emissions and protecting Saigon's environment." },
+                          Desc="Every decision we make is guided by reducing CO₂ emissions and protecting Saigon's environment.", TitleKey="about_val1_title", DescKey="about_val1_desc" },
                     new { Icon="🤝", Color="#dbeafe", Title="Transparent & Trustworthy",
-                          Desc="Clear pricing, no hidden charges. Your data is protected end-to-end with bank-grade security." },
+                          Desc="Clear pricing, no hidden charges. Your data is protected end-to-end with bank-grade security.", TitleKey="about_val2_title", DescKey="about_val2_desc" },
                     new { Icon="⚡", Color="#fef9c3", Title="Fast & Convenient",
-                          Desc="Unlock a vehicle in 10 seconds. Automatic billing. No cash, no dedicated app." },
+                          Desc="Unlock a vehicle in 10 seconds. Automatic billing. No cash, no dedicated app.", TitleKey="about_val3_title", DescKey="about_val3_desc" },
                     new { Icon="💛", Color="#ffe4e6", Title="Community First",
-                          Desc="5% of all revenue is donated to the HCMC Urban Green Tree Fund." },
+                          Desc="5% of all revenue is donated to the HCMC Urban Green Tree Fund.", TitleKey="about_val4_title", DescKey="about_val4_desc" },
                 };
             }
             @foreach (var v in values)
@@ -79,8 +79,8 @@
                     <div class="text-center p-4 h-100 bg-white rounded-4 shadow-sm border border-light">
                         <div style="font-size:2.5rem;margin-bottom:1rem;">@v.Icon</div>
                         <div style="width:48px;height:4px;background:#16a34a;border-radius:999px;margin:0 auto 1rem;"></div>
-                        <h5 class="fw-bold mb-2">@v.Title</h5>
-                        <p class="text-muted mb-0" style="font-size:.9rem;line-height:1.65;">@v.Desc</p>
+                        <h5 class="fw-bold mb-2" data-i18n="@v.TitleKey">@v.Title</h5>
+                        <p class="text-muted mb-0" style="font-size:.9rem;line-height:1.65;" data-i18n="@v.DescKey">@v.Desc</p>
                     </div>
                 </div>
             }
@@ -98,9 +98,9 @@
         <div class="row g-4 justify-content-center">
             @{
                 var members = new[] {
-                    new { Name="Truong Minh Thanh", Role="Developer & CEO", Emoji="🧑‍💻", School="Ton Duc Thang University" },
-                    new { Name="Ngo Huynh Duc",  Role="Developer & CTO", Emoji="🧑‍💻", School="Ton Duc Thang University" },
-                    new { Name="Lam Tan Dat",    Role="Leak Designer",    Emoji="🐶", School="Ton Duc Thang University" },
+                    new { Name="Truong Minh Thanh", Role="Developer & CEO", Emoji="🧑‍💻", School="Ton Duc Thang University", RoleKey="about_team1_role", SchoolKey="about_team1_school" },
+                    new { Name="Ngo Huynh Duc",  Role="Developer & CTO", Emoji="🧑‍💻", School="Ton Duc Thang University", RoleKey="about_team2_role", SchoolKey="about_team2_school" },
+                    new { Name="Lam Tan Dat",    Role="Lead Designer",    Emoji="🐶", School="Ton Duc Thang University", RoleKey="about_team3_role", SchoolKey="about_team3_school" },
                 };
             }
             @foreach (var m in members)
@@ -109,8 +109,8 @@
                     <div class="text-center p-4 bg-white rounded-4 shadow-sm border border-light h-100">
                         <div style="font-size:4rem;margin-bottom:1rem;">@m.Emoji</div>
                         <h5 class="fw-bold mb-1">@m.Name</h5>
-                        <div class="text-sr-green fw-semibold mb-1" style="font-size:.9rem;">@m.Role</div>
-                        <div class="text-muted" style="font-size:.82rem;">@m.School</div>
+                        <div class="text-sr-green fw-semibold mb-1" style="font-size:.9rem;" data-i18n="@m.RoleKey">@m.Role</div>
+                        <div class="text-muted" style="font-size:.82rem;" data-i18n="@m.SchoolKey">@m.School</div>
                     </div>
                 </div>
             }

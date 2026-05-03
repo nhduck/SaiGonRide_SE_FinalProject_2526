@@ -282,12 +282,12 @@
         <div class="row g-4">
             @{
                 var features = new[] {
-                    new { Icon="bi-lightning-charge-fill", Color="#16a34a", BgColor="#dcfce7", Title="Lightning Fast",       Desc="Book a bike in under 30 seconds. Scan, ride, done. No dedicated app required.", Delay="sr-delay-1" },
-                    new { Icon="bi-geo-alt-fill",           Color="#0d9488", BgColor="#ccfbf1", Title="City-Wide Network",   Desc="50+ stations from District 1 to District 12, Thu Duc and beyond. Always a bike nearby.", Delay="sr-delay-2" },
-                    new { Icon="bi-shield-fill-check",      Color="#7c3aed", BgColor="#ede9fe", Title="Safe & Transparent",  Desc="Vehicle insurance + real-time GPS tracking. Honest pricing, zero hidden fees.", Delay="sr-delay-3" },
-                    new { Icon="bi-currency-dollar",        Color="#ea580c", BgColor="#ffedd5", Title="Ultra Affordable",    Desc="Standard bike from 500 VND/min. E-scooter from 1,500 VND/min. Always cheaper than taxis.", Delay="sr-delay-4" },
-                    new { Icon="bi-leaf-fill",              Color="#16a34a", BgColor="#dcfce7", Title="100% Eco-Friendly",   Desc="Each ride saves ~200g of CO₂ vs. a motorbike. Together, we're greening Saigon.", Delay="sr-delay-5" },
-                    new { Icon="bi-headset",                Color="#0284c7", BgColor="#e0f2fe", Title="24/7 Support",        Desc="Live support agents around the clock. Issue on the road? We're there in 15 minutes.", Delay="sr-delay-6" },
+                    new { Icon="bi-lightning-charge-fill", Color="#16a34a", BgColor="#dcfce7", Title="Lightning Fast",       Desc="Book a bike in under 30 seconds. Scan, ride, done. No dedicated app required.", Delay="sr-delay-1", TitleKey="feat_1_title", DescKey="feat_1_desc" },
+                    new { Icon="bi-geo-alt-fill",           Color="#0d9488", BgColor="#ccfbf1", Title="City-Wide Network",   Desc="50+ stations from District 1 to District 12, Thu Duc and beyond. Always a bike nearby.", Delay="sr-delay-2", TitleKey="feat_2_title", DescKey="feat_2_desc" },
+                    new { Icon="bi-shield-fill-check",      Color="#7c3aed", BgColor="#ede9fe", Title="Safe & Transparent",  Desc="Vehicle insurance + real-time GPS tracking. Honest pricing, zero hidden fees.", Delay="sr-delay-3", TitleKey="feat_3_title", DescKey="feat_3_desc" },
+                    new { Icon="bi-currency-dollar",        Color="#ea580c", BgColor="#ffedd5", Title="Ultra Affordable",    Desc="Standard bike from 500 VND/min. E-scooter from 1,500 VND/min. Always cheaper than taxis.", Delay="sr-delay-4", TitleKey="feat_4_title", DescKey="feat_4_desc" },
+                    new { Icon="bi-leaf-fill",              Color="#16a34a", BgColor="#dcfce7", Title="100% Eco-Friendly",   Desc="Each ride saves ~200g of CO₂ vs. a motorbike. Together, we're greening Saigon.", Delay="sr-delay-5", TitleKey="feat_5_title", DescKey="feat_5_desc" },
+                    new { Icon="bi-headset",                Color="#0284c7", BgColor="#e0f2fe", Title="24/7 Support",        Desc="Live support agents around the clock. Issue on the road? We're there in 15 minutes.", Delay="sr-delay-6", TitleKey="feat_6_title", DescKey="feat_6_desc" },
                 };
             }
 
@@ -298,8 +298,8 @@
                         <div class="sr-feature-icon" style="background:@f.BgColor;color:@f.Color;">
                             <i class="bi @f.Icon"></i>
                         </div>
-                        <h5 class="fw-bold mb-2">@f.Title</h5>
-                        <p class="text-muted mb-0" style="font-size:.92rem;line-height:1.65;">@f.Desc</p>
+                        <h5 class="fw-bold mb-2" data-i18n="@f.TitleKey">@f.Title</h5>
+                        <p class="text-muted mb-0" style="font-size:.92rem;line-height:1.65;" data-i18n="@f.DescKey">@f.Desc</p>
                     </div>
                 </div>
             }
@@ -318,9 +318,9 @@
         <div class="row g-4 justify-content-center">
             @{
                 var steps = new[] {
-                    new { Num="1", Icon="📍", Title="Find a Station",     Desc="Open the map, pick the nearest station. Check vehicle count and type availability." },
-                    new { Num="2", Icon="🚲", Title="Choose & Book",       Desc="Select Standard or Electric. Confirm payment. Your bike unlocks immediately." },
-                    new { Num="3", Icon="🏁", Title="Return & Done",       Desc="Drop off at any station. The system auto-bills you and emails a receipt." },
+                    new { Num="1", Icon="📍", Title="Find a Station",     Desc="Open the map, pick the nearest station. Check vehicle count and type availability.", TitleKey="steps_1_title", DescKey="steps_1_desc" },
+                    new { Num="2", Icon="🚲", Title="Choose & Book",       Desc="Select Standard or Electric. Confirm payment. Your bike unlocks immediately.", TitleKey="steps_2_title", DescKey="steps_2_desc" },
+                    new { Num="3", Icon="🏁", Title="Return & Done",       Desc="Drop off at any station. The system auto-bills you and emails a receipt.", TitleKey="steps_3_title", DescKey="steps_3_desc" },
                 };
             }
             @for (int i = 0; i < steps.Length; i++)
@@ -342,8 +342,8 @@
                                 @s.Num
                             </div>
                         </div>
-                        <h5 class="fw-bold mb-2">@s.Title</h5>
-                        <p class="text-muted mb-0" style="font-size:.9rem;line-height:1.65;max-width:260px;margin:auto;">@s.Desc</p>
+                        <h5 class="fw-bold mb-2" data-i18n="@s.TitleKey">@s.Title</h5>
+                        <p class="text-muted mb-0" style="font-size:.9rem;line-height:1.65;max-width:260px;margin:auto;" data-i18n="@s.DescKey">@s.Desc</p>
                     </div>
                 </div>
             }
@@ -377,9 +377,9 @@
         {
             <div class="alert alert-info d-flex align-items-center mb-4 sr-reveal" role="alert">
                 <i class="bi bi-search me-2"></i>
-                Results for: <strong class="ms-1">"@searchQuery"</strong>
+                <span data-i18n="stations_results_for">Results for:</span> <strong class="ms-1">"@searchQuery"</strong>
                 <a asp-action="Index" class="btn btn-sm btn-outline-secondary ms-auto rounded-pill">
-                    <i class="bi bi-x-lg me-1"></i>Clear
+                    <i class="bi bi-x-lg me-1"></i><span data-i18n="stations_clear">Clear</span>
                 </a>
             </div>
         }
@@ -408,12 +408,12 @@
                                     @if (station.IsLowInventory)
                                     {
                                         <span class="badge bg-danger rounded-pill px-2 py-1" style="font-size:.7rem;animation:pulse-badge 2s infinite;">
-                                            <i class="bi bi-exclamation-triangle me-1"></i>Almost full
+                                            <i class="bi bi-exclamation-triangle me-1"></i><span data-i18n="stat_almost_full">Almost full</span>
                                         </span>
                                     }
                                     @if (!station.IsActive)
                                     {
-                                        <span class="badge bg-secondary rounded-pill px-2 py-1" style="font-size:.7rem;">Temporarily closed</span>
+                                        <span class="badge bg-secondary rounded-pill px-2 py-1" style="font-size:.7rem;" data-i18n="stat_closed">Temporarily closed</span>
                                     }
                                 </div>
                                 <div class="text-muted small mb-3">
@@ -423,13 +423,13 @@
                                     <div class="fill-bar flex-grow-1" style="max-width:220px;">
                                         <div class="fill-bar-inner @fillColorClass" style="width:@(fillPct)%;"></div>
                                     </div>
-                                    <small class="text-secondary fw-semibold">@station.CurrentCount/@station.TotalCapacity vehicles</small>
-                                    <span class="badge @badgeClass rounded-pill px-2">@fillPct% full</span>
+                                    <small class="text-secondary fw-semibold">@station.CurrentCount/@station.TotalCapacity <span data-i18n="stat_veh">vehicles</span></small>
+                                    <span class="badge @badgeClass rounded-pill px-2">@fillPct% <span data-i18n="stat_pct_full">full</span></span>
                                 </div>
                                 @if (station.IsLowInventory)
                                 {
                                     <div class="text-danger small mt-2 fw-semibold">
-                                        <i class="bi bi-tag-fill me-1"></i>Almost sold out — 15% discount applied!
+                                        <i class="bi bi-tag-fill me-1"></i><span data-i18n="stat_discount">Almost sold out — 15% discount applied!</span>
                                     </div>
                                 }
                             </div>
@@ -441,7 +441,7 @@
                                             data-station-id="@station.StationId" data-type="Standard"
                                             style="min-width:110px;border-radius:14px;">
                                         <i class="bi bi-bicycle fs-4 mb-1"></i>
-                                        <span class="fw-semibold" style="font-size:.82rem;">Standard</span>
+                                        <span class="fw-semibold" style="font-size:.82rem;" data-i18n="stat_btn_std">Standard</span>
                                         <small class="text-muted" style="font-size:.68rem;">500 VND/min</small>
                                     </button>
 
@@ -449,7 +449,7 @@
                                             data-station-id="@station.StationId" data-type="Electric"
                                             style="min-width:110px;border-radius:14px;">
                                         <i class="bi bi-lightning-charge-fill fs-4 mb-1"></i>
-                                        <span class="fw-semibold" style="font-size:.82rem;">Electric</span>
+                                        <span class="fw-semibold" style="font-size:.82rem;" data-i18n="stat_btn_elec">Electric</span>
                                         <small class="text-muted" style="font-size:.68rem;">1,500 VND/min</small>
                                     </button>
                                 }
@@ -459,15 +459,15 @@
                                        class="btn btn-outline-success px-4 py-2 text-center d-flex flex-column align-items-center"
                                        style="min-width:110px;border-radius:14px;">
                                         <i class="bi bi-bicycle fs-4 mb-1"></i>
-                                        <span class="fw-semibold" style="font-size:.82rem;">Standard</span>
-                                        <small class="text-muted" style="font-size:.68rem;">Log in to rent</small>
+                                        <span class="fw-semibold" style="font-size:.82rem;" data-i18n="stat_btn_std">Standard</span>
+                                        <small class="text-muted" style="font-size:.68rem;" data-i18n="stat_btn_login">Log in to rent</small>
                                     </a>
                                     <a asp-controller="Account" asp-action="Login"
                                        class="btn btn-outline-primary px-4 py-2 text-center d-flex flex-column align-items-center"
                                        style="min-width:110px;border-radius:14px;">
                                         <i class="bi bi-lightning-charge-fill fs-4 mb-1"></i>
-                                        <span class="fw-semibold" style="font-size:.82rem;">Electric</span>
-                                        <small class="text-muted" style="font-size:.68rem;">Log in to rent</small>
+                                        <span class="fw-semibold" style="font-size:.82rem;" data-i18n="stat_btn_elec">Electric</span>
+                                        <small class="text-muted" style="font-size:.68rem;" data-i18n="stat_btn_login">Log in to rent</small>
                                     </a>
                                 }
                             </div>
@@ -480,9 +480,9 @@
         {
             <div class="text-center py-5 sr-reveal">
                 <i class="bi bi-geo fs-1 text-muted d-block mb-3"></i>
-                <h5 class="text-muted">No stations found</h5>
-                <p class="text-muted small">Try searching with a different keyword</p>
-                <a asp-action="Index" class="btn btn-outline-success mt-2 rounded-pill px-4">View All Stations</a>
+                <h5 class="text-muted" data-i18n="stations_empty">No stations found</h5>
+                <p class="text-muted small" data-i18n="stations_empty_desc">Try searching with a different keyword</p>
+                <a asp-action="Index" class="btn btn-outline-success mt-2 rounded-pill px-4" data-i18n="stations_empty_btn">View All Stations</a>
             </div>
         }
     </div>
@@ -499,11 +499,11 @@
             @{
                 var testimonials = new[] {
                     new { Name="Nguyen Minh Tuan", Role="Office worker, District 1", Stars=5,
-                          Text="I use SaigonRide to commute every day. It saves me 70% compared to Grab and I never worry about traffic jams anymore. Absolutely love it!", Initial="T" },
+                          Text="I use SaigonRide to commute every day. It saves me 70% compared to Grab and I never worry about traffic jams anymore. Absolutely love it!", Initial="T", RoleKey="testi_1_role", TextKey="testi_1_text" },
                     new { Name="Sarah Johnson", Role="Australian traveller, backpacker", Stars=5,
-                          Text="Amazing service! Rented an e-bike for 3 days exploring Saigon. Super easy to use, very affordable. Highly recommend to any visitor!", Initial="S" },
+                          Text="Amazing service! Rented an e-bike for 3 days exploring Saigon. Super easy to use, very affordable. Highly recommend to any visitor!", Initial="S", RoleKey="testi_2_role", TextKey="testi_2_text" },
                     new { Name="Tran Thi Lan", Role="Student, HCMUT University", Stars=5,
-                          Text="Students need to save money. SaigonRide lets me get to class for just a few thousand VND each day. It's genuinely great!", Initial="L" },
+                          Text="Students need to save money. SaigonRide lets me get to class for just a few thousand VND each day. It's genuinely great!", Initial="L", RoleKey="testi_3_role", TextKey="testi_3_text" },
                 };
             }
             @for (int i = 0; i < testimonials.Length; i++)
@@ -514,14 +514,14 @@
                         <div class="text-warning mb-3" style="font-size:1.1rem;">
                             @for (int s = 0; s < t.Stars; s++) { <span>★</span> }
                         </div>
-                        <p class="text-muted mb-4" style="font-size:.95rem;line-height:1.7;font-style:italic;">
+                        <p class="text-muted mb-4" style="font-size:.95rem;line-height:1.7;font-style:italic;" data-i18n="@t.TextKey">
                             "@t.Text"
                         </p>
                         <div class="d-flex align-items-center gap-3">
                             <div class="sr-testimonial-avatar">@t.Initial</div>
                             <div>
                                 <div class="fw-bold text-dark" style="font-size:.95rem;">@t.Name</div>
-                                <div class="text-muted" style="font-size:.8rem;">@t.Role</div>
+                                <div class="text-muted" style="font-size:.8rem;" data-i18n="@t.RoleKey">@t.Role</div>
                             </div>
                         </div>
                     </div>
