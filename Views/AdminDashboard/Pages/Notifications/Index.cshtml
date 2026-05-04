@@ -1,0 +1,118 @@
+@{
+    Layout = null;
+    var activities = ViewBag.AllActivities as List<dynamic>;
+}
+
+<div class="container-fluid animate__animated animate__fadeIn">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <div>
+            <h2 class="fw-bold mb-0" data-i18n="admin_notifications">Notifications</h2>
+            <p class="text-muted small" data-i18n="admin_recent_activity">Recent System Activity</p>
+        </div>
+        <button class="btn btn-outline-secondary btn-sm" onclick="loadPage('/AdminDashboard/Notifications')">
+            <i class="bi bi-arrow-clockwise me-1"></i> <span data-i18n="admin_refresh">Refresh</span>
+        </button>
+    </div>
+
+    <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
+        <div class="card-body p-0">
+            @if (activities == null || !activities.Any())
+            {
+                <div class="text-center py-5">
+                    <div class="display-1 text-muted opacity-25 mb-3">
+                        <i class="bi bi-bell-slash"></i>
+                    </div>
+                    <p class="text-muted" data-i18n="admin_no_activity">No recent activity</p>
+                </div>
+            }
+            else
+            {
+                <div class="list-group list-group-flush">
+                    @foreach (var activity in activities)
+                    {
+                        <div class="list-group-item list-group-item-action p-4 border-start border-4 @(activity.Type == "Rental" ? "border-primary" : "border-warning")">
+                            <div class="d-flex align-items-center">
+                                <div class="sr-activity-icon @activity.IconClass text-white rounded-circle d-flex align-items-center justify-content-center me-4 shadow-sm" style="width: 50px; height: 50px;">
+                                    <i class="bi @activity.Icon fs-4"></i>
+                                </div>
+                                <div class="flex-grow-1">
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <h5 class="fw-bold mb-0" data-i18n="@activity.TitleKey">Notification Title</h5>
+                                        <span class="badge bg-light text-muted fw-normal rounded-pill">
+                                            <i class="bi bi-clock me-1"></i> @activity.Time.ToString("dd/MM/yyyy HH:mm")
+                                        </span>
+                                    </div>
+                                    <p class="text-muted mb-0 sr-notification-desc" 
+                                       data-i18n="@activity.DescriptionKey" 
+                                       data-i18n-param1="@activity.Param1" 
+                                       data-i18n-param2="@activity.Param2">
+                                        Description placeholder
+                                    </p>
+                                </div>
+                                <div class="ms-3 dropdown">
+                                    <button class="btn btn-light btn-sm rounded-circle shadow-none" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                        <i class="bi bi-three-dots-vertical"></i>
+                                    </button>
+                                    <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-3">
+                                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="markAsRead(this)"><i class="bi bi-check2-all me-2 text-success"></i> <span data-i18n="admin_mark_as_read">Mark as read</span></a></li>
+                                        <li><a class="dropdown-item py-2" href="javascript:void(0)" onclick="viewNotifDetails(this)"><i class="bi bi-eye me-2 text-primary"></i> <span data-i18n="admin_details">Details</span></a></li>
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item py-2 text-danger" href="javascript:void(0)" onclick="deleteNotif(this)"><i class="bi bi-trash me-2"></i> <span data-i18n="admin_delete">Delete</span></a></li>
+                                    </ul>
+                                </div>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </div>
+    </div>
+</div>
+
+<script>
+    // Ensure translations are applied
+    if (window.changeLanguage && window.getCurrentLang) {
+        window.changeLanguage(window.getCurrentLang());
+    }
+
+    function markAsRead(el) {
+        const item = $(el).closest('.list-group-item');
+        item.css('opacity', '0.6');
+        item.removeClass('border-primary border-warning').addClass('border-secondary');
+        // Optional: show a toast
+    }
+
+    function deleteNotif(el) {
+        const item = $(el).closest('.list-group-item');
+        item.addClass('animate__animated animate__fadeOutRight');
+        setTimeout(() => {
+            item.remove();
+            if ($('.list-group-item').length === 0) {
+                location.reload(); // Show empty state
+            }
+        }, 500);
+    }
+
+    function viewNotifDetails(el) {
+        const item = $(el).closest('.list-group-item');
+        const title = item.find('h5').text();
+        const desc = item.find('.sr-notification-desc').text();
+        const time = item.find('.badge').text().trim();
+        
+        alert(`${title}\n\n${desc}\n\nTime: ${time}`);
+        // In a real app, you might open a modal here.
+    }
+</script>
+
+<style>
+    .sr-activity-icon {
+        flex-shrink: 0;
+    }
+    .list-group-item {
+        transition: all 0.3s ease;
+    }
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+        transform: translateX(8px);
+    }
+</style>

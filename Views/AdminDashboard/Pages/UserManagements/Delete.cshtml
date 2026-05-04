@@ -37,3 +37,41 @@
         </div>
     </div>
 </div>
+
+<script>
+    (function ($) {
+
+        // ════════════════════════════════════════════════════════
+        // MODAL DELETE
+        // ════════════════════════════════════════════════════════
+
+        window.prepareUserDelete = function (userId, userName) {
+            $('#userIdToConfirm').val(userId);
+            $('#userIdToDisplay').text(userId);
+            $('#userNameToDisplay').text(userName);
+            $('#deleteUserModal').modal('show');
+        };
+
+        $('#confirmUserDeleteBtn').on('click', function () {
+            var id    = $('#userIdToConfirm').val();
+            var token = $('input[name="__RequestVerificationToken"]').first().val();
+
+            $.ajax({
+                url: '/Admin/UserManagements/DeleteConfirmed',
+                type: 'POST',
+                data: { id: id, __RequestVerificationToken: token },
+                success: function () {
+                    $('#deleteUserModal').modal('hide');
+                    $('tr[data-id="' + id + '"]').fadeOut(300, function () {
+                        $(this).remove();
+                        if (typeof updateUserStats === 'function') updateUserStats();
+                    });
+                },
+                error: function () {
+                    alert('Cannot delete user. Please try again.');
+                }
+            });
+        });
+
+    })(jQuery);
+</script>

@@ -9,7 +9,7 @@
 }
 
 <!DOCTYPE html>
-<html lang="vi">
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <title>@ViewData["Title"] - SaigonRide Admin</title>
@@ -19,11 +19,12 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.13.1/font/bootstrap-icons.min.css" />
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/RentalVehicleService.styles.css" asp-append-version="true" />
+    <link rel="stylesheet" href="~/css/admin-layout.css" asp-append-version="true" />
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
     <div class="d-flex">
-        <!-- SIDEBAR -->
+        <!-- Sidebar Navigation -->
         <aside class="sr-sidebar" id="adminSidebar">
             <!-- Brand -->
             <div class="sr-sidebar-brand">
@@ -38,47 +39,38 @@
 
             <!-- Navigation -->
             <nav class="sr-sidebar-nav">
-                <a href="/Admin/Dashboard"
-                   class="sr-sidebar-link @(currentController == "Dashboard" ? "active" : "")">
+                <a href="#" data-url="/AdminDashboard/Dashboard" class="sr-sidebar-link active nav-ajax-link">
                     <i class="bi bi-speedometer2"></i>
-                    <span>Dashboard</span>
+                    <span data-i18n="admin_dashboard">Dashboard</span>
                 </a>
-                <a href="/Admin/Stations"
-                   class="sr-sidebar-link @(currentController == "Stations" ? "active" : "")">
+                <a href="#" data-url="/Stations/Index" class="sr-sidebar-link nav-ajax-link">
                     <i class="bi bi-geo-alt"></i>
-                    <span>Manage Stations</span>
+                    <span data-i18n="admin_stations">Manage Stations</span>
                 </a>
-                <a href="/Admin/Vehicles"
-                   class="sr-sidebar-link @(currentController == "Vehicles" ? "active" : "")">
+                <a href="#" data-url="/Vehicles/Index" class="sr-sidebar-link nav-ajax-link">
                     <i class="bi bi-bicycle"></i>
-                    <span>Manage Vehicles</span>
+                    <span data-i18n="admin_vehicles">Manage Vehicles</span>
                 </a>
-                <a href="/Admin/Users"
-                   class="sr-sidebar-link @(currentController == "Users" ? "active" : "")">
+                <a href="#" data-url="/UserManagements/Index" class="sr-sidebar-link nav-ajax-link">
                     <i class="bi bi-people"></i>
-                    <span>Users</span>
+                    <span data-i18n="admin_users">Users</span>
                 </a>
-                <a href="/Admin/Reports"
-                   class="sr-sidebar-link @(currentController == "Reports" ? "active" : "")">
+                <a href="#" data-url="/AdminDashboard/Reports" class="sr-sidebar-link nav-ajax-link">
                     <i class="bi bi-bar-chart-line"></i>
-                    <span>Reports</span>
-                </a>
-                <a href="/Admin/Payments"
-                   class="sr-sidebar-link @(currentController == "Payments" ? "active" : "")">
-                    <i class="bi bi-credit-card"></i>
-                    <span>Payments</span>
+                    <span data-i18n="admin_reports">Reports</span>
                 </a>
 
-                <hr class="sr-sidebar-divider" />
-
-                <a href="/" class="sr-sidebar-link">
-                    <i class="bi bi-box-arrow-left"></i>
-                    <span>Return to Home</span>
-                </a>
+                <div class="mt-auto w-100">
+                    <hr class="sr-sidebar-divider" />
+                    <a href="/" class="sr-sidebar-link text-danger">
+                        <i class="bi bi-box-arrow-left"></i>
+                        <span data-i18n="admin_return_home">Return to Home</span>
+                    </a>
+                </div>
             </nav>
         </aside>
 
-        <!-- MAIN AREA -->
+        <!-- Main Content Area -->
         <div class="sr-admin-main">
             <!-- Top bar -->
             <header class="sr-admin-topbar">
@@ -90,13 +82,42 @@
                 <h5 class="mb-0 fw-semibold">@ViewData["Title"]</h5>
 
                 <div class="ms-auto d-flex align-items-center">
+                    <!-- Language Switcher -->
+                    <div class="dropdown me-3">
+                        <button class="btn btn-light dropdown-toggle d-flex align-items-center gap-1"
+                                type="button" id="adminLangDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-translate text-success"></i><span class="d-none d-md-inline small text-dark">English</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <li><a class="dropdown-item sr-lang-item d-flex align-items-center gap-2" href="javascript:void(0);" data-lang="en" onclick="changeLanguage('en')">🇬🇧 English</a></li>
+                            <li><a class="dropdown-item sr-lang-item d-flex align-items-center gap-2" href="javascript:void(0);" data-lang="vi" onclick="changeLanguage('vi')">🇻🇳 Tiếng Việt</a></li>
+                        </ul>
+                    </div>
+
                     <!-- Notifications -->
-                    <button class="btn btn-light position-relative me-3" type="button">
-                        <i class="bi bi-bell"></i>
-                        <span class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger" style="font-size: 0.6rem;">
-                            3
-                        </span>
-                    </button>
+                    <div class="dropdown me-3">
+                        <button class="btn btn-light position-relative" type="button" data-bs-toggle="dropdown" aria-expanded="false" onclick="loadNotifications()">
+                            <i class="bi bi-bell"></i>
+                            <span id="notifBadge" class="position-absolute top-0 start-100 translate-middle badge rounded-pill bg-danger d-none" style="font-size: 0.6rem;">
+                                0
+                            </span>
+                        </button>
+                        <div class="dropdown-menu dropdown-menu-end shadow-sm p-0" style="width: 320px; border-radius: 0.5rem; overflow: hidden;">
+                            <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light">
+                                <h6 class="mb-0 fw-bold text-dark fs-6" data-i18n="admin_notifications">Notifications</h6>
+                                <span id="notifStatusBadge" class="badge bg-success rounded-pill px-2 py-1 d-none" style="font-size: 0.7rem;">0 new</span>
+                            </div>
+                            <div id="notifList" class="list-group list-group-flush" style="max-height: 350px; overflow-y: auto;">
+                                <div class="p-4 text-center text-muted small">
+                                    <div class="spinner-border spinner-border-sm text-success mb-2" role="status"></div>
+                                    <div data-i18n="admin_loading">Loading...</div>
+                                </div>
+                            </div>
+                            <div class="p-2 border-top bg-light text-center">
+                                <a href="javascript:void(0)" onclick="loadPage('/AdminDashboard/Notifications')" class="text-decoration-none small text-success fw-semibold" data-i18n="admin_view_all_notifications">View All Notifications</a>
+                            </div>
+                        </div>
+                    </div>
 
                     <!-- Admin dropdown -->
                     <div class="dropdown">
@@ -112,14 +133,14 @@
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm">
                             <li>
                                 <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
-                                    <i class="bi bi-gear me-2"></i>Settings
+                                    <i class="bi bi-gear me-2"></i><span data-i18n="admin_settings">Settings</span>
                                 </a>
                             </li>
                             <li><hr class="dropdown-divider" /></li>
                             <li>
                                 <form asp-controller="Account" asp-action="Logout" method="post">
                                     <button type="submit" class="dropdown-item text-danger">
-                                        <i class="bi bi-box-arrow-right me-2"></i>Logout
+                                        <i class="bi bi-box-arrow-right me-2"></i><span data-i18n="nav_logout">Logout</span>
                                     </button>
                                 </form>
                             </li>
@@ -137,7 +158,9 @@
 
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <script src="~/js/site.js" asp-append-version="true"></script>
+    <script src="~/js/i18n.js" asp-append-version="true"></script>
     <script>
         function toggleSidebar() {
             document.getElementById('adminSidebar').classList.toggle('show');
@@ -149,6 +172,86 @@
             if (!toggler && sidebar.classList.contains('show') && !sidebar.contains(e.target)) {
                 sidebar.classList.remove('show');
             }
+        });
+
+        // AJAX Navigation logic
+        function loadPage(url) {
+            if (!url || url === '#') return;
+
+            $('.modal').modal('hide');
+            $('body').removeClass('modal-open');
+            $('.modal-backdrop').remove();
+
+            $('#main').html('<div class="h1 p-4 text-center align-self-center"><span>Loading...</span></div>');
+
+            $('#main').load(url, function (response, status, xhr) {
+                if (status === 'error') {
+                    $('#main').html('<div class="h1 p-4 text-center align-self-center text-danger">Error ' + xhr.status + ': Page not found</div>');
+                } else {
+                    // Apply i18n to newly loaded content
+                    if (window.changeLanguage && window.getCurrentLang) {
+                        window.changeLanguage(window.getCurrentLang());
+                    }
+                }
+            });
+        }
+
+        function loadNotifications() {
+            $.get('/AdminDashboard/GetNotifications', function (data) {
+                const list = $('#notifList');
+                list.empty();
+                
+                if (data && data.length > 0) {
+                    $('#notifBadge').text(data.length).removeClass('d-none');
+                    $('#notifStatusBadge').text(data.length + ' new').removeClass('d-none');
+                    
+                    data.forEach(item => {
+                        const timeStr = new Date(item.time).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+                        const title = window.getI18nText ? window.getI18nText(item.titleKey) : item.titleKey;
+                        let desc = window.getI18nText ? window.getI18nText(item.descriptionKey) : item.descriptionKey;
+                        
+                        // Replace placeholders if any
+                        desc = desc.replace('{0}', '<strong>' + item.param1 + '</strong>').replace('{1}', '<strong>' + item.param2 + '</strong>');
+
+                        const html = `
+                            <div class="list-group-item border-bottom-0 px-3 py-3" style="background-color: ${item.type === 'Rental' ? '#f8fff9' : '#fffaf0'};">
+                                <div class="d-flex w-100 justify-content-between mb-1">
+                                    <span class="fw-semibold text-dark" style="font-size: 0.85rem;">
+                                        <i class="bi ${item.icon} text-${item.iconClass.replace('bg-', '')} me-2"></i>
+                                        <span>${title}</span>
+                                    </span>
+                                    <small class="text-muted">${timeStr}</small>
+                                </div>
+                                <p class="mb-0 text-muted" style="font-size: 0.8rem; line-height: 1.4;">${desc}</p>
+                            </div>
+                        `;
+                        list.append(html);
+                    });
+                } else {
+                    $('#notifBadge').addClass('d-none');
+                    $('#notifStatusBadge').addClass('d-none');
+                    list.html('<div class="p-4 text-center text-muted small" data-i18n="admin_no_notifications">No new notifications</div>');
+                }
+            });
+        }
+
+        $(document).ready(function () {
+            loadNotifications(); // Initial load
+            // Polling for notifications every 60 seconds
+            setInterval(loadNotifications, 60000);
+
+            $('.nav-ajax-link').click(function (e) {
+                e.preventDefault();
+                $('.nav-ajax-link').removeClass('active');
+                $(this).addClass('active');
+
+                const url = $(this).data('url');
+                loadPage(url);
+
+                if (window.innerWidth < 992) {
+                    $('#adminSidebar').removeClass('show');
+                }
+            });
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)

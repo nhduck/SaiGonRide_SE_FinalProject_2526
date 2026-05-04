@@ -5,7 +5,8 @@
 	var pct = (int)(s.FillRate * 100);
 	var barColorClass = pct < 60 ? "bg-success" : (pct < 85 ? "bg-warning" : "bg-danger");
 	var statusBadge = s.IsLowInventory ? "bg-warning text-dark" : (pct > 85 ? "bg-danger" : "bg-success");
-	var statusText = s.IsLowInventory ? "Low Stock" : (pct > 85 ? "Full" : "Normal");
+	var statusTextKey = s.IsLowInventory ? "admin_low_stock" : (pct > 85 ? "admin_full" : "admin_normal");
+	var statusTextDefault = s.IsLowInventory ? "Low Stock" : (pct > 85 ? "Full" : "Normal");
 
 	<tr data-id="@s.StationId" class="station-row">
 		<td class="ps-4 fw-bold text-muted">@s.StationId</td>
@@ -24,12 +25,12 @@
 			</div>
 		</td>
 		<td class="text-center">
-			<span class="badge @statusBadge rounded-pill px-2">@statusText</span>
+			<span class="badge @statusBadge rounded-pill px-2" data-i18n="@statusTextKey">@statusTextDefault</span>
 		</td>
 		<td class="text-center">
 			<span class="badge rounded-pill @(s.IsActive ? "bg-success-subtle text-success border border-success" : "bg-danger-subtle text-danger border border-danger")">
 				<i class="bi bi-circle-fill me-1" style="font-size: 0.4rem; vertical-align: middle;"></i>
-				@(s.IsActive ? "Active" : "Inactive")
+				<span data-i18n="@(s.IsActive ? "admin_active" : "admin_inactive")">@(s.IsActive ? "Active" : "Inactive")</span>
 			</span>
 		</td>
 		<td class="text-center">
