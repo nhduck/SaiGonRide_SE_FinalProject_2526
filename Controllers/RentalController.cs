@@ -171,7 +171,7 @@ namespace RentalVehicleService.Controllers
                 rental.EndStationId = endStationId;
                 rental.Status = RentalStatus.Completed;
 
-                rental.FinalFare = _rentalService.ProcessFinalBill(rental.RentalId, endStationId);
+                rental.FinalFare = _rentalService.ProcessFinalBill(rental, endStationId);
 
                 var vehicle = await _context.Vehicles.FindAsync((int)rental.VehicleId);
                 if (vehicle != null) vehicle.State = VehicleState.Available;
@@ -313,7 +313,8 @@ namespace RentalVehicleService.Controllers
 
                 StartTime = rental.StartTime,
                 TotalMinutes = totalMinutes,
-                FinalFare = rental.FinalFare
+                FinalFare = rental.FinalFare,
+                DiscountAmount = rental.DiscountAmount
             };
 
             return View(model);

@@ -46,5 +46,7 @@ namespace RentalVehicleService.Models
 
         [ForeignKey("EndStationId")]
         public Station? EndStation { get; set; }
+
+        public decimal? DiscountAmount { get; set; }
     }
 }

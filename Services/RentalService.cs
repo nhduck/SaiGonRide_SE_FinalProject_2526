@@ -1,4 +1,5 @@
 using RentalVehicleService.Data;
+using RentalVehicleService.Models;
 
 namespace RentalVehicleService.Services
 {
@@ -13,17 +14,15 @@ namespace RentalVehicleService.Services
 
         public decimal CalculateFare(DateTime startTime, DateTime endTime, decimal pricePerMin)
         {
-            var vehicle = _context.Vehicles.Find(pricePerMin);
-            if (vehicle == null) return 0;
-
+            // Tính toán khoảng thời gian thuê
             TimeSpan duration = endTime - startTime;
             double totalMinutes = Math.Ceiling(duration.TotalMinutes);
+
+            // Đảm bảo không bị âm
             if (totalMinutes < 0) totalMinutes = 0;
 
-            decimal currentRate = (decimal)vehicle.Price;
-
-            return (decimal)totalMinutes * currentRate;
-
+            // Nhân tổng số phút với giá mỗi phút đã nhận từ tham số
+            return (decimal)totalMinutes * pricePerMin;
         }
 
         public decimal CheckDiscount(int endStationId)
@@ -40,20 +39,18 @@ namespace RentalVehicleService.Services
             return 0m;
         }
 
-        public decimal ProcessFinalBill(int rentalId, int endStationId)
+        public decimal ProcessFinalBill(Rental rental, int endStationId)
         {
-            var rental = _context.Rentals.Find(rentalId);
-            if (rental == null) return 0m;
-
             var vehicle = _context.Vehicles.Find(rental.VehicleId);
             if (vehicle == null) return 0m;
 
             decimal baseFare = CalculateFare(rental.StartTime, DateTime.Now, (decimal)vehicle.Price);
-
             decimal discountRate = CheckDiscount(endStationId);
 
             decimal discountAmount = baseFare * discountRate;
             decimal finalFare = baseFare - discountAmount;
+
+            rental.DiscountAmount = discountAmount;
 
             return finalFare;
         }

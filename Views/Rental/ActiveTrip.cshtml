@@ -66,13 +66,11 @@
                                 </select>
                             </div>
 
-                            <a asp-action="Payment"
-                               asp-controller="Rental"
-                               asp-route-id="@Model.RentalId"
-                               class="btn btn-success w-100 mb-3"
-                               style="border-radius: 30px; font-weight: bold; font-size: 1.1rem; padding: 12px; text-decoration: none; display: inline-block; text-align: center;">
+                            <button type="submit"
+                                    class="btn btn-success w-100 mb-3"
+                                    style="border-radius: 30px; font-weight: bold; font-size: 1.1rem; padding: 12px; display: inline-block; text-align: center;">
                                 <i class="far fa-dot-circle"></i> FINISH TRIP
-                            </a>
+                            </button>
                         </form>
 
                         <button type="button" class="btn btn-outline-success w-100" style="border-radius: 30px; background-color: #e9f7ef; color: #198754; font-weight: bold;">
