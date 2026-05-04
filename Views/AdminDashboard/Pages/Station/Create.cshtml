@@ -7,11 +7,11 @@
 <div class="container-fluid py-4 px-lg-5">
     <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-4 gap-3">
         <div>
-            <h1 class="h3 mb-1 text-gray-800 fw-bold"><i class="bi bi-plus-circle-fill text-success me-2"></i>Create New Station</h1>
-            <p class="text-muted mb-0">Add a new docking location to the operational network.</p>
+            <h1 class="h3 mb-1 text-gray-800 fw-bold"><i class="bi bi-plus-circle-fill text-success me-2"></i><span data-i18n="admin_add_new_station">Create New Station</span></h1>
+            <p class="text-muted mb-0" data-i18n="admin_station_subtitle">Add a new docking location to the operational network.</p>
         </div>
         <button onclick="loadPage('/Stations/Index')" class="btn btn-outline-secondary rounded-pill px-4 shadow-sm hover-lift">
-            <i class="bi bi-arrow-left me-2"></i>Back to List
+            <i class="bi bi-arrow-left me-2"></i><span data-i18n="admin_back">Back to List</span>
         </button>
     </div>
 
@@ -20,7 +20,7 @@
         <div class="col-lg-7">
             <div class="card border-0 shadow-sm rounded-4 overflow-hidden">
                 <div class="card-header bg-white border-bottom-0 pt-4 pb-0 px-4">
-                    <h5 class="fw-bold text-success mb-0"><i class="bi bi-building me-2"></i>Station Info Setup</h5>
+                    <h5 class="fw-bold text-success mb-0"><i class="bi bi-building me-2"></i><span data-i18n="admin_station_setup">Station Info Setup</span></h5>
                 </div>
                 <div class="card-body p-4">
                     <form id="stationCreateForm">
@@ -30,27 +30,27 @@
                         <div class="row g-4 mb-4">
                             <div class="col-md-12">
                                 <div class="form-floating">
-                                    <input asp-for="Name" class="form-control rounded-3 border-success border-opacity-25" placeholder="Station Name" />
-                                    <label asp-for="Name" class="text-muted"><i class="bi bi-tag text-success me-1"></i>Station Name</label>
+                                    <input asp-for="Name" class="form-control rounded-3 border-success border-opacity-25" placeholder="Station Name" data-i18n="[placeholder]admin_station_name" />
+                                    <label asp-for="Name" class="text-muted"><i class="bi bi-tag text-success me-1"></i><span data-i18n="admin_station_name">Station Name</span></label>
                                     <span asp-validation-for="Name" class="text-danger small mt-1 d-block"></span>
                                 </div>
                             </div>
                             
                             <div class="col-md-12">
                                 <div class="form-floating">
-                                    <input asp-for="Address" class="form-control rounded-3 border-success border-opacity-25" placeholder="Address" />
-                                    <label asp-for="Address" class="text-muted"><i class="bi bi-geo-alt text-success me-1"></i>Address location</label>
+                                    <input asp-for="Address" class="form-control rounded-3 border-success border-opacity-25" placeholder="Address" data-i18n="[placeholder]admin_station_address" />
+                                    <label asp-for="Address" class="text-muted"><i class="bi bi-geo-alt text-success me-1"></i><span data-i18n="admin_station_address">Address location</span></label>
                                     <span asp-validation-for="Address" class="text-danger small mt-1 d-block"></span>
                                 </div>
                             </div>
                         </div>
 
-                        <h6 class="fw-bold text-secondary mb-3 text-uppercase" style="font-size: 0.85rem; letter-spacing: 0.5px;">Capacity Setup</h6>
+                        <h6 class="fw-bold text-secondary mb-3 text-uppercase" style="font-size: 0.85rem; letter-spacing: 0.5px;" data-i18n="admin_capacity_setup">Capacity Setup</h6>
                         <div class="row g-4 mb-4">
                             <div class="col-md-6">
                                 <div class="form-floating">
-                                    <input asp-for="TotalCapacity" class="form-control rounded-3" placeholder="Total Capacity" value="20" />
-                                    <label asp-for="TotalCapacity" class="text-muted"><i class="bi bi-grid-3x3-gap me-1"></i>Total Capacity</label>
+                                    <input asp-for="TotalCapacity" class="form-control rounded-3" placeholder="Total Capacity" value="20" data-i18n="[placeholder]admin_station_capacity" />
+                                    <label asp-for="TotalCapacity" class="text-muted"><i class="bi bi-grid-3x3-gap me-1"></i><span data-i18n="admin_station_capacity">Total Capacity</span></label>
                                     <span asp-validation-for="TotalCapacity" class="text-danger small mt-1 d-block"></span>
                                 </div>
                             </div>
@@ -58,7 +58,7 @@
                             <div class="col-md-6">
                                 <div class="form-floating">
                                     <input asp-for="CurrentCount" class="form-control rounded-3" placeholder="Current Count" value="0" />
-                                    <label asp-for="CurrentCount" class="text-muted"><i class="bi bi-bicycle me-1"></i>Initial Vehicles Count</label>
+                                    <label asp-for="CurrentCount" class="text-muted"><i class="bi bi-bicycle me-1"></i><span data-i18n="admin_initial_vehicles">Initial Vehicles Count</span></label>
                                     <span asp-validation-for="CurrentCount" class="text-danger small mt-1 d-block"></span>
                                 </div>
                             </div>
@@ -67,8 +67,8 @@
                         <div class="mb-4 bg-light p-3 rounded-3 border border-light-subtle d-flex align-items-center shadow-sm">
                             <i class="bi bi-lightning-charge-fill fs-3 text-success me-3"></i>
                             <div class="flex-grow-1">
-                                <h6 class="mb-1 fw-bold">Active Immediately</h6>
-                                <p class="text-muted mb-0 small">Toggle to make this station visible and operational for users right away.</p>
+                                <h6 class="mb-1 fw-bold" data-i18n="admin_active_immediately">Active Immediately</h6>
+                                <p class="text-muted mb-0 small" data-i18n="admin_active_subtitle">Toggle to make this station visible and operational for users right away.</p>
                             </div>
                             <div class="form-check form-switch fs-4 mb-0">
                                 <input class="form-check-input bg-success border-success" type="checkbox" asp-for="IsActive" id="statusSwitch" checked>
@@ -81,9 +81,9 @@
                         <hr class="my-4 text-muted opacity-25">
 
                         <div class="d-flex flex-column flex-sm-row justify-content-end gap-3">
-                            <button type="button" class="btn btn-light px-4 rounded-pill fw-bold border hover-lift" onclick="loadPage('/Stations/Index')">Cancel</button>
+                            <button type="button" class="btn btn-light px-4 rounded-pill fw-bold border hover-lift" onclick="loadPage('/Stations/Index')" data-i18n="admin_cancel">Cancel</button>
                             <button type="submit" class="btn btn-success px-5 rounded-pill shadow-sm fw-bold hover-lift">
-                                <i class="bi bi-save me-2"></i>Create Station
+                                <i class="bi bi-save me-2"></i><span data-i18n="admin_add_station">Create Station</span>
                             </button>
                         </div>
                     </form>
@@ -112,9 +112,9 @@
                     <div class="mt-3">
                         <div class="input-group input-group-sm">
                             <span class="input-group-text bg-white"><i class="bi bi-search text-success"></i></span>
-                            <input type="text" id="createMapSearch" class="form-control" placeholder="Search for a location...">
+                            <input type="text" id="createMapSearch" class="form-control" placeholder="Search for a location..." data-i18n="[placeholder]admin_search_location">
                             <button class="btn btn-outline-success" type="button" id="createMapSearchBtn">
-                                <i class="bi bi-geo"></i> Find
+                                <i class="bi bi-geo"></i> <span data-i18n="admin_find">Find</span>
                             </button>
                         </div>
                     </div>
@@ -235,8 +235,8 @@
                 }
             },
             error: function(xhr) {
-                console.error("Error creating station:", xhr.statusText);
-                alert("An error occurred. Please try again.");
+                const errorMsg = (window.getI18nText && window.getI18nText('admin_error_occurred')) || 'An error occurred. Please try again.';
+                alert(errorMsg);
             }
         });
     });

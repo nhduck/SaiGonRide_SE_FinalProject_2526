@@ -31,8 +31,7 @@ namespace RentalVehicleService.Controllers
             }
 
             var stations = await stationsQuery
-                .OrderBy(s => s.StationId)
-                .Take(6)
+                .OrderByDescending(s => s.StationId)
                 .ToListAsync();
 
             // Stats for hero

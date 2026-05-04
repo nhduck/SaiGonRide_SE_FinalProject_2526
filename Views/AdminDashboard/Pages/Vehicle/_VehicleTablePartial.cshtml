@@ -1,4 +1,4 @@
-﻿@model IEnumerable<RentalVehicleService.Models.Vehicle>
+@model IEnumerable<RentalVehicleService.Models.Vehicle>
 
 @foreach (var item in Model)
 {
@@ -6,7 +6,8 @@
         <td class="ps-4 fw-bold text-muted">@item.VehicleId</td>
         <td>
             <span class="badge text-dark border">
-                <i class="@(item.Type.ToString() == "Electric" ? "bi bi-lightning text-warning" : "bi bi-leaf text-success")"></i> @item.Type
+                <i class="@(item.Type.ToString() == "Electric" ? "bi bi-lightning text-warning" : "bi bi-leaf text-success")"></i> 
+                <span data-i18n="@(item.Type.ToString() == "Electric" ? "nav_electric" : "nav_pedal")">@item.Type</span>
             </span>
         </td>
         <td>@item.VehicleModel</td>
@@ -29,9 +30,10 @@
                                 stateStr == "UnAvailable" ? "secondary" :
                                   stateStr == "Rented" ? "purple" :
                                   stateStr == "Maintenance" ? "danger" : "warning";
+                var statusKey = "admin_" + stateStr.ToLower();
             }
             <span class="badge rounded-pill bg-@statusClass-subtle text-@statusClass border border-@statusClass">
-                @stateStr
+                <span data-i18n="@statusKey">@stateStr</span>
             </span>
         </td>
         <td class="text-muted small">@item.LastMaintenance.ToString("dd/MM/yyyy")</td>

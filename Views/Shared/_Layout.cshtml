@@ -85,27 +85,27 @@
                 <span class="sr-brand-text fw-bold">SaigonRide</span>
             </a>
 
-            <button class="navbar-toggler border-0" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
+            <button class="navbar-toggler border-0 px-2" type="button" data-bs-toggle="collapse" data-bs-target="#mainNavbar"
                     aria-controls="mainNavbar" aria-expanded="false" aria-label="Toggle navigation">
-                <span class="navbar-toggler-icon"></span>
+                <i class="bi bi-list" style="font-size: 2rem; color: #16a34a;"></i>
             </button>
 
             <div class="collapse navbar-collapse" id="mainNavbar">
                 <ul class="navbar-nav me-auto mb-2 mb-xl-0 gap-1">
                     <li class="nav-item">
-                        <a class="nav-link text-nowrap d-flex align-items-center" href="/"><i class="bi bi-house-door me-1"></i>Home</a>
+                        <a class="nav-link text-nowrap d-flex align-items-center" href="/"><i class="bi bi-house-door me-1"></i><span data-i18n="nav_home">Home</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-nowrap d-flex align-items-center" href="/#station-search"><i class="bi bi-geo-alt me-1"></i>Find Stations</a>
+                        <a class="nav-link text-nowrap d-flex align-items-center" href="/#station-search"><i class="bi bi-geo-alt me-1"></i><span data-i18n="nav_find_stations">Find Stations</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-nowrap d-flex align-items-center" href="/Home/Guide"><i class="bi bi-info-circle me-1"></i>How It Works</a>
+                        <a class="nav-link text-nowrap d-flex align-items-center" href="/Home/Guide"><i class="bi bi-info-circle me-1"></i><span data-i18n="nav_how_it_works">How It Works</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-nowrap d-flex align-items-center" href="/Home/About"><i class="bi bi-people me-1"></i>About Us</a>
+                        <a class="nav-link text-nowrap d-flex align-items-center" href="/Home/About"><i class="bi bi-people me-1"></i><span data-i18n="nav_about">About Us</span></a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link text-nowrap d-flex align-items-center" href="/Home/FAQ"><i class="bi bi-chat-square-dots me-1"></i>FAQ</a>
+                        <a class="nav-link text-nowrap d-flex align-items-center" href="/Home/FAQ"><i class="bi bi-chat-square-dots me-1"></i><span data-i18n="nav_faq">FAQ</span></a>
                     </li>
                 </ul>
 
@@ -113,59 +113,58 @@
                 <form class="d-flex me-3 sr-search-form flex-grow-1" style="max-width:280px;" role="search" action="/" method="get">
                     <div class="input-group flex-nowrap">
                         <input class="form-control text-truncate border-success" type="search" name="query"
-                               placeholder="Search stations..." aria-label="Search" />
+                               placeholder="Search stations..." aria-label="Search" data-i18n-placeholder="nav_search_placeholder" />
                         <button class="btn btn-success flex-shrink-0" type="submit"><i class="bi bi-search"></i></button>
                     </div>
                 </form>
 
                 <!-- Auth -->
-                <div class="d-flex align-items-center gap-2 flex-nowrap">
+                <div class="d-flex flex-column flex-xl-row align-items-start align-items-xl-center gap-2 mt-3 mt-xl-0">
                     @if (User.IsInRole("Admin"))
                     {
-                        <a class="btn btn-dark btn-sm d-flex align-items-center gap-1 px-3 fw-semibold flex-nowrap" href="/AdminDashboard/Index">
+                        <a class="btn btn-dark btn-sm d-flex align-items-center gap-1 px-3 fw-semibold flex-nowrap w-100 w-xl-auto justify-content-center" href="/AdminDashboard/Index">
                             <i class="bi bi-shield-lock flex-shrink-0"></i>
-                            <span class="d-none d-xl-inline text-nowrap">Admin Panel</span>
+                            <span class="text-nowrap" data-i18n="nav_admin_panel">Admin Panel</span>
                         </a>
                     }
 
-                    <div class="dropdown me-1 d-none d-xl-block">
-                        <button class="btn btn-outline-success dropdown-toggle btn-sm d-flex align-items-center gap-1 px-3 text-nowrap"
-                                type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-translate flex-shrink-0"></i><span>Language</span>
+                    <div class="dropdown w-100 w-xl-auto">
+                        <button class="btn btn-outline-success dropdown-toggle btn-sm d-flex align-items-center justify-content-center gap-1 px-3 text-nowrap w-100 w-xl-auto"
+                                type="button" id="langDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
+                            <i class="bi bi-translate flex-shrink-0"></i><span>🇬🇧 English</span>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
-                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0);" onclick="changeLanguage('en')">🇬🇧 English</a></li>
-                            <li><a class="dropdown-item d-flex align-items-center gap-2" href="javascript:void(0);" onclick="changeLanguage('vi')">🇻🇳 Tiếng Việt</a></li>
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0 w-100 w-xl-auto text-center text-xl-start">
+                            <li><a class="dropdown-item sr-lang-item d-flex justify-content-center justify-content-xl-start align-items-center gap-2" href="javascript:void(0);" data-lang="en" onclick="changeLanguage('en')">🇬🇧 English</a></li>
+                            <li><a class="dropdown-item sr-lang-item d-flex justify-content-center justify-content-xl-start align-items-center gap-2" href="javascript:void(0);" data-lang="vi" onclick="changeLanguage('vi')">🇻🇳 Tiếng Việt</a></li>
                         </ul>
                     </div>
-                    <div id="google_translate_element" style="display:none;"></div>
 
                     @if (SignInManager.IsSignedIn(User))
                     {
-                        <div class="dropdown">
-                            <button class="btn btn-light btn-sm d-flex align-items-center gap-2 dropdown-toggle sr-user-btn border"
-                                    type="button" data-bs-toggle="dropdown" aria-expanded="false" style="max-width:200px;">
+                        <div class="dropdown w-100 w-xl-auto">
+                            <button class="btn btn-light btn-sm d-flex align-items-center justify-content-center gap-2 dropdown-toggle sr-user-btn border w-100 w-xl-auto"
+                                    type="button" data-bs-toggle="dropdown" aria-expanded="false">
                                 <div class="sr-avatar flex-shrink-0" style="width:24px;height:24px;">
                                     <i class="bi bi-person-fill" style="font-size:1rem;"></i>
                                 </div>
-                                <span class="d-none d-md-inline text-truncate fw-medium" style="max-width:130px;">@displayName</span>
+                                <span class="text-truncate fw-medium" style="max-width:130px;">@displayName</span>
                             </button>
-                            <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                            <ul class="dropdown-menu dropdown-menu-end shadow-sm w-100 w-xl-auto text-center text-xl-start">
                                 <li>
-                                    <a class="dropdown-item" asp-controller="Account" asp-action="Profile">
-                                        <i class="bi bi-person me-2"></i>My Profile
+                                    <a class="dropdown-item d-flex justify-content-center justify-content-xl-start align-items-center" asp-controller="Account" asp-action="Profile">
+                                        <i class="bi bi-person me-2"></i><span data-i18n="nav_my_profile">My Profile</span>
                                     </a>
                                 </li>
                                 <li>
-                                    <a class="dropdown-item" href="#">
-                                        <i class="bi bi-clock-history me-2"></i>Rental History
+                                    <a class="dropdown-item d-flex justify-content-center justify-content-xl-start align-items-center" href="#">
+                                        <i class="bi bi-clock-history me-2"></i><span data-i18n="nav_rental_history">Rental History</span>
                                     </a>
                                 </li>
                                 <li><hr class="dropdown-divider" /></li>
                                 <li>
-                                    <form asp-controller="Account" asp-action="Logout" method="post">
-                                        <button type="submit" class="dropdown-item text-danger">
-                                            <i class="bi bi-box-arrow-right me-2"></i>Log Out
+                                    <form asp-controller="Account" asp-action="Logout" method="post" class="w-100">
+                                        <button type="submit" class="dropdown-item text-danger d-flex justify-content-center justify-content-xl-start align-items-center w-100">
+                                            <i class="bi bi-box-arrow-right me-2"></i><span data-i18n="nav_logout">Log Out</span>
                                         </button>
                                     </form>
                                 </li>
@@ -174,8 +173,10 @@
                     }
                     else
                     {
-                        <a class="btn btn-outline-success btn-sm px-3" asp-controller="Account" asp-action="Login">Log In</a>
-                        <a class="btn btn-success btn-sm px-3" asp-controller="Account" asp-action="Register">Register</a>
+                        <div class="d-flex flex-row gap-2 flex-shrink-0">
+                            <a class="btn btn-outline-success btn-sm px-3 text-nowrap" asp-controller="Account" asp-action="Login" data-i18n="nav_login">Log In</a>
+                            <a class="btn btn-success btn-sm px-3 text-nowrap" asp-controller="Account" asp-action="Register" data-i18n="nav_register">Register</a>
+                        </div>
                     }
                 </div>
             </div>
@@ -203,7 +204,7 @@
                         </svg>
                         <span class="fs-5 fw-bold text-white">SaigonRide</span>
                     </div>
-                    <p class="text-white-50 small" style="line-height:1.7;">
+                    <p class="text-white-50 small" style="line-height:1.7;" data-i18n="footer_brand_desc">
                         Smart bike & e-scooter sharing network across Ho Chi Minh City.
                         Green, convenient, and modern — move your way.
                     </p>
@@ -217,31 +218,31 @@
 
                 <!-- Explore -->
                 <div class="col-lg-2 col-md-6 col-6">
-                    <h6 class="sr-footer-heading">Explore</h6>
+                    <h6 class="sr-footer-heading" data-i18n="footer_explore">Explore</h6>
                     <ul class="list-unstyled sr-footer-links">
-                        <li><a href="/">Home</a></li>
-                        <li><a href="/#station-search">Find Stations</a></li>
-                        <li><a href="/Home/Guide">How It Works</a></li>
-                        <li><a href="/Home/About">About Us</a></li>
-                        <li><a href="/Home/FAQ">FAQ</a></li>
+                        <li><a href="/" data-i18n="footer_home">Home</a></li>
+                        <li><a href="/#station-search" data-i18n="footer_find_stations">Find Stations</a></li>
+                        <li><a href="/Home/Guide" data-i18n="footer_how_it_works">How It Works</a></li>
+                        <li><a href="/Home/About" data-i18n="footer_about">About Us</a></li>
+                        <li><a href="/Home/FAQ" data-i18n="footer_faq_link">FAQ</a></li>
                     </ul>
                 </div>
 
                 <!-- Support -->
                 <div class="col-lg-2 col-md-6 col-6">
-                    <h6 class="sr-footer-heading">Support</h6>
+                    <h6 class="sr-footer-heading" data-i18n="footer_support">Support</h6>
                     <ul class="list-unstyled sr-footer-links">
-                        <li><a href="/Home/Privacy">Privacy Policy</a></li>
-                        <li><a href="/Home/Privacy">Terms of Service</a></li>
-                        <li><a href="/Home/FAQ">Help Center</a></li>
-                        <li><a href="#">Contact Us</a></li>
-                        <li><a href="#">Report an Issue</a></li>
+                        <li><a href="/Home/Privacy" data-i18n="footer_privacy">Privacy Policy</a></li>
+                        <li><a href="/Home/Privacy" data-i18n="footer_terms">Terms of Service</a></li>
+                        <li><a href="/Home/FAQ" data-i18n="footer_help">Help Center</a></li>
+                        <li><a href="#" data-i18n="footer_contact_us">Contact Us</a></li>
+                        <li><a href="#" data-i18n="footer_report">Report an Issue</a></li>
                     </ul>
                 </div>
 
                 <!-- Contact -->
                 <div class="col-lg-4 col-md-6">
-                    <h6 class="sr-footer-heading">Contact</h6>
+                    <h6 class="sr-footer-heading" data-i18n="footer_contact">Contact</h6>
                     <ul class="list-unstyled small text-white-50">
                         <li class="d-flex align-items-start gap-2 mb-3">
                             <i class="bi bi-geo-alt-fill mt-1" style="color:#16a34a;flex-shrink:0;"></i>
@@ -257,7 +258,7 @@
                         </li>
                         <li class="d-flex align-items-center gap-2">
                             <i class="bi bi-clock-fill" style="color:#16a34a;"></i>
-                            <span>Available 24/7</span>
+                            <span data-i18n="footer_available">Available 24/7</span>
                         </li>
                     </ul>
                     <div class="d-flex gap-2 mt-3 flex-wrap">
@@ -270,11 +271,11 @@
             <hr class="my-4" style="border-color:rgba(255,255,255,0.1);" />
 
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-center gap-3 pb-3">
-                <p class="text-white-50 small mb-0">&copy; 2026 SaigonRide. All rights reserved.</p>
+                <p class="text-white-50 small mb-0" data-i18n="footer_copyright">&copy; 2026 SaigonRide. All rights reserved.</p>
                 <div class="d-flex gap-3">
-                    <a href="/Home/Privacy" class="text-white-50 small text-decoration-none hover-green">Privacy</a>
-                    <a href="/Home/Privacy" class="text-white-50 small text-decoration-none hover-green">Terms</a>
-                    <a href="/Home/FAQ"     class="text-white-50 small text-decoration-none hover-green">FAQ</a>
+                    <a href="/Home/Privacy" class="text-white-50 small text-decoration-none hover-green" data-i18n="footer_privacy_short">Privacy</a>
+                    <a href="/Home/Privacy" class="text-white-50 small text-decoration-none hover-green" data-i18n="footer_terms_short">Terms</a>
+                    <a href="/Home/FAQ"     class="text-white-50 small text-decoration-none hover-green" data-i18n="footer_faq_short">FAQ</a>
                 </div>
             </div>
         </div>
@@ -300,19 +301,19 @@
         </label>
         <div class="fab-menu">
             <div class="fab-item-container">
-                <span class="fab-item-label">Messenger</span>
+                <span class="fab-item-label" data-i18n="fab_messenger">Messenger</span>
                 <a href="#" class="btn rounded-circle shadow-sm fab-item text-white" style="background:#0084FF;" title="Messenger">
                     <i class="bi bi-messenger"></i>
                 </a>
             </div>
             <div class="fab-item-container">
-                <span class="fab-item-label">Instagram</span>
+                <span class="fab-item-label" data-i18n="fab_instagram">Instagram</span>
                 <a href="#" class="btn rounded-circle shadow-sm fab-item text-white"
                    style="background:radial-gradient(circle at 30% 107%,#fdf497 0%,#fdf497 5%,#fd5949 45%,#d6249f 60%,#285AEB 90%);"
                    title="Instagram"><i class="bi bi-instagram"></i></a>
             </div>
             <div class="fab-item-container">
-                <span class="fab-item-label">Call Hotline</span>
+                <span class="fab-item-label" data-i18n="fab_call">Call Hotline</span>
                 <a href="tel:0932013424" class="btn rounded-circle shadow-sm fab-item bg-success text-white" title="Call Us">
                     <i class="bi bi-telephone-fill"></i>
                 </a>
@@ -386,29 +387,9 @@
         }, { threshold: 0.12 });
         document.querySelectorAll('.sr-reveal').forEach(el => srObserver.observe(el));
 
-        // Google Translate
-        function googleTranslateElementInit() {
-            // Guard: initialise only once
-            if (window._gtInitDone) return;
-            window._gtInitDone = true;
-            new google.translate.TranslateElement(
-                { pageLanguage: 'en', includedLanguages: 'en,vi', autoDisplay: false },
-                'google_translate_element'
-            );
-        }
-        function changeLanguage(langCode) {
-            document.cookie = `googtrans=/en/${langCode}; path=/`;
-            document.cookie = `googtrans=/en/${langCode}; domain=.${location.hostname}; path=/`;
-            window.location.reload();
-        }
     </script>
-    <!--
-        async + defer: Google Translate script loads fully off the critical path.
-        This prevents its AJAX sub-requests from re-triggering load events.
-    -->
-    <script async defer
-            src="https://translate.google.com/translate_a/element.js?cb=googleTranslateElementInit">
-    </script>
+    <!-- Custom i18n (replaces Google Translate — no toolbar, instant switch) -->
+    <script src="~/js/i18n.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
 </body>

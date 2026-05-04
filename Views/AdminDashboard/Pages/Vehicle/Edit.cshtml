@@ -1,4 +1,4 @@
-﻿@model RentalVehicleService.Models.Vehicle
+@model RentalVehicleService.Models.Vehicle
 
 <!-- Edit Modal -->
 <div class="modal fade" id="editModal" tabindex="-1" aria-hidden="true">
@@ -7,7 +7,7 @@
 
             <div class="modal-header bg-primary text-white">
                 <h5 class="modal-title fw-bold">
-                    <i class="bi bi-pencil-square me-2"></i>Edit Vehicle
+                    <i class="bi bi-pencil-square me-2"></i><span data-i18n="admin_edit_vehicle">Edit Vehicle</span>
                 </h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
@@ -21,7 +21,7 @@
                     <div class="row g-3">
 
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">
+                            <label class="form-label fw-semibold" data-i18n="admin_model">
                                 <i class="bi bi-tag me-1 text-primary"></i>Vehicle Model
                             </label>
                             <input type="text" class="form-control" id="editVehicleModel"
@@ -29,7 +29,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">
+                            <label class="form-label fw-semibold" data-i18n="nav_guide">
                                 <i class="bi bi-lightning-charge me-1 text-primary"></i>Type
                             </label>
                             <select class="form-select" id="editType" name="Type">
@@ -41,7 +41,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">
+                            <label class="form-label fw-semibold" data-i18n="admin_price_per_min">
                                 <i class="bi bi-currency-dollar me-1 text-primary"></i>Rental Price (VND/min)
                             </label>
                             <input type="number" class="form-control" id="editPrice"
@@ -49,7 +49,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">
+                            <label class="form-label fw-semibold" data-i18n="admin_battery">
                                 <i class="bi bi-battery-half me-1 text-primary"></i>Battery (%)
                             </label>
                             <div class="input-group">
@@ -60,7 +60,7 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">
+                            <label class="form-label fw-semibold" data-i18n="admin_status">
                                 <i class="bi bi-activity me-1 text-primary"></i>State
                             </label>
                             <select class="form-select" id="editState" name="State">
@@ -72,17 +72,17 @@
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">
+                            <label class="form-label fw-semibold" data-i18n="admin_current_station">
                                 <i class="bi bi-geo-alt me-1 text-primary"></i>Current Station
                             </label>
-                            <!-- JS fillStationDropdown() trong Index.cshtml sẽ tự điền -->
+                            <!-- JS fillStationDropdown() in Index.cshtml will auto-fill this -->
                             <select class="form-select" id="editStationId" name="CurrentStationId">
-                                <option value="">-- No Station --</option>
+                                <option value="" data-i18n="admin_no_station">-- No Station --</option>
                             </select>
                         </div>
 
                         <div class="col-md-6">
-                            <label class="form-label fw-semibold">
+                            <label class="form-label fw-semibold" data-i18n="admin_last_maintenance">
                                 <i class="bi bi-wrench me-1 text-primary"></i>Last Maintenance Date
                             </label>
                             <input type="datetime-local" class="form-control"
@@ -94,10 +94,10 @@
 
                 <div class="modal-footer border-0 pt-0 px-4 pb-4">
                     <button type="button" class="btn btn-light" data-bs-dismiss="modal">
-                        <i class="bi bi-x-lg me-1"></i>Cancel
+                        <i class="bi bi-x-lg me-1"></i><span data-i18n="admin_cancel">Cancel</span>
                     </button>
                     <button type="submit" class="btn btn-primary px-4" id="editSubmitBtn">
-                        <i class="bi bi-floppy me-1"></i>Save Changes
+                        <i class="bi bi-floppy me-1"></i><span data-i18n="admin_save_changes">Save Changes</span>
                     </button>
                 </div>
             </form>
