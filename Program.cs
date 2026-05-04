@@ -3,8 +3,16 @@ using Microsoft.EntityFrameworkCore;
 using RentalVehicleService.Data;
 using RentalVehicleService.Models;
 using RentalVehicleService.Services;
+using VNPAY;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.Services.AddHttpContextAccessor();
+
+builder.Services.Configure<VNPAY.Extensions.Options.VnpayConfiguration>(
+    builder.Configuration.GetSection("Vnpay")
+);
+
+builder.Services.AddScoped<IVnpayClient, VnpayClient>();
 
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");

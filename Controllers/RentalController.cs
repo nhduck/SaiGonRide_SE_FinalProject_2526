@@ -10,6 +10,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
+using VNPAY;
+using VNPAY.Models;
+using VNPAY.Models.Enums;
+using VNPAY.Models.Exceptions;
 
 namespace RentalVehicleService.Controllers
 {
@@ -19,10 +23,16 @@ namespace RentalVehicleService.Controllers
 
         private readonly RentalService _rentalService;
 
-        public RentalController(ApplicationDbContext context, RentalService rentalService)
+        private readonly IVnpayClient _vnpayClient;
+
+        private readonly IConfiguration _configuration;
+
+        public RentalController(ApplicationDbContext context, RentalService rentalService, IVnpayClient vnpayClient, IConfiguration configuration)
         {
-            _context = context; 
+            _context = context;
             _rentalService = rentalService;
+            _vnpayClient = vnpayClient;
+            _configuration = configuration;
         }
 
         // Removed redundant constructor that caused CS8618
@@ -307,6 +317,77 @@ namespace RentalVehicleService.Controllers
             };
 
             return View(model);
+        }
+
+        // THÊM MỚI: Xử lý nút bấm "Xác nhận & Thanh toán"
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> ProcessPayment(int rentalId, string paymentMethod, string couponCode)
+        {
+            var rental = await _context.Rentals.FindAsync(rentalId);
+            if (rental == null) return NotFound();
+
+            if (paymentMethod == "VNPay")
+            {
+                decimal finalAmount = rental.FinalFare;
+
+                if (!string.IsNullOrEmpty(couponCode) && couponCode.ToUpper() == "SAIGONGREEN20")
+                {
+                    finalAmount -= 10000;
+                    if (finalAmount < 0) finalAmount = 0;
+                }
+
+                var request = new VnpayPaymentRequest
+                {
+                    Money = (double)finalAmount,
+                    Description = $"Thanh toan chuyen di {rental.RentalId} tai SaigonRide",
+                    BankCode = BankCode.ANY
+                };
+
+                var paymentUrlInfo = _vnpayClient.CreatePaymentUrl(request);
+                return Redirect(paymentUrlInfo.Url);
+            }
+
+            TempData["Info"] = "This payment method is currently under development..";
+            return RedirectToAction("Payment", new { id = rentalId });
+        }
+
+        //Xử lý kết quả trả về từ VNPay
+       [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> PaymentCallback()
+        {
+            try
+            {
+                var paymentResult = _vnpayClient.GetPaymentResult(Request);
+
+                int rentalId = int.Parse(paymentResult.Description
+                    .Split(' ').Last()
+                );
+
+                // Thanh toán thành công
+                var rental = await _context.Rentals.FindAsync(rentalId);
+                if (rental != null)
+                {
+                    rental.Status = RentalStatus.Completed;
+                    await _context.SaveChangesAsync();
+                }
+
+                TempData["Success"] = "Payment successful! Thank you for using saigonRide.";
+                return RedirectToAction("Details", new { id = rentalId });
+            }
+            catch (VnpayException ex) // Thanh toán thất bại / sai chữ ký
+            {
+                // Parse rentalId từ query string trực tiếp để redirect về Payment
+                var txnRef = Request.Query["vnp_TxnRef"].ToString();
+                int rentalId = string.IsNullOrEmpty(txnRef) ? 0 : int.Parse(txnRef.Split('_')[0]);
+
+                TempData["Error"] = "Payment failed " + ex.Message;
+                return rentalId > 0
+                    ? RedirectToAction("Payment", new { id = rentalId })
+                    : RedirectToAction("Index");
+            }
         }
     }
 }
