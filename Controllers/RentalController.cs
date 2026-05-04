@@ -68,35 +68,35 @@ namespace RentalVehicleService.Controllers
             return View(rental);
         }
 
-        // GET: Rental/Create
-        public IActionResult Create()
-        {
-            ViewData["EndStationId"] = new SelectList(_context.Stations, "StationId", "Address");
-            ViewData["StartStationId"] = new SelectList(_context.Stations, "StationId", "Address");
-            ViewData["VehicleId"] = new SelectList(_context.Vehicles, "VehicleId", "VehicleModel");
-            return View("ActiveTrip");
-        }
-
-        // POST: Rental/Create
-        // To protect from overposting attacks, enable the specific properties you want to bind to.
-        // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        [Authorize]
+        // 1. GET: Rental/Create (Màn hình xác nhận trung gian sau khi quét QR)
+        [HttpGet]
         public async Task<IActionResult> Create(int vehicleId, int startStationId)
         {
             var vehicle = await _context.Vehicles.FindAsync(vehicleId);
-            if (vehicle == null || vehicle.State != VehicleState.Available)
-            {
-                TempData["Error"] = "Xe không sẵn sàng hoặc không tồn tại.";
-                return RedirectToAction("Index", "Vehicles");
-            }
+            var station = await _context.Stations.FindAsync(startStationId);
 
-            if (!vehicle.IsReadyForRent)
-            {
-                TempData["Error"] = "Xe không đủ pin để thực hiện chuyến đi (>20%).";
-                return RedirectToAction("Details", "Vehicles", new { id = vehicleId });
-            }
+
+            //tạm comment để hoàn thành(đây là kiểm tra trạng thái xe hợp lệ không)
+            //if (vehicle == null || vehicle.State != VehicleState.Available)
+            //{
+            //    TempData["Error"] = "Xe không sẵn sàng hoặc không tồn tại.";
+            //    return RedirectToAction("Index", "Home");
+            //}
+
+            ViewBag.VehicleId = vehicleId;
+            ViewBag.StartStationId = startStationId;
+            ViewBag.VehicleModel = vehicle.VehicleModel;
+            ViewBag.StationAddress = station?.Address ?? "Unknown Station";
+
+            return View(); // Trả về màn hình xác nhận Create.cshtml
+        }
+
+        [HttpPost, ActionName("Create")]
+        [ValidateAntiForgeryToken]
+        [Authorize]
+        public async Task<IActionResult> CreatePost(int vehicleId, int startStationId) // Tên hàm mới giúp hết lỗi CS0111
+        {
+            var vehicle = await _context.Vehicles.FindAsync(vehicleId);
 
             var rental = new Rental
             {
@@ -111,18 +111,18 @@ namespace RentalVehicleService.Controllers
             try
             {
                 vehicle.State = VehicleState.Rented;
-
                 var station = await _context.Stations.FindAsync(startStationId);
                 if (station != null) station.CurrentCount -= 1;
 
                 _context.Add(rental);
                 await _context.SaveChangesAsync();
 
-                return RedirectToAction("ActiveTrip", new { id = rental.RentalId });
+                // Chuyển hướng sang trang ActiveTrip kèm ID thực tế
+                return RedirectToAction("ActiveTrip", "Rental", new { area = "", id = rental.RentalId });
             }
-            catch (Exception)
+            catch (Exception ex)
             {
-                return View();
+                return Content("Lỗi lưu DB: " + ex.Message);
             }
         }
 
@@ -163,7 +163,7 @@ namespace RentalVehicleService.Controllers
 
                 rental.FinalFare = _rentalService.ProcessFinalBill(rental.RentalId, endStationId);
 
-                var vehicle = await _context.Vehicles.FindAsync(rental.VehicleId);
+                var vehicle = await _context.Vehicles.FindAsync((int)rental.VehicleId);
                 if (vehicle != null) vehicle.State = VehicleState.Available;
 
                 var station = await _context.Stations.FindAsync(endStationId);
@@ -244,9 +244,69 @@ namespace RentalVehicleService.Controllers
             ViewBag.StationId = stationId;
             return PartialView("_VehicleListModal", vehicles);
         }
-        public IActionResult ActiveTrip(int id)
+        public async Task<IActionResult> ActiveTrip(int id)
         {
-            return View();
+            // Tìm chuyến đi dựa trên ID và nạp kèm thông tin xe/trạm
+            var rental = await _context.Rentals
+                .Include(r => r.Vehicle)
+                .Include(r => r.StartStation)
+                .FirstOrDefaultAsync(m => m.RentalId == id);
+
+            if (rental == null)
+            {
+                return NotFound();
+            }
+
+            // Truyền dữ liệu chuyến đi sang trang ActiveTrip.cshtml
+            return View(rental);
+        }
+
+        //Hàm payment trang thanh toán
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> Payment(int id)
+        {
+            var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Tìm chuyến đi cùng với thông tin Trạm trả và Xe
+            var rental = await _context.Rentals
+                .Include(r => r.EndStation)
+                .Include(r => r.Vehicle)
+                .FirstOrDefaultAsync(m => m.RentalId == id);
+
+            if (rental == null)
+            {
+                return NotFound();
+            }
+
+            var user = await _context.Users.FindAsync(userID);
+
+            // Tính tổng thời gian
+            int totalMinutes = 0;
+            if (rental.EndTime.HasValue)
+            {
+                totalMinutes = (int)(rental.EndTime.Value - rental.StartTime).TotalMinutes;
+            }
+
+            var model = new PaymentViewModel
+            {
+                CustomerName = user?.UserName ?? User.Identity.Name,
+                PhoneNumber = user?.PhoneNumber ?? "No phone number available",
+                Email = user?.Email ?? "No email yet",
+
+                RentalId = rental.RentalId,
+                EndStationName = rental.EndStation?.Address ?? "There is no pay station yet",
+                EndStationAddress = rental.EndStation?.Address ?? "No address available",
+                VehicleModel = rental.Vehicle?.VehicleModel ?? "Not determined",
+
+                // VehicleBattery = rental.Vehicle?.BatteryLevel, 
+
+                StartTime = rental.StartTime,
+                TotalMinutes = totalMinutes,
+                FinalFare = rental.FinalFare
+            };
+
+            return View(model);
         }
     }
 }

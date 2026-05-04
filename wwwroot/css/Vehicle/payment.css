@@ -1,0 +1,298 @@
+﻿/* wwwroot/css/Vehicle/payment.css */
+
+.payment-wrapper {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    background: #f0f4f0;
+    padding: 40px 16px;
+    min-height: 100vh;
+}
+
+.invoice-card {
+    background: #fff;
+    border-radius: 16px;
+    box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+    max-width: 740px;
+    margin: 0 auto;
+}
+
+/* ── Headings ── */
+.invoice-title {
+    text-align: center;
+    font-weight: 900;
+    font-size: 1.4rem;
+    color: #16a34a;
+    letter-spacing: -0.01em;
+    margin-bottom: 1.75rem;
+}
+
+.section-heading {
+    font-weight: 800;
+    font-size: 0.97rem;
+    color: #111827;
+    margin: 0;
+}
+
+/* ── Divider ── */
+.divider {
+    border: none;
+    border-top: 1px solid #e5e7eb;
+    margin: 0;
+}
+
+/* ── Customer info ── */
+.customer-row {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 40px;
+    font-size: 0.875rem;
+    color: #374151;
+}
+
+/* ── Location pin ── */
+.pin-wrap {
+    width: 36px;
+    height: 36px;
+    background: #dcfce7;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+}
+
+/* ── Time row ── */
+.time-row {
+    background: #f3f4f6;
+    border-radius: 10px;
+    padding: 16px 20px;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+}
+
+.time-cell {
+    flex: 1;
+    min-width: 110px;
+}
+
+.time-label {
+    font-weight: 600;
+    font-size: 0.8rem;
+    color: #6b7280;
+}
+
+.time-value {
+    font-weight: 700;
+    font-size: 0.95rem;
+    color: #111827;
+    margin-top: 3px;
+}
+
+/* ── Fee section ── */
+.fee-section {
+    display: flex;
+    align-items: flex-start;
+    gap: 32px;
+}
+
+.fee-section-label {
+    flex-shrink: 0;
+    width: 140px;
+}
+
+.fee-rows {
+    flex: 1;
+}
+
+.fee-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    padding: 5px 0;
+}
+
+.fee-label {
+    font-size: 0.875rem;
+    color: #374151;
+}
+
+.fee-value {
+    font-size: 0.875rem;
+    color: #111827;
+    font-weight: 600;
+    white-space: nowrap;
+    padding-left: 16px;
+}
+
+    .fee-value.discount {
+        color: #16a34a;
+    }
+
+.fee-total-label {
+    font-size: 0.875rem;
+    color: #111827;
+    font-weight: 700;
+}
+
+.fee-total-value {
+    font-size: 0.875rem;
+    color: #111827;
+    font-weight: 800;
+    white-space: nowrap;
+    padding-left: 16px;
+}
+
+/* ── Promo code ── */
+.coupon-wrap {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 10px;
+}
+
+.coupon-input-wrap {
+    display: flex;
+    gap: 8px;
+    flex: 1;
+}
+
+.coupon-input {
+    border: 1px solid #d1d5db;
+    border-radius: 8px;
+    font-size: 0.875rem;
+    color: #374151;
+    padding: 10px 14px;
+    outline: none;
+    width: 100%;
+    font-family: 'Be Vietnam Pro', sans-serif;
+}
+
+    .coupon-input:focus {
+        border-color: #22c55e;
+        box-shadow: 0 0 0 2px rgba(34,197,94,0.15);
+    }
+
+.coupon-btn {
+    padding: 0 20px;
+    border-radius: 8px;
+    background: #16a34a;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.875rem;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s;
+    white-space: nowrap;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    height: 42px;
+}
+
+    .coupon-btn:hover {
+        background: #15803d;
+    }
+
+.coupon-msg {
+    font-size: 0.875rem;
+    font-weight: 600;
+    min-height: 20px;
+}
+
+/* ── Grand total ── */
+.grand-total-row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 1.5rem;
+}
+
+.grand-total-amount {
+    font-weight: 900;
+    font-size: 1.4rem;
+    color: #16a34a;
+    letter-spacing: -0.01em;
+}
+
+/* ── Payment method cards ── */
+.pay-cards-wrap {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+}
+
+.pay-card {
+    border: 1.5px solid #e5e7eb;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: border-color 0.15s, box-shadow 0.15s;
+    flex: 1;
+    min-width: 120px;
+    position: relative;
+    background: #fff;
+    padding: 16px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+}
+
+    .pay-card:hover {
+        border-color: #22c55e;
+    }
+
+    .pay-card.selected {
+        border-color: #22c55e;
+        box-shadow: 0 0 0 1.5px #22c55e;
+    }
+
+    .pay-card .check {
+        display: none;
+        position: absolute;
+        top: 8px;
+        right: 8px;
+        background: #22c55e;
+        color: #fff;
+        border-radius: 50%;
+        width: 20px;
+        height: 20px;
+        font-size: 0.7rem;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .pay-card.selected .check {
+        display: flex;
+    }
+
+.pay-card-logo {
+    height: 40px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.pay-card-name {
+    font-size: 0.75rem;
+    font-weight: 600;
+    color: #374151;
+}
+
+/* ── Confirm button ── */
+.btn-confirm {
+    background: #16a34a;
+    color: #fff;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 1.05rem;
+    letter-spacing: 0.03em;
+    height: 56px;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    transition: background 0.15s;
+    font-family: 'Be Vietnam Pro', sans-serif;
+    text-transform: uppercase;
+}
+
+    .btn-confirm:hover {
+        background: #15803d;
+    }

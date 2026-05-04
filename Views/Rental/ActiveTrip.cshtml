@@ -8,6 +8,16 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 }
 
+@model RentalVehicleService.Models.Rental
+@{
+    // Kiểm tra nếu Model bị null không
+    if (Model == null)
+    {
+        <p>Loading trip information...</p>
+        return;
+    }
+}
+
 <div class="active-trip-container">
     <div class="container py-4">
         <!-- Status Header -->
@@ -41,11 +51,32 @@
                     </div>
 
                     <div class="action-buttons mt-5">
-                        <button class="btn btn-end-trip w-100 mb-3 py-3">
-                            <i class="fa-regular fa-circle-stop me-2"></i> FINISH TRIP
-                        </button>
-                        <button class="btn btn-lock-temporary w-100 py-3">
-                            <i class="fa-solid fa-lock me-2"></i> Temporary Lock
+                        <form asp-action="Edit" asp-controller="Rental" method="post">
+
+                            <input type="hidden" name="id" value="@Model.RentalId" />
+
+                            <div class="mb-3" style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px;">
+                                <label class="text-white mb-2">Select Drop-off Station:</label>
+                                <select name="endStationId" class="form-select" required>
+                                    <option value="">-- Choose a station to drop bike --</option>
+                                    <!-- Tạm thời thêm vài Option để test chuyển trang, sau này bạn có thể lấy từ Database (ViewBag) -->
+                                    <option value="1">Trạm Thảo Cầm Viên</option>
+                                    <option value="2">Trạm Bến Thành</option>
+                                    <option value="3">Trạm Phố Đi Bộ</option>
+                                </select>
+                            </div>
+
+                            <a asp-action="Payment"
+                               asp-controller="Rental"
+                               asp-route-id="@Model.RentalId"
+                               class="btn btn-success w-100 mb-3"
+                               style="border-radius: 30px; font-weight: bold; font-size: 1.1rem; padding: 12px; text-decoration: none; display: inline-block; text-align: center;">
+                                <i class="far fa-dot-circle"></i> FINISH TRIP
+                            </a>
+                        </form>
+
+                        <button type="button" class="btn btn-outline-success w-100" style="border-radius: 30px; background-color: #e9f7ef; color: #198754; font-weight: bold;">
+                            <i class="fas fa-lock"></i> Temporary Lock
                         </button>
                     </div>
                 </div>
