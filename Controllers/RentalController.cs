@@ -296,7 +296,7 @@ namespace RentalVehicleService.Controllers
             int totalMinutes = 0;
             if (rental.EndTime.HasValue)
             {
-                totalMinutes = (int)(rental.EndTime.Value - rental.StartTime).TotalMinutes;
+                totalMinutes = (int)Math.Ceiling((rental.EndTime.Value - rental.StartTime).TotalMinutes);
             }
 
             var model = new PaymentViewModel
