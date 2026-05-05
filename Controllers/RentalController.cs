@@ -14,6 +14,7 @@ using VNPAY;
 using VNPAY.Models;
 using VNPAY.Models.Enums;
 using VNPAY.Models.Exceptions;
+using System.Text.RegularExpressions;
 
 namespace RentalVehicleService.Controllers
 {
@@ -342,7 +343,7 @@ namespace RentalVehicleService.Controllers
                 var request = new VnpayPaymentRequest
                 {
                     Money = (double)finalAmount,
-                    Description = $"Thanh toan chuyen di {rental.RentalId} tai SaigonRide",
+                    Description = $"Thanh toan chuyen di {rentalId} tai SaigonRide",
                     BankCode = BankCode.ANY
                 };
 
@@ -362,10 +363,16 @@ namespace RentalVehicleService.Controllers
             try
             {
                 var paymentResult = _vnpayClient.GetPaymentResult(Request);
+                var match = Regex.Match(paymentResult.Description, @"\d+");
+                if (!match.Success)
+                {
+                    // Nếu không tìm thấy số nào trong chuỗi, báo lỗi hoặc quay về trang chủ
+                    TempData["Error"] = "Không tìm thấy mã chuyến đi trong giao dịch.";
+                    return RedirectToAction("Index", "Home");
+                }
 
-                int rentalId = int.Parse(paymentResult.Description
-                    .Split(' ').Last()
-                );
+
+                int rentalId = int.Parse(match.Value);
 
                 // Thanh toán thành công
                 var rental = await _context.Rentals.FindAsync(rentalId);
