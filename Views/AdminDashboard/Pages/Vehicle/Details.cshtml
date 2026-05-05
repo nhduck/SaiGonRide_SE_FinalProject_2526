@@ -55,23 +55,57 @@
 
 <script>
 	$(document).ready(function () {
-	const currentDomain = window.location.origin;
-	const unlockUrl = `${currentDomain}/Rental/Create?vehicleId=@Model.VehicleId`;
-    
-	// Sử dụng selector của jQuery để tìm container
-	const $qrContainer = $("#qrcode-container");
+		const currentDomain = window.location.origin;
+		const unlockUrl = `${currentDomain}/Rental/Create?vehicleId=@Model.VehicleId`;
 
-	// Kiểm tra xem phần tử có tồn tại không (.length > 0)
-	if ($qrContainer.length) {
-	// Truy xuất phần tử DOM thuần bằng [0] để thư viện QRCode có thể nhận diện
-	new QRCode($qrContainer[0], {
-	text: unlockUrl,
-	width: 160,
-	height: 160,
-	colorDark: "#064e3b",
-	colorLight: "#ffffff",
-	correctLevel: QRCode.CorrectLevel.H
+		// Sử dụng selector của jQuery để tìm container
+		const $qrContainer = $("#qrcode-container");
+
+		// Kiểm tra xem phần tử có tồn tại không (.length > 0)
+		if ($qrContainer.length) {
+			// Truy xuất phần tử DOM thuần bằng [0] để thư viện QRCode có thể nhận diện
+			new QRCode($qrContainer[0], {
+				text: unlockUrl,
+				width: 160,
+				height: 160,
+				colorDark: "#064e3b",
+				colorLight: "#ffffff",
+				correctLevel: QRCode.CorrectLevel.H
+			});
+		}
 	});
-	}
-	});
+
+	function ShowDetailsModal(vehicleId) {
+    $('#detailsModalBody').html(
+        '<div class="text-center py-4">' +
+        '  <div class="spinner-border text-primary" role="status"></div>' +
+        '  <p class="mt-2 text-muted">' + ((window.getI18nText && window.getI18nText('admin_loading')) || 'Loading...') + '</p>' +
+        '</div>'
+    );
+
+    $('#detailsEditBtn').data('id', vehicleId);
+    $('#detailsModal').modal('show');
+
+    $.ajax({
+        url: '/Vehicles/Details/' + vehicleId,
+        type: 'GET',
+        success: function (html) {
+            $('#detailsModalBody').html(html);
+        },
+        error: function () {
+            const errorMsg = (window.getI18nText && window.getI18nText('admin_details_error')) || 'Cannot load vehicle details. Please try again.';
+            $('#detailsModalBody').html(
+                '<div class="alert alert-danger">' + errorMsg + '</div>'
+            );
+        }
+    });
+}
+
+$('#detailsEditBtn').on('click', function () {
+    var id = $(this).data('id');
+    $('#detailsModal').modal('hide');
+    $('#detailsModal').one('hidden.bs.modal', function () {
+        ShowEditModal(id);
+    });
+});
 </script>

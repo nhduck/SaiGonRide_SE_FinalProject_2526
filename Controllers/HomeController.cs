@@ -87,6 +87,29 @@ namespace RentalVehicleService.Controllers
             return View();
         }
 
+        [HttpGet]
+        public IActionResult ReportIssue()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ReportIssue(BugReport model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            model.CreatedDate = DateTime.Now;
+            model.Status = BugReport.BugStatus.New;
+
+            _context.BugReport.Add(model);
+            await _context.SaveChangesAsync();
+
+            TempData["ReportSuccess"] = true;
+            return RedirectToAction(nameof(ReportIssue));
+        }
+
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

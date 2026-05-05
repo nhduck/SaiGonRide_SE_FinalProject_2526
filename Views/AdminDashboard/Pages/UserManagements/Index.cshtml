@@ -24,48 +24,90 @@
             <div class="col">
                 <div class="card border-0 shadow-sm stat-card border-start border-primary border-4 h-100">
                     <div class="card-body">
-                        <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_total_users">Total Users</div>
-                        <div id="totalUserCount" class="h3 fw-bold text-primary mb-0">@ViewBag.TotalUsers</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_total_users">Total Users</div>
+                                <div id="totalUserCount" class="h3 fw-bold text-primary mb-0">@ViewBag.TotalUsers</div>
+                            </div>
+                            <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-people-fill text-primary fs-5"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card border-0 shadow-sm stat-card border-start border-success border-4 h-100">
                     <div class="card-body">
-                        <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_active">Active</div>
-                        <div id="activeUserCount" class="h3 fw-bold text-success mb-0">@ViewBag.ActiveUsers</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_active">Active</div>
+                                <div id="activeUserCount" class="h3 fw-bold text-success mb-0">@ViewBag.ActiveUsers</div>
+                            </div>
+                            <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-check-circle text-success fs-5"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card border-0 shadow-sm stat-card border-start border-danger border-4 h-100">
                     <div class="card-body">
-                        <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_locked">Locked Out</div>
-                        <div id="lockedUserCount" class="h3 fw-bold text-danger mb-0">@ViewBag.LockedUsers</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_locked">Locked Out</div>
+                                <div id="lockedUserCount" class="h3 fw-bold text-danger mb-0">@ViewBag.LockedUsers</div>
+                            </div>
+                            <div class="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-lock-fill text-danger fs-5"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card border-0 shadow-sm stat-card border-start border-warning border-4 h-100">
                     <div class="card-body">
-                        <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_admins">Admins</div>
-                        <div id="adminUserCount" class="h3 fw-bold text-warning mb-0">@ViewBag.Admins</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_admins">Admins</div>
+                                <div id="adminUserCount" class="h3 fw-bold text-warning mb-0">@ViewBag.Admins</div>
+                            </div>
+                            <div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-shield-check text-warning fs-5"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card border-0 shadow-sm stat-card border-start border-info border-4 h-100">
                     <div class="card-body">
-                        <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_customers">Customers</div>
-                        <div id="customerUserCount" class="h3 fw-bold text-info mb-0">@ViewBag.Customers</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_customers">Customers</div>
+                                <div id="customerUserCount" class="h3 fw-bold text-info mb-0">@ViewBag.Customers</div>
+                            </div>
+                            <div class="bg-info bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-person-badge text-info fs-5"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card border-0 shadow-sm stat-card border-start border-purple border-4 h-100">
                     <div class="card-body">
-                        <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_staff">Staff</div>
-                        <div id="staffUserCount" class="h3 fw-bold text-purple mb-0">@ViewBag.Staff</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_staff">Staff</div>
+                                <div id="staffUserCount" class="h3 fw-bold text-purple mb-0">@ViewBag.Staff</div>
+                            </div>
+                            <div class="bg-purple bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-briefcase text-purple fs-5"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -87,11 +129,11 @@
                     </div>
                     <div class="col-lg-8 d-flex gap-2 flex-wrap justify-content-lg-end">
                         <button id="userClearBTN" class="btn btn-outline-primary d-none" data-i18n="admin_clear_sort">Clear Sort</button>
-                        <button id="activeBTN" class="userSortBTN btn btn-outline-success" data-i18n="admin_active">Active</button>
-                        <button id="lockedBTN" class="userSortBTN btn btn-outline-danger" data-i18n="admin_locked">Locked</button>
-                        <button id="adminBTN" class="userSortBTN btn btn-outline-warning" data-i18n="admin_admins">Admin</button>
-                        <button id="customerBTN" class="userSortBTN btn btn-outline-info" data-i18n="admin_customers">Customer</button>
-                        <button id="staffBTN" class="userSortBTN btn btn-outline-purple" data-i18n="admin_staff">Staff</button>
+                        <button id="activeBTN" class="userSortBTN btn btn-outline-success" data-filter="Active" data-i18n="admin_active">Active</button>
+                        <button id="lockedBTN" class="userSortBTN btn btn-outline-danger" data-filter="Locked" data-i18n="admin_locked">Locked</button>
+                        <button id="adminBTN" class="userSortBTN btn btn-outline-warning" data-filter="Admin" data-i18n="admin_admins">Admin</button>
+                        <button id="customerBTN" class="userSortBTN btn btn-outline-info" data-filter="Customer" data-i18n="admin_customers">Customer</button>
+                        <button id="staffBTN" class="userSortBTN btn btn-outline-purple" data-filter="Staff" data-i18n="admin_staff">Staff</button>
                     </div>
                 </form>
             </div>
@@ -180,7 +222,7 @@
         $('.userSortBTN').on('click', function (e) {
             e.preventDefault();
 
-            var filterName = $(this).text().trim();
+            var filterName = $(this).data("filter");
             $(this).toggleClass('active-selected');
 
             var index = $.inArray(filterName, selectedUserFilters);
@@ -247,4 +289,5 @@
 
     })(jQuery);
 </script>
-<link rel="stylesheet" href="~/css/User/indexStyle.css?v=1.1" />
+
+<link rel="stylesheet" href="~/css/User/indexStyle.css?v=1.2" />

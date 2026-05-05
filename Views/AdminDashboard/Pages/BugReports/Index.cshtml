@@ -1,53 +1,236 @@
-﻿@model IEnumerable<RentalVehicleService.Models.BugReport>
+@using RentalVehicleService.Models
+@model IEnumerable<RentalVehicleService.Models.BugReport>
 
 @{
-    ViewData["Title"] = "Index";
+    ViewData["Title"] = "Report Management";
 }
 
-<h1>Index</h1>
+<div class="m-3">
+    <div class="container-fluid py-4 px-lg-5">
 
-<p>
-    <a asp-action="Create">Create New</a>
-</p>
-<table class="table">
-    <thead>
-        <tr>
-            <th>
-                @Html.DisplayNameFor(model => model.Title)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Description)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.CreatedDate)
-            </th>
-            <th>
-                @Html.DisplayNameFor(model => model.Status)
-            </th>
-            <th></th>
-        </tr>
-    </thead>
-    <tbody>
-@foreach (var item in Model) {
-        <tr>
-            <td>
-                @Html.DisplayFor(modelItem => item.Title)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Description)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.CreatedDate)
-            </td>
-            <td>
-                @Html.DisplayFor(modelItem => item.Status)
-            </td>
-            <td>
-                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
-                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
-                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
-            </td>
-        </tr>
-}
-    </tbody>
-</table>
+        <!-- Header -->
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <div>
+                <h4 class="fw-bold mb-1"><i class="bi bi-flag-fill text-danger me-2"></i>Report Management</h4>
+                <p class="text-muted small mb-0">View and manage all user-submitted reports</p>
+            </div>
+        </div>
+
+        <!-- Stats -->
+        <div class="row row-cols-1 row-cols-md-3 row-cols-xl-5 g-3 mb-5">
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-primary border-4 h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase">Total Reports</div>
+                                <div id="totalReportCount" class="h3 fw-bold text-primary mb-0">@ViewBag.TotalReports</div>
+                            </div>
+                            <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-flag text-primary fs-5"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-danger border-4 h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase">New</div>
+                                <div id="newReportCount" class="h3 fw-bold text-danger mb-0">@ViewBag.NewReports</div>
+                            </div>
+                            <div class="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-exclamation-circle text-danger fs-5"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-warning border-4 h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase">In Progress</div>
+                                <div id="inProgressCount" class="h3 fw-bold text-warning mb-0">@ViewBag.InProgress</div>
+                            </div>
+                            <div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-arrow-repeat text-warning fs-5"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-success border-4 h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase">Resolved</div>
+                                <div id="resolvedCount" class="h3 fw-bold text-success mb-0">@ViewBag.Resolved</div>
+                            </div>
+                            <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-check-circle text-success fs-5"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col">
+                <div class="card border-0 shadow-sm stat-card border-start border-secondary border-4 h-100">
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase">Closed</div>
+                                <div id="closedCount" class="h3 fw-bold text-secondary mb-0">@ViewBag.Closed</div>
+                            </div>
+                            <div class="bg-secondary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-x-circle text-secondary fs-5"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search & Filter -->
+        <div class="card border-0 shadow-sm mb-4">
+            <div class="card-body">
+                <form method="get" class="row g-2">
+                    <div class="col-lg-4">
+                        <div class="input-group">
+                            <span class="input-group-text bg-white border-end-0">
+                                <i class="bi bi-search text-muted"></i>
+                            </span>
+                            <input id="reportSearchBar" type="text"
+                                   class="form-control border-start-0 ps-0"
+                                   placeholder="Search by title, ID or description..." />
+                        </div>
+                    </div>
+                    <div class="col-lg-8 d-flex gap-2 flex-wrap justify-content-lg-end">
+                        <button id="reportClearBTN" class="btn btn-outline-primary d-none">Clear Sort</button>
+                        <button class="reportSortBTN btn btn-outline-danger" data-status="New">New</button>
+                        <button class="reportSortBTN btn btn-outline-warning" data-status="InProgress">In Progress</button>
+                        <button class="reportSortBTN btn btn-outline-success" data-status="Resolved">Resolved</button>
+                        <button class="reportSortBTN btn btn-outline-secondary" data-status="Closed">Closed</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Table -->
+        <div class="card border-0 shadow-sm">
+            <div class="table-responsive">
+                <div class="scroll-area">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="bg-light sticky-top">
+                            <tr>
+                                <th class="ps-4">#ID</th>
+                                <th>Title</th>
+                                <th>Description</th>
+                                <th>Reporter Email</th>
+                                <th>Submitted Date</th>
+                                <th>Status</th>
+                                <th class="text-center">Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody id="reportTableBody">
+                            <partial name="~/Views/AdminDashboard/Pages/BugReports/_ReportTablePartial.cshtml" />
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <iframe name="hidden_frame" style="display:none;"></iframe>
+
+    <!-- Modals -->
+    <partial name="~/Views/AdminDashboard/Pages/BugReports/Delete.cshtml" />
+    <partial name="~/Views/AdminDashboard/Pages/BugReports/Edit.cshtml" />
+    <partial name="~/Views/AdminDashboard/Pages/BugReports/Details.cshtml" />
+
+</div>
+
+<script>
+    // ─── Stats ───────────────────────────────────────────
+    function updateReportStats() {
+        $.ajax({
+            url: '/BugReports/GetAmountInfo',
+            type: 'GET',
+            success: function (data) {
+                $('#totalReportCount').text(data.totalReports);
+                $('#newReportCount').text(data.newReports);
+                $('#inProgressCount').text(data.inProgress);
+                $('#resolvedCount').text(data.resolved);
+                $('#closedCount').text(data.closed);
+            }
+        });
+    }
+
+    // ─── Search & Filter ─────────────────────────────────
+    var selectedReportStatuses = [];
+
+    $('#reportSearchBar').on('input', function () {
+        searchReports();
+    });
+
+    $('.reportSortBTN').on('click', function (e) {
+        e.preventDefault();
+        var status = $(this).data('status');
+        $(this).toggleClass('active-selected');
+        var index = selectedReportStatuses.indexOf(status);
+        if (index > -1) {
+            selectedReportStatuses.splice(index, 1);
+        } else {
+            selectedReportStatuses.push(status);
+        }
+        if (selectedReportStatuses.length > 1) {
+            $('#reportClearBTN').removeClass('d-none');
+        } else {
+            $('#reportClearBTN').addClass('d-none');
+        }
+        if (selectedReportStatuses.length === 4) {
+            clearReportSort(e);
+        } else {
+            searchReports();
+        }
+    });
+
+    $('#reportClearBTN').on('click', function (e) {
+        clearReportSort(e);
+    });
+
+    function clearReportSort(e) {
+        e.preventDefault();
+        selectedReportStatuses = [];
+        $('.reportSortBTN').removeClass('active-selected');
+        $('#reportClearBTN').addClass('d-none');
+        searchReports();
+    }
+
+    function searchReports() {
+        $.ajax({
+            url: '/BugReports/Search',
+            type: 'GET',
+            data: { searchTerm: $('#reportSearchBar').val(), statuses: selectedReportStatuses },
+            traditional: true,
+            success: function (html) {
+                $('#reportTableBody').html(html);
+                updateReportStats();
+            }
+        });
+    }
+
+    // ─── Init ─────────────────────────────────────────────
+    $(document).ready(function () {
+        window.prepareReportDelete   = prepareReportDelete;
+        window.showReportDetails     = showReportDetails;
+        window.showReportEditModal   = showReportEditModal;
+    });
+</script>
+
+<link rel="stylesheet" href="~/css/Report/indexStyle.css" />

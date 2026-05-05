@@ -22,6 +22,11 @@ namespace RentalVehicleService.Models
         [Required]
         public string Description { get; set; }
 
+        [Required(ErrorMessage = "Vui lòng nhập email của bạn")]
+        [EmailAddress(ErrorMessage = "Email không hợp lệ")]
+        [StringLength(255)]
+        public string ReporterEmail { get; set; }
+
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 
         public BugStatus Status { get; set; } = BugStatus.New;

@@ -24,48 +24,90 @@
             <div class="col">
                 <div class="card border-0 shadow-sm stat-card border-start border-primary border-4 h-100">
                     <div class="card-body">
-                        <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_total_vehicles">Total Vehicles</div>
-                        <div id="totalCount" class="h3 fw-bold text-primary mb-0">@ViewBag.TotalVehicles</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_total_vehicles">Total Vehicles</div>
+                                <div id="totalCount" class="h3 fw-bold text-primary mb-0">@ViewBag.TotalVehicles</div>
+                            </div>
+                            <div class="bg-primary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-bicycle text-primary fs-5"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card border-0 shadow-sm stat-card border-start border-success border-4 h-100">
                     <div class="card-body">
-                        <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_available">Available</div>
-                        <div id="availableCount" class="h3 fw-bold text-success mb-0">@ViewBag.Available</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_available">Available</div>
+                                <div id="availableCount" class="h3 fw-bold text-success mb-0">@ViewBag.Available</div>
+                            </div>
+                            <div class="bg-success bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-check-circle text-success fs-5"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card border-0 shadow-sm stat-card border-start border-secondary border-4 h-100">
                     <div class="card-body">
-                        <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_unavailable">Unavailable</div>
-                        <div id="unavailableCount" class="h3 fw-bold text-secondary mb-0">@ViewBag.UnAvailable</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_unavailable">Unavailable</div>
+                                <div id="unavailableCount" class="h3 fw-bold text-secondary mb-0">@ViewBag.UnAvailable</div>
+                            </div>
+                            <div class="bg-secondary bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-x-circle text-secondary fs-5"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card border-0 shadow-sm stat-card border-start border-warning border-4 h-100">
                     <div class="card-body">
-                        <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_charging">Charging</div>
-                        <div id="chargingCount" class="h3 fw-bold text-warning mb-0">@ViewBag.Charging</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_charging">Charging</div>
+                                <div id="chargingCount" class="h3 fw-bold text-warning mb-0">@ViewBag.Charging</div>
+                            </div>
+                            <div class="bg-warning bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-lightning-charge text-warning fs-5"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card border-0 shadow-sm stat-card border-start border-danger border-4 h-100">
                     <div class="card-body">
-                        <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_maintenance">Maintenance</div>
-                        <div id="maintenanceCount" class="h3 fw-bold text-danger mb-0">@ViewBag.Maintenance</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_maintenance">Maintenance</div>
+                                <div id="maintenanceCount" class="h3 fw-bold text-danger mb-0">@ViewBag.Maintenance</div>
+                            </div>
+                            <div class="bg-danger bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-tools text-danger fs-5"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
             <div class="col">
                 <div class="card border-0 shadow-sm stat-card border-start border-purple border-4 h-100">
                     <div class="card-body">
-                        <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_rented">Rented</div>
-                        <div id="rentedCount" class="h3 fw-bold text-purple mb-0">@ViewBag.Rented</div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div>
+                                <div class="text-muted small fw-bold text-uppercase" data-i18n="admin_rented">Rented</div>
+                                <div id="rentedCount" class="h3 fw-bold text-purple mb-0">@ViewBag.Rented</div>
+                            </div>
+                            <div class="bg-purple bg-opacity-10 rounded-circle d-flex align-items-center justify-content-center" style="width:45px;height:45px;">
+                                <i class="bi bi-person-check text-purple fs-5"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -131,7 +173,7 @@
             var stationList = [
                 @foreach (var s in ViewBag.Stations as List<RentalVehicleService.Models.Station>)
                 {
-                        @:{ id: @s.StationId, name: "@Html.Raw(s.Name)", address: "@Html.Raw(s.Address)" },
+                            @:{ id: @s.StationId, name: "@Html.Raw(s.Name)", address: "@Html.Raw(s.Address)" },
                 }
             ];
     </script>
@@ -145,307 +187,123 @@
 </div>
 
 <script>
-         $(document).ready(function () {
+     // Station helpers
+    function fillStationDropdown(selectId, selectedId) {
+        var $select = $(selectId);
+        $select.empty();
+        const noStationText = (window.getI18nText && window.getI18nText('admin_no_station')) || '-- No Station --';
+        $select.append('<option value="">' + noStationText + '</option>');
 
-        // STATION
-
-        // Populate station dropdown list
-        function fillStationDropdown(selectId, selectedId) {
-            var $select = $(selectId);
-            $select.empty();
-            const noStationText = (window.getI18nText && window.getI18nText('admin_no_station')) || '-- No Station --';
-            $select.append('<option value="">' + noStationText + '</option>');
-
-            $.each(stationList, function (i, station) {
-                var option = $('<option>')
-                    .val(station.id)
-                    .text('#' + station.id + ' — ' + station.name + ' (' + station.address + ')');
-
-                if (station.id == selectedId) {
-                    option.prop('selected', true);
-                }
-
-                $select.append(option);
-            });
-        }
-
-        // Get station name by ID
-        function getStationName(stationId) {
-            var result = (window.getI18nText && window.getI18nText('admin_no_station')) || 'No Station';
-            $.each(stationList, function (i, station) {
-                if (station.id == stationId) {
-                    result = station.name;
-                    return false; // dừng vòng lặp
-                }
-            });
-            return result;
-        }
-
-        // Render station names in the table (replaces ID with name)
-        function renderStationNames() {
-            $('[data-station-id]').each(function () {
-                var stationId = $(this).data('station-id');
-                var name      = getStationName(stationId);
-                $(this).html('<i class="bi bi-geo-alt text-danger"></i> ' + name);
-            });
-        }
-
-
-        // DELETE MODAL
-        function prepareDelete(vehicleId, vehicleName) {
-            $('#idToConfirm').val(vehicleId);
-            $('#idToDisplay').text(vehicleId);
-            $('#nameToDisplay').text(vehicleName);
-            $('#deleteModal').modal('show');
-        }
-
-        $('#confirmDeleteBtn').on('click', function () {
-            var id    = $('#idToConfirm').val();
-            var token = $('input[name="__RequestVerificationToken"]').first().val();
-
-            $.ajax({
-                url: '/Vehicles/DeleteConfirmed',
-                type: 'POST',
-                data: { id: id, __RequestVerificationToken: token },
-                success: function () {
-                    $('#deleteModal').modal('hide');
-                    // Remove row from table with fade effect
-                    $('tr[data-id="' + id + '"]').fadeOut(300, function () {
-                        $(this).remove();
-                        updateStats();
-                    });
-                },
-                error: function () {
-                    const deleteError = (window.getI18nText && window.getI18nText('admin_error_occurred')) || 'Cannot delete vehicle. Please try again.';
-                    alert(deleteError);
-                }
-            });
+        $.each(stationList, function (i, station) {
+            var option = $('<option>').val(station.id).text('#' + station.id + ' — ' + station.name + ' (' + station.address + ')');
+            if (station.id == selectedId) option.prop('selected', true);
+            $select.append(option);
         });
+    }
 
-
-        // CREATE MODAL
-        function ShowCreateModal() {
-            fillStationDropdown('#createStationId', null);
-            $('#createModal').modal('show');
-        }
-
-        $('#openCreateBtn').on('click', function () {
-            ShowCreateModal();
-        });
-
-
-        // DETAILS MODAL
-        function ShowDetailsModal(vehicleId) {
-            // Show spinner while loading
-            $('#detailsModalBody').html(
-                '<div class="text-center py-4">' +
-                '  <div class="spinner-border text-primary" role="status"></div>' +
-                '  <p class="mt-2 text-muted">' + ((window.getI18nText && window.getI18nText('admin_loading')) || 'Loading...') + '</p>' +
-                '</div>'
-            );
-
-            // Save ID for Edit button usage
-            $('#detailsEditBtn').data('id', vehicleId);
-            $('#detailsModal').modal('show');
-
-            $.ajax({
-                url: '/Vehicles/Details/' + vehicleId,
-                type: 'GET',
-                success: function (html) {
-                    $('#detailsModalBody').html(html);
-                },
-                error: function () {
-                    const errorMsg = (window.getI18nText && window.getI18nText('admin_details_error')) || 'Cannot load vehicle details. Please try again.';
-                    $('#detailsModalBody').html(
-                        '<div class="alert alert-danger">' + errorMsg + '</div>'
-                    );
-                }
-            });
-        }
-
-        // Edit button inside Details modal -> close Details then open Edit
-        $('#detailsEditBtn').on('click', function () {
-            var id = $(this).data('id');
-            $('#detailsModal').modal('hide');
-            $('#detailsModal').one('hidden.bs.modal', function () {
-                ShowEditModal(id);
-            });
-        });
-
-
-        // EDIT MODAL
-        function ShowEditModal(vehicleId) {
-            $('#editAlertArea').html('');
-            $('#editForm')[0].reset();
-
-            $.ajax({
-                url: '/Vehicles/Edit/' + vehicleId,
-                type: 'GET',
-                success: function (data) {
-                    // Fill data into form
-                    $('#editVehicleId').val(data.vehicleId);
-                    $('#editVehicleModel').val(data.vehicleModel);
-                    $('#editPrice').val(data.price);
-                    $('#editBattery').val(data.batteryPercentage);
-                    $('#editState').val(data.state);
-                    $('#editType').val(data.type);
-                    $('#editLastMaintenance').val(data.lastMaintenance);
-
-                    // Populate station dropdown and pre-select current station
-                    fillStationDropdown('#editStationId', data.currentStationId);
-
-                    $('#editModal').modal('show');
-                },
-                error: function () {
-                    const errorMsg = (window.getI18nText && window.getI18nText('admin_error_occurred')) || 'Cannot load vehicle data. Please try again.';
-                    alert(errorMsg);
-                }
-            });
-        }
-
-        // Submit Edit form
-        $('#editForm').on('submit', function (e) {
-            e.preventDefault();
-
-            var vehicleId = $('#editVehicleId').val();
-            var $btn      = $('#editSubmitBtn');
-
-            const savingText = (window.getI18nText && window.getI18nText('admin_saving')) || 'Saving...';
-            // Disable button, show spinner
-            $btn.prop('disabled', true)
-                .html('<span class="spinner-border spinner-border-sm me-1"></span>' + savingText);
-
-            $.ajax({
-                url: '/Vehicles/Edit/' + vehicleId,
-                type: 'POST',
-                data: $(this).serialize(),
-                success: function () {
-                    $('#editModal').modal('hide');
-                    search();
-                },
-                error: function (xhr) {
-                    // Display server error
-                    var msg = 'An error occurred. Please try again.';
-                    try {
-                        var res = JSON.parse(xhr.responseText);
-                        if (res.errors) msg = res.errors.join('<br>');
-                    } catch (e) {}
-
-                    $('#editAlertArea').html(
-                        '<div class="alert alert-danger alert-dismissible fade show py-2 small">' +
-                        '  <i class="bi bi-exclamation-triangle me-1"></i>' + msg +
-                        '  <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>' +
-                        '</div>'
-                    );
-                },
-                complete: function () {
-                    // Re-enable button
-                    const saveText = (window.getI18nText && window.getI18nText('admin_save_changes')) || 'Save Changes';
-                    $btn.prop('disabled', false)
-                        .html('<i class="bi bi-floppy me-1"></i>' + saveText);
-                }
-            });
-        });
-
-
-        // STATISTICS
-        function updateStats() {
-            $.ajax({
-                url: '/Vehicles/GetAmountInfo',
-                type: 'GET',
-                success: function (data) {
-                    $('#totalCount').text(data.totalVehicles);
-                    $('#availableCount').text(data.available);
-                    $('#unavailableCount').text(data.unAvailable);
-                    $('#chargingCount').text(data.charging);
-                    $('#maintenanceCount').text(data.maintenance);
-                    $('#rentedCount').text(data.rented);
-                }
-            });
-        }
-
-
-        // SEARCH & FILTER
-        var selectedStatuses = [];
-
-        // Search bar
-        $('#searchBar').on('input', function () {
-            search();
-        });
-
-        // Status filter buttons
-        $('.sortBTN').on('click', function (e) {
-            e.preventDefault();
-
-            var statusName = $(this).text().trim();
-            $(this).toggleClass('active-selected');
-
-            // Add or remove from filter list
-            var index = $.inArray(statusName, selectedStatuses);
-            if (index > -1) {
-                selectedStatuses.splice(index, 1);
-            } else {
-                selectedStatuses.push(statusName);
-            }
-
-            // Show/hide Clear button
-            if (selectedStatuses.length > 1) {
-                $('#clearBTN').removeClass('d-none');
-            } else {
-                $('#clearBTN').addClass('d-none');
-            }
-
-            // Auto-clear if all selected
-            if (selectedStatuses.length === 5) {
-                clearSort(e);
-            } else {
-                search();
+    function getStationName(stationId) {
+        var result = (window.getI18nText && window.getI18nText('admin_no_station')) || 'No Station';
+        $.each(stationList, function (i, station) {
+            if (station.id == stationId) {
+                result = station.name;
+                return false;
             }
         });
+        return result;
+    }
 
-        // Clear Sort button
-        $('#clearBTN').on('click', function (e) {
-            clearSort(e);
+    function renderStationNames() {
+        $('[data-station-id]').each(function () {
+            var stationId = $(this).data('station-id');
+            var name = getStationName(stationId);
+            $(this).html('<i class="bi bi-geo-alt text-danger"></i> ' + name);
         });
+    }
 
-        function clearSort(e) {
-            e.preventDefault();
-            selectedStatuses = [];
-            $('.sortBTN').removeClass('active-selected');
+    // Stats
+    function updateStats() {
+        $.ajax({
+            url: '/Vehicles/GetAmountInfo',
+            type: 'GET',
+            success: function (data) {
+                $('#totalCount').text(data.totalVehicles);
+                $('#availableCount').text(data.available);
+                $('#unavailableCount').text(data.unAvailable);
+                $('#chargingCount').text(data.charging);
+                $('#maintenanceCount').text(data.maintenance);
+                $('#rentedCount').text(data.rented);
+            }
+        });
+    }
+
+    // Search & Filter
+    var selectedStatuses = [];
+
+    $('#searchBar').on('input', function () {
+        search();
+    });
+
+    $('.sortBTN').on('click', function (e) {
+        e.preventDefault();
+        var statusName = $(this).text().trim();
+        $(this).toggleClass('active-selected');
+        var index = $.inArray(statusName, selectedStatuses);
+        if (index > -1) {
+            selectedStatuses.splice(index, 1);
+        } else {
+            selectedStatuses.push(statusName);
+        }
+        if (selectedStatuses.length > 1) {
+            $('#clearBTN').removeClass('d-none');
+        } else {
             $('#clearBTN').addClass('d-none');
+        }
+        if (selectedStatuses.length === 5) {
+            clearSort(e);
+        } else {
             search();
         }
+    });
 
-        // Call search API and reload table
-        function search() {
-            $.ajax({
-                url: '/AdminDashboard/SearchVehicles',
-                type: 'GET',
-                data: { searchTerm: $('#searchBar').val(), statuses: selectedStatuses },
-                traditional: true,
-                success: function (html) {
-                    $('#vehicleTableBody').html(html);
-                    renderStationNames();
-                    updateStats();
-                }
-            });
-        }
+    $('#clearBTN').on('click', function (e) {
+        clearSort(e);
+    });
 
-        // INITIALIZATION
+    function clearSort(e) {
+        e.preventDefault();
+        selectedStatuses = [];
+        $('.sortBTN').removeClass('active-selected');
+        $('#clearBTN').addClass('d-none');
+        search();
+    }
+
+    function search() {
+        $.ajax({
+            url: '/AdminDashboard/SearchVehicles',
+            type: 'GET',
+            data: { searchTerm: $('#searchBar').val(), statuses: selectedStatuses },
+            traditional: true,
+            success: function (html) {
+                $('#vehicleTableBody').html(html);
+                renderStationNames();
+                updateStats();
+            }
+        });
+    }
+
+    // Init
+    $(document).ready(function () {
         renderStationNames();
-
-        // Expose to global scope for partial views
-        window.prepareDelete       = prepareDelete;
-        window.ShowCreateModal     = ShowCreateModal;
-        window.ShowDetailsModal    = ShowDetailsModal;
-        window.ShowEditModal       = ShowEditModal;
+        window.prepareDelete = prepareDelete;
+        window.ShowCreateModal = ShowCreateModal;
+        window.ShowDetailsModal = ShowDetailsModal;
+        window.ShowEditModal = ShowEditModal;
         window.fillStationDropdown = fillStationDropdown;
-        window.getStationName      = getStationName;
-
-    }); // end document.ready
+        window.getStationName = getStationName;
+    });
 </script>
 
-<link rel="stylesheet" href="~/css/Vehicle/indexStyle.css" />
+<link rel="stylesheet" href="~/css/Vehicle/indexStyle.css?v=1.1" />
 
 <style>
     #RentedBTN.active-selected {

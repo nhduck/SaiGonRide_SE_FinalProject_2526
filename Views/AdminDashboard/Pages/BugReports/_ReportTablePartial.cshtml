@@ -1,0 +1,66 @@
+@using RentalVehicleService.Models
+@model IEnumerable<RentalVehicleService.Models.BugReport>
+
+@if (!Model.Any())
+{
+    <tr>
+        <td colspan="7" class="text-center text-muted py-5">
+            <i class="bi bi-inbox fs-1 d-block mb-2"></i>
+            No reports found.
+        </td>
+    </tr>
+}
+else
+{
+    foreach (var item in Model)
+    {
+        <tr class="report-row" data-id="@item.Id">
+            <td class="ps-4 fw-bold text-muted">#@item.Id</td>
+            <td class="fw-semibold" style="max-width:200px;">
+                <span title="@item.Title">@(item.Title.Length > 50 ? item.Title.Substring(0, 50) + "..." : item.Title)</span>
+            </td>
+            <td class="text-muted small" style="max-width:250px;">
+                <span title="@item.Description">@(item.Description.Length > 80 ? item.Description.Substring(0, 80) + "..." : item.Description)</span>
+            </td>
+            <td class="text-muted small">
+                <a href="mailto:@item.ReporterEmail" class="text-decoration-none text-success" title="@item.ReporterEmail">
+                    <i class="bi bi-envelope me-1"></i>@(item.ReporterEmail.Length > 25 ? item.ReporterEmail.Substring(0, 25) + "..." : item.ReporterEmail)
+                </a>
+            </td>
+            <td class="text-muted small">
+                <i class="bi bi-calendar3 me-1"></i>@item.CreatedDate.ToString("dd/MM/yyyy HH:mm")
+            </td>
+            <td>
+                @{
+                    var (badgeClass, icon) = item.Status switch
+                    {
+                        BugReport.BugStatus.New        => ("bg-danger-subtle text-danger", "bi-exclamation-circle"),
+                        BugReport.BugStatus.InProgress => ("bg-warning-subtle text-warning", "bi-arrow-repeat"),
+                        BugReport.BugStatus.Resolved   => ("bg-success-subtle text-success", "bi-check-circle"),
+                        BugReport.BugStatus.Closed     => ("bg-secondary-subtle text-secondary", "bi-x-circle"),
+                        _                              => ("bg-light text-muted", "bi-question-circle")
+                    };
+                }
+                <span class="badge @badgeClass px-2 py-1 rounded-pill">
+                    <i class="bi @icon me-1"></i>@item.Status
+                </span>
+            </td>
+            <td class="text-center">
+                <div class="btn-group btn-group-sm">
+                    <button class="btn btn-outline-info" title="View Details"
+                            onclick="showReportDetails(@item.Id)">
+                        <i class="bi bi-eye"></i>
+                    </button>
+                    <button class="btn btn-outline-primary" title="Update Status"
+                            onclick="showReportEditModal(@item.Id)">
+                        <i class="bi bi-pencil-square"></i>
+                    </button>
+                    <button class="btn btn-outline-danger" title="Delete"
+                            onclick="prepareReportDelete(@item.Id, '@Html.Raw(item.Title.Replace("'", "\\'"))')">
+                        <i class="bi bi-trash3"></i>
+                    </button>
+                </div>
+            </td>
+        </tr>
+    }
+}
