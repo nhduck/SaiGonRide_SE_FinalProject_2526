@@ -129,11 +129,11 @@
                     </div>
                     <div class="col-lg-8 d-flex gap-2 flex-wrap justify-content-lg-end">
                         <button id="userClearBTN" class="btn btn-outline-primary d-none" data-i18n="admin_clear_sort">Clear Sort</button>
-                        <button id="activeBTN" class="userSortBTN btn btn-outline-success" data-i18n="admin_active">Active</button>
-                        <button id="lockedBTN" class="userSortBTN btn btn-outline-danger" data-i18n="admin_locked">Locked</button>
-                        <button id="adminBTN" class="userSortBTN btn btn-outline-warning" data-i18n="admin_admins">Admin</button>
-                        <button id="customerBTN" class="userSortBTN btn btn-outline-info" data-i18n="admin_customers">Customer</button>
-                        <button id="staffBTN" class="userSortBTN btn btn-outline-purple" data-i18n="admin_staff">Staff</button>
+                        <button id="activeBTN" class="userSortBTN btn btn-outline-success" data-filter="Active" data-i18n="admin_active">Active</button>
+                        <button id="lockedBTN" class="userSortBTN btn btn-outline-danger" data-filter="Locked" data-i18n="admin_locked">Locked</button>
+                        <button id="adminBTN" class="userSortBTN btn btn-outline-warning" data-filter="Admin" data-i18n="admin_admins">Admin</button>
+                        <button id="customerBTN" class="userSortBTN btn btn-outline-info" data-filter="Customer" data-i18n="admin_customers">Customer</button>
+                        <button id="staffBTN" class="userSortBTN btn btn-outline-purple" data-filter="Staff" data-i18n="admin_staff">Staff</button>
                     </div>
                 </form>
             </div>
@@ -222,7 +222,7 @@
         $('.userSortBTN').on('click', function (e) {
             e.preventDefault();
 
-            var filterName = $(this).text().trim();
+            var filterName = $(this).data("filter");
             $(this).toggleClass('active-selected');
 
             var index = $.inArray(filterName, selectedUserFilters);

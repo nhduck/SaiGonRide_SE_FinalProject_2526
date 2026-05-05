@@ -4,7 +4,7 @@
 @if (!Model.Any())
 {
     <tr>
-        <td colspan="6" class="text-center text-muted py-5">
+        <td colspan="7" class="text-center text-muted py-5">
             <i class="bi bi-inbox fs-1 d-block mb-2"></i>
             No reports found.
         </td>
@@ -21,6 +21,11 @@ else
             </td>
             <td class="text-muted small" style="max-width:250px;">
                 <span title="@item.Description">@(item.Description.Length > 80 ? item.Description.Substring(0, 80) + "..." : item.Description)</span>
+            </td>
+            <td class="text-muted small">
+                <a href="mailto:@item.ReporterEmail" class="text-decoration-none text-success" title="@item.ReporterEmail">
+                    <i class="bi bi-envelope me-1"></i>@(item.ReporterEmail.Length > 25 ? item.ReporterEmail.Substring(0, 25) + "..." : item.ReporterEmail)
+                </a>
             </td>
             <td class="text-muted small">
                 <i class="bi bi-calendar3 me-1"></i>@item.CreatedDate.ToString("dd/MM/yyyy HH:mm")
