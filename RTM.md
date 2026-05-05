@@ -20,7 +20,7 @@ This document maps the Functional and Non-Functional Requirements to their respe
 | **FR-P01** | Payment via MoMo, VNPay, Cash (Local) | Đạt | `RentalController.cs`, `Views/Rental/Payment.cshtml` | TC-P01 | Completed |
 | **FR-P02** | Payment via PayPal, Apple Pay, Cash (Tourist) | Đạt | `RentalController.cs`, `Views/Rental/Payment.cshtml` | TC-P02 | Completed |
 | **FR-P03** | Strategy Design Pattern for Payment Gateways | Đạt | `Services/PaymentStrategies/` (Integrated) | TC-P03 | Completed |
-| **FR-QA01** | Automated Unit Tests for Pricing Logic (xUnit) | Thành | `SaiGonRide.Tests/RentalServiceTests.cs` | TC-QA01 | Completed |
+| **FR-QA01** | Automated Unit Tests for Pricing, Model & Promo (25 tests) | Thành | `SaiGonRide.Tests/` | TC-QA01 | Completed |
 | **FR-RPT1** | Revenue Report by Category | Team | `AdminDashboardController.cs` | TC-RPT1 | Completed |
 | **FR-RPT2** | Station Utilization Report | Team | `AdminDashboardController.cs` | TC-RPT2 | Completed |
 
