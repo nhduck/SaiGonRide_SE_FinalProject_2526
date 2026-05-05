@@ -95,6 +95,7 @@
 						</div>
 					</div>
 					<div class="col-lg-8 d-flex gap-2 flex-wrap justify-content-lg-end">
+						<button id="stationClearBTN" class="btn btn-outline-primary d-none">Clear Sort</button>
 						<button id="activeBTN" class="stationSortBTN btn btn-outline-success" data-i18n="admin_active">Active</button>
 						<button id="lowStockBTN" class="stationSortBTN btn btn-outline-warning" data-i18n="admin_low_stock">Low Stock</button>
 						<button id="fullBTN" class="stationSortBTN btn btn-outline-danger" data-i18n="admin_full">Full</button>
@@ -306,7 +307,28 @@
 			var status = $(this).text().trim();
 			$(this).toggleClass('active-selected');
 			toggleStationStatus(status);
+
+			if (selectedStationStatuses.length > 1) {
+				$('#stationClearBTN').removeClass('d-none');
+			} else {
+				$('#stationClearBTN').addClass('d-none');
+			}
+			if (selectedStationStatuses.length === 4) {
+				clearStationSort(e);
+			}
 		});
+
+		$('#stationClearBTN').on('click', function(e) {
+			clearStationSort(e);
+		});
+
+		function clearStationSort(e) {
+			e.preventDefault();
+			selectedStationStatuses = [];
+			$('.stationSortBTN').removeClass('active-selected');
+			$('#stationClearBTN').addClass('d-none');
+			searchStations();
+		}
 
 		function toggleStationStatus(statusName) {
 			var index = selectedStationStatuses.indexOf(statusName);
