@@ -383,7 +383,7 @@ namespace RentalVehicleService.Controllers
                 }
 
                 TempData["Success"] = "Payment successful! Thank you for using saigonRide.";
-                return RedirectToAction("Details", new { id = rentalId });
+                return View("Success");
             }
             catch (VnpayException ex) // Thanh toán thất bại / sai chữ ký
             {

@@ -1,0 +1,86 @@
+﻿* {
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Be Vietnam Pro', sans-serif;
+    background: #f4f7f4; /* Màu nền nhạt để làm nổi bật card */
+    min-height: 100vh;
+}
+
+/* Navbar */
+.navbar {
+    background: #fff;
+    border-bottom: 1px solid #e5e7eb;
+}
+
+.logo-icon {
+    font-size: 1.4rem;
+}
+
+/* Check icon animation */
+@keyframes pop-in {
+    0% {
+        transform: scale(0.4);
+        opacity: 0;
+    }
+
+    70% {
+        transform: scale(1.12);
+        opacity: 1;
+    }
+
+    100% {
+        transform: scale(1);
+    }
+}
+
+.check-circle {
+    width: 100px;
+    height: 100px;
+    background: #16a34a;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 24px;
+    animation: pop-in 0.5s cubic-bezier(.36,.07,.19,.97) both;
+    box-shadow: 0 8px 32px rgba(22,163,74,0.35);
+}
+
+.success-title {
+    letter-spacing: -0.01em;
+}
+
+/* Congrats card */
+.congrats-card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 14px;
+    padding: 24px 28px;
+    box-shadow: 0 4px 12px rgba(0,0,0,0.02);
+}
+
+/* Back home button */
+.btn-home {
+    background: #16a34a;
+    color: #fff;
+    border-radius: 999px;
+    font-weight: 700;
+    font-size: 1rem;
+    padding: 16px 32px;
+    border: none;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    width: 100%;
+    transition: background 0.15s;
+    box-shadow: 0 4px 16px rgba(22,163,74,0.25);
+    text-decoration: none;
+}
+
+    .btn-home:hover {
+        background: #15803d;
+    }
