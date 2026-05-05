@@ -32,3 +32,34 @@
 		</div>
 	</div>
 </div>
+
+<script>
+	function prepareDelete(vehicleId, vehicleName) {
+		$('#idToConfirm').val(vehicleId);
+		$('#idToDisplay').text(vehicleId);
+		$('#nameToDisplay').text(vehicleName);
+		$('#deleteModal').modal('show');
+	}
+
+	$('#confirmDeleteBtn').on('click', function () {
+		var id    = $('#idToConfirm').val();
+		var token = $('input[name="__RequestVerificationToken"]').first().val();
+
+		$.ajax({
+			url: '/Vehicles/DeleteConfirmed',
+			type: 'POST',
+			data: { id: id, __RequestVerificationToken: token },
+			success: function () {
+				$('#deleteModal').modal('hide');
+				$('tr[data-id="' + id + '"]').fadeOut(300, function () {
+					$(this).remove();
+					updateStats();
+				});
+			},
+			error: function () {
+				const deleteError = (window.getI18nText && window.getI18nText('admin_error_occurred')) || 'Cannot delete vehicle. Please try again.';
+				alert(deleteError);
+			}
+		});
+	});
+</script>

@@ -1,12 +1,13 @@
 ﻿/* --- Stat Cards --- */
 .stat-card {
     transition: all 0.3s ease;
+    border-radius: 12px !important;
     cursor: default;
 }
-.stat-card:hover {
-    transform: translateY(-3px);
-    box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
-}
+    .stat-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 4px 12px rgba(0,0,0,0.1) !important;
+    }
 .border-purple { border-color: #6f42c1 !important; }
 .text-purple { color: #6f42c1 !important; }
 
@@ -17,6 +18,7 @@
     border-style: solid;
     border-width: 1px;
     background-color: transparent;
+    border-radius: 20px !important;
 }
 
 /* --- Colors for each button --- */

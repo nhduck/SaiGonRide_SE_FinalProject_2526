@@ -105,3 +105,68 @@
         </div>
     </div>
 </div>
+
+<script>
+        function ShowEditModal(vehicleId) {
+        $('#editAlertArea').html('');
+        $('#editForm')[0].reset();
+
+        $.ajax({
+            url: '/Vehicles/Edit/' + vehicleId,
+            type: 'GET',
+            success: function (data) {
+                $('#editVehicleId').val(data.vehicleId);
+                $('#editVehicleModel').val(data.vehicleModel);
+                $('#editPrice').val(data.price);
+                $('#editBattery').val(data.batteryPercentage);
+                $('#editState').val(data.state);
+                $('#editType').val(data.type);
+                $('#editLastMaintenance').val(data.lastMaintenance);
+                fillStationDropdown('#editStationId', data.currentStationId);
+                $('#editModal').modal('show');
+            },
+            error: function () {
+                const errorMsg = (window.getI18nText && window.getI18nText('admin_error_occurred')) || 'Cannot load vehicle data. Please try again.';
+                alert(errorMsg);
+            }
+        });
+    }
+
+    $('#editForm').on('submit', function (e) {
+        e.preventDefault();
+
+        var vehicleId = $('#editVehicleId').val();
+        var $btn      = $('#editSubmitBtn');
+        const savingText = (window.getI18nText && window.getI18nText('admin_saving')) || 'Saving...';
+    
+        $btn.prop('disabled', true).html('<span class="spinner-border spinner-border-sm me-1"></span>' + savingText);
+
+        $.ajax({
+            url: '/Vehicles/Edit/' + vehicleId,
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function () {
+                $('#editModal').modal('hide');
+                search();
+            },
+            error: function (xhr) {
+                var msg = 'An error occurred. Please try again.';
+                try {
+                    var res = JSON.parse(xhr.responseText);
+                    if (res.errors) msg = res.errors.join('<br>');
+                } catch (e) {}
+
+                $('#editAlertArea').html(
+                    '<div class="alert alert-danger alert-dismissible fade show py-2 small">' +
+                    '  <i class="bi bi-exclamation-triangle me-1"></i>' + msg +
+                    '  <button type="button" class="btn-close py-2" data-bs-dismiss="alert"></button>' +
+                    '</div>'
+                );
+            },
+            complete: function () {
+                const saveText = (window.getI18nText && window.getI18nText('admin_save_changes')) || 'Save Changes';
+                $btn.prop('disabled', false).html('<i class="bi bi-floppy me-1"></i>' + saveText);
+            }
+        });
+    });
+</script>
