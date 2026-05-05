@@ -69,6 +69,18 @@ namespace RentalVehicleService.Controllers
             {
                 _context.Add(vehicle);
                 await _context.SaveChangesAsync();
+
+                // Sync station count
+                if (vehicle.CurrentStationId != null)
+                {
+                    var st = await _context.Stations.FindAsync(vehicle.CurrentStationId);
+                    if (st != null)
+                    {
+                        st.CurrentCount = await _context.Vehicles.CountAsync(v => v.CurrentStationId == vehicle.CurrentStationId);
+                        await _context.SaveChangesAsync();
+                    }
+                }
+
                 return Ok(new { success = true });
             }
 
@@ -127,6 +139,21 @@ namespace RentalVehicleService.Controllers
             {
                 _context.Update(vehicle);
                 await _context.SaveChangesAsync();
+
+                // Sync counts for all stations (simplest way to handle potential station change)
+                var stations = await _context.Stations.ToListAsync();
+                var vehicleCounts = await _context.Vehicles
+                    .Where(v => v.CurrentStationId != null)
+                    .GroupBy(v => v.CurrentStationId)
+                    .Select(g => new { StationId = g.Key, Count = g.Count() })
+                    .ToListAsync();
+
+                foreach (var s in stations)
+                {
+                    s.CurrentCount = vehicleCounts.FirstOrDefault(c => c.StationId == s.StationId)?.Count ?? 0;
+                }
+                await _context.SaveChangesAsync();
+
                 return Ok(new { success = true });
             }
             catch (DbUpdateException)
@@ -145,8 +172,19 @@ namespace RentalVehicleService.Controllers
             var vehicle = await _context.Vehicles.FindAsync(id);
             if (vehicle != null)
             {
+                var stationId = vehicle.CurrentStationId;
                 _context.Vehicles.Remove(vehicle);
                 await _context.SaveChangesAsync();
+
+                if (stationId != null)
+                {
+                    var st = await _context.Stations.FindAsync(stationId);
+                    if (st != null)
+                    {
+                        st.CurrentCount = await _context.Vehicles.CountAsync(v => v.CurrentStationId == stationId);
+                        await _context.SaveChangesAsync();
+                    }
+                }
             }
             return Ok();
         }

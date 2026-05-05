@@ -96,7 +96,7 @@ namespace RentalVehicleService.Controllers
 
             ViewBag.VehicleId = vehicleId;
             ViewBag.StartStationId = startStationId;
-            ViewBag.VehicleModel = vehicle.VehicleModel;
+            ViewBag.VehicleModel = vehicle?.VehicleModel ?? "Unknown";
             ViewBag.StationAddress = station?.Address ?? "Unknown Station";
 
             return View(); // Trả về màn hình xác nhận Create.cshtml
@@ -116,12 +116,12 @@ namespace RentalVehicleService.Controllers
                 StartTime = DateTime.Now,
                 Status = RentalStatus.Active,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty,
-                VehicleType = vehicle.Type
+                VehicleType = vehicle?.Type ?? VehicleType.Standard
             };
 
             try
             {
-                vehicle.State = VehicleState.Rented;
+                if (vehicle != null) vehicle.State = VehicleState.Rented;
                 var station = await _context.Stations.FindAsync(startStationId);
                 if (station != null) station.CurrentCount -= 1;
 
@@ -268,6 +268,8 @@ namespace RentalVehicleService.Controllers
                 return NotFound();
             }
 
+            ViewBag.Stations = await _context.Stations.ToListAsync();
+
             // Truyền dữ liệu chuyến đi sang trang ActiveTrip.cshtml
             return View(rental);
         }
@@ -301,7 +303,7 @@ namespace RentalVehicleService.Controllers
 
             var model = new PaymentViewModel
             {
-                CustomerName = user?.UserName ?? User.Identity.Name,
+                CustomerName = user?.UserName ?? User.Identity?.Name ?? "Guest",
                 PhoneNumber = user?.PhoneNumber ?? "No phone number available",
                 Email = user?.Email ?? "No email yet",
 

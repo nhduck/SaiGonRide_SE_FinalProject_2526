@@ -1,4 +1,4 @@
-﻿@{
+@{
     ViewData["Title"] = "Active Trip - SaigonRide";
     Layout = "_Layout";
 }
@@ -13,7 +13,7 @@
     // Kiểm tra nếu Model bị null không
     if (Model == null)
     {
-        <p>Loading trip information...</p>
+        <p data-i18n="trip_loading">Loading trip information...</p>
         return;
     }
 }
@@ -22,12 +22,12 @@
     <div class="container py-4">
         <!-- Status Header -->
         <div class="trip-header mb-4">
-            <h1 class="fw-bold">Current Rental</h1>
+            <h1 class="fw-bold" data-i18n="trip_current">Current Rental</h1>
             <div class="d-flex align-items-center gap-3 mt-2">
                 <span class="status-badge">
-                    <span class="dot">●</span> TRIP IN PROGRESS
+                    <span class="dot">●</span> <span data-i18n="trip_in_progress">TRIP IN PROGRESS</span>
                 </span>
-                <span class="trip-id text-white-50">#SR-1234</span>
+                <span class="trip-id text-white-50">#SR-@Model.RentalId</span>
             </div>
         </div>
 
@@ -39,13 +39,13 @@
 
                     <div class="row stats-row mt-4">
                         <div class="col-6 border-end">
-                            <p class="stat-label">Distance</p>
-                            <p class="stat-sub-label">Trip Length</p>
+                            <p class="stat-label" data-i18n="trip_distance">Distance</p>
+                            <p class="stat-sub-label" data-i18n="trip_length">Trip Length</p>
                             <h3 class="stat-value" id="distance">0.00 km</h3>
                         </div>
                         <div class="col-6">
-                            <p class="stat-label">Estimated Cost</p>
-                            <p class="stat-sub-label">Current Charges</p>
+                            <p class="stat-label" data-i18n="trip_est_cost">Estimated Cost</p>
+                            <p class="stat-sub-label" data-i18n="trip_charges">Current Charges</p>
                             <h3 class="stat-value" id="cost">0 VND</h3>
                         </div>
                     </div>
@@ -56,25 +56,28 @@
                             <input type="hidden" name="id" value="@Model.RentalId" />
 
                             <div class="mb-3" style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px;">
-                                <label class="text-white mb-2">Select Drop-off Station:</label>
+                                <label class="text-white mb-2" data-i18n="trip_select_dropoff">Select Drop-off Station:</label>
                                 <select name="endStationId" class="form-select" required>
-                                    <option value="">-- Choose a station to drop bike --</option>
-                                    <!-- Tạm thời thêm vài Option để test chuyển trang, sau này bạn có thể lấy từ Database (ViewBag) -->
-                                    <option value="1">Trạm Thảo Cầm Viên</option>
-                                    <option value="2">Trạm Bến Thành</option>
-                                    <option value="3">Trạm Phố Đi Bộ</option>
+                                    <option value="" data-i18n="trip_choose_station">-- Choose a station to drop bike --</option>
+                                    @if (ViewBag.Stations != null)
+                                    {
+                                        foreach (var station in (List<RentalVehicleService.Models.Station>)ViewBag.Stations)
+                                        {
+                                            <option value="@station.StationId">@station.Name</option>
+                                        }
+                                    }
                                 </select>
                             </div>
 
                             <button type="submit"
                                     class="btn btn-success w-100 mb-3"
                                     style="border-radius: 30px; font-weight: bold; font-size: 1.1rem; padding: 12px; display: inline-block; text-align: center;">
-                                <i class="far fa-dot-circle"></i> FINISH TRIP
+                                <i class="far fa-dot-circle"></i> <span data-i18n="trip_finish">FINISH TRIP</span>
                             </button>
                         </form>
 
                         <button type="button" class="btn btn-outline-success w-100" style="border-radius: 30px; background-color: #e9f7ef; color: #198754; font-weight: bold;">
-                            <i class="fas fa-lock"></i> Temporary Lock
+                            <i class="fas fa-lock"></i> <span data-i18n="trip_temp_lock">Temporary Lock</span>
                         </button>
                     </div>
                 </div>
@@ -91,13 +94,13 @@
                 <!-- Battery Status Card -->
                 <div class="info-card battery-card mb-4">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="fw-bold">Battery Level</span>
+                        <span class="fw-bold" data-i18n="trip_battery">Battery Level</span>
                         <span class="fw-bold">85%</span>
                     </div>
                     <div class="progress mb-2" style="height: 10px;">
                         <div class="progress-bar bg-success" style="width: 85%"></div>
                     </div>
-                    <small class="text-muted">Approx. 30 km left</small>
+                    <small class="text-muted"><span data-i18n="trip_approx_left" data-i18n-param1="30">Approx. 30 km left</span></small>
                 </div>
 
                 <!-- Live Map Card -->

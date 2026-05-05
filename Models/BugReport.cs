@@ -1,4 +1,4 @@
-﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations;
 
 namespace RentalVehicleService.Models
 {
@@ -17,15 +17,15 @@ namespace RentalVehicleService.Models
 
         [Required(ErrorMessage = "Vui lòng nhập tiêu đề lỗi")]
         [StringLength(100)]
-        public string Title { get; set; }
+        public string Title { get; set; } = string.Empty;
 
         [Required]
-        public string Description { get; set; }
+        public string Description { get; set; } = string.Empty;
 
         [Required(ErrorMessage = "Vui lòng nhập email của bạn")]
         [EmailAddress(ErrorMessage = "Email không hợp lệ")]
         [StringLength(255)]
-        public string ReporterEmail { get; set; }
+        public string ReporterEmail { get; set; } = string.Empty;
 
         public DateTime CreatedDate { get; set; } = DateTime.Now;
 

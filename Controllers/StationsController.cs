@@ -27,6 +27,19 @@ namespace RentalVehicleService.Controllers
         public async Task<IActionResult> Index()
         {
             var stations = await _context.Stations.ToListAsync();
+            
+            // Optimized sync: Get all counts in one query
+            var vehicleCounts = await _context.Vehicles
+                .Where(v => v.CurrentStationId != null)
+                .GroupBy(v => v.CurrentStationId)
+                .Select(g => new { StationId = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            foreach (var s in stations)
+            {
+                s.CurrentCount = vehicleCounts.FirstOrDefault(c => c.StationId == s.StationId)?.Count ?? 0;
+            }
+            await _context.SaveChangesAsync();
 
             ViewBag.TotalStations = stations.Count;
             ViewBag.Active = stations.Count(s => s.IsActive);
@@ -156,6 +169,18 @@ namespace RentalVehicleService.Controllers
         public async Task<IActionResult> GetAmountInfo()
         {
             var stations = await _context.Stations.ToListAsync();
+            var vehicleCounts = await _context.Vehicles
+                .Where(v => v.CurrentStationId != null)
+                .GroupBy(v => v.CurrentStationId)
+                .Select(g => new { StationId = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            foreach (var s in stations)
+            {
+                s.CurrentCount = vehicleCounts.FirstOrDefault(c => c.StationId == s.StationId)?.Count ?? 0;
+            }
+            await _context.SaveChangesAsync();
+
             return Ok(new
             {
                 totalStations = stations.Count,
@@ -183,6 +208,18 @@ namespace RentalVehicleService.Controllers
             }
 
             var stations = await query.ToListAsync();
+
+            var vehicleCounts = await _context.Vehicles
+                .Where(v => v.CurrentStationId != null)
+                .GroupBy(v => v.CurrentStationId)
+                .Select(g => new { StationId = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            foreach (var s in stations)
+            {
+                s.CurrentCount = vehicleCounts.FirstOrDefault(c => c.StationId == s.StationId)?.Count ?? 0;
+            }
+            await _context.SaveChangesAsync();
 
             if (statuses != null && statuses.Any())
             {

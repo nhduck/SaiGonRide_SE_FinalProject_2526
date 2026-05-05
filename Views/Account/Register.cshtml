@@ -87,8 +87,8 @@
                                     </svg>
                                     <span class="text-white fw-bold fs-5">SaigonRide</span>
                                 </div>
-                                <h2 class="text-white fw-bold mb-1" style="font-size:1.5rem;">Create Your Free Account</h2>
-                                <p class="text-white-50 mb-0" style="font-size:.88rem;">
+                                <h2 class="text-white fw-bold mb-1" style="font-size:1.5rem;" data-i18n="auth_reg_title">Create Your Free Account</h2>
+                                <p class="text-white-50 mb-0" style="font-size:.88rem;" data-i18n-html="auth_reg_banner_info">
                                     Get <strong class="text-warning">15% OFF</strong> on your first 3 rides!
                                 </p>
                             </div>
@@ -115,20 +115,20 @@
 
                         <!-- User type -->
                         <div class="mb-4">
-                            <p class="fw-semibold mb-3" style="font-size:.9rem;color:#334155;">I am a...</p>
+                            <p class="fw-semibold mb-3" style="font-size:.9rem;color:#334155;" data-i18n="auth_iam_label">I am a...</p>
                             <div class="row g-3">
                                 <div class="col-6">
                                     <div class="sr-type-card selected" id="card-local" onclick="selectType('Local')">
                                         <div class="type-icon">🏙️</div>
-                                        <div class="type-title">Local Resident</div>
-                                        <div class="type-sub">Vietnamese ID / Passport</div>
+                                        <div class="type-title" data-i18n="auth_local_title">Local Resident</div>
+                                        <div class="type-sub" data-i18n="auth_local_sub">Vietnamese ID / Passport</div>
                                     </div>
                                 </div>
                                 <div class="col-6">
                                     <div class="sr-type-card" id="card-tourist" onclick="selectType('Tourist')">
                                         <div class="type-icon">✈️</div>
-                                        <div class="type-title">Tourist</div>
-                                        <div class="type-sub">Foreign Passport</div>
+                                        <div class="type-title" data-i18n="auth_tourist_title">Tourist</div>
+                                        <div class="type-sub" data-i18n="auth_tourist_sub">Foreign Passport</div>
                                     </div>
                                 </div>
                             </div>
@@ -139,26 +139,26 @@
 
                             <div class="row g-3 mb-3">
                                 <div class="col-12">
-                                    <label asp-for="FullName" class="form-label fw-semibold" style="font-size:.875rem;">Full Name</label>
+                                    <label asp-for="FullName" class="form-label fw-semibold" style="font-size:.875rem;" data-i18n="auth_fullname">Full Name</label>
                                     <div class="input-group sr-input-group">
                                         <span class="input-group-text"><i class="bi bi-person"></i></span>
-                                        <input asp-for="FullName" class="form-control py-2" placeholder="John Doe" autocomplete="name" />
+                                        <input asp-for="FullName" class="form-control py-2" data-i18n="[placeholder]auth_fullname_placeholder" placeholder="John Doe" autocomplete="name" />
                                     </div>
                                     <span asp-validation-for="FullName" class="text-danger" style="font-size:.8rem;"></span>
                                 </div>
                                 <div class="col-12">
-                                    <label asp-for="Email" class="form-label fw-semibold" style="font-size:.875rem;">Email Address</label>
+                                    <label asp-for="Email" class="form-label fw-semibold" style="font-size:.875rem;" data-i18n="auth_email">Email Address</label>
                                     <div class="input-group sr-input-group">
                                         <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                                        <input asp-for="Email" class="form-control py-2" placeholder="email@example.com" autocomplete="email" />
+                                        <input asp-for="Email" class="form-control py-2" data-i18n="[placeholder]auth_email_placeholder" placeholder="email@example.com" autocomplete="email" />
                                     </div>
                                     <span asp-validation-for="Email" class="text-danger" style="font-size:.8rem;"></span>
                                 </div>
                                 <div class="col-md-6">
-                                    <label asp-for="Password" class="form-label fw-semibold" style="font-size:.875rem;">Password</label>
+                                    <label asp-for="Password" class="form-label fw-semibold" style="font-size:.875rem;" data-i18n="auth_password">Password</label>
                                     <div class="input-group sr-input-group">
                                         <span class="input-group-text"><i class="bi bi-lock"></i></span>
-                                        <input asp-for="Password" class="form-control py-2" placeholder="At least 6 characters"
+                                        <input asp-for="Password" class="form-control py-2" data-i18n="[placeholder]auth_reg_pwd_placeholder" placeholder="At least 6 characters"
                                                id="regPassword" autocomplete="new-password" />
                                         <button class="btn btn-outline-secondary border-start-0" type="button"
                                                 onclick="togglePwd('regPassword',this)" tabindex="-1">
@@ -168,10 +168,10 @@
                                     <span asp-validation-for="Password" class="text-danger" style="font-size:.8rem;"></span>
                                 </div>
                                 <div class="col-md-6">
-                                    <label asp-for="ConfirmPassword" class="form-label fw-semibold" style="font-size:.875rem;">Confirm Password</label>
+                                    <label asp-for="ConfirmPassword" class="form-label fw-semibold" style="font-size:.875rem;" data-i18n="auth_confirm_pwd">Confirm Password</label>
                                     <div class="input-group sr-input-group">
                                         <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
-                                        <input asp-for="ConfirmPassword" class="form-control py-2" placeholder="Re-enter password"
+                                        <input asp-for="ConfirmPassword" class="form-control py-2" data-i18n="[placeholder]auth_confirm_pwd_placeholder" placeholder="Re-enter password"
                                                id="regConfirmPassword" autocomplete="new-password" />
                                     </div>
                                     <span asp-validation-for="ConfirmPassword" class="text-danger" style="font-size:.8rem;"></span>
@@ -181,18 +181,18 @@
                             <!-- Local fields -->
                             <div id="local-fields" class="row g-3 mb-3 field-group">
                                 <div class="col-md-6">
-                                    <label asp-for="CCCD" class="form-label fw-semibold" style="font-size:.875rem;">National ID (CCCD/CMND)</label>
+                                    <label asp-for="CCCD" class="form-label fw-semibold" style="font-size:.875rem;" data-i18n="auth_national_id">National ID (CCCD/CMND)</label>
                                     <div class="input-group sr-input-group">
                                         <span class="input-group-text"><i class="bi bi-card-text"></i></span>
-                                        <input asp-for="CCCD" class="form-control py-2" placeholder="9 or 12 digits" />
+                                        <input asp-for="CCCD" class="form-control py-2" data-i18n="[placeholder]auth_national_id_placeholder" placeholder="9 or 12 digits" />
                                     </div>
                                     <span asp-validation-for="CCCD" class="text-danger" style="font-size:.8rem;"></span>
                                 </div>
                                 <div class="col-md-6">
-                                    <label asp-for="PhoneNumber" class="form-label fw-semibold" style="font-size:.875rem;">Phone Number</label>
+                                    <label asp-for="PhoneNumber" class="form-label fw-semibold" style="font-size:.875rem;" data-i18n="auth_phone">Phone Number</label>
                                     <div class="input-group sr-input-group">
                                         <span class="input-group-text"><i class="bi bi-telephone"></i></span>
-                                        <input asp-for="PhoneNumber" class="form-control py-2" placeholder="0901234567" autocomplete="tel" />
+                                        <input asp-for="PhoneNumber" class="form-control py-2" data-i18n="[placeholder]auth_phone_placeholder" placeholder="0901234567" autocomplete="tel" />
                                     </div>
                                     <span asp-validation-for="PhoneNumber" class="text-danger" style="font-size:.8rem;"></span>
                                 </div>
@@ -201,18 +201,18 @@
                             <!-- Tourist fields -->
                             <div id="tourist-fields" class="row g-3 mb-3 field-group" style="display:none!important;">
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold" style="font-size:.875rem;">Passport Number</label>
+                                    <label class="form-label fw-semibold" style="font-size:.875rem;" data-i18n="auth_passport">Passport Number</label>
                                     <div class="input-group sr-input-group">
                                         <span class="input-group-text"><i class="bi bi-passport"></i></span>
-                                        <input name="PassportNumber" class="form-control py-2" placeholder="AB1234567" />
+                                        <input name="PassportNumber" class="form-control py-2" data-i18n="[placeholder]auth_passport_placeholder" placeholder="AB1234567" />
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <label class="form-label fw-semibold" style="font-size:.875rem;">Nationality</label>
+                                    <label class="form-label fw-semibold" style="font-size:.875rem;" data-i18n="auth_nationality">Nationality</label>
                                     <div class="input-group sr-input-group">
                                         <span class="input-group-text"><i class="bi bi-globe"></i></span>
                                         <select name="Nationality" class="form-select py-2">
-                                            <option value="">Select country...</option>
+                                            <option value="" data-i18n="auth_select_country">Select country...</option>
                                             <option value="US">🇺🇸 United States</option>
                                             <option value="UK">🇬🇧 United Kingdom</option>
                                             <option value="AU">🇦🇺 Australia</option>
@@ -233,25 +233,25 @@
                             <div class="form-check mb-4">
                                 <input class="form-check-input" type="checkbox" id="agreeTerms" required>
                                 <label class="form-check-label text-muted" for="agreeTerms" style="font-size:.85rem;">
-                                    I agree to the
-                                    <a href="/Home/Privacy" class="text-sr-green text-decoration-none fw-medium">Terms of Service</a>
-                                    and
-                                    <a href="/Home/Privacy" class="text-sr-green text-decoration-none fw-medium">Privacy Policy</a>
+                                    <span data-i18n="auth_agree_terms">I agree to the</span>
+                                    <a href="/Home/Privacy" class="text-sr-green text-decoration-none fw-medium" data-i18n="auth_terms_of_service">Terms of Service</a>
+                                    <span data-i18n="admin_and">and</span>
+                                    <a href="/Home/Privacy" class="text-sr-green text-decoration-none fw-medium" data-i18n="auth_privacy_policy">Privacy Policy</a>
                                 </label>
                             </div>
 
                             <button type="submit" class="btn btn-success w-100 py-2 fw-bold rounded-3 mb-3"
                                     id="registerBtn"
                                     style="font-size:1rem;box-shadow:0 4px 16px rgba(22,163,74,.3);letter-spacing:.02em;">
-                                <i class="bi bi-person-plus me-2"></i>Create Account
+                                <i class="bi bi-person-plus me-2"></i><span data-i18n="auth_reg_btn">Create Account</span>
                             </button>
                         </form>
 
-                        <div class="sr-divider">ALREADY HAVE AN ACCOUNT?</div>
+                        <div class="sr-divider" data-i18n="auth_already_account">ALREADY HAVE AN ACCOUNT?</div>
 
                         <a asp-controller="Account" asp-action="Login"
                            class="btn btn-outline-success w-100 py-2 fw-semibold rounded-3">
-                            <i class="bi bi-box-arrow-in-right me-2"></i>Log In
+                            <i class="bi bi-box-arrow-in-right me-2"></i><span data-i18n="auth_login_link">Log In</span>
                         </a>
                     </div>
                 </div>
@@ -304,7 +304,8 @@
     });
     document.getElementById('registerForm')?.addEventListener('submit', function () {
         const btn = document.getElementById('registerBtn');
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Creating account...';
+        const creatingAccountText = typeof getI18nText === 'function' ? getI18nText('auth_creating_account') : 'Creating account...';
+        btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>${creatingAccountText}`;
         btn.disabled = true;
     });
 </script>
