@@ -6,7 +6,7 @@
     <tr>
         <td colspan="7" class="text-center text-muted py-5">
             <i class="bi bi-inbox fs-1 d-block mb-2"></i>
-            No reports found.
+            <span data-i18n="admin_no_reports">No reports found.</span>
         </td>
     </tr>
 }
@@ -42,20 +42,20 @@ else
                     };
                 }
                 <span class="badge @badgeClass px-2 py-1 rounded-pill">
-                    <i class="bi @icon me-1"></i>@item.Status
+                    <i class="bi @icon me-1"></i><span data-i18n="admin_@(item.Status.ToString().ToLower())">@item.Status</span>
                 </span>
             </td>
             <td class="text-center">
                 <div class="btn-group btn-group-sm">
-                    <button class="btn btn-outline-info" title="View Details"
+                    <button class="btn btn-outline-info" title="View Details" data-i18n="[title]admin_details"
                             onclick="showReportDetails(@item.Id)">
                         <i class="bi bi-eye"></i>
                     </button>
-                    <button class="btn btn-outline-primary" title="Update Status"
+                    <button class="btn btn-outline-primary" title="Update Status" data-i18n="[title]admin_edit"
                             onclick="showReportEditModal(@item.Id)">
                         <i class="bi bi-pencil-square"></i>
                     </button>
-                    <button class="btn btn-outline-danger" title="Delete"
+                    <button class="btn btn-outline-danger" title="Delete" data-i18n="[title]admin_delete"
                             onclick="prepareReportDelete(@item.Id, '@Html.Raw(item.Title.Replace("'", "\\'"))')">
                         <i class="bi bi-trash3"></i>
                     </button>

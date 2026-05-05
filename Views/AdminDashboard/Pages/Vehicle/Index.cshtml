@@ -171,9 +171,12 @@
     <!-- Station data from server - modals share this via fillStationDropdown() -->
     <script>
             var stationList = [
-                @foreach (var s in ViewBag.Stations as List<RentalVehicleService.Models.Station>)
+                @if (ViewBag.Stations != null)
                 {
-                            @:{ id: @s.StationId, name: "@Html.Raw(s.Name)", address: "@Html.Raw(s.Address)" },
+                    foreach (var s in (List<RentalVehicleService.Models.Station>)ViewBag.Stations)
+                    {
+                        @:{ id: @s.StationId, name: "@Html.Raw(s.Name)", address: "@Html.Raw(s.Address)" },
+                    }
                 }
             ];
     </script>

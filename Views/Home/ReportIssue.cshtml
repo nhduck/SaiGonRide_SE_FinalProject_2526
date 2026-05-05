@@ -2,7 +2,7 @@
 @{
     ViewData["Title"] = "Report an Issue";
     Layout = "~/Views/Shared/_Layout.cshtml";
-    bool success = TempData["ReportSuccess"] != null && (bool)TempData["ReportSuccess"];
+    bool success = TempData["ReportSuccess"] is true;
 }
 
 <div class="report-issue-page py-5">

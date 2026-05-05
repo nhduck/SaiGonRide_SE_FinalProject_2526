@@ -207,8 +207,8 @@
                 </div>
             </div>
 
-            <h3 class="text-white fw-bold mb-2" style="font-size:1.7rem;">Welcome Back, Rider!</h3>
-            <p class="text-white-50 mb-4" style="max-width:300px;line-height:1.65;font-size:.95rem;margin:auto;">
+            <h3 class="text-white fw-bold mb-2" style="font-size:1.7rem;" data-i18n="auth_login_welcome">Welcome Back, Rider!</h3>
+            <p class="text-white-50 mb-4" style="max-width:300px;line-height:1.65;font-size:.95rem;margin:auto;" data-i18n="auth_login_subtitle">
                 Log in to continue your green journey across Saigon.
             </p>
 
@@ -216,15 +216,15 @@
             <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
                 <div class="sr-glass px-3 py-2 text-center">
                     <div class="text-white fw-bold fs-5">50+</div>
-                    <div class="text-white-50" style="font-size:.75rem;">Stations</div>
+                    <div class="text-white-50" style="font-size:.75rem;" data-i18n="auth_stats_stations">Stations</div>
                 </div>
                 <div class="sr-glass px-3 py-2 text-center">
                     <div class="text-white fw-bold fs-5">500+</div>
-                    <div class="text-white-50" style="font-size:.75rem;">Vehicles</div>
+                    <div class="text-white-50" style="font-size:.75rem;" data-i18n="auth_stats_vehicles">Vehicles</div>
                 </div>
                 <div class="sr-glass px-3 py-2 text-center">
                     <div class="text-white fw-bold fs-5">24/7</div>
-                    <div class="text-white-50" style="font-size:.75rem;">Support</div>
+                    <div class="text-white-50" style="font-size:.75rem;" data-i18n="auth_stats_support">Support</div>
                 </div>
             </div>
         </div>
@@ -242,8 +242,8 @@
                         <path d="M15 6a1 1 0 1 0 0-2 1 1 0 0 0 0 2zm-3 11.5V14l-3-3 4-3 2 3h2"/>
                     </svg>
                 </div>
-                <h2 class="fw-bold mb-1" style="font-size:1.6rem;">Log In</h2>
-                <p class="text-muted mb-0" style="font-size:.9rem;">Welcome back! <span>👋</span></p>
+                <h2 class="fw-bold mb-1" style="font-size:1.6rem;" data-i18n="auth_login_header">Log In</h2>
+                <p class="text-muted mb-0" style="font-size:.9rem;"><span data-i18n="auth_login_subheader">Welcome back!</span> <span>👋</span></p>
             </div>
 
             @if (TempData["SuccessMessage"] != null)
@@ -272,16 +272,16 @@
                 <input type="hidden" name="returnUrl" value="@ViewData["ReturnUrl"]" />
 
                 <div class="mb-3">
-                    <label asp-for="Email" class="form-label fw-semibold" style="font-size:.875rem;">Email</label>
+                    <label asp-for="Email" class="form-label fw-semibold" style="font-size:.875rem;" data-i18n="auth_email">Email</label>
                     <div class="input-group sr-input-group">
                         <span class="input-group-text"><i class="bi bi-envelope"></i></span>
-                        <input asp-for="Email" class="form-control py-2" placeholder="name@example.com" autocomplete="email" />
+                        <input asp-for="Email" class="form-control py-2" data-i18n="[placeholder]auth_email_placeholder" placeholder="name@example.com" autocomplete="email" />
                     </div>
                     <span asp-validation-for="Email" class="text-danger" style="font-size:.8rem;"></span>
                 </div>
 
                 <div class="mb-3">
-                    <label asp-for="Password" class="form-label fw-semibold" style="font-size:.875rem;">Password</label>
+                    <label asp-for="Password" class="form-label fw-semibold" style="font-size:.875rem;" data-i18n="auth_password">Password</label>
                     <div class="input-group sr-input-group">
                         <span class="input-group-text"><i class="bi bi-lock"></i></span>
                         <input asp-for="Password" class="form-control py-2" placeholder="••••••••"
@@ -297,36 +297,36 @@
                 <div class="d-flex justify-content-between align-items-center mb-4">
                     <div class="form-check mb-0">
                         <input asp-for="RememberMe" class="form-check-input" id="rememberMe">
-                        <label class="form-check-label text-muted" for="rememberMe" style="font-size:.875rem;">
+                        <label class="form-check-label text-muted" for="rememberMe" style="font-size:.875rem;" data-i18n="auth_remember_me">
                             Remember me
                         </label>
                     </div>
-                    <a href="#" class="text-sr-green text-decoration-none fw-medium" style="font-size:.875rem;">
+                    <a href="#" class="text-sr-green text-decoration-none fw-medium" style="font-size:.875rem;" data-i18n="auth_forgot_pwd">
                         Forgot password?
                     </a>
                 </div>
 
                 <button type="submit" class="btn btn-success w-100 py-2 fw-bold rounded-3 mb-3"
                         id="loginBtn" style="font-size:1rem;letter-spacing:.02em;box-shadow:0 4px 16px rgba(22,163,74,.3);">
-                    <i class="bi bi-box-arrow-in-right me-2"></i>Log In
+                    <i class="bi bi-box-arrow-in-right me-2"></i><span data-i18n="auth_login_btn">Log In</span>
                 </button>
             </form>
 
-            <div class="sr-divider">OR</div>
+            <div class="sr-divider" data-i18n="auth_or">OR</div>
 
             <div class="text-center">
-                <span class="text-muted" style="font-size:.9rem;">Don't have an account?</span>
+                <span class="text-muted" style="font-size:.9rem;" data-i18n="auth_no_account">Don't have an account?</span>
                 <a asp-controller="Account" asp-action="Register"
                    class="fw-bold text-sr-green text-decoration-none ms-1" style="font-size:.9rem;">
-                    Register free <i class="bi bi-arrow-right"></i>
+                    <span data-i18n="auth_register_link">Register free</span> <i class="bi bi-arrow-right"></i>
                 </a>
             </div>
 
             <p class="text-center text-muted mt-4 mb-0" style="font-size:.75rem;">
-                By logging in, you agree to our
-                <a href="/Home/Privacy" class="text-sr-green text-decoration-none">Privacy Policy</a>
-                and
-                <a href="/Home/Privacy" class="text-sr-green text-decoration-none">Terms of Service</a>.
+                <span data-i18n="auth_policy_agree">By logging in, you agree to our</span>
+                <a href="/Home/Privacy" class="text-sr-green text-decoration-none" data-i18n="auth_privacy_policy">Privacy Policy</a>
+                <span data-i18n="admin_and">and</span>
+                <a href="/Home/Privacy" class="text-sr-green text-decoration-none" data-i18n="auth_terms_of_service">Terms of Service</a>.
             </p>
         </div>
     </div>
@@ -342,7 +342,8 @@
     }
     document.getElementById('loginForm')?.addEventListener('submit', function () {
         const btn = document.getElementById('loginBtn');
-        btn.innerHTML = '<span class="spinner-border spinner-border-sm me-2"></span>Logging in...';
+        const loggingInText = typeof getI18nText === 'function' ? getI18nText('auth_logging_in') : 'Logging in...';
+        btn.innerHTML = `<span class="spinner-border spinner-border-sm me-2"></span>${loggingInText}`;
         btn.disabled = true;
     });
 </script>

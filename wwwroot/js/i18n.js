@@ -84,7 +84,14 @@
         });
         document.querySelectorAll('[data-i18n-html]').forEach(el => {
             const key = el.getAttribute('data-i18n-html');
-            if (dict[key] !== undefined) el.innerHTML = dict[key];
+            if (dict[key] !== undefined) {
+                let html = dict[key];
+                const p1 = el.getAttribute('data-i18n-param1');
+                const p2 = el.getAttribute('data-i18n-param2');
+                if (p1 !== null) html = html.replace('{0}', p1);
+                if (p2 !== null) html = html.replace('{1}', p2);
+                el.innerHTML = html;
+            }
         });
     }
 
@@ -175,4 +182,6 @@
     window.changeLanguage = changeLanguage;
     window.getCurrentLang = getCurrentLang;
     window.getI18nText = getI18nText;
+    window.applyTranslations = applyTranslations;
+    window.getDict = getDict;
 })();

@@ -1,12 +1,12 @@
-﻿@model IEnumerable<RentalVehicleService.Models.Vehicle>
+@model IEnumerable<RentalVehicleService.Models.Vehicle>
 @using RentalVehicleService.Models
 
 <div class="modal-header sr-modal-header border-0 pb-0">
     <div>
-        <h5 class="modal-title fw-bold" id="vehicleModalLabel">
+        <h5 class="modal-title fw-bold" id="vehicleModalLabel" data-i18n="modal_choose_vehicle">
             Chọn xe để bắt đầu
         </h5>
-        <small class="text-muted">Danh sách xe đang có sẵn tại trạm.</small>
+        <small class="text-muted" data-i18n="modal_avail_desc">Danh sách xe đang có sẵn tại trạm.</small>
     </div>
     <button type="button" class="btn-close sr-btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
 </div>
@@ -16,7 +16,7 @@
     {
         <div class="text-center py-4">
             <i class="fa-solid fa-bicycle text-muted fs-1 mb-2 opacity-50"></i>
-            <p class="text-muted mb-0">Rất tiếc, loại xe này tại trạm đang tạm hết.</p>
+            <p class="text-muted mb-0" data-i18n="modal_no_vehicles">Rất tiếc, loại xe này tại trạm đang tạm hết.</p>
         </div>
     }
     else
@@ -30,14 +30,14 @@
                             <i class="fa-solid @(vehicle.Type == VehicleType.Electric ? "fa-bolt" : "fa-bicycle")"></i>
                         </div>
                         <div>
-                            <h6 class="mb-0 fw-bold">Mã số: #@vehicle.VehicleId</h6>
+                            <h6 class="mb-0 fw-bold"><span data-i18n="modal_vehicle_id">Mã số</span>: #@vehicle.VehicleId</h6>
                             @if (vehicle.Type == VehicleType.Electric)
                             {
-                                <small class="text-muted"><i class="fa-solid fa-battery-three-quarters text-success me-1"></i> Pin: Sẵn sàng</small>
+                                <small class="text-muted"><i class="fa-solid fa-battery-three-quarters text-success me-1"></i> <span data-i18n="modal_battery_ready">Pin: Sẵn sàng</span></small>
                             }
                             else
                             {
-                                <small class="text-muted"><i class="fa-solid fa-check text-success me-1"></i> Trạng thái tốt</small>
+                                <small class="text-muted"><i class="fa-solid fa-check text-success me-1"></i> <span data-i18n="modal_good_status">Trạng thái tốt</span></small>
                             }
                         </div>
                     </div>
@@ -50,6 +50,6 @@
 
 <div class="modal-footer border-0 px-4 pb-4 d-flex justify-content-start">
     <button type="button" class="btn btn-success rounded-pill px-4 py-2 fw-bold shadow-sm d-flex align-items-center btn-open-scanner" data-station-id="@ViewBag.StationId">
-        <i class="bi bi-qr-code-scan fs-5 me-2"></i> Quét mã để thuê
+        <i class="bi bi-qr-code-scan fs-5 me-2"></i> <span data-i18n="modal_scan_to_rent">Quét mã để thuê</span>
     </button>
 </div>

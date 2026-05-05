@@ -65,7 +65,7 @@ using (var scope = app.Services.CreateScope())
                 await context.Database.MigrateAsync();
                 break;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 retries--;
                 if (retries == 0) throw;

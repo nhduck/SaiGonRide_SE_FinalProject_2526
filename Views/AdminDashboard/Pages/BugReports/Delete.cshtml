@@ -3,23 +3,23 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content">
             <div class="modal-header bg-danger text-white">
-                <h5 class="modal-title"><i class="bi bi-exclamation-octagon me-2"></i>Confirm Delete</h5>
+                <h5 class="modal-title" data-i18n="admin_confirm_delete"><i class="bi bi-exclamation-octagon me-2"></i>Confirm Delete</h5>
                 <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
             </div>
             <div class="modal-body text-center py-4">
                 <input type="hidden" id="reportIdToConfirm" />
                 <i class="bi bi-trash3 text-danger" style="font-size: 3rem;"></i>
-                <h4 class="mt-3">Are you sure?</h4>
+                <h4 class="mt-3" data-i18n="admin_are_you_sure">Are you sure?</h4>
                 <p class="text-muted">
-                    You are about to delete report:<br />
-                    <div>ID: <span class="fw-bold" id="reportIdToDisplay"></span></div>
-                    <div>Title: <span class="fw-bold" id="reportTitleToDisplay"></span></div>
+                    <span data-i18n="admin_delete_confirm_desc">You are about to delete report:</span><br />
+                    <div><span data-i18n="admin_id_col">ID:</span> <span class="fw-bold" id="reportIdToDisplay"></span></div>
+                    <div><span data-i18n="admin_title_col">Title:</span> <span class="fw-bold" id="reportTitleToDisplay"></span></div>
                 </p>
-                <small class="text-danger">This action cannot be undone!</small>
+                <small class="text-danger" data-i18n="admin_delete_warning">This action cannot be undone!</small>
             </div>
             <div class="modal-footer justify-content-center">
-                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                <button id="confirmReportDeleteBtn" type="button" class="btn btn-danger">Yes, Delete it!</button>
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal" data-i18n="admin_cancel">Cancel</button>
+                <button id="confirmReportDeleteBtn" type="button" class="btn btn-danger" data-i18n="admin_yes_delete">Yes, Delete it!</button>
             </div>
         </div>
     </div>

@@ -23,9 +23,22 @@
     <link rel="stylesheet" href="~/css/bike-animation.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/RentalVehicleService.styles.css" asp-append-version="true" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
+    <script src="~/js/i18n.js"></script>
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body style="overflow-x:hidden;">
+    <!-- Floating Language Switcher -->
+    <div style="position:fixed; top:20px; right:20px; z-index:1050;">
+        <div class="dropdown">
+            <button class="btn btn-white shadow-sm dropdown-toggle rounded-pill px-3" type="button" id="langDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false" style="background: white; border: 1px solid #e2e8f0;">
+                <span>🇬🇧 English</span>
+            </button>
+            <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4" aria-labelledby="langDropdownBtn">
+                <li><a class="dropdown-item sr-lang-item active fw-semibold" href="javascript:void(0)" onclick="changeLanguage('en')" data-lang="en">🇬🇧 English</a></li>
+                <li><a class="dropdown-item sr-lang-item" href="javascript:void(0)" onclick="changeLanguage('vi')" data-lang="vi">🇻🇳 Tiếng Việt</a></li>
+            </ul>
+        </div>
+    </div>
 
     <main role="main">
         @RenderBody()

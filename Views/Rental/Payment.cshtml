@@ -1,4 +1,4 @@
-﻿@model RentalVehicleService.Models.PaymentViewModel
+@model RentalVehicleService.Models.PaymentViewModel
 @{
     ViewData["Title"] = "Payment - SaigonRide";
 }
@@ -14,15 +14,15 @@
     <div class="invoice-card p-8">
 
         <!-- Title -->
-        <h1 class="invoice-title">Thanh Toán</h1>
+        <h1 class="invoice-title" data-i18n="pay_title">Thanh Toán</h1>
 
         <!-- ── Section: Customer Info ── -->
         <div class="mb-5">
-            <p class="section-heading mb-3">Thông Tin Khách Hàng</p>
+            <p class="section-heading mb-3" data-i18n="pay_customer_info">Thông Tin Khách Hàng</p>
             <div class="customer-row">
-                <span><span class="font-semibold">Tên:</span> @Model.CustomerName</span>
-                <span><span class="font-semibold">Số ĐT:</span> @Model.PhoneNumber</span>
-                <span><span class="font-semibold">Email:</span> @Model.Email</span>
+                <span><span class="font-semibold" data-i18n="pay_name">Tên:</span> @Model.CustomerName</span>
+                <span><span class="font-semibold" data-i18n="pay_phone">Số ĐT:</span> @Model.PhoneNumber</span>
+                <span><span class="font-semibold" data-i18n="pay_email">Email:</span> @Model.Email</span>
             </div>
         </div>
 
@@ -30,7 +30,7 @@
 
         <!-- ── Section: Return Station ── -->
         <div class="mb-5">
-            <p class="section-heading mb-3">Trạm Trả Xe Hiện Tại</p>
+            <p class="section-heading mb-3" data-i18n="pay_return_station">Trạm Trả Xe Hiện Tại</p>
             <div class="flex items-start gap-3">
                 <div class="pin-wrap mt-0.5">
                     <svg width="18" height="22" viewBox="0 0 18 22" fill="none">
@@ -39,9 +39,9 @@
                     </svg>
                 </div>
                 <div class="text-sm text-gray-700 leading-relaxed">
-                    <p><span class="font-semibold">Trạm Trả Xe:</span> @Model.EndStationName</p>
-                    <p><span class="font-semibold">Địa chỉ:</span> @Model.EndStationAddress</p>
-                    <p><span class="font-semibold">Mã xe:</span> @Model.VehicleModel</p>
+                    <p><span class="font-semibold" data-i18n="pay_station">Trạm Trả Xe:</span> @Model.EndStationName</p>
+                    <p><span class="font-semibold" data-i18n="pay_address">Địa chỉ:</span> @Model.EndStationAddress</p>
+                    <p><span class="font-semibold" data-i18n="pay_vehicle_id">Mã xe:</span> @Model.VehicleModel</p>
                 </div>
             </div>
         </div>
@@ -49,16 +49,16 @@
         <!-- ── Time Row ── -->
         <div class="time-row mb-5">
             <div class="time-cell">
-                <div class="time-label">Thời gian bắt đầu:</div>
+                <div class="time-label" data-i18n="pay_start_time">Thời gian bắt đầu:</div>
                 <div class="time-value">@Model.StartTime.ToString("HH:mm")</div>
             </div>
             <div class="time-cell">
-                <div class="time-label">Thời gian kết thúc:</div>
-                <div class="time-value">@Model.StartTime.AddMinutes(Model.TotalMinutes).ToString("HH:mm") (dự kiến)</div>
+                <div class="time-label" data-i18n="pay_end_time">Thời gian kết thúc:</div>
+                <div class="time-value">@Model.StartTime.AddMinutes(Model.TotalMinutes).ToString("HH:mm") (<span data-i18n="pay_estimated">dự kiến</span>)</div>
             </div>
             <div class="time-cell">
-                <div class="time-label">Tổng thời gian:</div>
-                <div class="time-value">@Model.TotalMinutes phút</div>
+                <div class="time-label" data-i18n="pay_total_time">Tổng thời gian:</div>
+                <div class="time-value">@Model.TotalMinutes <span data-i18n="pay_minutes">phút</span></div>
             </div>
         </div>
 
@@ -68,23 +68,23 @@
         <div class="mb-5">
             <div class="fee-section">
                 <div class="fee-section-label">
-                    <p class="section-heading">Chi Tiết Phí</p>
+                    <p class="section-heading" data-i18n="pay_fee_details">Chi Tiết Phí</p>
                 </div>
                 <div class="fee-rows">
                     <div class="fee-row">
-                        <span class="fee-label">Phí thời gian (@Model.TotalMinutes phút):</span>
+                        <span class="fee-label"><span data-i18n="pay_time_fee">Phí thời gian</span> (@Model.TotalMinutes <span data-i18n="pay_minutes">phút</span> x 1.500 VND/<span data-i18n="pay_minutes">phút</span>):</span>
                         <span class="fee-value">@((Model.TotalMinutes * 1500).ToString("N0")) VND</span>
                     </div>
                     @if (Model.DiscountAmount.HasValue && Model.DiscountAmount > 0)
                     {
                         <div class="fee-row">
-                            <span class="fee-label">Giảm giá trạm SL xe ít:</span>
+                            <span class="fee-label" data-i18n="pay_discount_low_stock">Giảm giá trạm SL xe ít:</span>
                             <span class="fee-value discount">-@Model.DiscountAmount.Value.ToString("N0") VND</span>
                         </div>
                     }
                     <hr class="divider my-2" />
                     <div class="fee-row">
-                        <span class="fee-total-label">Tổng phụ (Subtotal):</span>
+                        <span class="fee-total-label" data-i18n="pay_subtotal">Tổng phụ (Subtotal):</span>
                         <span class="fee-total-value">@(Model.FinalFare?.ToString("N0")) VND</span>
                     </div>
                 </div>
@@ -96,10 +96,10 @@
         <!-- ── Section: Promo Code ── -->
         <div class="mb-5">
             <div class="coupon-wrap">
-                <p class="section-heading" style="width:140px;flex-shrink:0;">Mã Giảm Giá</p>
+                <p class="section-heading" style="width:140px;flex-shrink:0;" data-i18n="pay_promo_code">Mã Giảm Giá</p>
                 <div class="coupon-input-wrap">
-                    <input class="coupon-input" id="couponInput" placeholder="Nhập mã..." value="" />
-                    <button type="button" onclick="applyCoupon()" class="coupon-btn">Áp dụng</button>
+                    <input class="coupon-input" id="couponInput" placeholder="Nhập mã..." value="" data-i18n="[placeholder]pay_promo_placeholder" />
+                    <button type="button" onclick="applyCoupon()" class="coupon-btn" data-i18n="pay_apply">Áp dụng</button>
                 </div>
             </div>
             <p class="coupon-msg text-green-600 ml-0" id="couponMsg"></p>
@@ -109,13 +109,13 @@
 
         <!-- ── Grand Total ── -->
         <div class="grand-total-row">
-            <p class="section-heading" style="font-size:0.97rem;">Tổng Cộng Phải Thanh Toán</p>
-            <p class="grand-total-amount" id="grandTotal">Total: @(Model.FinalFare?.ToString("N0")) VND</p>
+            <p class="section-heading" style="font-size:0.97rem;" data-i18n="pay_grand_total">Tổng Cộng Phải Thanh Toán</p>
+            <p class="grand-total-amount" id="grandTotal" data-i18n="pay_total_fare" data-i18n-param1="@(Model.FinalFare?.ToString("N0"))">Total: @(Model.FinalFare?.ToString("N0")) VND</p>
         </div>
 
         <!-- ── Section: Payment Method ── -->
         <div class="mb-7">
-            <p class="section-heading mb-4">Chọn Phương thức Thanh toán</p>
+            <p class="section-heading mb-4" data-i18n="pay_select_method">Chọn Phương thức Thanh toán</p>
             <div class="pay-cards-wrap">
 
                 <!-- VNPay -->
@@ -130,7 +130,7 @@
                             <text x="38" y="20" font-size="11" font-weight="900" fill="#fff" font-family="Arial">VNPAY</text>
                         </svg>
                     </div>
-                    <span class="pay-card-name">Ví VNPay</span>
+                    <span class="pay-card-name" data-i18n="pay_vnpay">Ví VNPay</span>
                 </div>
 
                 <!-- PayPal -->
@@ -142,7 +142,7 @@
                             <text x="34" y="19" font-size="18" font-weight="900" fill="#009cde" font-family="Arial">Pal</text>
                         </svg>
                     </div>
-                    <span class="pay-card-name">Tài khoản PayPal</span>
+                    <span class="pay-card-name" data-i18n="pay_paypal">Tài khoản PayPal</span>
                 </div>
 
                 <!-- MoMo -->
@@ -153,7 +153,7 @@
                             <span style="font-weight:900;color:#fff;font-size:1rem;font-family:Arial;">mo</span>
                         </div>
                     </div>
-                    <span class="pay-card-name">Ví MoMo</span>
+                    <span class="pay-card-name" data-i18n="pay_momo">Ví MoMo</span>
                 </div>
 
                 <!-- Visa / Mastercard -->
@@ -170,7 +170,7 @@
                             <path d="M17 5.3a12 12 0 010 17.4A12 12 0 0117 5.3z" fill="#ff5f00" />
                         </svg>
                     </div>
-                    <span class="pay-card-name">Thẻ Quốc tế</span>
+                    <span class="pay-card-name" data-i18n="pay_card">Thẻ Quốc tế</span>
                 </div>
 
             </div>
@@ -181,7 +181,7 @@
             <input type="hidden" name="rentalId" value="@Model.RentalId" />
             <input type="hidden" name="paymentMethod" id="paymentMethodInput" value="VNPay" />
             <input type="hidden" name="couponCode" id="couponCodeInput" value="" />
-            <button type="submit" class="btn-confirm">
+            <button type="submit" class="btn-confirm" data-i18n="pay_confirm">
                 Xác nhận &amp; Thanh toán
             </button>
         </form>
@@ -218,7 +218,7 @@
                 msg.className = 'coupon-msg text-green-600';
             } else {
                 couponDiscount = 0;
-                msg.textContent = 'Mã không hợp lệ.';
+                msg.textContent = typeof getI18nText === 'function' ? getI18nText('pay_invalid_coupon') : 'Mã không hợp lệ.';
                 msg.className = 'coupon-msg text-red-500';
             }
             updateTotal();
@@ -226,8 +226,14 @@
 
         function updateTotal() {
             const total = Math.max(0, BASE_FARE - couponDiscount);
-            document.getElementById('grandTotal').textContent =
-                'Total: ' + total.toLocaleString('vi-VN') + ' VND';
+            const formattedTotal = total.toLocaleString('vi-VN');
+            const el = document.getElementById('grandTotal');
+            if (typeof getI18nText === 'function') {
+                el.textContent = getI18nText('pay_total_fare').replace('{0}', formattedTotal);
+                el.setAttribute('data-i18n-param1', formattedTotal);
+            } else {
+                el.textContent = 'Total: ' + formattedTotal + ' VND';
+            }
         }
     </script>
 }
