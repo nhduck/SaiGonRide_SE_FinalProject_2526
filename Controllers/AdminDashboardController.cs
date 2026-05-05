@@ -69,9 +69,9 @@ namespace RentalVehicleService.Controllers
                 .OrderBy(v => v.BatteryPercentage)
                 .Take(5)
                 .ToListAsync();
-            
+
             ViewBag.LowBatteryVehicles = lowBatteryVehicles;
-            
+
             // Recent Activity (Mix of recent rentals and new users)
             var recentRentals = await _context.Rentals
                 .Include(r => r.Vehicle)
@@ -190,12 +190,147 @@ namespace RentalVehicleService.Controllers
                 .Where(r => r.Status == RentalStatus.Completed)
                 .SumAsync(r => r.FinalFare);
 
-            return Json(new {
+            return Json(new
+            {
                 totalVehicles,
                 activeRentals,
                 totalUsers,
                 totalRevenue = totalRevenue.ToString("N0")
             });
+        }
+
+        // ─── Station Inventory Status ─────────────────────────────────────────
+        [HttpGet]
+        public async Task<IActionResult> GetStationInventoryStatus()
+        {
+            var stations = await _context.Stations
+                .Where(s => s.IsActive)
+                .ToListAsync();
+
+            var overfull = stations
+                .Where(s => s.TotalCapacity > 0 && (double)s.CurrentCount / s.TotalCapacity >= 0.90)
+                .Select(s => new {
+                    s.StationId,
+                    s.Name,
+                    s.Address,
+                    s.CurrentCount,
+                    s.TotalCapacity,
+                    FillRate = Math.Round((double)s.CurrentCount / s.TotalCapacity * 100, 1)
+                })
+                .OrderByDescending(s => s.FillRate)
+                .ToList();
+
+            var shortage = stations
+                .Where(s => s.TotalCapacity > 0 && (double)s.CurrentCount / s.TotalCapacity < 0.20)
+                .Select(s => new {
+                    s.StationId,
+                    s.Name,
+                    s.Address,
+                    s.CurrentCount,
+                    s.TotalCapacity,
+                    FillRate = Math.Round((double)s.CurrentCount / s.TotalCapacity * 100, 1)
+                })
+                .OrderBy(s => s.FillRate)
+                .ToList();
+
+            return Json(new { overfull, shortage });
+        }
+
+        // ─── CSV Export Endpoints ─────────────────────────────────────────────
+        [HttpGet]
+        public async Task<IActionResult> ExportDashboardCsv()
+        {
+            var totalVehicles = await _context.Vehicles.CountAsync();
+            var activeRentals = await _context.Rentals.CountAsync(r => r.Status == RentalStatus.Active);
+            var totalUsers = await _context.Users.CountAsync();
+            var totalRevenue = await _context.Rentals
+                .Where(r => r.Status == RentalStatus.Completed)
+                .SumAsync(r => r.FinalFare);
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("Metric,Value");
+            sb.AppendLine($"Export Date,{DateTime.Now:dd/MM/yyyy HH:mm:ss}");
+            sb.AppendLine($"Total Vehicles,{totalVehicles}");
+            sb.AppendLine($"Active Rentals,{activeRentals}");
+            sb.AppendLine($"Total Users,{totalUsers}");
+            sb.AppendLine($"Total Revenue (VND),{totalRevenue:N0}");
+
+            var dateStr = DateTime.Now.ToString("yyyy-MM-dd");
+            return File(Utf8BomBytes(sb.ToString()), "text/csv; charset=utf-8", $"dashboard-report-{dateStr}.csv");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportRevenueCsv()
+        {
+            var rentals = await _context.Rentals
+                .Include(r => r.Vehicle)
+                .Include(r => r.StartStation)
+                .Include(r => r.EndStation)
+                .Where(r => r.Status == RentalStatus.Completed)
+                .OrderByDescending(r => r.EndTime)
+                .ToListAsync();
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("Rental ID,User ID,Vehicle Model,Vehicle Type,Start Station,End Station,Start Time,End Time,Duration (min),Final Fare (VND),Discount (VND)");
+
+            foreach (var r in rentals)
+            {
+                var duration = r.EndTime.HasValue
+                    ? Math.Round((r.EndTime.Value - r.StartTime).TotalMinutes, 1)
+                    : 0;
+                var model = EscapeCsv(r.Vehicle?.VehicleModel ?? "N/A");
+                var startStation = EscapeCsv(r.StartStation?.Name ?? "N/A");
+                var endStation = EscapeCsv(r.EndStation?.Name ?? "N/A");
+                sb.AppendLine($"{r.RentalId},{EscapeCsv(r.UserId)},{model},{r.VehicleType},{startStation},{endStation},{r.StartTime:dd/MM/yyyy HH:mm},{r.EndTime:dd/MM/yyyy HH:mm},{duration},{r.FinalFare:N0},{r.DiscountAmount?.ToString("N0") ?? "0"}");
+            }
+
+            var dateStr = DateTime.Now.ToString("yyyy-MM-dd");
+            return File(Utf8BomBytes(sb.ToString()), "text/csv; charset=utf-8", $"revenue-report-{dateStr}.csv");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExportStationInventoryCsv()
+        {
+            var stations = await _context.Stations
+                .Include(s => s.Vehicles)
+                .OrderBy(s => s.Name)
+                .ToListAsync();
+
+            var sb = new System.Text.StringBuilder();
+            sb.AppendLine("Station ID,Station Name,Address,Total Capacity,Current Count,Fill Rate (%),Status,Active Vehicles,Charging Vehicles,Maintenance Vehicles");
+
+            foreach (var s in stations)
+            {
+                var fillRate = s.TotalCapacity > 0 ? Math.Round((double)s.CurrentCount / s.TotalCapacity * 100, 1) : 0;
+                var status = fillRate >= 90 ? "Overfull" : fillRate < 20 ? "Shortage" : "Normal";
+                var activeVehicles = s.Vehicles.Count(v => v.State == VehicleState.Available);
+                var chargingVehicles = s.Vehicles.Count(v => v.State == VehicleState.Charging);
+                var maintenanceVehicles = s.Vehicles.Count(v => v.State == VehicleState.Maintenance);
+
+                sb.AppendLine($"{s.StationId},{EscapeCsv(s.Name)},{EscapeCsv(s.Address)},{s.TotalCapacity},{s.CurrentCount},{fillRate},{status},{activeVehicles},{chargingVehicles},{maintenanceVehicles}");
+            }
+
+            var dateStr = DateTime.Now.ToString("yyyy-MM-dd");
+            return File(Utf8BomBytes(sb.ToString()), "text/csv; charset=utf-8", $"station-inventory-report-{dateStr}.csv");
+        }
+
+        // Trả về bytes với UTF-8 BOM để Excel đọc tiếng Việt đúng
+        private static byte[] Utf8BomBytes(string content)
+        {
+            var bom = new byte[] { 0xEF, 0xBB, 0xBF };
+            var body = System.Text.Encoding.UTF8.GetBytes(content);
+            var result = new byte[bom.Length + body.Length];
+            bom.CopyTo(result, 0);
+            body.CopyTo(result, bom.Length);
+            return result;
+        }
+
+        private static string EscapeCsv(string value)
+        {
+            if (string.IsNullOrEmpty(value)) return "";
+            if (value.Contains(',') || value.Contains('"') || value.Contains('\n'))
+                return $"\"{value.Replace("\"", "\"\"")}\"";
+            return value;
         }
 
         // ─── Reports — load vào AdminDashboard qua AJAX loadPage() ───────────
@@ -207,10 +342,10 @@ namespace RentalVehicleService.Controllers
                 .ToListAsync();
 
             ViewBag.TotalReports = reports.Count;
-            ViewBag.NewReports   = reports.Count(r => r.Status == BugReport.BugStatus.New);
-            ViewBag.InProgress   = reports.Count(r => r.Status == BugReport.BugStatus.InProgress);
-            ViewBag.Resolved     = reports.Count(r => r.Status == BugReport.BugStatus.Resolved);
-            ViewBag.Closed       = reports.Count(r => r.Status == BugReport.BugStatus.Closed);
+            ViewBag.NewReports = reports.Count(r => r.Status == BugReport.BugStatus.New);
+            ViewBag.InProgress = reports.Count(r => r.Status == BugReport.BugStatus.InProgress);
+            ViewBag.Resolved = reports.Count(r => r.Status == BugReport.BugStatus.Resolved);
+            ViewBag.Closed = reports.Count(r => r.Status == BugReport.BugStatus.Closed);
 
             return PartialView("~/Views/AdminDashboard/Pages/BugReports/Index.cshtml", reports);
         }
