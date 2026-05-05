@@ -336,11 +336,9 @@ namespace RentalVehicleService.Controllers
             {
                 decimal finalAmount = rental.FinalFare;
 
-                if (!string.IsNullOrEmpty(couponCode) && couponCode.ToUpper() == "SAIGONGREEN20")
-                {
-                    finalAmount -= 10000;
-                    if (finalAmount < 0) finalAmount = 0;
-                }
+                // Use RentalService for coupon logic (enables unit testing)
+                var rentalService = new RentalService(_context);
+                finalAmount = rentalService.ApplyCoupon(rental.FinalFare, couponCode);
 
                 var request = new VnpayPaymentRequest
                 {

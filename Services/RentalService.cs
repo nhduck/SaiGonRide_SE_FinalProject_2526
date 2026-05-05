@@ -56,5 +56,17 @@ namespace RentalVehicleService.Services
             return finalFare;
         }
 
+        public decimal ApplyCoupon(decimal currentFare, string couponCode)
+        {
+            if (string.IsNullOrEmpty(couponCode)) return currentFare;
+
+            if (couponCode.ToUpper() == "SAIGONGREEN20")
+            {
+                decimal newFare = currentFare - 10000;
+                return newFare < 0 ? 0 : newFare;
+            }
+
+            return currentFare;
+        }
     }
 }
