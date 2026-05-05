@@ -1,21 +1,18 @@
 @{
     ViewData["Title"] = "Active Trip - SaigonRide";
     Layout = "_Layout";
-}
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/Vehicle/activeTrip.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-}
-
-@model RentalVehicleService.Models.Rental
-@{
-    // Kiểm tra nếu Model bị null không
     if (Model == null)
     {
         <p data-i18n="trip_loading">Loading trip information...</p>
         return;
     }
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Vehicle/activeTrip.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
 }
 
 <div class="active-trip-container">
@@ -52,7 +49,6 @@
 
                     <div class="action-buttons mt-5">
                         <form asp-action="Edit" asp-controller="Rental" method="post">
-
                             <input type="hidden" name="id" value="@Model.RentalId" />
 
                             <div class="mb-3" style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px;">
@@ -84,30 +80,184 @@
             </div>
 
             <!-- Right Column: Bike Info & Map -->
-            <div class="col-lg-4">
+            <div class="col-lg-4 d-flex flex-column gap-4">
                 <!-- Bike Preview Card -->
-                <div class="info-card bike-preview-card mb-4">
-                    <span class="bike-tag">SR-2024</span>
-                    <img src="~/img/green-bike-side.png" alt="SaigonRide Bike" class="img-fluid bike-img">
+                <!-- Bike Preview Card -->
+                <div class="info-card bike-preview-card" style="
+                    background: linear-gradient(135deg, #16a34a 0%, #15803d 60%, #0f766e 100%);
+                    border-radius: 16px;
+                    position: relative;
+                    overflow: hidden;
+                    min-height: 240px;
+                    display: flex;
+                    align-items: center;
+                    justify-content: center;
+                    padding: 0;
+                    ">
+                    <!-- Tag SR-2024 -->
+                    <span class="bike-tag" style="
+                    position: absolute;
+                    top: 1rem;
+                    right: 1rem;
+                    background: rgba(255,255,255,0.2);
+                    color: white;
+                    font-weight: 700;
+                    font-size: 0.8rem;
+                    padding: 0.3rem 0.75rem;
+                    border-radius: 20px;
+                    z-index: 10;
+                    backdrop-filter: blur(4px);
+                    ">SR-2024</span>
+
+                    <!-- SCENE CHỨA TOÀN BỘ HIỆU ỨNG TỪ INDEX.CSHTML -->
+                    <div class="sr-bike-scene" style="position: relative; width: 340px; height: 220px; transform: scale(0.95);">
+        
+                        <!-- Speed lines (Vạch tốc độ) -->
+                        <div style="position: absolute; top: 30px; left: -10px;">
+                            <svg width="80" height="60" viewBox="0 0 80 60" fill="none">
+                                <line x1="0" y1="10" x2="70" y2="10" stroke="rgba(74,222,128,0.5)" stroke-width="2" stroke-linecap="round" />
+                                <line x1="0" y1="22" x2="60" y2="22" stroke="rgba(74,222,128,0.35)" stroke-width="1.5" stroke-linecap="round" />
+                                <line x1="0" y1="34" x2="78" y2="34" stroke="rgba(74,222,128,0.25)" stroke-width="1" stroke-linecap="round" />
+                                <line x1="0" y1="46" x2="55" y2="46" stroke="rgba(74,222,128,0.2)" stroke-width="1" stroke-linecap="round" />
+                            </svg>
+                        </div>
+
+                        <!-- Dust particles (Bụi mờ) -->
+                        <div style="position: absolute; bottom: 20px; left: 10px;">
+                            <svg width="60" height="30" viewBox="0 0 60 30">
+                                <circle cx="10" cy="20" r="5" fill="rgba(74,222,128,0.3)" />
+                                <circle cx="25" cy="15" r="3.5" fill="rgba(74,222,128,0.2)" />
+                                <circle cx="40" cy="22" r="4" fill="rgba(74,222,128,0.15)" />
+                                <circle cx="55" cy="18" r="2.5" fill="rgba(74,222,128,0.1)" />
+                            </svg>
+                        </div>
+
+                        <!-- SVG XE ĐẠP CHÍNH XÁC TỪ INDEX -->
+                        <div style="position: absolute; bottom: 0; right: 0;">
+                            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 320 200" width="300" height="190" style="overflow:visible;">
+                                <defs>
+                                    <linearGradient id="bikeFrameGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+                                        <stop offset="0%" style="stop-color:#4ade80;stop-opacity:1" />
+                                        <stop offset="50%" style="stop-color:#16a34a;stop-opacity:1" />
+                                        <stop offset="100%" style="stop-color:#14532d;stop-opacity:1" />
+                                    </linearGradient>
+                                    <filter id="bikeGlow">
+                                        <feGaussianBlur stdDeviation="2" result="blur" />
+                                        <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                                    </filter>
+                                    <filter id="fShadow">
+                                        <feDropShadow dx="0" dy="3" stdDeviation="3" flood-color="#166534" flood-opacity="0.5" />
+                                    </filter>
+                                </defs>
+
+                                <!-- REAR WHEEL -->
+                                <g transform="translate(82,148)">
+                                    <g>
+                                        <!-- LƯU Ý: Đã bỏ 'begin="1.75s"' để bánh xe xoay ngay lập tức -->
+                                        <animateTransform attributeName="transform" type="rotate"
+                                                          from="0 0 0" to="360 0 0"
+                                                          dur="0.45s" repeatCount="indefinite" />
+                                        <circle r="52" fill="#111827" stroke="#1f2937" stroke-width="2" />
+                                        <circle r="46" fill="none" stroke="#374151" stroke-width="4" />
+                                        <circle r="41" fill="#1a1f2e" stroke="#374151" stroke-width="1.5" />
+                                        <circle r="6" fill="#374151" stroke="#6b7280" stroke-width="1.5" />
+                                        <circle r="3" fill="#9ca3af" />
+                                        <g stroke="#6b7280" stroke-width="1.3" opacity="0.8">
+                                            <line x1="0" y1="-6" x2="0" y2="-41" />
+                                            <line x1="0" y1="6" x2="0" y2="41" />
+                                            <line x1="-6" y1="0" x2="-41" y2="0" />
+                                            <line x1="6" y1="0" x2="41" y2="0" />
+                                            <line x1="-4" y1="-4" x2="-29" y2="-29" />
+                                            <line x1="4" y1="-4" x2="29" y2="-29" />
+                                            <line x1="-4" y1="4" x2="-29" y2="29" />
+                                            <line x1="4" y1="4" x2="29" y2="29" />
+                                        </g>
+                                        <circle r="16" fill="none" stroke="#374151" stroke-width="7" stroke-dasharray="5 3" opacity="0.55" />
+                                        <text font-family="Arial" font-size="5.5" font-weight="700" fill="#4b5563" letter-spacing="2.2">
+                                            <textPath href="#rWheelPath" startOffset="2%">RideToEveryWhere ·</textPath>
+                                        </text>
+                                        <path id="rWheelPath" d="M 0,-46 A 46,46 0 1,1 -0.1,-46" fill="none" />
+                                    </g>
+                                </g>
+
+                                <!-- FRONT WHEEL -->
+                                <g transform="translate(238,148)">
+                                    <g>
+                                        <!-- LƯU Ý: Đã bỏ 'begin="1.75s"' để bánh xe xoay ngay lập tức -->
+                                        <animateTransform attributeName="transform" type="rotate"
+                                                          from="0 0 0" to="360 0 0"
+                                                          dur="0.45s" repeatCount="indefinite" />
+                                        <circle r="52" fill="#111827" stroke="#1f2937" stroke-width="2" />
+                                        <circle r="46" fill="none" stroke="#374151" stroke-width="4" />
+                                        <circle r="41" fill="#1a1f2e" stroke="#374151" stroke-width="1.5" />
+                                        <circle r="6" fill="#374151" stroke="#6b7280" stroke-width="1.5" />
+                                        <circle r="3" fill="#9ca3af" />
+                                        <g stroke="#6b7280" stroke-width="1.3" opacity="0.8">
+                                            <line x1="0" y1="-6" x2="0" y2="-41" />
+                                            <line x1="0" y1="6" x2="0" y2="41" />
+                                            <line x1="-6" y1="0" x2="-41" y2="0" />
+                                            <line x1="6" y1="0" x2="41" y2="0" />
+                                            <line x1="-4" y1="-4" x2="-29" y2="-29" />
+                                            <line x1="4" y1="-4" x2="29" y2="-29" />
+                                            <line x1="-4" y1="4" x2="-29" y2="29" />
+                                            <line x1="4" y1="4" x2="29" y2="29" />
+                                        </g>
+                                        <circle r="16" fill="none" stroke="#374151" stroke-width="7" stroke-dasharray="5 3" opacity="0.55" />
+                                        <text font-family="Arial" font-size="5.5" font-weight="700" fill="#4b5563" letter-spacing="2.2">
+                                            <textPath href="#fWheelPath" startOffset="2%">RideToEveryWhere ·</textPath>
+                                        </text>
+                                        <path id="fWheelPath" d="M 0,-46 A 46,46 0 1,1 -0.1,-46" fill="none" />
+                                    </g>
+                                </g>
+
+                                <!-- BODY GROUP -->
+                                <g class="sr-bike-body-group">
+                                    <line x1="82" y1="148" x2="158" y2="153" stroke="url(#bikeFrameGrad)" stroke-width="7" stroke-linecap="round" filter="url(#fShadow)" />
+                                    <circle cx="158" cy="153" r="9" fill="#1f2937" stroke="#374151" stroke-width="2" />
+                                    <circle cx="158" cy="153" r="17" fill="none" stroke="#4b5563" stroke-width="2.5" stroke-dasharray="4 3" />
+                                    <circle cx="158" cy="153" r="6" fill="#374151" stroke="#6b7280" stroke-width="1.5" />
+                                    <line x1="158" y1="153" x2="148" y2="90" stroke="url(#bikeFrameGrad)" stroke-width="8" stroke-linecap="round" filter="url(#fShadow)" />
+                                    <line x1="212" y1="97" x2="158" y2="153" stroke="url(#bikeFrameGrad)" stroke-width="8" stroke-linecap="round" filter="url(#fShadow)" />
+                                    <line x1="148" y1="90" x2="212" y2="97" stroke="url(#bikeFrameGrad)" stroke-width="7" stroke-linecap="round" filter="url(#fShadow)" />
+                                    <line x1="148" y1="90" x2="82" y2="148" stroke="url(#bikeFrameGrad)" stroke-width="6" stroke-linecap="round" filter="url(#fShadow)" />
+                                    <line x1="212" y1="97" x2="238" y2="148" stroke="url(#bikeFrameGrad)" stroke-width="7" stroke-linecap="round" filter="url(#fShadow)" />
+                                    <rect x="206" y="89" width="12" height="22" rx="5" fill="url(#bikeFrameGrad)" stroke="#166534" stroke-width="1" />
+                                    <text x="172" y="143" font-family="Arial" font-size="8.5" font-weight="900" fill="rgba(255,255,255,0.92)"
+                                          transform="rotate(-46,172,143)" letter-spacing="0.6">SaigonRide</text>
+                                    <rect x="166" y="108" width="9" height="22" rx="3" fill="#475569" stroke="#94a3b8" stroke-width="1" />
+                                    <rect x="168" y="105" width="5" height="6" rx="2" fill="#94a3b8" />
+                                    <line x1="148" y1="90" x2="141" y2="70" stroke="#374151" stroke-width="5" stroke-linecap="round" />
+                                    <path d="M 125 69 Q 141 64 157 68 Q 149 73 141 72 Q 133 73 125 69 Z" fill="#1f2937" stroke="#4b5563" stroke-width="1.5" />
+                                    <line x1="212" y1="93" x2="224" y2="79" stroke="#374151" stroke-width="5" stroke-linecap="round" />
+                                    <path d="M 218 77 Q 224 73 230 75 Q 236 79 238 87 Q 236 91 232 89" fill="none" stroke="#1f2937" stroke-width="5" stroke-linecap="round" />
+                                    <path d="M 218 77 Q 216 73 214 75" fill="none" stroke="#1f2937" stroke-width="4" stroke-linecap="round" />
+                                    <line x1="158" y1="153" x2="170" y2="168" stroke="#374151" stroke-width="5" stroke-linecap="round" />
+                                    <rect x="167" y="167" width="11" height="4" rx="2" fill="#4b5563" />
+                                    <line x1="158" y1="153" x2="146" y2="138" stroke="#374151" stroke-width="5" stroke-linecap="round" />
+                                    <rect x="141" y="133" width="11" height="4" rx="2" fill="#4b5563" />
+                                    <path d="M 88 156 Q 122 164 150 156" fill="none" stroke="#4b5563" stroke-width="2" stroke-dasharray="3 2" opacity="0.7" />
+                                    <circle cx="188" cy="118" r="3.5" fill="rgba(74,222,128,0.7)" filter="url(#bikeGlow)" />
+                                </g>
+                            </svg>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- Battery Status Card -->
-                <div class="info-card battery-card mb-4">
+                <div class="info-card battery-card">
                     <div class="d-flex justify-content-between align-items-center mb-2">
                         <span class="fw-bold" data-i18n="trip_battery">Battery Level</span>
                         <span class="fw-bold">85%</span>
                     </div>
-                    <div class="progress mb-2" style="height: 10px;">
+                    <div class="progress mb-2" style="height: 10px; border-radius: 5px;">
                         <div class="progress-bar bg-success" style="width: 85%"></div>
                     </div>
                     <small class="text-muted"><span data-i18n="trip_approx_left" data-i18n-param1="30">Approx. 30 km left</span></small>
                 </div>
 
                 <!-- Live Map Card -->
-                <div class="info-card map-card p-0 overflow-hidden">
-                    <div id="trip-map" style="height: 200px; background: #e9ecef;">
-                        <img src="~/img/map-mockup.png" class="w-100 h-100" style="object-fit: cover;" alt="Route Map" />
-                    </div>
+                <div class="info-card map-card overflow-hidden" style="border-radius: 16px;">
+                    <div id="trip-map" style="height: 180px; background: #e9ecef; z-index: 1;"></div>
                 </div>
             </div>
         </div>
@@ -115,5 +265,26 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/rentalManager.js"></script>
+    <script src="~/js/rentalManager.js" asp-append-version="true"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+    <script>
+        document.addEventListener("DOMContentLoaded", function() {
+        // Khởi tạo bản đồ tại tọa độ trung tâm Sài Gòn (Quận 1)
+        var map = L.map('trip-map').setView([10.7769, 106.7009], 15);
+
+        // Thêm lớp bản đồ từ OpenStreetMap
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+        attribution: '© OpenStreetMap contributors'
+        }).addTo(map);
+
+        // Thêm một Marker tượng trưng cho vị trí xe đạp
+        var bikeIcon = L.icon({
+        iconUrl: 'https://cdn-icons-png.flaticon.com/512/3198/3198336.png',
+        iconSize: [30, 30]
+        });
+        L.marker([10.7769, 106.7009], {icon: bikeIcon}).addTo(map)
+        .bindPopup('Vị trí xe của bạn')
+        .openPopup();
+        });
+    </script>
 }
