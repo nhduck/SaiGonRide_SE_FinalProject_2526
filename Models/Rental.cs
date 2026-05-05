@@ -6,6 +6,7 @@ namespace RentalVehicleService.Models
     public enum RentalStatus
     {
         Active,
+        PendingPayment,
         Completed,
         Cancelled
     }

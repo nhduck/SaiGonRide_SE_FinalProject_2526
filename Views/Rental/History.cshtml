@@ -1,0 +1,128 @@
+﻿@model IEnumerable<RentalVehicleService.Models.Rental>
+
+@{
+    ViewData["Title"] = "Ride History";
+}
+
+<div class="container mt-5 mb-5">
+    <!-- Header Section -->
+    <div class="row mb-4">
+        <div class="col-12">
+            <h2 class="fw-bold" style="color: #198754;">
+                <!-- Icon đồng hồ (sử dụng Bootstrap Icons hoặc FontAwesome) -->
+                <svg xmlns="http://www.w3.org/2000/svg" width="28" height="28" fill="currentColor" class="bi bi-clock-history me-2 mb-1" viewBox="0 0 16 16">
+                    <path d="M8.515 1.019A7 7 0 0 0 8 1V0a8 8 0 0 1 .589.022zm2.004.45a7 7 0 0 0-.985-.299l.219-.976q.576.129 1.126.342zm1.37.71a7 7 0 0 0-.439-.27l.493-.87a8 8 0 0 1 .979.654l-.615.789a7 7 0 0 0-.418-.302zm1.834 1.79a7 7 0 0 0-.653-.796l.724-.69q.406.429.747.91zm.744 1.352a7 7 0 0 0-.214-.468l.893-.45a8 8 0 0 1 .45 1.088l-.95.313a7 7 0 0 0-.179-.483m.53 2.507a7 7 0 0 0-.1-1.025l.985-.17q.1.58.116 1.17zm-.131 1.538q.05-.254.081-.51l.993.123a8 8 0 0 1-.23 1.155l-.964-.267q.069-.247.12-.501m-.952 2.379q.276-.436.486-.908l.914.405q-.24.54-.555 1.038zm-.964 1.205q.183-.183.35-.378l.758.653a8 8 0 0 1-.401.432z" />
+                    <path d="M8 1a7 7 0 1 0 4.95 11.95l.707.707A8.001 8.001 0 1 1 8 0z" />
+                    <path d="M7.5 3a.5.5 0 0 1 .5.5v5.21l3.248 1.856a.5.5 0 0 1-.496.868l-3.5-2A.5.5 0 0 1 7 9V3.5a.5.5 0 0 1 .5-.5" />
+                </svg>
+                Your Ride History
+            </h2>
+            <p class="text-muted">Review your past trips, routes, and payments with SaigonRide.</p>
+        </div>
+    </div>
+
+    @if (!Model.Any())
+    {
+        <!-- Empty State -->
+        <div class="alert alert-light border shadow-sm d-flex align-items-center rounded-3 p-4" role="alert">
+            <div class="me-3">
+                <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="#198754" class="bi bi-info-circle-fill" viewBox="0 0 16 16">
+                    <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16m.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3" />
+                </svg>
+            </div>
+            <div>
+                <h5 class="alert-heading fw-bold mb-1">No rides found</h5>
+                <span class="text-muted">You haven't completed any rides yet. Find a station and start moving green today!</span>
+            </div>
+        </div>
+    }
+    else
+    {
+        <!-- Data Table inside a modern Card -->
+        <div class="card shadow-sm border-0 rounded-4 overflow-hidden">
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover table-borderless align-middle mb-0">
+                        <thead class="table-light border-bottom text-muted">
+                            <tr>
+                                <th scope="col" class="py-3 px-4 fw-semibold">Trip ID</th>
+                                <th scope="col" class="py-3 fw-semibold">Vehicle Info</th>
+                                <th scope="col" class="py-3 fw-semibold">Route</th>
+                                <th scope="col" class="py-3 fw-semibold">Duration</th>
+                                <th scope="col" class="py-3 text-end fw-semibold">Total Fare</th>
+                                <th scope="col" class="py-3 text-center px-4 fw-semibold">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach (var item in Model)
+                            {
+                                <tr class="border-bottom">
+                                    <!-- Trip ID -->
+                                    <td class="px-4 text-secondary">
+                                        <span class="fw-bold">#@item.RentalId</span>
+                                    </td>
+                                    
+                                    <!-- Vehicle -->
+                                    <td>
+                                        <div class="fw-bold text-dark">@(item.Vehicle?.VehicleModel ?? "Standard Bike")</div>
+                                        <small class="text-muted">@item.VehicleType</small>
+                                    </td>
+                                    
+                                    <!-- Route (Start -> End) -->
+                                    <td>
+                                        <div class="d-flex flex-column justify-content-center">
+                                            <span class="text-truncate d-inline-block mb-1" style="max-width: 250px;" title="@item.StartStation?.Address">
+                                                <span class="text-success me-1" style="font-size: 0.8rem;">●</span>
+                                                @(item.StartStation?.Address ?? "Unknown Start Station")
+                                            </span>
+                                            <span class="text-truncate d-inline-block" style="max-width: 250px;" title="@item.EndStation?.Address">
+                                                <span class="text-danger me-1" style="font-size: 0.8rem;">●</span>
+                                                @(item.EndStation?.Address ?? "Unknown End Station")
+                                            </span>
+                                        </div>
+                                    </td>
+                                    
+                                    <!-- Duration/Time -->
+                                    <td>
+                                        <div class="text-dark">@item.StartTime.ToString("MMM dd, yyyy")</div>
+                                        <div class="small text-muted">
+                                            @item.StartTime.ToString("HH:mm")
+                                            @if (item.EndTime.HasValue)
+                                            {
+                                                <span>- @item.EndTime.Value.ToString("HH:mm")</span>
+                                            }
+                                        </div>
+                                    </td>
+                                    
+                                    <!-- Fare -->
+                                    <td class="text-end fw-bold" style="color: #198754;">
+                                        @item.FinalFare.ToString("N0") VND
+                                    </td>
+                                    
+                                    <!-- Status -->
+                                    <td class="text-center px-4">
+                                        <span class="badge bg-success bg-opacity-10 text-success border border-success rounded-pill px-3 py-2 fw-medium">
+                                            Completed
+                                        </span>
+                                    </td>
+                                </tr>
+                            }
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+
+<!-- Thêm một chút CSS tuỳ chỉnh nhe để giao diện mượt hơn -->
+<style>
+    .table-hover tbody tr:hover {
+        background-color: #f8f9fa;
+        transition: background-color 0.2s ease-in-out;
+    }
+
+    .badge.bg-opacity-10 {
+        background-color: rgba(25, 135, 84, 0.1) !important;
+    }
+</style>

@@ -170,7 +170,7 @@ namespace RentalVehicleService.Controllers
             {
                 rental.EndTime = DateTime.Now;
                 rental.EndStationId = endStationId;
-                rental.Status = RentalStatus.Completed;
+                rental.Status = RentalStatus.PendingPayment;
 
                 rental.FinalFare = _rentalService.ProcessFinalBill(rental, endStationId);
 
@@ -398,6 +398,25 @@ namespace RentalVehicleService.Controllers
                     ? RedirectToAction("Payment", new { id = rentalId })
                     : RedirectToAction("Index");
             }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> History()
+        {
+            // Lấy ID người dùng đang đăng nhập
+            var userID = User.FindFirstValue(ClaimTypes.NameIdentifier);
+
+            // Truy vấn các chuyến đi đã hoàn thành của user này
+            var historyList = await _context.Rentals
+                .Include(r => r.Vehicle)
+                .Include(r => r.StartStation)
+                .Include(r => r.EndStation)
+                .Where(r => r.UserId == userID && r.Status == RentalStatus.Completed) // Lọc trạng thái Completed
+                .OrderByDescending(r => r.EndTime)
+                .ToListAsync();
+
+            return View(historyList); // Trả về trang Views/Rental/History.cshtml
         }
     }
 }
