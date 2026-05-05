@@ -3,10 +3,9 @@ let totalSeconds = 0;
 function startRentalTimer() {
     const costElement = document.getElementById('cost');
 
-    // Đặt giá mặc định phòng hờ lỗi
+    // Đặt giá mặc định
     let pricePerMinute = 1000;
 
-    // Đọc trực tiếp giá tiền từ C# truyền xuống qua HTML
     if (costElement) {
         const priceAttr = costElement.getAttribute('data-price-per-minute');
 

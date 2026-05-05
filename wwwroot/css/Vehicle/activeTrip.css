@@ -2,34 +2,39 @@
     --sr-primary: #1DB954;
     --sr-dark-green: #064E3B;
     --sr-deep-bg: #022C22;
+    --sr-light-bg: #f8f9fa;
 }
 
 .active-trip-container {
     background: linear-gradient(180deg, var(--sr-dark-green) 0%, var(--sr-deep-bg) 100%);
     min-height: 100vh;
     color: white;
+    padding-bottom: 50px;
 }
 
 /* Thẻ dashboard chính */
 .main-dashboard-card {
     background: white;
     border-radius: 24px;
-    padding: 60px 40px;
+    padding: 50px 40px;
     color: #1a1a1a;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.3);
+    height: 100%;
 }
 
 .timer-display {
-    font-size: 5rem;
+    font-size: 4.5rem;
     font-weight: 800;
     letter-spacing: -2px;
     margin-bottom: 20px;
+    color: var(--sr-dark-green);
 }
 
 .stat-label {
     font-weight: 700;
     margin-bottom: 0;
     font-size: 1.1rem;
+    color: #1a1a1a;
 }
 
 .stat-sub-label {
@@ -40,49 +45,79 @@
 
 .stat-value {
     font-weight: 800;
-    color: #1a1a1a;
+    color: var(--sr-primary);
+}
+
+/* Dropdown trạm trả xe */
+.dropoff-section {
+    background: var(--sr-light-bg);
+    padding: 15px;
+    border-radius: 15px;
+    border: 1px solid #e9ecef;
+    text-align: left;
+}
+
+.dropoff-label {
+    color: #495057;
+    font-weight: 600;
+    font-size: 0.95rem;
+    margin-bottom: 8px;
 }
 
 /* Nút bấm */
 .btn-end-trip {
-    background: linear-gradient(90deg, #1DB954 0%, #17A34A 100%);
+    background: linear-gradient(90deg, #1DB954 0%, #15803d 100%);
     color: white;
     border: none;
-    border-radius: 50px;
+    border-radius: 30px;
     font-weight: 700;
-    font-size: 1.2rem;
-    transition: transform 0.2s;
+    font-size: 1.1rem;
+    padding: 14px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(29, 185, 84, 0.3);
 }
+
+    .btn-end-trip:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 10px 25px rgba(29, 185, 84, 0.4);
+        color: white;
+    }
 
 .btn-lock-temporary {
-    background: rgba(6, 78, 59, 0.1);
-    color: #064E3B;
-    border: 2px solid #064E3B;
-    border-radius: 50px;
+    background: #ecfdf5;
+    color: #059669;
+    border: 2px solid transparent;
+    border-radius: 30px;
     font-weight: 600;
+    padding: 12px;
+    transition: all 0.3s ease;
 }
 
-.btn-end-trip:hover {
-    transform: scale(1.02);
-    color: white;
-}
+    .btn-lock-temporary:hover {
+        background: #d1fae5;
+        border-color: #10b981;
+        color: #047857;
+    }
 
 /* Thông tin xe & Badge */
 .info-card {
     background: white;
-    border-radius: 15px;
-    padding: 20px;
+    border-radius: 20px;
+    padding: 24px;
     color: #333;
     position: relative;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+    height: 100%;
 }
 
 .bike-preview-card {
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
     display: flex;
     justify-content: center;
     align-items: center;
     padding: 40px;
+    box-shadow: none;
 }
 
 .bike-tag {
@@ -91,21 +126,48 @@
     right: 15px;
     background: white;
     color: black;
-    padding: 4px 12px;
-    border-radius: 8px;
+    padding: 6px 14px;
+    border-radius: 10px;
     font-weight: 700;
     font-size: 0.9rem;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+}
+
+.battery-card {
+    background: white;
+}
+
+.map-card {
+    padding: 0;
+    border: 4px solid white;
 }
 
 .status-badge {
-    background: rgba(255, 255, 255, 0.1);
-    padding: 6px 16px;
+    background: rgba(255, 255, 255, 0.15);
+    padding: 8px 18px;
     border-radius: 20px;
     font-size: 0.85rem;
     font-weight: 600;
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(5px);
 }
 
     .status-badge .dot {
-        color: #1DB954;
-        margin-right: 5px;
+        color: #34d399;
+        margin-right: 6px;
+        animation: pulse 1.5s infinite;
     }
+
+@keyframes pulse {
+    0% {
+        opacity: 1;
+    }
+
+    50% {
+        opacity: 0.4;
+    }
+
+    100% {
+        opacity: 1;
+    }
+}

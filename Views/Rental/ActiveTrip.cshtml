@@ -1,21 +1,18 @@
-﻿@{
+﻿@model RentalVehicleService.Models.Rental
+@{
     ViewData["Title"] = "Active Trip - SaigonRide";
     Layout = "_Layout";
-}
 
-@section Styles {
-    <link rel="stylesheet" href="~/css/Vehicle/activeTrip.css" />
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
-}
-
-@model RentalVehicleService.Models.Rental
-@{
-    // Kiểm tra nếu Model bị null không
     if (Model == null)
     {
         <p>Loading trip information...</p>
         return;
     }
+}
+
+@section Styles {
+    <link rel="stylesheet" href="~/css/Vehicle/activeTrip.css" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" />
 }
 
 <div class="active-trip-container">
@@ -34,78 +31,77 @@
         <div class="row g-4">
             <!-- Left Column: Main Dashboard -->
             <div class="col-lg-8">
-                <div class="main-dashboard-card text-center">
-                    <div class="timer-display" id="timer">00 : 00 : 00</div>
+                <div class="main-dashboard-card text-center d-flex flex-column justify-content-between">
+                    <div>
+                        <div class="timer-display" id="timer">00 : 00 : 00</div>
 
-                    <div class="row stats-row mt-4">
-                        <!-- Cột Quãng đường -->
-                        <div class="col-6 border-end">
-                            <p class="stat-label">Distance</p>
-                            <p class="stat-sub-label">Trip Length</p>
-                            <h3 class="stat-value" id="distance">0.00 km</h3>
-                        </div>
-    
-                        <!-- Cột Tính tiền -->
-                        <div class="col-6">
-                            <p class="stat-label">Estimated Cost</p>
-                            <p class="stat-sub-label">Current Charges</p>
-                            <!-- Gắn thuộc tính data-vehicle-type để JS nhận diện -->
-                            <h3 class="stat-value" id="cost" data-vehicle-type="@Model.VehicleType.ToString()">0 VND</h3>
+                        <div class="row stats-row mt-4">
+                            <!-- Cột Quãng đường -->
+                            <div class="col-6 border-end">
+                                <p class="stat-label">Distance</p>
+                                <p class="stat-sub-label">Trip Length</p>
+                                <h3 class="stat-value" id="distance">0.00 km</h3>
+                            </div>
+        
+                            <!-- Cột Tính tiền -->
+                            <div class="col-6">
+                                <p class="stat-label">Estimated Cost</p>
+                                <p class="stat-sub-label">Current Charges</p>
+                                <!-- Truyền data-price-per-minute cho JS -->
+                                <h3 class="stat-value" id="cost" data-price-per-minute="@(Model.Vehicle?.Price ?? 1000)">0 VND</h3>
+                            </div>
                         </div>
                     </div>
+
                     <div class="action-buttons mt-5">
                         <form asp-action="Edit" asp-controller="Rental" method="post">
-
                             <input type="hidden" name="id" value="@Model.RentalId" />
 
-                            <div class="mb-3" style="background: rgba(255,255,255,0.1); padding: 10px; border-radius: 10px;">
-                                <label class="text-white mb-2">Select Drop-off Station:</label>
-                                <select name="endStationId" class="form-select" required>
+                            <div class="dropoff-section mb-4">
+                                <label class="dropoff-label"><i class="fas fa-map-marker-alt text-danger me-2"></i>Select Drop-off Station:</label>
+                                <select name="endStationId" class="form-select border-success" required>
                                     <option value="">-- Choose a station to drop bike --</option>
-                                    <!-- Tạm thời thêm vài Option để test chuyển trang, sau này bạn có thể lấy từ Database (ViewBag) -->
                                     <option value="1">Trạm Bến Thành</option>
                                     <option value="2">Trạm Bến Nhà Rồng</option>
                                     <option value="3">Trạm Thảo Cầm Viên</option>
                                 </select>
                             </div>
 
-                            <button type="submit"
-                                    class="btn btn-success w-100 mb-3"
-                                    style="border-radius: 30px; font-weight: bold; font-size: 1.1rem; padding: 12px; display: inline-block; text-align: center;">
-                                <i class="far fa-dot-circle"></i> FINISH TRIP
+                            <button type="submit" class="btn btn-end-trip w-100 mb-3">
+                                <i class="far fa-dot-circle me-1"></i> FINISH TRIP
                             </button>
                         </form>
 
-                        <button type="button" class="btn btn-outline-success w-100" style="border-radius: 30px; background-color: #e9f7ef; color: #198754; font-weight: bold;">
-                            <i class="fas fa-lock"></i> Temporary Lock
+                        <button type="button" class="btn btn-lock-temporary w-100">
+                            <i class="fas fa-lock me-1"></i> Temporary Lock
                         </button>
                     </div>
                 </div>
             </div>
 
             <!-- Right Column: Bike Info & Map -->
-            <div class="col-lg-4">
+            <div class="col-lg-4 d-flex flex-column gap-4">
                 <!-- Bike Preview Card -->
-                <div class="info-card bike-preview-card mb-4">
+                <div class="info-card bike-preview-card">
                     <span class="bike-tag">SR-2024</span>
                     <img src="~/img/green-bike-side.png" alt="SaigonRide Bike" class="img-fluid bike-img">
                 </div>
 
                 <!-- Battery Status Card -->
-                <div class="info-card battery-card mb-4">
+                <div class="info-card battery-card">
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <span class="fw-bold">Battery Level</span>
-                        <span class="fw-bold">85%</span>
+                        <span class="fw-bold text-dark">Battery Level</span>
+                        <span class="fw-bold text-success">85%</span>
                     </div>
-                    <div class="progress mb-2" style="height: 10px;">
+                    <div class="progress mb-2" style="height: 10px; border-radius: 5px;">
                         <div class="progress-bar bg-success" style="width: 85%"></div>
                     </div>
-                    <small class="text-muted">Approx. 30 km left</small>
+                    <small class="text-muted"><i class="fas fa-bolt text-warning me-1"></i> Approx. 30 km left</small>
                 </div>
 
                 <!-- Live Map Card -->
-                <div class="info-card map-card p-0 overflow-hidden">
-                    <div id="trip-map" style="height: 200px; background: #e9ecef;">
+                <div class="info-card map-card overflow-hidden">
+                    <div id="trip-map" style="height: 180px; background: #e9ecef;">
                         <img src="~/img/map-mockup.png" class="w-100 h-100" style="object-fit: cover;" alt="Route Map" />
                     </div>
                 </div>
