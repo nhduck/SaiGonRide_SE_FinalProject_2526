@@ -50,10 +50,8 @@
                         <div class="col-md-6">
                             <label class="form-label fw-semibold"><span data-i18n="admin_user_type">User Type</span> <span class="text-danger">*</span></label>
                             <select id="editUserType" name="UserType" class="form-select" required>
-                                <option value="" data-i18n="admin_select_type">-- Select Type --</option>
-                                <option value="Admin">Admin</option>
-                                <option value="Staff">Staff</option>
-                                <option value="Customer">Customer</option>
+                                <option value="Local">Local</option>
+                                <option value="Tourist">Tourist</option>
                             </select>
                         </div>
                         <div class="col-md-6 d-flex align-items-end">
@@ -94,6 +92,10 @@
                     </p>
 
                     <div id="editUserRolesContainer" class="d-flex gap-3 flex-wrap mb-2">
+                        <div class="form-check">
+                            <input class="form-check-input" type="checkbox" name="Roles" value="Custom" id="editRoleCustom" />
+                            <label class="form-check-label" for="editRoleCustom">Custom</label>
+                        </div>
                         <div class="form-check">
                             <input class="form-check-input" type="checkbox" name="Roles" value="Admin" id="editRoleAdmin" />
                             <label class="form-check-label" for="editRoleAdmin">Admin</label>

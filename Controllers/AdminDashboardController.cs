@@ -198,6 +198,23 @@ namespace RentalVehicleService.Controllers
             });
         }
 
+        // ─── Reports — load vào AdminDashboard qua AJAX loadPage() ───────────
+        [HttpGet]
+        public async Task<IActionResult> Reports()
+        {
+            var reports = await _context.BugReport
+                .OrderByDescending(r => r.CreatedDate)
+                .ToListAsync();
+
+            ViewBag.TotalReports = reports.Count;
+            ViewBag.NewReports   = reports.Count(r => r.Status == BugReport.BugStatus.New);
+            ViewBag.InProgress   = reports.Count(r => r.Status == BugReport.BugStatus.InProgress);
+            ViewBag.Resolved     = reports.Count(r => r.Status == BugReport.BugStatus.Resolved);
+            ViewBag.Closed       = reports.Count(r => r.Status == BugReport.BugStatus.Closed);
+
+            return PartialView("~/Views/AdminDashboard/Pages/BugReports/Index.cshtml", reports);
+        }
+
         [HttpGet]
         public async Task<IActionResult> Notifications()
         {
