@@ -38,20 +38,21 @@
                     <div class="timer-display" id="timer">00 : 00 : 00</div>
 
                     <div class="row stats-row mt-4">
+                        <!-- Cột Quãng đường -->
                         <div class="col-6 border-end">
                             <p class="stat-label">Distance</p>
                             <p class="stat-sub-label">Trip Length</p>
                             <h3 class="stat-value" id="distance">0.00 km</h3>
                         </div>
+    
+                        <!-- Cột Tính tiền -->
                         <div class="col-6">
                             <p class="stat-label">Estimated Cost</p>
                             <p class="stat-sub-label">Current Charges</p>
-                            <h3 class="stat-value" id="cost" data-price-per-minute="@(Model?.Vehicle?.Price)">0 VND</h3>
-                            <!-- Debug: Check if Price is loaded -->
-                            <input type="hidden" id="debugPrice" value="@(Model?.Vehicle?.Price ?? 0)" />
+                            <!-- Gắn thuộc tính data-vehicle-type để JS nhận diện -->
+                            <h3 class="stat-value" id="cost" data-vehicle-type="@Model.VehicleType.ToString()">0 VND</h3>
                         </div>
                     </div>
-
                     <div class="action-buttons mt-5">
                         <form asp-action="Edit" asp-controller="Rental" method="post">
 
@@ -62,9 +63,9 @@
                                 <select name="endStationId" class="form-select" required>
                                     <option value="">-- Choose a station to drop bike --</option>
                                     <!-- Tạm thời thêm vài Option để test chuyển trang, sau này bạn có thể lấy từ Database (ViewBag) -->
-                                    <option value="1">Trạm Thảo Cầm Viên</option>
-                                    <option value="2">Trạm Bến Thành</option>
-                                    <option value="3">Trạm Phố Đi Bộ</option>
+                                    <option value="1">Trạm Bến Thành</option>
+                                    <option value="2">Trạm Bến Nhà Rồng</option>
+                                    <option value="3">Trạm Thảo Cầm Viên</option>
                                 </select>
                             </div>
 
@@ -114,5 +115,5 @@
 </div>
 
 @section Scripts {
-    <script src="~/js/rentalManager.js"></script>
+    <script src="~/js/rentalManager.js" asp-append-version="true"></script>
 }
