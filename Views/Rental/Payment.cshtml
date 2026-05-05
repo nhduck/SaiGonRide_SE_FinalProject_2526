@@ -72,7 +72,7 @@
                 </div>
                 <div class="fee-rows">
                     <div class="fee-row">
-                        <span class="fee-label">Phí thời gian (@Model.TotalMinutes phút x 1.500 VND/phút):</span>
+                        <span class="fee-label">Phí thời gian (@Model.TotalMinutes phút):</span>
                         <span class="fee-value">@((Model.TotalMinutes * 1500).ToString("N0")) VND</span>
                     </div>
                     @if (Model.DiscountAmount.HasValue && Model.DiscountAmount > 0)
