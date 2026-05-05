@@ -46,7 +46,9 @@
                         <div class="col-6">
                             <p class="stat-label">Estimated Cost</p>
                             <p class="stat-sub-label">Current Charges</p>
-                            <h3 class="stat-value" id="cost">0 VND</h3>
+                            <h3 class="stat-value" id="cost" data-price-per-minute="@(Model?.Vehicle?.Price)">0 VND</h3>
+                            <!-- Debug: Check if Price is loaded -->
+                            <input type="hidden" id="debugPrice" value="@(Model?.Vehicle?.Price ?? 0)" />
                         </div>
                     </div>
 
