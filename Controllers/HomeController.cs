@@ -34,6 +34,19 @@ namespace RentalVehicleService.Controllers
                 .OrderByDescending(s => s.StationId)
                 .ToListAsync();
 
+            // Sync vehicle counts to ensure accuracy on Home page
+            var vehicleCounts = await _context.Vehicles
+                .Where(v => v.CurrentStationId != null)
+                .GroupBy(v => v.CurrentStationId)
+                .Select(g => new { StationId = g.Key, Count = g.Count() })
+                .ToListAsync();
+
+            foreach (var s in stations)
+            {
+                s.CurrentCount = vehicleCounts.FirstOrDefault(c => c.StationId == s.StationId)?.Count ?? 0;
+            }
+            await _context.SaveChangesAsync();
+
             // Stats for hero
             ViewBag.TotalStations = await _context.Stations.CountAsync(s => s.IsActive);
             ViewBag.TotalVehicles = await _context.Vehicles.CountAsync();

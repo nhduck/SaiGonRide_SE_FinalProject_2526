@@ -226,9 +226,9 @@ namespace RentalVehicleService.Controllers
                 stations = stations.Where(s =>
                 {
                     bool match = false;
-                    if (statuses.Contains("Active") && s.IsActive && !s.IsLowInventory && s.FillRate <= 0.85) match = true;
+                    if (statuses.Contains("Active") && s.IsActive && !s.IsLowInventory && !s.IsAlmostFull) match = true;
                     if (statuses.Contains("Low Stock") && s.IsLowInventory) match = true;
-                    if (statuses.Contains("Full") && s.FillRate > 0.85) match = true;
+                    if (statuses.Contains("Full") && s.IsAlmostFull) match = true;
                     if (statuses.Contains("Inactive") && !s.IsActive) match = true;
                     return match;
                 }).ToList();

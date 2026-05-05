@@ -59,6 +59,8 @@
     "stations_desc": "Pick a station, pick a ride, start your journey",
     "stations_search_placeholder": "Search by name or address...",
     "stat_almost_full": "Almost full",
+    "stat_low_inventory": "Low stock",
+
     "stat_closed": "Temporarily closed",
     "stat_veh": "vehicles",
     "stat_pct_full": "full",

@@ -407,6 +407,12 @@
                                     <h5 class="fw-bold mb-0 text-dark">@station.Name</h5>
                                     @if (station.IsLowInventory)
                                     {
+                                        <span class="badge bg-warning text-dark rounded-pill px-2 py-1" style="font-size:.7rem;">
+                                            <i class="bi bi-info-circle me-1"></i><span data-i18n="stat_low_inventory">Low stock</span>
+                                        </span>
+                                    }
+                                    @if (station.IsAlmostFull)
+                                    {
                                         <span class="badge bg-danger rounded-pill px-2 py-1" style="font-size:.7rem;animation:pulse-badge 2s infinite;">
                                             <i class="bi bi-exclamation-triangle me-1"></i><span data-i18n="stat_almost_full">Almost full</span>
                                         </span>

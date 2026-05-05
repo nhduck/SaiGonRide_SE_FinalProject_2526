@@ -39,12 +39,13 @@ namespace RentalVehicleService.Services
             return 0m;
         }
 
-        public decimal ProcessFinalBill(Rental rental, int endStationId)
+        public decimal ProcessFinalBill(Rental rental, int endStationId, DateTime? endTime = null)
         {
             var vehicle = _context.Vehicles.Find(rental.VehicleId);
             if (vehicle == null) return 0m;
 
-            decimal baseFare = CalculateFare(rental.StartTime, DateTime.Now, (decimal)vehicle.Price);
+            DateTime end = endTime ?? DateTime.Now;
+            decimal baseFare = CalculateFare(rental.StartTime, end, (decimal)vehicle.Price);
             decimal discountRate = CheckDiscount(endStationId);
 
             decimal discountAmount = baseFare * discountRate;
