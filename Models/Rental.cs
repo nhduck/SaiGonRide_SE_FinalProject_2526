@@ -48,6 +48,7 @@ namespace RentalVehicleService.Models
         [ForeignKey("EndStationId")]
         public Station? EndStation { get; set; }
 
+        [Column(TypeName = "decimal(18,2)")]
         public decimal? DiscountAmount { get; set; }
 
         // Payment tracking

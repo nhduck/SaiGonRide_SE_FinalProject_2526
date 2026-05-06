@@ -249,18 +249,20 @@ namespace RentalVehicleService.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAvailableVehicles(int stationId, string type)
         {
-            var vehicleType = type?.Equals("Electric", StringComparison.OrdinalIgnoreCase) == true
-                              ? VehicleType.Electric
-                              : VehicleType.Standard;
-
-            var vehicles = await _context.Vehicles
+            var query = _context.Vehicles
                 .Where(v => v.CurrentStationId == stationId
-                         && v.Type == vehicleType
-                         && v.State == VehicleState.Available)
-                .ToListAsync();
+                         && v.State == VehicleState.Available);
+
+            if (!string.IsNullOrEmpty(type) && !type.Equals("All", StringComparison.OrdinalIgnoreCase))
+            {
+                var vehicleType = type.Equals("Electric", StringComparison.OrdinalIgnoreCase) ? VehicleType.Electric : VehicleType.Standard;
+                query = query.Where(v => v.Type == vehicleType);
+            }
+
+            var vehicles = await query.ToListAsync();
 
             ViewBag.StationId = stationId;
-            ViewBag.VehicleType = type;
+            ViewBag.VehicleType = type ?? "All";
             return PartialView("_VehicleListModal", vehicles);
         }
         public async Task<IActionResult> ActiveTrip(int id)
