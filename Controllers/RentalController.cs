@@ -99,6 +99,7 @@ namespace RentalVehicleService.Controllers
             ViewBag.VehicleId = vehicleId;
             ViewBag.StartStationId = startStationId;
             ViewBag.VehicleModel = vehicle?.VehicleModel ?? "Unknown";
+            ViewBag.StationName = station?.Name ?? "Unknown Station";
             ViewBag.StationAddress = station?.Address ?? "Unknown Station";
 
             return View(); // Trả về màn hình xác nhận Create.cshtml

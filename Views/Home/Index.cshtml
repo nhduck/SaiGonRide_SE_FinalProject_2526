@@ -597,7 +597,7 @@
 </div>
 
 @section Scripts {
-    <script src="https://unpkg.com/html5-qrcode"></script>
+  <script src="https://unpkg.com/html5-qrcode"></script>
 
 <script>
 
@@ -635,7 +635,8 @@
                         (decodedText, decodedResult) => {
                             stopCamera();
 
-                            window.location.href = decodedText + "&startStationId=" + stationId;
+                            let currentUrl = window.location.origin;
+                            window.location.href = currentUrl + "/Rental/Create?vehicleId=" + decodedText + "&startStationId=" + stationId;
                         },
                         (errorMessage) => {
                         }
