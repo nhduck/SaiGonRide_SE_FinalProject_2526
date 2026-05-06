@@ -254,17 +254,8 @@ namespace RentalVehicleService.Controllers
                          && v.State == VehicleState.Available)
                 .ToListAsync();
 
-            if (!vehicles.Any())
-            {
-                var unavailableVehicles = await _context.Vehicles
-                    .Where(v => v.CurrentStationId == stationId
-                             && v.Type == vehicleType)
-                    .Select(v => new { v.VehicleId, v.Type, v.State, v.CurrentStationId })
-                    .ToListAsync();
-
-            }
-
             ViewBag.StationId = stationId;
+            ViewBag.VehicleType = type;
             return PartialView("_VehicleListModal", vehicles);
         }
         public async Task<IActionResult> ActiveTrip(int id)
