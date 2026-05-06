@@ -39,6 +39,16 @@
     letter-spacing: 0.2px;
 }
 
+[data-bs-theme="dark"] .fab-contact-msg {
+    background: rgba(30, 41, 59, 0.85);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+[data-bs-theme="dark"] .fb-msg-text {
+    color: #4ade80;
+}
+
+
 .fb-msg-dots {
     display: flex;
     gap: 3px;

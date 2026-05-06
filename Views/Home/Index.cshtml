@@ -421,8 +421,8 @@
         <!-- LIST VIEW -->
         @if (Model.Any())
         {
-            <div class="sr-scroll-fade d-none" id="stationListPanel" style="background: #fff; border-radius: 20px;">
-                <div class="d-flex flex-column gap-3" id="stationListScroll" style="background: #fff;">
+            <div class="sr-scroll-fade d-none" id="stationListPanel" style="border-radius: 20px;">
+                <div class="d-flex flex-column gap-3" id="stationListScroll">
                 @foreach (var station in Model)
                 {
                     var fillPct = (int)(station.FillRate * 100);
@@ -440,7 +440,13 @@
 
                             <div class="flex-grow-1">
                                 <div class="d-flex align-items-center gap-2 mb-1">
-                                    <h5 class="fw-bold mb-0 text-dark" data-i18n="@station.Name">@station.Name</h5>
+                                    <h5 class="fw-bold mb-0" data-i18n="@station.Name">@station.Name</h5>
+                                    @if (station.IsEmpty)
+                                    {
+                                        <span class="badge bg-danger rounded-pill px-2 py-1" style="font-size:.7rem;">
+                                            <i class="bi bi-exclamation-circle me-1"></i><span data-i18n="stat_empty">Out of bikes</span>
+                                        </span>
+                                    }
                                     @if (station.IsLowInventory)
                                     {
                                         <span class="badge bg-warning text-dark rounded-pill px-2 py-1" style="font-size:.7rem;">
@@ -661,6 +667,7 @@
         capacity = s.TotalCapacity,
         fillRate = Math.Round(s.FillRate * 100),
         isActive = s.IsActive,
+        isEmpty = s.IsEmpty,
         hasElectric = s.Vehicles.Any(v => v.Type == RentalVehicleService.Models.VehicleType.Electric && v.State == RentalVehicleService.Models.VehicleState.Available),
         stdCount = s.Vehicles.Count(v => v.Type == RentalVehicleService.Models.VehicleType.Standard && v.State == RentalVehicleService.Models.VehicleState.Available),
         elecCount = s.Vehicles.Count(v => v.Type == RentalVehicleService.Models.VehicleType.Electric && v.State == RentalVehicleService.Models.VehicleState.Available)
@@ -670,7 +677,7 @@
     let stationMap = null;
     let mapMarkers = [];
 
-    function createMarkerIcon(hasElectric, isActive) {
+    function createMarkerIcon(hasElectric, isActive, isEmpty) {
         const bikeSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" viewBox="0 0 16 16"><path d="M4 4.5a.5.5 0 0 1 .5-.5H6a.5.5 0 0 1 0 1v.5h4.14l.386-1.158A.5.5 0 0 1 11 4h1a.5.5 0 0 1 0 1h-.64l-.311.935.807 1.29a3 3 0 1 1-.848.53l-.508-.812-2.076 3.322A.5.5 0 0 1 8 10.5H5.959a3 3 0 1 1-1.815-3.274L5 5.856V5h-.5a.5.5 0 0 1-.5-.5m1.5 2.443-.508.814c.5.444.85 1.054.967 1.743h1.139zM8 9.057 9.598 6.5H6.402zM4.937 9.5a2 2 0 0 0-.652-1.157L3.167 10.5H4.937zM3 12a2 2 0 1 0-1-3.732L.868 10.5A2 2 0 0 0 3 12m10-4a2 2 0 1 0-.001 4.001A2 2 0 0 0 13 8"/></svg>`;
 
         let className = 'sr-marker-container';
@@ -678,6 +685,7 @@
         
         let colorClass = 'sr-marker-green';
         if (!isActive) colorClass = 'sr-marker-red';
+        else if (isEmpty) colorClass = 'sr-marker-gray';
         else if (hasElectric) colorClass = 'sr-marker-blue';
 
         let badgeHtml = '';
@@ -770,7 +778,7 @@
         }).addTo(stationMap);
         stationData.forEach(s => {
             if (!s.lat || !s.lng) return;
-            const icon = createMarkerIcon(s.hasElectric, s.isActive);
+            const icon = createMarkerIcon(s.hasElectric, s.isActive, s.isEmpty);
             const marker = L.marker([s.lat, s.lng], { icon })
                 .addTo(stationMap)
                 .bindPopup(getPopupContent(s), { className: 'sr-leaflet-popup', maxWidth: 320 });
