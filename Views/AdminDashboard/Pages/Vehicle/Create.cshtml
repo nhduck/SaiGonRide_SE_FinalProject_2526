@@ -96,12 +96,12 @@
 </div>
 
 <script>
-	$(document).ready(function () {
-		function ShowCreateModal() {
-			fillStationDropdown('#createStationId', null);
-			$('#createModal').modal('show');
-		}
+	function ShowCreateModal() {
+		fillStationDropdown('#createStationId', null);
+		$('#createModal').modal('show');
+	}
 
+	$(document).ready(function () {
 		$('#openCreateBtn').on('click', function () {
 			ShowCreateModal();
 	});
