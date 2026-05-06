@@ -37,7 +37,8 @@ namespace RentalVehicleService.Models
 
         // Logic nghiệp vụ: Cảnh báo bãi rỗng
         [NotMapped]
-        public bool IsLowInventory => FillRate < 0.20;
+        public bool IsLowInventory => FillRate < 0.20 && CurrentCount > 0;
+        public bool IsEmpty => CurrentCount == 0;
         public bool IsAlmostFull => FillRate > 0.85;
     }
 }

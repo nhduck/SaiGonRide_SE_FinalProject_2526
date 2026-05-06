@@ -6,15 +6,15 @@ html {
     margin: 0;
     padding: 0;
     height: 100%;
-    background-color: #f8f9fa;
-    /* Light gray background */
+    background-color: var(--sr-body-bg);
 }
+
 
 /* Sidebar */
 .sr-sidebar {
     width: 260px;
-    background-color: #ffffff;
-    border-right: 1px solid #edf2f9;
+    background-color: var(--sr-card-bg);
+    border-right: 1px solid var(--sr-border);
     height: 100vh;
     position: fixed;
     top: 0;
@@ -30,8 +30,8 @@ html {
     padding: 1.5rem;
     display: flex;
     align-items: center;
-    border-bottom: 1px solid #edf2f9;
-    color: #212529;
+    border-bottom: 1px solid var(--sr-border);
+    color: var(--sr-text-heading);
 }
 
 .sr-sidebar-brand svg {
@@ -106,8 +106,8 @@ html {
 /* Topbar */
 .sr-admin-topbar {
     height: 70px;
-    background-color: #ffffff;
-    border-bottom: 1px solid #edf2f9;
+    background-color: var(--sr-card-bg);
+    border-bottom: 1px solid var(--sr-border);
     display: flex;
     align-items: center;
     padding: 0 2rem;
@@ -157,10 +157,10 @@ html {
 
 /* Dashboard & Management Styles */
 .sr-stat-card {
-    background: #fff;
+    background: var(--sr-card-bg);
     border-radius: 1rem;
     padding: 1.5rem;
-    border: 1px solid #edf2f9;
+    border: 1px solid var(--sr-border);
     transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
@@ -192,7 +192,7 @@ html {
     top: 0;
     bottom: 0;
     width: 2px;
-    background: #edf2f9;
+    background: var(--sr-border);
 }
 
 .sr-activity-item {
@@ -212,7 +212,7 @@ html {
     color: #fff;
     font-size: 0.6rem;
     z-index: 1;
-    border: 2px solid #fff;
+    border: 2px solid var(--sr-card-bg);
 }
 
 .sr-activity-content {
@@ -221,9 +221,9 @@ html {
 
 /* Glassmorphism utility */
 .glass-panel {
-    background: rgba(255, 255, 255, 0.7);
+    background: var(--sr-glass-bg);
     backdrop-filter: blur(10px);
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: 1px solid var(--sr-border);
 }
 
 /* Table Enhancements */
@@ -232,13 +232,13 @@ html {
     text-transform: uppercase;
     font-size: 0.75rem;
     letter-spacing: 0.025em;
-    color: #64748b;
+    color: var(--sr-text-muted);
     border-top: none;
 }
 
 .table td {
     vertical-align: middle;
-    color: #334155;
+    color: var(--sr-text-main);
 }
 
 .rounded-4 {
@@ -247,9 +247,9 @@ html {
 
 /* Buttons */
 .btn-white {
-    background-color: #fff;
-    color: #334155;
-    border-color: #e2e8f0;
+    background-color: var(--sr-card-bg);
+    color: var(--sr-text-main);
+    border-color: var(--sr-border);
 }
 
 .btn-white:hover {

@@ -24,13 +24,24 @@
     <link rel="stylesheet" href="~/RentalVehicleService.styles.css" asp-append-version="true" />
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     <script src="~/js/i18n.js"></script>
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('sr-theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        })();
+    </script>
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body style="overflow-x:hidden;">
-    <!-- Floating Language Switcher -->
-    <div style="position:fixed; top:20px; right:20px; z-index:1050;">
+    <!-- Floating Switchers -->
+    <div style="position:fixed; top:20px; right:20px; z-index:1050; display:flex; gap:10px;">
+        <button class="btn btn-white shadow-sm rounded-circle p-0 d-flex align-items-center justify-content-center" 
+                id="themeToggle" type="button" style="width:38px; height:38px;">
+            <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+        </button>
+
         <div class="dropdown">
-            <button class="btn btn-white shadow-sm dropdown-toggle rounded-pill px-3" type="button" id="langDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false" style="background: white; border: 1px solid #e2e8f0;">
+            <button class="btn btn-white shadow-sm dropdown-toggle rounded-pill px-3 d-flex align-items-center gap-1" type="button" id="langDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false" style="height:38px;">
                 <span>🇬🇧 English</span>
             </button>
             <ul class="dropdown-menu dropdown-menu-end shadow border-0 rounded-4" aria-labelledby="langDropdownBtn">
@@ -48,5 +59,31 @@
     <script src="~/js/site.js" asp-append-version="true"></script>
 
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+
+        function updateThemeIcon(theme) {
+            if (!themeIcon) return;
+            if (theme === 'dark') {
+                themeIcon.classList.replace('bi-moon-stars-fill', 'bi-sun-fill');
+            } else {
+                themeIcon.classList.replace('bi-sun-fill', 'bi-moon-stars-fill');
+            }
+        }
+
+        updateThemeIcon(document.documentElement.getAttribute('data-bs-theme'));
+
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-bs-theme', newTheme);
+                localStorage.setItem('sr-theme', newTheme);
+                updateThemeIcon(newTheme);
+            });
+        }
+    </script>
 </body>
 </html>

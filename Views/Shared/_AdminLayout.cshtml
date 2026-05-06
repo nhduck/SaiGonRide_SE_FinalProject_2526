@@ -20,6 +20,12 @@
     <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/RentalVehicleService.styles.css" asp-append-version="true" />
     <link rel="stylesheet" href="~/css/admin-layout.css" asp-append-version="true" />
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('sr-theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        })();
+    </script>
     @await RenderSectionAsync("Styles", required: false)
 </head>
 <body>
@@ -88,11 +94,16 @@
                                 type="button" id="adminLangDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
                             <i class="bi bi-translate text-success"></i><span class="d-none d-md-inline small text-dark">English</span>
                         </button>
-                        <ul class="dropdown-menu dropdown-menu-end shadow-sm">
+                        <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
                             <li><a class="dropdown-item sr-lang-item d-flex align-items-center gap-2" href="javascript:void(0);" data-lang="en" onclick="changeLanguage('en')">🇬🇧 English</a></li>
                             <li><a class="dropdown-item sr-lang-item d-flex align-items-center gap-2" href="javascript:void(0);" data-lang="vi" onclick="changeLanguage('vi')">🇻🇳 Tiếng Việt</a></li>
                         </ul>
                     </div>
+
+                    <button class="btn btn-light me-3 d-flex align-items-center justify-content-center" 
+                            id="themeToggle" type="button" title="Toggle Theme">
+                        <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                    </button>
 
                     <!-- Notifications -->
                     <div class="dropdown me-3">
@@ -256,5 +267,34 @@
         });
     </script>
     @await RenderSectionAsync("Scripts", required: false)
+
+    <script>
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+
+        function updateThemeIcon(theme) {
+            if (!themeIcon) return;
+            if (theme === 'dark') {
+                themeIcon.classList.remove('bi-moon-stars-fill');
+                themeIcon.classList.add('bi-sun-fill');
+            } else {
+                themeIcon.classList.remove('bi-sun-fill');
+                themeIcon.classList.add('bi-moon-stars-fill');
+            }
+        }
+
+        updateThemeIcon(document.documentElement.getAttribute('data-bs-theme'));
+
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                document.documentElement.setAttribute('data-bs-theme', newTheme);
+                localStorage.setItem('sr-theme', newTheme);
+                updateThemeIcon(newTheme);
+            });
+        }
+    </script>
 </body>
 </html>

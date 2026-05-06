@@ -59,6 +59,7 @@
     "stations_desc": "Chọn trạm, chọn xe, bắt đầu hành trình",
     "stations_search_placeholder": "Tìm theo tên hoặc địa chỉ...",
     "stat_almost_full": "Gần đầy",
+    "stat_empty": "Hết xe",
     "stat_low_inventory": "Sắp hết xe",
 
     "stat_closed": "Tạm đóng cửa",

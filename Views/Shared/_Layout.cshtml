@@ -62,6 +62,12 @@
     <script src="~/lib/jquery/dist/jquery.min.js"></script>
     @await RenderSectionAsync("Styles", required: false)
 
+    <script>
+        (function() {
+            const savedTheme = localStorage.getItem('sr-theme') || 'light';
+            document.documentElement.setAttribute('data-bs-theme', savedTheme);
+        })();
+    </script>
     <style>
         #nprogress .bar { background: #16a34a !important; height: 3px; }
         #nprogress .peg  { box-shadow: 0 0 10px #16a34a, 0 0 5px #16a34a !important; }
@@ -138,6 +144,11 @@
                             <li><a class="dropdown-item sr-lang-item d-flex justify-content-center justify-content-xl-start align-items-center gap-2" href="javascript:void(0);" data-lang="vi" onclick="changeLanguage('vi')">🇻🇳 Tiếng Việt</a></li>
                         </ul>
                     </div>
+
+                    <button class="btn btn-outline-success btn-sm px-3 ms-xl-1 w-100 w-xl-auto d-flex align-items-center justify-content-center" 
+                            id="themeToggle" type="button" title="Toggle Theme">
+                        <i class="bi bi-moon-stars-fill" id="themeIcon"></i>
+                    </button>
 
                     @if (SignInManager.IsSignedIn(User))
                     {
@@ -371,6 +382,35 @@
         document.querySelectorAll('form').forEach(f => {
             f.addEventListener('submit', () => NProgress.start());
         });
+
+        // Theme Toggle Logic
+        const themeToggle = document.getElementById('themeToggle');
+        const themeIcon = document.getElementById('themeIcon');
+
+        function updateThemeIcon(theme) {
+            if (!themeIcon) return;
+            if (theme === 'dark') {
+                themeIcon.classList.remove('bi-moon-stars-fill');
+                themeIcon.classList.add('bi-sun-fill');
+            } else {
+                themeIcon.classList.remove('bi-sun-fill');
+                themeIcon.classList.add('bi-moon-stars-fill');
+            }
+        }
+
+        // Initialize icon
+        updateThemeIcon(document.documentElement.getAttribute('data-bs-theme'));
+
+        if (themeToggle) {
+            themeToggle.addEventListener('click', () => {
+                const currentTheme = document.documentElement.getAttribute('data-bs-theme');
+                const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+                
+                document.documentElement.setAttribute('data-bs-theme', newTheme);
+                localStorage.setItem('sr-theme', newTheme);
+                updateThemeIcon(newTheme);
+            });
+        }
 
         // Navbar scroll shrink
         const nav = document.getElementById('mainNav');
