@@ -9,11 +9,11 @@ using RentalVehicleService.Data;
 
 #nullable disable
 
-namespace RentalVehicleService.Data.Migrations
+namespace RentalVehicleService.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260402030940_InitialApplicationUserUpdate")]
-    partial class InitialApplicationUserUpdate
+    [Migration("20260506120716_Duc")]
+    partial class Duc
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -185,6 +185,9 @@ namespace RentalVehicleService.Data.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("EmailVerificationCode")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<string>("FullName")
                         .IsRequired()
                         .HasMaxLength(100)
@@ -236,6 +239,9 @@ namespace RentalVehicleService.Data.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("nvarchar(50)");
 
+                    b.Property<DateTime?>("VerificationCodeExpires")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
 
                     b.HasIndex("NormalizedEmail")
@@ -249,6 +255,39 @@ namespace RentalVehicleService.Data.Migrations
                     b.ToTable("AspNetUsers", (string)null);
                 });
 
+            modelBuilder.Entity("RentalVehicleService.Models.BugReport", b =>
+                {
+                    b.Property<int>("Id")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int");
+
+                    SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
+
+                    b.Property<DateTime>("CreatedDate")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("ReporterEmail")
+                        .IsRequired()
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<int>("Status")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Title")
+                        .IsRequired()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)");
+
+                    b.HasKey("Id");
+
+                    b.ToTable("BugReport");
+                });
+
             modelBuilder.Entity("RentalVehicleService.Models.Rental", b =>
                 {
                     b.Property<int>("RentalId")
@@ -256,6 +295,9 @@ namespace RentalVehicleService.Data.Migrations
                         .HasColumnType("int");
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("RentalId"));
+
+                    b.Property<decimal?>("DiscountAmount")
+                        .HasColumnType("decimal(18,2)");
 
                     b.Property<int?>("EndStationId")
                         .HasColumnType("int");
@@ -265,6 +307,15 @@ namespace RentalVehicleService.Data.Migrations
 
                     b.Property<decimal>("FinalFare")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("PaymentCompletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentTransactionId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StartStationId")
                         .HasColumnType("int");
@@ -315,10 +366,10 @@ namespace RentalVehicleService.Data.Migrations
                     b.Property<bool>("IsActive")
                         .HasColumnType("bit");
 
-                    b.Property<double?>("Latitude")
+                    b.Property<double>("Latitude")
                         .HasColumnType("float");
 
-                    b.Property<double?>("Longitude")
+                    b.Property<double>("Longitude")
                         .HasColumnType("float");
 
                     b.Property<string>("Name")
@@ -426,19 +477,18 @@ namespace RentalVehicleService.Data.Migrations
                 {
                     b.HasOne("RentalVehicleService.Models.Station", "EndStation")
                         .WithMany()
-                        .HasForeignKey("EndStationId")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .HasForeignKey("EndStationId");
 
                     b.HasOne("RentalVehicleService.Models.Station", "StartStation")
                         .WithMany()
                         .HasForeignKey("StartStationId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("RentalVehicleService.Models.Vehicle", "Vehicle")
                         .WithMany()
                         .HasForeignKey("VehicleId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("EndStation");
@@ -452,8 +502,7 @@ namespace RentalVehicleService.Data.Migrations
                 {
                     b.HasOne("RentalVehicleService.Models.Station", "CurrentStation")
                         .WithMany("Vehicles")
-                        .HasForeignKey("CurrentStationId")
-                        .OnDelete(DeleteBehavior.SetNull);
+                        .HasForeignKey("CurrentStationId");
 
                     b.Navigation("CurrentStation");
                 });
