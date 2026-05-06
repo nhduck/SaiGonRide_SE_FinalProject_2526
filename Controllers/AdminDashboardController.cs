@@ -73,21 +73,30 @@ namespace RentalVehicleService.Controllers
             ViewBag.LowBatteryVehicles = lowBatteryVehicles;
 
             // Recent Activity (Mix of recent rentals and new users)
-            var recentRentals = await _context.Rentals
-                .Include(r => r.Vehicle)
-                .OrderByDescending(r => r.StartTime)
-                .Take(5)
-                .Select(r => new {
+            var recentRentalsQuery = await (from r in _context.Rentals
+                                       join u in _context.Users on r.UserId equals u.Id
+                                       join v in _context.Vehicles on r.VehicleId equals v.VehicleId into vGroup
+                                       from v in vGroup.DefaultIfEmpty()
+                                       orderby r.StartTime descending
+                                       select new {
+                                           r.Status,
+                                           VehicleModel = v != null ? v.VehicleModel : "Unknown",
+                                           UserName = u.UserName,
+                                           Time = r.StartTime
+                                       })
+                                       .Take(5)
+                                       .ToListAsync();
+
+            var recentRentals = recentRentalsQuery.Select(r => new {
                     Type = "Rental",
                     TitleKey = r.Status == RentalStatus.Active ? "admin_activity_rental_started" : "admin_activity_rental_completed",
                     DescriptionKey = r.Status == RentalStatus.Active ? "admin_activity_rental_started_desc" : "admin_activity_rental_completed_desc",
-                    Param1 = r.UserId.Substring(0, Math.Min(5, r.UserId.Length)) + "...",
-                    Param2 = (r.Vehicle != null ? r.Vehicle.VehicleModel : "Unknown"),
-                    Time = r.StartTime,
+                    Param1 = r.UserName,
+                    Param2 = r.VehicleModel,
+                    Time = r.Time,
                     IconClass = r.Status == RentalStatus.Active ? "bg-primary" : "bg-success",
                     Icon = r.Status == RentalStatus.Active ? "bi-bicycle" : "bi-check-lg"
-                })
-                .ToListAsync();
+                }).ToList();
 
             var recentUsers = await _context.Users
                 .OrderByDescending(u => u.Id)

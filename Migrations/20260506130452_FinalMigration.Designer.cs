@@ -12,7 +12,7 @@ using RentalVehicleService.Data;
 namespace RentalVehicleService.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260506124426_FinalMigration")]
+    [Migration("20260506130452_FinalMigration")]
     partial class FinalMigration
     {
         /// <inheritdoc />

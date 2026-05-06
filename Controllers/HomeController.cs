@@ -34,9 +34,9 @@ namespace RentalVehicleService.Controllers
                 .OrderByDescending(s => s.StationId)
                 .ToListAsync();
 
-            // Sync vehicle counts to ensure accuracy on Home page
+            // Sync vehicle counts to ensure accuracy on Home page (Only count Available vehicles)
             var vehicleCounts = await _context.Vehicles
-                .Where(v => v.CurrentStationId != null)
+                .Where(v => v.CurrentStationId != null && v.State == VehicleState.Available)
                 .GroupBy(v => v.CurrentStationId)
                 .Select(g => new { StationId = g.Key, Count = g.Count() })
                 .ToListAsync();

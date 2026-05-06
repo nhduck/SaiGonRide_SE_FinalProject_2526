@@ -177,7 +177,11 @@ namespace RentalVehicleService.Controllers
                 rental.FinalFare = _rentalService.ProcessFinalBill(rental, endStationId);
 
                 var vehicle = await _context.Vehicles.FindAsync((int)rental.VehicleId);
-                if (vehicle != null) vehicle.State = VehicleState.Available;
+                if (vehicle != null)
+                {
+                    vehicle.State = VehicleState.Available;
+                    vehicle.CurrentStationId = endStationId;
+                }
 
                 var station = await _context.Stations.FindAsync(endStationId);
                 if (station != null) station.CurrentCount += 1;

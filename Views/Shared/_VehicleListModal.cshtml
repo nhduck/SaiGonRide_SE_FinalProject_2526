@@ -21,7 +21,7 @@
     }
     else
     {
-        <div class="list-group list-group-flush gap-2">
+        <div class="list-group list-group-flush gap-2" style="max-height: 400px; overflow-y: auto; scrollbar-width: thin;">
             @foreach (var vehicle in Model)
             {
                 <div class="list-group-item sr-info-card border rounded-3 d-flex justify-content-between align-items-center p-3">
@@ -30,7 +30,9 @@
                             <i class="fa-solid @(vehicle.Type == VehicleType.Electric ? "fa-bolt" : "fa-bicycle")"></i>
                         </div>
                         <div>
-                            <h6 class="mb-0 fw-bold"><span data-i18n="modal_vehicle_id">Mã số</span>: #@vehicle.VehicleId</h6>
+                            <h6 class="mb-0 fw-bold" data-i18n="@vehicle.VehicleModel">@vehicle.VehicleModel</h6>
+                            <small class="text-muted"><span data-i18n="modal_vehicle_id">Mã số</span>: #@vehicle.VehicleId</small>
+                            <br />
                             @if (vehicle.Type == VehicleType.Electric)
                             {
                                 <small class="text-muted"><i class="fa-solid fa-battery-three-quarters text-success me-1"></i> <span data-i18n="modal_battery_ready">Pin: Sẵn sàng</span></small>

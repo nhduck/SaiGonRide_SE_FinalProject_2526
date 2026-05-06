@@ -10,7 +10,7 @@
                 <span data-i18n="@(item.Type.ToString() == "Electric" ? "nav_electric" : "nav_pedal")">@item.Type</span>
             </span>
         </td>
-        <td>@item.VehicleModel</td>
+        <td data-i18n="@item.VehicleModel">@item.VehicleModel</td>
         <td data-station-id="@item.CurrentStationId">
             <i class="bi bi-geo-alt text-danger"></i> @item.CurrentStationId
         </td>
