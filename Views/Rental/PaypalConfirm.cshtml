@@ -1,0 +1,88 @@
+@{
+    ViewData["Title"] = "Confirm PayPal Payment - SaigonRide";
+}
+
+<div class="container py-5">
+    <div class="row">
+        <div class="col-md-6 offset-md-3">
+            <div class="card">
+                <div class="card-body">
+                    <h2 class="card-title mb-4">Xác nhận Thanh toán PayPal</h2>
+                    <p class="card-text">
+                        <strong>Số tiền:</strong> <span id="amountDisplay">@ViewBag.Amount.ToString("N0")</span> VND
+                    </p>
+                    <p class="card-text">
+                        <strong>Trạng thái:</strong> <span class="badge badge-warning">Đang chờ xác nhận</span>
+                    </p>
+
+                    <div id="loadingSpinner" class="text-center my-3" style="display:none;">
+                        <div class="spinner-border text-primary" role="status">
+                            <span class="sr-only">Loading...</span>
+                        </div>
+                        <p>Đang xử lý thanh toán...</p>
+                    </div>
+
+                    <div id="errorMessage" class="alert alert-danger" style="display:none;"></div>
+                    <div id="successMessage" class="alert alert-success" style="display:none;"></div>
+
+                    <button class="btn btn-primary w-100 mt-3" onclick="capturePayment()">
+                        Xác nhận Thanh toán
+                    </button>
+                    <a href="@Url.Action("Payment", "Rental", new { id = ViewBag.RentalId })" class="btn btn-secondary w-100 mt-2">
+                        Hủy bỏ
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        async function capturePayment() {
+            const token = '@ViewBag.Token';
+            const rentalId = @ViewBag.RentalId;
+            const errorDiv = document.getElementById('errorMessage');
+            const successDiv = document.getElementById('successMessage');
+            const spinner = document.getElementById('loadingSpinner');
+            const btn = event.target;
+
+            errorDiv.style.display = 'none';
+            successDiv.style.display = 'none';
+            spinner.style.display = 'block';
+            btn.disabled = true;
+
+            try {
+                const response = await fetch('/api/paypal/capture-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        orderId: token,
+                        rentalId: rentalId
+                    })
+                });
+
+                const result = await response.json();
+
+                if (result.success) {
+                    successDiv.textContent = result.message || 'Thanh toán thành công!';
+                    successDiv.style.display = 'block';
+                    setTimeout(() => {
+                        window.location.href = '/Rental/PaymentSuccess?rentalId=' + rentalId;
+                    }, 2000);
+                } else {
+                    errorDiv.textContent = result.error || 'Có lỗi xảy ra khi xử lý thanh toán.';
+                    errorDiv.style.display = 'block';
+                    btn.disabled = false;
+                    spinner.style.display = 'none';
+                }
+            } catch (error) {
+                errorDiv.textContent = 'Error: ' + error.message;
+                errorDiv.style.display = 'block';
+                btn.disabled = false;
+                spinner.style.display = 'none';
+                console.error(error);
+            }
+        }
+    </script>
+}
