@@ -45,9 +45,12 @@ builder.Services.AddControllersWithViews()
 
 builder.Services.AddScoped<RentalService>();
 
+// Register HttpClient for external API calls (PayPal)
+builder.Services.AddHttpClient();
+
 // Payment Strategies
 builder.Services.AddScoped<IPaymentStrategy, VnpayPaymentStrategy>();
-builder.Services.AddScoped<IPaymentStrategy, PaypalPaymentStrategy>();
+// Removed the old simulated PaypalPaymentStrategy. Use the new PayPal API controller instead.
 
 var app = builder.Build();
 

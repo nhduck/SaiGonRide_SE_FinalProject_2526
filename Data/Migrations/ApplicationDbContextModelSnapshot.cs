@@ -8,7 +8,7 @@ using RentalVehicleService.Data;
 
 #nullable disable
 
-namespace RentalVehicleService.Data.Migrations
+namespace RentalVehicleService.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
@@ -304,6 +304,15 @@ namespace RentalVehicleService.Data.Migrations
 
                     b.Property<decimal>("FinalFare")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("PaymentCompletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentTransactionId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StartStationId")
                         .HasColumnType("int");

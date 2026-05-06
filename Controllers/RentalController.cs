@@ -254,6 +254,16 @@ namespace RentalVehicleService.Controllers
                          && v.State == VehicleState.Available)
                 .ToListAsync();
 
+            if (!vehicles.Any())
+            {
+                var unavailableVehicles = await _context.Vehicles
+                    .Where(v => v.CurrentStationId == stationId
+                             && v.Type == vehicleType)
+                    .Select(v => new { v.VehicleId, v.Type, v.State, v.CurrentStationId })
+                    .ToListAsync();
+
+            }
+
             ViewBag.StationId = stationId;
             return PartialView("_VehicleListModal", vehicles);
         }
@@ -366,14 +376,30 @@ namespace RentalVehicleService.Controllers
                     return RedirectToAction("Index", "Home");
                 }
 
-
                 int rentalId = int.Parse(match.Value);
 
+                // Get VNPay transaction ID from request
+                var vnpTxnRef = Request.Query["vnp_TxnRef"].ToString();
+
                 // Thanh toán thành công
-                var rental = await _context.Rentals.FindAsync(rentalId);
+                var rental = await _context.Rentals
+                    .Include(r => r.Vehicle)
+                    .Include(r => r.EndStation)
+                    .FirstOrDefaultAsync(r => r.RentalId == rentalId);
+
                 if (rental != null)
                 {
                     rental.Status = RentalStatus.Completed;
+                    rental.PaymentMethod = "VNPay";
+                    rental.PaymentTransactionId = vnpTxnRef;
+                    rental.PaymentCompletedTime = DateTime.Now;
+
+                    // Ensure vehicle is available
+                    if (rental.Vehicle != null && rental.Vehicle.State != VehicleState.Available)
+                    {
+                        rental.Vehicle.State = VehicleState.Available;
+                    }
+
                     await _context.SaveChangesAsync();
                 }
 
@@ -391,6 +417,75 @@ namespace RentalVehicleService.Controllers
                     ? RedirectToAction("Payment", new { id = rentalId })
                     : RedirectToAction("Index");
             }
+        }
+
+        // Handle PayPal return after user approves payment
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> PaypalReturn(string token, int rentalId)
+        {
+            if (string.IsNullOrWhiteSpace(token))
+            {
+                TempData["Error"] = "Invalid PayPal token.";
+                return RedirectToAction("Payment", new { id = rentalId });
+            }
+
+            TempData["PayPalToken"] = token;
+            TempData["RentalId"] = rentalId;
+            return RedirectToAction("PaypalConfirm", new { rentalId, token });
+        }
+
+        // Display confirmation before capturing payment
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> PaypalConfirm(int rentalId, string token)
+        {
+            var rental = await _context.Rentals.FindAsync(rentalId);
+            if (rental == null)
+                return NotFound();
+
+            ViewBag.Token = token;
+            ViewBag.RentalId = rentalId;
+            ViewBag.Amount = rental.FinalFare;
+            return View();
+        }
+
+        // Capture PayPal order and complete payment
+        [Authorize]
+        [HttpPost]
+        public async Task<IActionResult> PaypalCapture(int rentalId, string orderId)
+        {
+            try
+            {
+                var rental = await _context.Rentals.FindAsync(rentalId);
+                if (rental == null)
+                    return NotFound();
+
+                // Call PayPal API to capture order
+                var client = new HttpClient();
+                var baseUrl = _configuration["PayPal:BaseUrl"] ?? "https://api-m.sandbox.paypal.com";
+
+                // This will be handled by frontend JavaScript calling /api/paypal/capture-order
+                TempData["Success"] = "Payment successful! Thank you for using saigonRide.";
+                return RedirectToAction("PaymentSuccess", new { rentalId });
+            }
+            catch (Exception ex)
+            {
+                TempData["Error"] = $"Payment capture failed: {ex.Message}";
+                return RedirectToAction("Payment", new { id = rentalId });
+            }
+        }
+
+        [Authorize]
+        [HttpGet]
+        public async Task<IActionResult> PaymentSuccess(int rentalId)
+        {
+            var rental = await _context.Rentals.FindAsync(rentalId);
+            if (rental == null)
+                return NotFound();
+
+            ViewBag.RentalId = rentalId;
+            return View("Success");
         }
 
         [Authorize]

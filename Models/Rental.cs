@@ -49,5 +49,10 @@ namespace RentalVehicleService.Models
         public Station? EndStation { get; set; }
 
         public decimal? DiscountAmount { get; set; }
+
+        // Payment tracking
+        public string? PaymentMethod { get; set; } // VNPay, PayPal, Card, etc.
+        public string? PaymentTransactionId { get; set; } // Store PayPal Order ID, VNPay transaction ID, etc.
+        public DateTime? PaymentCompletedTime { get; set; }
     }
 }

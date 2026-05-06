@@ -145,53 +145,25 @@
                     <span class="pay-card-name" data-i18n="pay_paypal">Tài khoản PayPal</span>
                 </div>
 
-                <!-- MoMo -->
-                <div class="pay-card" onclick="selectPay(this)" data-method="MoMo">
-                    <span class="check">✓</span>
-                    <div class="pay-card-logo">
-                        <div style="background:#a50064;border-radius:10px;width:44px;height:44px;display:flex;align-items:center;justify-content:center;">
-                            <span style="font-weight:900;color:#fff;font-size:1rem;font-family:Arial;">mo</span>
-                        </div>
-                    </div>
-                    <span class="pay-card-name" data-i18n="pay_momo">Ví MoMo</span>
-                </div>
-
-                <!-- Visa / Mastercard -->
-                <div class="pay-card" onclick="selectPay(this)" data-method="Card">
-                    <span class="check">✓</span>
-                    <div class="pay-card-logo" style="gap:6px;">
-                        <svg width="44" height="28" viewBox="0 0 44 28" fill="none">
-                            <rect width="44" height="28" rx="4" fill="#1a1f71" />
-                            <text x="5" y="20" font-size="12" font-weight="900" fill="#fff" font-family="Arial" letter-spacing="1">VISA</text>
-                        </svg>
-                        <svg width="34" height="28" viewBox="0 0 34 28" fill="none">
-                            <circle cx="13" cy="14" r="12" fill="#eb001b" />
-                            <circle cx="21" cy="14" r="12" fill="#f79e1b" />
-                            <path d="M17 5.3a12 12 0 010 17.4A12 12 0 0117 5.3z" fill="#ff5f00" />
-                        </svg>
-                    </div>
-                    <span class="pay-card-name" data-i18n="pay_card">Thẻ Quốc tế</span>
-                </div>
-
             </div>
         </div>
-
         <!-- ── Confirm Button ── -->
-        <form asp-action="ProcessPayment" method="post">
+        <form asp-action="ProcessPayment" method="post" id="paymentForm">
             <input type="hidden" name="rentalId" value="@Model.RentalId" />
             <input type="hidden" name="paymentMethod" id="paymentMethodInput" value="VNPay" />
             <input type="hidden" name="couponCode" id="couponCodeInput" value="" />
-            <button type="submit" class="btn-confirm" data-i18n="pay_confirm">
+            <button type="button" class="btn-confirm" onclick="submitPayment()" data-i18n="pay_confirm">
                 Xác nhận &amp; Thanh toán
             </button>
         </form>
-
     </div>
 </div>
 
 @section Scripts {
+
     <script>
         const BASE_FARE = @(Model.FinalFare ?? 0);
+        const RENTAL_ID = @Model.RentalId;
         let couponDiscount = 0;
 
         function selectPay(el) {
@@ -205,12 +177,7 @@
             const msg = document.getElementById('couponMsg');
             document.getElementById('couponCodeInput').value = val;
 
-            if (!val) {
-                msg.textContent = '';
-                couponDiscount = 0;
-                updateTotal();
-                return;
-            }
+            if (!val) { msg.textContent = ''; couponDiscount = 0; updateTotal(); return; }
 
             if (val === 'SAIGONGREEN20') {
                 couponDiscount = 10000;
@@ -233,6 +200,43 @@
                 el.setAttribute('data-i18n-param1', formattedTotal);
             } else {
                 el.textContent = 'Total: ' + formattedTotal + ' VND';
+            }
+        }
+
+        async function submitPayment() {
+            const paymentMethod = document.getElementById('paymentMethodInput').value;
+            const totalAmount = Math.max(0, BASE_FARE - couponDiscount);
+
+            if (paymentMethod === 'PayPal') {
+                // Call PayPal API to create order
+                const finalAmount = (totalAmount / 23000).toFixed(2); // Convert VND to USD (approximate)
+
+                try {
+                    const response = await fetch('/api/paypal/create-order', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({
+                            rentalId: RENTAL_ID,
+                            amount: parseFloat(finalAmount),
+                            currency: 'USD',
+                            returnUrl: window.location.origin + `/Rental/PaypalReturn?rentalId=${RENTAL_ID}`,
+                            cancelUrl: window.location.origin + `/Rental/Payment?id=${RENTAL_ID}`
+                        })
+                    });
+
+                    const result = await response.json();
+                    if (result.success && result.approveUrl) {
+                        window.location.href = result.approveUrl;
+                    } else {
+                        alert('Failed to create PayPal order: ' + (result.error || 'Unknown error'));
+                    }
+                } catch (error) {
+                    alert('Error creating PayPal order: ' + error.message);
+                    console.error(error);
+                }
+            } else {
+                // For other payment methods, submit form normally
+                document.getElementById('paymentForm').submit();
             }
         }
     </script>
