@@ -12,8 +12,8 @@ using RentalVehicleService.Data;
 namespace RentalVehicleService.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260506120716_Duc")]
-    partial class Duc
+    [Migration("20260506124426_FinalMigration")]
+    partial class FinalMigration
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
