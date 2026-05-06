@@ -2,10 +2,10 @@
 
 #nullable disable
 
-namespace RentalVehicleService.Data.Migrations
+namespace RentalVehicleService.Migrations
 {
     /// <inheritdoc />
-    public partial class DatDatabases : Migration
+    public partial class Duc : Migration
     {
         /// <inheritdoc />
         protected override void Up(MigrationBuilder migrationBuilder)

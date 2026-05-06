@@ -9,11 +9,11 @@ using RentalVehicleService.Data;
 
 #nullable disable
 
-namespace RentalVehicleService.Data.Migrations
+namespace RentalVehicleService.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
-    [Migration("20260506014615_Dat-Databases")]
-    partial class DatDatabases
+    [Migration("20260506120716_Duc")]
+    partial class Duc
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -307,6 +307,15 @@ namespace RentalVehicleService.Data.Migrations
 
                     b.Property<decimal>("FinalFare")
                         .HasColumnType("decimal(18,2)");
+
+                    b.Property<DateTime?>("PaymentCompletedTime")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("PaymentMethod")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("PaymentTransactionId")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<int>("StartStationId")
                         .HasColumnType("int");

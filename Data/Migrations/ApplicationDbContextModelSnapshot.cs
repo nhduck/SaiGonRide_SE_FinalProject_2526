@@ -8,7 +8,7 @@ using RentalVehicleService.Data;
 
 #nullable disable
 
-namespace RentalVehicleService.Data.Migrations
+namespace RentalVehicleService.Migrations
 {
     [DbContext(typeof(ApplicationDbContext))]
     partial class ApplicationDbContextModelSnapshot : ModelSnapshot
