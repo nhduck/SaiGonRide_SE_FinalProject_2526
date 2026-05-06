@@ -48,6 +48,41 @@ namespace SaiGonRide.Tests
             Assert.Equal(0m, result);
         }
 
+        [Theory]
+        [InlineData(10000, 0)]      // Boundary: Exactly 10k -> 0
+        [InlineData(10001, 1)]      // Boundary: 10,001 -> 1
+        [InlineData(9999, 0)]       // Boundary: 9,999 -> 0
+        [InlineData(20000, 10000)]  // Normal Case
+        public void ApplyCoupon_BoundaryAmounts_ReturnsExpected(decimal currentFare, decimal expectedFare)
+        {
+            // Arrange
+            var context = GetInMemoryDbContext();
+            var service = new RentalService(context);
+            string coupon = "SAIGONGREEN20";
+
+            // Act
+            var result = service.ApplyCoupon(currentFare, coupon);
+
+            // Assert
+            Assert.Equal(expectedFare, result);
+        }
+
+        [Fact]
+        public void ApplyCoupon_CaseInsensitive_WorksForLowercase()
+        {
+            // Arrange
+            var context = GetInMemoryDbContext();
+            var service = new RentalService(context);
+            decimal currentFare = 20000m;
+            string coupon = "saigongreen20"; // lowercase
+
+            // Act
+            var result = service.ApplyCoupon(currentFare, coupon);
+
+            // Assert
+            Assert.Equal(10000m, result);
+        }
+
         [Fact]
         public void ApplyCoupon_InvalidCode_NoChange()
         {

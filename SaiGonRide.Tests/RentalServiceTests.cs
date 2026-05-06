@@ -89,6 +89,28 @@ namespace SaiGonRide.Tests
             Assert.Equal(0m, result);
         }
 
+        [Theory]
+        [InlineData(0, 0)]      // 0 min -> 0 VND
+        [InlineData(1, 500)]    // 1 min -> 500 VND
+        [InlineData(0.1, 500)]  // 0.1 min -> rounds to 1 min -> 500 VND
+        [InlineData(0.9, 500)]  // 0.9 min -> rounds to 1 min -> 500 VND
+        [InlineData(1.1, 1000)] // 1.1 min -> rounds to 2 min -> 1000 VND
+        public void CalculateFare_BoundaryValues_ReturnsCorrectFare(double minutes, decimal expectedFare)
+        {
+            // Arrange
+            var context = GetInMemoryDbContext();
+            var service = new RentalService(context);
+            var startTime = DateTime.Now;
+            var endTime = startTime.AddMinutes(minutes);
+            decimal pricePerMin = 500m;
+
+            // Act
+            var result = service.CalculateFare(startTime, endTime, pricePerMin);
+
+            // Assert
+            Assert.Equal(expectedFare, result);
+        }
+
         [Fact]
         public void CheckDiscount_LowInventoryStation_Returns15Percent()
         {

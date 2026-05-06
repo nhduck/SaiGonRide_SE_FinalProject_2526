@@ -3,6 +3,7 @@ using Microsoft.EntityFrameworkCore;
 using RentalVehicleService.Data;
 using RentalVehicleService.Models;
 using RentalVehicleService.Services;
+using RentalVehicleService.Services.PaymentStrategies;
 using VNPAY;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -43,6 +44,10 @@ builder.Services.AddControllersWithViews()
     });
 
 builder.Services.AddScoped<RentalService>();
+
+// Payment Strategies
+builder.Services.AddScoped<IPaymentStrategy, VnpayPaymentStrategy>();
+builder.Services.AddScoped<IPaymentStrategy, PaypalPaymentStrategy>();
 
 var app = builder.Build();
 

@@ -15,6 +15,7 @@ using VNPAY.Models;
 using VNPAY.Models.Enums;
 using VNPAY.Models.Exceptions;
 using System.Text.RegularExpressions;
+using RentalVehicleService.Services.PaymentStrategies;
 
 namespace RentalVehicleService.Controllers
 {
@@ -25,15 +26,16 @@ namespace RentalVehicleService.Controllers
         private readonly RentalService _rentalService;
 
         private readonly IVnpayClient _vnpayClient;
-
         private readonly IConfiguration _configuration;
+        private readonly IEnumerable<IPaymentStrategy> _paymentStrategies;
 
-        public RentalController(ApplicationDbContext context, RentalService rentalService, IVnpayClient vnpayClient, IConfiguration configuration)
+        public RentalController(ApplicationDbContext context, RentalService rentalService, IVnpayClient vnpayClient, IConfiguration configuration, IEnumerable<IPaymentStrategy> paymentStrategies)
         {
             _context = context;
             _rentalService = rentalService;
             _vnpayClient = vnpayClient;
             _configuration = configuration;
+            _paymentStrategies = paymentStrategies;
         }
 
         // Removed redundant constructor that caused CS8618
@@ -332,27 +334,20 @@ namespace RentalVehicleService.Controllers
             var rental = await _context.Rentals.FindAsync(rentalId);
             if (rental == null) return NotFound();
 
-            if (paymentMethod == "VNPay")
+            var strategy = _paymentStrategies.FirstOrDefault(s => s.Name.Equals(paymentMethod, StringComparison.OrdinalIgnoreCase));
+            if (strategy == null)
             {
-                decimal finalAmount = rental.FinalFare;
-
-                // Use RentalService for coupon logic (enables unit testing)
-                var rentalService = new RentalService(_context);
-                finalAmount = rentalService.ApplyCoupon(rental.FinalFare, couponCode);
-
-                var request = new VnpayPaymentRequest
-                {
-                    Money = (double)finalAmount,
-                    Description = $"Thanh toan chuyen di {rentalId} tai SaigonRide",
-                    BankCode = BankCode.ANY
-                };
-
-                var paymentUrlInfo = _vnpayClient.CreatePaymentUrl(request);
-                return Redirect(paymentUrlInfo.Url);
+                TempData["Info"] = "This payment method is currently under development..";
+                return RedirectToAction("Payment", new { id = rentalId });
             }
 
-            TempData["Info"] = "This payment method is currently under development..";
-            return RedirectToAction("Payment", new { id = rentalId });
+            decimal finalAmount = rental.FinalFare;
+            finalAmount = _rentalService.ApplyCoupon(rental.FinalFare, couponCode);
+            
+            // Save the coupon used if needed (optional)
+            
+            var redirectUrl = await strategy.ProcessPaymentAsync(rental, finalAmount);
+            return Redirect(redirectUrl);
         }
 
         //Xử lý kết quả trả về từ VNPay
@@ -415,6 +410,21 @@ namespace RentalVehicleService.Controllers
                 .ToListAsync();
 
             return View(historyList); // Trả về trang Views/Rental/History.cshtml
+        }
+
+        [HttpGet]
+        [Authorize]
+        public async Task<IActionResult> PaypalCallback(int rentalId)
+        {
+            var rental = await _context.Rentals.FindAsync(rentalId);
+            if (rental != null)
+            {
+                rental.Status = RentalStatus.Completed;
+                await _context.SaveChangesAsync();
+            }
+
+            TempData["Success"] = "PayPal payment successful! Thank you for using saigonRide.";
+            return View("Success");
         }
     }
 }
