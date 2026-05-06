@@ -436,6 +436,7 @@
     "pay_total_fare": "Total: {0} VND",
     "conf_ready": "Ready to Ride?",
     "conf_station": "Station",
+    "conf_address": "Address",
     "conf_vehicle": "Vehicle",
     "conf_price_rate": "Price Rate",
     "conf_price_val": "1,500 VND / min",
