@@ -650,6 +650,7 @@
 }
 
 @section Scripts {
+
     <script src="https://unpkg.com/html5-qrcode"></script>
     <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
@@ -775,7 +776,6 @@
             attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
             maxZoom: 19
         }).addTo(stationMap);
-
         stationData.forEach(s => {
             if (!s.lat || !s.lng) return;
             const icon = createMarkerIcon(s.hasElectric, s.isActive, s.isEmpty);
@@ -885,18 +885,26 @@
                 stopCamera();
                 html5QrCode = new Html5Qrcode("reader");
                 const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-                html5QrCode.start({ facingMode: "user" }, config,
-                    (decodedText) => {
-                        stopCamera();
-                        window.location.href = decodedText + "&startStationId=" + stationId;
-                    },
-                    () => {}
-                ).catch(err => {
-                    console.error("Camera error: ", err);
-                    alert(getI18nText("modal_camera_error"));
-                });
-            }, 400);
-        });
+                    html5QrCode.start({ facingMode: "user" }, config,
+                        (decodedText, decodedResult) => {
+                            stopCamera();
+
+                            let currentUrl = window.location.origin;
+                            window.location.href = currentUrl + "/Rental/Create?vehicleId=" + decodedText + "&startStationId=" + stationId;
+                        },
+                        (errorMessage) => {
+                        }
+                    ).catch(err => {
+                        console.error("Không thể mở Camera: ", err);
+                        alert(getI18nText("modal_camera_error"));
+                    });
+
+                }, 400);
+            });
+
+            $('#qrScannerModal').on('hidden.bs.modal', function () {
+                stopCamera();
+            });
 
         // ── Live Search (filters both list AND map) ──
         const searchFilter = function (query) {

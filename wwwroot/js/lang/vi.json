@@ -437,6 +437,7 @@
     "pay_total_fare": "Tổng cộng: {0} VND",
     "conf_ready": "Sẵn sàng di chuyển?",
     "conf_station": "Trạm",
+    "conf_address": "Địa chỉ",
     "conf_vehicle": "Xe",
     "conf_price_rate": "Đơn giá",
     "conf_price_val": "1.500 VNĐ / phút",

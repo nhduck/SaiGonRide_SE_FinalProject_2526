@@ -22,23 +22,29 @@
 
     <!-- Header info -->
     <div class="col-12">
-        <div class="d-flex align-items-center gap-3 p-3 bg-light rounded-3">
-            <div class="fs-1">
-                @if (Model.Type == RentalVehicleService.Models.VehicleType.Electric)
-                {
-                    <i class="bi bi-ev-front text-success"></i>
-                }
-                else
-                {
-                    <i class="bi bi-bicycle text-primary"></i>
-                }
+        <div class="d-flex align-items-center justify-content-between p-3 bg-light rounded-3">
+        
+            <div class="d-flex align-items-center gap-3">
+                <div class="fs-1">
+                    @if (Model.Type == RentalVehicleService.Models.VehicleType.Electric)
+                    {
+                        <i class="bi bi-ev-front text-success"></i>
+                    }
+                    else
+                    {
+                        <i class="bi bi-bicycle text-primary"></i>
+                    }
+                </div>
+                <div>
+                    <h5 class="fw-bold mb-1" data-i18n="@Model.VehicleModel">@Model.VehicleModel</h5>
+                    <span class="text-muted small">ID: #@Model.VehicleId</span>
+                    <span class="ms-2 badge @stateBadge.Item1">
+                        <i class="bi @stateBadge.Item2 me-1"></i>@Model.State
+                    </span>
+                </div>
             </div>
-            <div>
-                <h5 class="fw-bold mb-1" data-i18n="@Model.VehicleModel">@Model.VehicleModel</h5>
-                <span class="text-muted small">ID: #@Model.VehicleId</span>
-                <span class="ms-2 badge @stateBadge.Item1">
-                    <i class="bi @stateBadge.Item2 me-1"></i>@Model.State
-                </span>
+
+            <div id="qrcode-container">
             </div>
         </div>
     </div>
@@ -122,3 +128,25 @@
     </div>
 
 </div>
+
+<script>
+    $(document).ready(function () {
+        const unlockUrl = `@Model.VehicleId`;
+
+        // Sử dụng selector của jQuery để tìm container
+        const $qrContainer = $("#qrcode-container");
+
+        // Kiểm tra xem phần tử có tồn tại không (.length > 0)
+        if ($qrContainer.length) {
+            // Truy xuất phần tử DOM thuần bằng [0] để thư viện QRCode có thể nhận diện
+            new QRCode($qrContainer[0], {
+                text: unlockUrl,
+                width: 160,
+                height: 160,
+                colorDark: "#064e3b",
+                colorLight: "#ffffff",
+                correctLevel: QRCode.CorrectLevel.H
+            });
+        }
+    });
+</script>
