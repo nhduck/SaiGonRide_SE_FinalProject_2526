@@ -11,8 +11,8 @@
             </span>
         </td>
         <td data-i18n="@item.VehicleModel">@item.VehicleModel</td>
-        <td data-station-id="@item.CurrentStationId">
-            <i class="bi bi-geo-alt text-danger"></i> @item.CurrentStationId
+        <td data-station-id="@item.CurrentStationId" class="small">
+            <i class="bi bi-geo-alt text-danger"></i> @(item.CurrentStation?.Name ?? "In Transit")
         </td>
         <td>
             <div class="d-flex align-items-center">

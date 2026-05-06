@@ -236,7 +236,6 @@ namespace RentalVehicleService.Controllers
 
             return PartialView($"{ViewPath}_StationTablePartial.cshtml", stations);
         }
-
         private bool StationExists(int id)
         {
             return _context.Stations.Any(e => e.StationId == id);

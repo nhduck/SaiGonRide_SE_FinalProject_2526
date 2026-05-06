@@ -360,15 +360,39 @@
 <!-- STATION SEARCH SECTION -->
 <section class="sr-section" id="station-search" style="background:#fff;">
     <div class="container">
-        <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-center mb-5 gap-3 sr-reveal">
-            <div>
-                <h2 class="fw-bold mb-1" style="font-size:2rem;" data-i18n="stations_title">📍 Stations Near You</h2>
-                <p class="text-muted mb-0" data-i18n="stations_desc">Pick a station, pick a ride, start your journey</p>
-            </div>
-            <div class="d-flex gap-3 align-items-center flex-shrink-0">
-                <div class="input-group shadow-sm rounded-pill overflow-hidden bg-white border" style="min-width:260px;">
+        <div class="sr-reveal mb-4">
+            <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-3 mb-3">
+                <div>
+                    <h2 class="fw-bold mb-1" style="font-size:2rem;" data-i18n="stations_title">📍 Stations Near You</h2>
+                    <p class="text-muted mb-0" data-i18n="stations_desc">Pick a station, pick a ride, start your journey</p>
+                </div>
+                <div class="input-group shadow-sm rounded-pill overflow-hidden bg-white border flex-shrink-0" style="min-width:260px;max-width:320px;">
                     <span class="input-group-text bg-white border-0 ps-3 text-muted"><i class="bi bi-search"></i></span>
                     <input type="text" id="liveSearchBox" class="form-control border-0 shadow-none ps-1" placeholder="Search by name or address..." data-i18n-placeholder="stations_search_placeholder">
+                </div>
+            </div>
+            <div class="d-flex align-items-center gap-3 flex-wrap">
+                <div class="sr-view-toggle-group shadow-sm">
+                    <button class="btn active" id="btnViewMap">
+                        <i class="bi bi-map me-1"></i><span data-i18n="stations_view_map">Map</span>
+                    </button>
+                    <button class="btn" id="btnViewList">
+                        <i class="bi bi-list-ul me-1"></i><span data-i18n="stations_view_list">List</span>
+                    </button>
+                </div>
+                <div class="sr-map-legend">
+                    <div class="sr-map-legend-item">
+                        <div class="sr-map-legend-dot" style="background:#16a34a;"></div>
+                        <span data-i18n="map_legend_standard">Standard</span>
+                    </div>
+                    <div class="sr-map-legend-item">
+                        <div class="sr-map-legend-dot" style="background:#3b82f6;"></div>
+                        <span data-i18n="map_legend_electric">⚡ Electric Available</span>
+                    </div>
+                    <div class="sr-map-legend-item">
+                        <div class="sr-map-legend-dot" style="background:#ef4444;"></div>
+                        <span data-i18n="map_legend_closed">Closed</span>
+                    </div>
                 </div>
             </div>
         </div>
@@ -384,16 +408,28 @@
             </div>
         }
 
+        <!-- MAP VIEW -->
+        <div id="mapViewPanel" class="mb-4">
+            <div id="stationMapContainer">
+                <div id="stationMap"></div>
+            </div>
+            <div class="text-end mt-2">
+                <small class="text-muted" data-i18n="map_hint">Click a marker for station details</small>
+            </div>
+        </div>
+
+        <!-- LIST VIEW -->
         @if (Model.Any())
         {
-            <div class="d-flex flex-column gap-3" id="stationList">
+            <div class="sr-scroll-fade d-none" id="stationListPanel" style="background: #fff; border-radius: 20px;">
+                <div class="d-flex flex-column gap-3" id="stationListScroll" style="background: #fff;">
                 @foreach (var station in Model)
                 {
                     var fillPct = (int)(station.FillRate * 100);
                     var fillColorClass = fillPct < 60 ? "fill-green" : (fillPct < 85 ? "fill-amber" : "fill-red");
                     var badgeClass = fillPct < 60 ? "bg-success" : (fillPct < 85 ? "bg-warning text-dark" : "bg-danger");
 
-                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden station-horizontal-card sr-reveal station-item"
+                    <div class="card border-0 shadow-sm rounded-4 overflow-hidden station-horizontal-card station-item"
                          data-name="@station.Name.ToLower()" data-address="@station.Address.ToLower()">
                         <div class="card-body p-4 d-flex flex-column flex-md-row align-items-md-center gap-4">
 
@@ -404,7 +440,7 @@
 
                             <div class="flex-grow-1">
                                 <div class="d-flex align-items-center gap-2 mb-1">
-                                    <h5 class="fw-bold mb-0 text-dark">@station.Name</h5>
+                                    <h5 class="fw-bold mb-0 text-dark" data-i18n="@station.Name">@station.Name</h5>
                                     @if (station.IsLowInventory)
                                     {
                                         <span class="badge bg-warning text-dark rounded-pill px-2 py-1" style="font-size:.7rem;">
@@ -423,7 +459,7 @@
                                     }
                                 </div>
                                 <div class="text-muted small mb-3">
-                                    <i class="bi bi-geo-alt-fill text-danger me-1"></i>@station.Address
+                                    <i class="bi bi-geo-alt-fill text-danger me-1"></i><span data-i18n="@station.Address">@station.Address</span>
                                 </div>
                                 <div class="d-flex align-items-center gap-3">
                                     <div class="fill-bar flex-grow-1" style="max-width:220px;">
@@ -443,20 +479,26 @@
                             <div class="d-flex gap-2 flex-shrink-0 flex-wrap">
                                 @if (User.Identity?.IsAuthenticated == true)
                                 {
-                                    <button type="button" class="btn btn-outline-success px-4 py-2 text-center d-flex flex-column align-items-center btn-open-modal"
+                                    <button type="button" class="btn btn-outline-success px-4 py-2 text-center d-flex flex-column align-items-center btn-open-modal position-relative"
                                             data-station-id="@station.StationId" data-type="Standard"
                                             style="min-width:110px;border-radius:14px;">
                                         <i class="bi bi-bicycle fs-4 mb-1"></i>
                                         <span class="fw-semibold" style="font-size:.82rem;" data-i18n="stat_btn_std">Standard</span>
-                                        <small class="text-muted" style="font-size:.68rem;">~500 VND/min</small>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <span class="badge bg-success rounded-pill" style="font-size:.65rem;">@station.Vehicles.Count(v => v.Type == VehicleType.Standard && v.State == VehicleState.Available)</span>
+                                            <small class="text-muted" style="font-size:.68rem;">500đ</small>
+                                        </div>
                                     </button>
 
-                                    <button type="button" class="btn btn-outline-primary px-4 py-2 text-center d-flex flex-column align-items-center btn-open-modal"
+                                    <button type="button" class="btn btn-outline-primary px-4 py-2 text-center d-flex flex-column align-items-center btn-open-modal position-relative"
                                             data-station-id="@station.StationId" data-type="Electric"
                                             style="min-width:110px;border-radius:14px;">
                                         <i class="bi bi-lightning-charge-fill fs-4 mb-1"></i>
                                         <span class="fw-semibold" style="font-size:.82rem;" data-i18n="stat_btn_elec">Electric</span>
-                                        <small class="text-muted" style="font-size:.68rem;">~1,500 VND/min</small>
+                                        <div class="d-flex align-items-center gap-1">
+                                            <span class="badge bg-primary rounded-pill" style="font-size:.65rem;">@station.Vehicles.Count(v => v.Type == VehicleType.Electric && v.State == VehicleState.Available)</span>
+                                            <small class="text-muted" style="font-size:.68rem;">1.5kđ</small>
+                                        </div>
                                     </button>
                                 }
                                 else
@@ -480,11 +522,12 @@
                         </div>
                     </div>
                 }
+                </div>
             </div>
         }
         else
         {
-            <div class="text-center py-5 sr-reveal">
+            <div class="text-center py-5 d-none" id="stationListPanel">
                 <i class="bi bi-geo fs-1 text-muted d-block mb-3"></i>
                 <h5 class="text-muted" data-i18n="stations_empty">No stations found</h5>
                 <p class="text-muted small" data-i18n="stations_empty_desc">Try searching with a different keyword</p>
@@ -596,70 +639,332 @@
     </div>
 </div>
 
+@section Styles {
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+}
+
 @section Scripts {
     <script src="https://unpkg.com/html5-qrcode"></script>
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
 
 <script>
+    // ── Station data from server ──
+    const isAuthenticated = @(User.Identity?.IsAuthenticated == true ? "true" : "false");
+    const stationData = @Html.Raw(System.Text.Json.JsonSerializer.Serialize(Model.Select(s => new {
+        id = s.StationId,
+        name = s.Name,
+        address = s.Address,
+        lat = s.Latitude,
+        lng = s.Longitude,
+        current = s.CurrentCount,
+        capacity = s.TotalCapacity,
+        fillRate = Math.Round(s.FillRate * 100),
+        isActive = s.IsActive,
+        hasElectric = s.Vehicles.Any(v => v.Type == RentalVehicleService.Models.VehicleType.Electric && v.State == RentalVehicleService.Models.VehicleState.Available),
+        stdCount = s.Vehicles.Count(v => v.Type == RentalVehicleService.Models.VehicleType.Standard && v.State == RentalVehicleService.Models.VehicleState.Available),
+        elecCount = s.Vehicles.Count(v => v.Type == RentalVehicleService.Models.VehicleType.Electric && v.State == RentalVehicleService.Models.VehicleState.Available)
+    })));
 
-        let html5QrCode;
-        $(document).ready(function () {
-            let html5QrCode = null;
+    // ── Leaflet Map ──
+    let stationMap = null;
+    let mapMarkers = [];
 
-            function stopCamera() {
-                if (html5QrCode) {
-                    html5QrCode.stop().then(() => {
-                        html5QrCode.clear();
-                        html5QrCode = null;
-                        console.log("Đã giải phóng Camera thành công.");
-                    }).catch(err => {
-                        console.log("Camera đã tắt hoặc có lỗi khi tắt: ", err);
-                        html5QrCode = null;
-                    });
-                }
+    function createMarkerIcon(hasElectric, isActive) {
+        const bikeSvg = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" fill="#fff" viewBox="0 0 16 16"><path d="M4 4.5a.5.5 0 0 1 .5-.5H6a.5.5 0 0 1 0 1v.5h4.14l.386-1.158A.5.5 0 0 1 11 4h1a.5.5 0 0 1 0 1h-.64l-.311.935.807 1.29a3 3 0 1 1-.848.53l-.508-.812-2.076 3.322A.5.5 0 0 1 8 10.5H5.959a3 3 0 1 1-1.815-3.274L5 5.856V5h-.5a.5.5 0 0 1-.5-.5m1.5 2.443-.508.814c.5.444.85 1.054.967 1.743h1.139zM8 9.057 9.598 6.5H6.402zM4.937 9.5a2 2 0 0 0-.652-1.157L3.167 10.5H4.937zM3 12a2 2 0 1 0-1-3.732L.868 10.5A2 2 0 0 0 3 12m10-4a2 2 0 1 0-.001 4.001A2 2 0 0 0 13 8"/></svg>`;
+
+        let className = 'sr-marker-container';
+        if (isActive) className += ' sr-marker-active';
+        
+        let colorClass = 'sr-marker-green';
+        if (!isActive) colorClass = 'sr-marker-red';
+        else if (hasElectric) colorClass = 'sr-marker-blue';
+
+        let badgeHtml = '';
+        if (hasElectric && isActive) {
+            badgeHtml = `
+                <div class="sr-marker-badge">
+                    <svg width="11" height="14" viewBox="0 0 28 38" fill="none"><polygon points="17,0 9,18 15,18 8,38 24,13 17,13 25,0" fill="#fff"/></svg>
+                </div>`;
+        }
+
+        return L.divIcon({
+            className: 'sr-custom-marker-wrapper',
+            html: `
+                <div class="${className} ${colorClass}">
+                    <div class="sr-marker-body">
+                        ${bikeSvg}
+                    </div>
+                    ${badgeHtml}
+                </div>`,
+            iconSize: [42, 52],
+            iconAnchor: [21, 48],
+            popupAnchor: [0, -44]
+        });
+    }
+
+    function getPopupContent(s) {
+        const dict = window.getDict ? window.getDict() : {};
+        const name = dict[s.name] || s.name;
+        const addr = dict[s.address] || s.address;
+        const fillClass = s.fillRate < 60 ? 'bg-success' : (s.fillRate < 85 ? 'bg-warning text-dark' : 'bg-danger');
+        
+        const stdLabel = dict['map_legend_standard'] || 'Standard';
+        const elecLabel = dict['map_legend_electric'] || 'Electric';
+        const rentNowLabel = dict['stat_btn_rent_now'] || 'Rent Now';
+        const loginLabel = dict['stat_btn_login'] || 'Log in to rent';
+
+        let actionBtns = '';
+        if (s.isActive) {
+            if (isAuthenticated) {
+                actionBtns = `
+                    <div class="sr-popup-actions w-100 mt-2">
+                        <button class="btn btn-success btn-sm btn-open-modal w-100 py-2 rounded-pill shadow-sm" data-station-id="${s.id}" data-type="All">
+                            <i class="bi bi-qr-code-scan me-1"></i> <span data-i18n="stat_btn_rent_now">${rentNowLabel}</span>
+                        </button>
+                    </div>`;
+            } else {
+                actionBtns = `
+                    <div class="sr-popup-actions w-100 mt-2">
+                        <a href="/Account/Login" class="btn btn-outline-success btn-sm w-100 py-2 rounded-pill">
+                            <i class="bi bi-box-arrow-in-right me-1"></i> <span data-i18n="stat_btn_login">${loginLabel}</span>
+                        </a>
+                    </div>`;
             }
+        }
 
-            // Mở Modal Camera
-            $(document).on('click', '.btn-open-scanner', function () {
-                var stationId = $(this).data('station-id');
-                $('#dynamicVehicleModal').modal('hide');
+        return `<div class="sr-popup-inner">
+            <h6 data-i18n="${s.name}">${name}</h6>
+            <div class="sr-popup-addr"><i class="bi bi-geo-alt-fill text-danger me-1"></i><span data-i18n="${s.address}">${addr}</span></div>
+            <div class="sr-popup-stats mb-2 border-top pt-2">
+                <div class="d-flex justify-content-between w-100 mb-1">
+                    <span class="text-muted small"><i class="bi bi-bicycle me-1"></i><span data-i18n="map_legend_standard">${stdLabel}</span>:</span>
+                    <span class="fw-bold">${s.stdCount}</span>
+                </div>
+                <div class="d-flex justify-content-between w-100 mb-2">
+                    <span class="text-muted small"><i class="bi bi-lightning-charge-fill me-1 text-warning"></i><span data-i18n="map_legend_electric">${elecLabel}</span>:</span>
+                    <span class="fw-bold">${s.elecCount}</span>
+                </div>
+                <div class="d-flex justify-content-between align-items-center w-100">
+                    <span class="badge ${fillClass} rounded-pill">${s.fillRate}% <span data-i18n="stat_pct_full">full</span></span>
+                    <small class="text-muted"><strong>${s.current}</strong>/${s.capacity} <span data-i18n="stat_veh">vehicles</span></small>
+                </div>
+            </div>
+            ${actionBtns}
+        </div>`;
+    }
 
-                setTimeout(function () {
-                    $('#qrScannerModal').modal('show');
-                    stopCamera();
+    function initStationMap() {
+        if (stationMap) return;
+        const mapEl = document.getElementById('stationMap');
+        if (!mapEl) return;
 
-                    html5QrCode = new Html5Qrcode("reader");
+        stationMap = L.map('stationMap', {
+            scrollWheelZoom: true,
+            zoomControl: true
+        }).setView([10.7900, 106.7000], 12);
 
-                    const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+            attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a>',
+            maxZoom: 19
+        }).addTo(stationMap);
 
-                    html5QrCode.start({ facingMode: "user" }, config,
-                        (decodedText, decodedResult) => {
-                            stopCamera();
-
-                            window.location.href = decodedText + "&startStationId=" + stationId;
-                        },
-                        (errorMessage) => {
-                        }
-                    ).catch(err => {
-                        console.error("Không thể mở Camera: ", err);
-                        alert(getI18nText("modal_camera_error"));
-                    });
-
-                }, 400);
-            });
-
-            $('#qrScannerModal').on('hidden.bs.modal', function () {
-                stopCamera();
-            });
+        stationData.forEach(s => {
+            if (!s.lat || !s.lng) return;
+            const icon = createMarkerIcon(s.hasElectric, s.isActive);
+            const marker = L.marker([s.lat, s.lng], { icon })
+                .addTo(stationMap)
+                .bindPopup(getPopupContent(s), { className: 'sr-leaflet-popup', maxWidth: 320 });
+            marker._srStation = s;
+            mapMarkers.push(marker);
         });
 
-    document.getElementById('liveSearchBox')?.addEventListener('input', function () {
-        const q = this.value.toLowerCase().trim();
-        document.querySelectorAll('.station-item').forEach(el => {
-            const match = el.dataset.name?.includes(q) || el.dataset.address?.includes(q);
-            el.style.display = match ? '' : 'none';
+        // Fit bounds to all markers
+        if (mapMarkers.length > 0) {
+            const group = L.featureGroup(mapMarkers);
+            stationMap.fitBounds(group.getBounds().pad(0.08));
+        }
+
+        // Force resize after a short delay (for hidden containers)
+        setTimeout(() => stationMap.invalidateSize(), 200);
+    }
+
+    // ── View Toggle Logic ──
+    function toggleStationView(view) {
+        const mapPanel = document.getElementById('mapViewPanel');
+        const listPanel = document.getElementById('stationListPanel');
+        const btnMap = document.getElementById('btnViewMap');
+        const btnList = document.getElementById('btnViewList');
+
+        if (view === 'map') {
+            if (mapPanel) {
+                mapPanel.classList.remove('d-none');
+                mapPanel.style.setProperty('display', 'block', 'important');
+            }
+            if (listPanel) {
+                listPanel.classList.add('d-none');
+                listPanel.style.setProperty('display', 'none', 'important');
+            }
+            btnMap?.classList.add('active');
+            btnList?.classList.remove('active');
+            if (stationMap) {
+                setTimeout(() => {
+                    stationMap.invalidateSize();
+                }, 100);
+            }
+        } else {
+            if (mapPanel) {
+                mapPanel.classList.add('d-none');
+                mapPanel.style.setProperty('display', 'none', 'important');
+            }
+            if (listPanel) {
+                listPanel.classList.remove('d-none');
+                listPanel.style.setProperty('display', 'block', 'important');
+                
+                // Force cards to be visible and have height
+                document.querySelectorAll('.station-item').forEach(el => {
+                    if (!el.classList.contains('filtered-out')) {
+                        el.style.setProperty('display', 'block', 'important');
+                    }
+                });
+            }
+            btnMap?.classList.remove('active');
+            btnList?.classList.add('active');
+        }
+    }
+
+    // ── Scroll fade ──
+    const scrollContainer = document.getElementById('stationListScroll');
+    if (scrollContainer) {
+        scrollContainer.addEventListener('scroll', function() {
+            const parent = this.closest('.sr-scroll-fade');
+            if (!parent) return;
+            const atBottom = this.scrollHeight - this.scrollTop - this.clientHeight < 10;
+            parent.classList.toggle('scrolled-bottom', atBottom);
+        });
+    }
+
+    // ── Init map on load & Attach events ──
+    document.addEventListener('DOMContentLoaded', () => {
+        initStationMap();
+        
+        // Attach View Toggle events
+        document.getElementById('btnViewMap')?.addEventListener('click', () => toggleStationView('map'));
+        document.getElementById('btnViewList')?.addEventListener('click', () => toggleStationView('list'));
+    });
+
+    // ── QR Scanner ──
+    let html5QrCode;
+    $(document).ready(function () {
+        let html5QrCode = null;
+
+        function stopCamera() {
+            if (html5QrCode) {
+                html5QrCode.stop().then(() => {
+                    html5QrCode.clear();
+                    html5QrCode = null;
+                }).catch(err => {
+                    html5QrCode = null;
+                });
+            }
+        }
+
+        $(document).on('click', '.btn-open-scanner', function () {
+            var stationId = $(this).data('station-id');
+            $('#dynamicVehicleModal').modal('hide');
+
+            setTimeout(function () {
+                $('#qrScannerModal').modal('show');
+                stopCamera();
+                html5QrCode = new Html5Qrcode("reader");
+                const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+                html5QrCode.start({ facingMode: "user" }, config,
+                    (decodedText) => {
+                        stopCamera();
+                        window.location.href = decodedText + "&startStationId=" + stationId;
+                    },
+                    () => {}
+                ).catch(err => {
+                    console.error("Camera error: ", err);
+                    alert(getI18nText("modal_camera_error"));
+                });
+            }, 400);
+        });
+
+        // ── Live Search (filters both list AND map) ──
+        const searchFilter = function (query) {
+            const q = (query || "").toLowerCase().trim();
+
+            // Filter list items
+            document.querySelectorAll('.station-item').forEach(el => {
+                const name = el.dataset.name || "";
+                const addr = el.dataset.address || "";
+                const match = !q || name.includes(q) || addr.includes(q);
+                
+                if (match) {
+                    el.classList.remove('filtered-out');
+                    el.style.setProperty('display', 'block', 'important');
+                } else {
+                    el.classList.add('filtered-out');
+                    el.style.setProperty('display', 'none', 'important');
+                }
+            });
+
+            // Filter map markers
+            const dict = window.getDict ? window.getDict() : {};
+            mapMarkers.forEach(marker => {
+                const s = marker._srStation;
+                const name = (dict[s.name] || s.name).toLowerCase();
+                const addr = (dict[s.address] || s.address).toLowerCase();
+                const match = !q || name.includes(q) || addr.includes(q) || s.name.toLowerCase().includes(q) || s.address.toLowerCase().includes(q);
+                if (match) {
+                    if (!stationMap.hasLayer(marker)) marker.addTo(stationMap);
+                } else {
+                    stationMap.removeLayer(marker);
+                }
+            });
+        };
+
+        document.getElementById('liveSearchBox')?.addEventListener('input', function () {
+            searchFilter(this.value);
+            // Sync with navbar search if it exists
+            const navSearch = document.querySelector('input[name="query"]');
+            if (navSearch) navSearch.value = this.value;
+        });
+
+    const navSearchInput = document.querySelector('input[name="query"]');
+    navSearchInput?.addEventListener('input', function () {
+        searchFilter(this.value);
+        // Sync with live search box
+        const mainSearch = document.getElementById('liveSearchBox');
+        if (mainSearch) mainSearch.value = this.value;
+    });
+
+    // Prevent navbar search form from reloading on Home page
+    const navSearchForm = document.querySelector('.sr-search-form');
+    navSearchForm?.addEventListener('submit', function (e) {
+        if (window.location.pathname === '/' || window.location.pathname === '/Home/Index' || window.location.pathname === '') {
+            e.preventDefault();
+            searchFilter(navSearchInput.value);
+        }
+    });
+
+        // Translate open popup when language changes
+        document.addEventListener('languageChanged', function() {
+            if (stationMap) {
+                stationMap.eachLayer(function(layer) {
+                    if (layer instanceof L.Marker && layer.getPopup() && layer.getPopup().isOpen()) {
+                        layer.setPopupContent(getPopupContent(layer._srStation));
+                    }
+                });
+            }
+        });
+
+        $('#qrScannerModal').on('hidden.bs.modal', function () {
+            stopCamera();
         });
     });
 
+    // ── Counter Animation ──
     function animateCount(el) {
         const target = parseInt(el.dataset.target, 10);
         const duration = 1600;
@@ -680,43 +985,42 @@
     }, { threshold: .5 });
     counters.forEach(c => countObs.observe(c));
 
-        $(document).ready(function () {
-            $('.btn-open-modal').click(function () {
-                var stationId = $(this).data('station-id');
-                var type = $(this).data('type');
+    // ── Rental Modal ──
+    $(document).ready(function () {
+        $(document).on('click', '.btn-open-modal', function () {
+            var stationId = $(this).data('station-id');
+            var type = $(this).data('type');
 
-                // 1. Reset nội dung Modal về Loading và mở Modal
-                $('#modal-content-container').html(`
-                    <div class="text-center p-5">
-                        <div class="spinner-border text-success" role="status"></div>
-                        <p class="mt-3 text-muted fw-semibold" data-i18n="modal_finding_vehicle">${getI18nText("modal_finding_vehicle")}</p>
-                    </div>
-                `);
-                $('#dynamicVehicleModal').modal('show');
+            $('#modal-content-container').html(`
+                <div class="text-center p-5">
+                    <div class="spinner-border text-success" role="status"></div>
+                    <p class="mt-3 text-muted fw-semibold" data-i18n="modal_finding_vehicle">${getI18nText("modal_finding_vehicle")}</p>
+                </div>
+            `);
+            $('#dynamicVehicleModal').modal('show');
 
-                // 2. Gọi AJAX xuống Controller
-                $.ajax({
-                    url: '/Rental/GetAvailableVehicles',
-                    type: 'GET',
-                    data: { stationId: stationId, type: type },
-                    success: function (result) {
-                        $('#modal-content-container').html(result);
-                        if (window.applyTranslations && window.getDict) {
-                            window.applyTranslations(window.getDict());
-                        }
-                    },
-                    error: function () {
-                        $('#modal-content-container').html(`
-                            <div class="p-5 text-center">
-                                <i class="bi bi-x-circle text-danger fs-1 mb-2"></i>
-                                <h5 class="text-dark fw-bold" data-i18n="modal_conn_error">${getI18nText("modal_conn_error")}</h5>
-                                <p class="text-muted" data-i18n="modal_conn_error_desc">${getI18nText("modal_conn_error_desc")}</p>
-                                <button type="button" class="btn btn-outline-secondary rounded-pill px-4 mt-2" data-bs-dismiss="modal" data-i18n="modal_close">${getI18nText("modal_close")}</button>
-                            </div>
-                        `);
+            $.ajax({
+                url: '/Rental/GetAvailableVehicles',
+                type: 'GET',
+                data: { stationId: stationId, type: type },
+                success: function (result) {
+                    $('#modal-content-container').html(result);
+                    if (window.applyTranslations && window.getDict) {
+                        window.applyTranslations(window.getDict());
                     }
-                });
+                },
+                error: function () {
+                    $('#modal-content-container').html(`
+                        <div class="p-5 text-center">
+                            <i class="bi bi-x-circle text-danger fs-1 mb-2"></i>
+                            <h5 class="text-dark fw-bold" data-i18n="modal_conn_error">${getI18nText("modal_conn_error")}</h5>
+                            <p class="text-muted" data-i18n="modal_conn_error_desc">${getI18nText("modal_conn_error_desc")}</p>
+                            <button type="button" class="btn btn-outline-secondary rounded-pill px-4 mt-2" data-bs-dismiss="modal" data-i18n="modal_close">${getI18nText("modal_close")}</button>
+                        </div>
+                    `);
+                }
             });
         });
+    });
 </script>
 }
