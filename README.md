@@ -2,7 +2,6 @@
 
 > **Course Project:** Software Engineering (SE FinalProject 2526)
 > **Author:** Le Minh Thanh, Ngo Huynh Duc, Lam Tan Dat — Ton Duc Thang University (TDTU)
-> **Branch:** `feature/uc03-payment`
 
 SaigonRide (technical name: `RentalVehicleService`) is a modern web application built on **ASP.NET Core 8.0**, designed to address the urban mobility needs of Ho Chi Minh City. The platform provides an end-to-end bicycle and electric vehicle rental experience — from account registration with OTP verification, QR code scanning, real-time trip tracking, to multi-gateway payment processing via VNPay and PayPal.
 
