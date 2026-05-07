@@ -212,7 +212,7 @@
 
             if (paymentMethod === 'PayPal') {
                 // Call PayPal API to create order
-                const finalAmount = (totalAmount / 23000).toFixed(2); // Convert VND to USD (approximate)
+                const finalAmount = (totalAmount / 26310).toFixed(2); // Convert VND to USD (approximate)
 
                 try {
                     const response = await fetch('/api/paypal/create-order', {

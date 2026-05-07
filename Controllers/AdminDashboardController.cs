@@ -152,7 +152,7 @@ namespace RentalVehicleService.Controllers
             }
             catch (Exception ex)
             {
-                // Return empty table in case of error
+                // Return empty table in case of errors
                 return PartialView("~/Views/AdminDashboard/Pages/Vehicle/_VehicleTablePartial.cshtml", new List<Vehicle>());
             }
         }
