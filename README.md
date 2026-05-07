@@ -1,8 +1,7 @@
 # 🚲 SaigonRide — Rental Vehicle Service
 
 > **Đồ án môn học:** Kỹ thuật Phần mềm (SE FinalProject 2526)
-> **Sinh viên thực hiện:** Trần Hữu Danh — Đại học Tôn Đức Thắng (TDTU)
-> **Branch:** `feature/uc03-payment`
+> **Sinh viên thực hiện:** Lê Minh Thành, Ngô Huyngf Đức, Lâm Tấn Đạt — Đại học Tôn Đức Thắng (TDTU)
 
 SaigonRide (tên kỹ thuật: `RentalVehicleService`) là một nền tảng ứng dụng web hiện đại được xây dựng trên **ASP.NET Core 8.0**, giải quyết nhu cầu di chuyển xanh tại TP. Hồ Chí Minh. Hệ thống cung cấp quy trình thuê xe đạp và xe điện khép kín — từ đăng ký tài khoản, xác thực OTP, quét mã QR thuê xe, theo dõi chuyến đi thời gian thực, đến thanh toán đa phương thức qua VNPay và PayPal.
 
@@ -237,6 +236,6 @@ RentalVehicleService/
 
 ## 👤 Tác giả
 
-**Trương Đỗ Minh Thành,Ngô Huỳnh Đức, Lâm Tấn Đạt **
+**Lê Minh Thành,Ngô Huỳnh Đức, Lâm Tấn Đạt **
 Sinh viên Đại học Tôn Đức Thắng (TDTU)
 Đồ án môn Kỹ thuật Phần mềm — SE FinalProject 2526 | © 2026
