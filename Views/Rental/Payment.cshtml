@@ -72,8 +72,11 @@
                 </div>
                 <div class="fee-rows">
                     <div class="fee-row">
-                        <span class="fee-label"><span data-i18n="pay_time_fee">Phí thời gian</span> (@Model.TotalMinutes <span data-i18n="pay_minutes">phút</span> x 1.500 VND/<span data-i18n="pay_minutes">phút</span>):</span>
-                        <span class="fee-value">@((Model.TotalMinutes * 1500).ToString("N0")) VND</span>
+                        <span class="fee-label">
+                            <span data-i18n="pay_time_fee">Phí thời gian</span>
+                            (@Model.TotalMinutes <span data-i18n="pay_minutes">phút</span> x @Model.UnitPrice.ToString("N0") VND/<span data-i18n="pay_minutes">phút</span>):
+                        </span>
+                        <span class="fee-value">@((Model.TotalMinutes * Model.UnitPrice).ToString("N0")) VND</span>
                     </div>
                     @if (Model.DiscountAmount.HasValue && Model.DiscountAmount > 0)
                     {

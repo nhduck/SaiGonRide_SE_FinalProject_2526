@@ -324,6 +324,7 @@ namespace RentalVehicleService.Controllers
 
                 // VehicleBattery = rental.Vehicle?.BatteryLevel, 
 
+                UnitPrice = (decimal)(rental.Vehicle?.Price ?? 0),
                 StartTime = rental.StartTime,
                 TotalMinutes = totalMinutes,
                 FinalFare = rental.FinalFare,
