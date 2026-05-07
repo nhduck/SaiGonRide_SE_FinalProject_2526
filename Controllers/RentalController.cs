@@ -281,6 +281,8 @@ namespace RentalVehicleService.Controllers
 
             ViewBag.Stations = await _context.Stations.ToListAsync();
 
+            ViewBag.PricePerMinute = rental.Vehicle?.Price ?? 0;
+
             // Truyền dữ liệu chuyến đi sang trang ActiveTrip.cshtml
             return View(rental);
         }
