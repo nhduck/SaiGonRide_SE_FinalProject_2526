@@ -101,6 +101,7 @@ namespace RentalVehicleService.Controllers
             ViewBag.VehicleModel = vehicle?.VehicleModel ?? "Unknown";
             ViewBag.StationName = station?.Name ?? "Unknown Station";
             ViewBag.StationAddress = station?.Address ?? "Unknown Station";
+            ViewBag.VehiclePrice = vehicle?.Price ?? 0;
 
             return View(); // Trả về màn hình xác nhận Create.cshtml
         }
