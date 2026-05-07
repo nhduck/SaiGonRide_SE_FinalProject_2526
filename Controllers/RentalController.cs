@@ -101,6 +101,7 @@ namespace RentalVehicleService.Controllers
             ViewBag.VehicleModel = vehicle?.VehicleModel ?? "Unknown";
             ViewBag.StationName = station?.Name ?? "Unknown Station";
             ViewBag.StationAddress = station?.Address ?? "Unknown Station";
+            ViewBag.VehiclePrice = vehicle?.Price ?? 0;
 
             return View(); // Trả về màn hình xác nhận Create.cshtml
         }
@@ -280,6 +281,8 @@ namespace RentalVehicleService.Controllers
 
             ViewBag.Stations = await _context.Stations.ToListAsync();
 
+            ViewBag.PricePerMinute = rental.Vehicle?.Price ?? 0;
+
             // Truyền dữ liệu chuyến đi sang trang ActiveTrip.cshtml
             return View(rental);
         }
@@ -324,6 +327,7 @@ namespace RentalVehicleService.Controllers
 
                 // VehicleBattery = rental.Vehicle?.BatteryLevel, 
 
+                UnitPrice = (decimal)(rental.Vehicle?.Price ?? 0),
                 StartTime = rental.StartTime,
                 TotalMinutes = totalMinutes,
                 FinalFare = rental.FinalFare,
