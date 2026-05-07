@@ -134,7 +134,8 @@ namespace RentalVehicleService.Controllers
                 allVehicles = allVehicles.Where(v =>
                     v.VehicleId.ToString().Contains(st) ||
                     (v.VehicleModel != null && v.VehicleModel.ToLower().Contains(st)) ||
-                    v.Type.ToString().ToLower().Contains(st)
+                    v.Type.ToString().ToLower().Contains(st) ||
+                    v.CurrentStation.Name.ToLower().Contains(st)
                     ).ToList();
             }
 
