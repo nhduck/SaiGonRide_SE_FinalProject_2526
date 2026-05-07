@@ -8,7 +8,7 @@
     var pageTitle   = ViewData["Title"]?.ToString() ?? "Home";
     var metaDesc    = ViewData["MetaDescription"]?.ToString()
                       ?? "SaigonRide – Smart bike & e-scooter rental network across Ho Chi Minh City. Green, convenient, and affordable urban mobility.";
-    var ogImage     = ViewData["OgImage"]?.ToString() ?? "https://i.imgur.com/placeholder.png";
+    var ogImage     = ViewData["OgImage"]?.ToString() ?? "/img/og-banner.png";
     var isHomePage  = ViewContext.RouteData.Values["controller"]?.ToString() == "Home" && 
                       ViewContext.RouteData.Values["action"]?.ToString() == "Index";
 
@@ -35,15 +35,15 @@
     <meta property="og:title"       content="@pageTitle - SaigonRide" />
     <meta property="og:description" content="@metaDesc" />
     <meta property="og:image"       content="@ogImage" />
-    <meta property="og:url"         content="https://saigonride.vn/" />
+    <meta property="og:url"         content="https://saigonride-web.onrender.com/" />
     <meta property="og:locale"      content="en_US" />
     <!-- Twitter Card -->
     <meta name="twitter:card"        content="summary_large_image" />
     <meta name="twitter:title"       content="@pageTitle - SaigonRide" />
     <meta name="twitter:description" content="@metaDesc" />
-    <meta name="twitter:image"       content="@ogImage" />
+    <meta name="twitter:image"       content="https://saigonride-web.onrender.com/img/og-banner.png" />
     <!-- Canonical -->
-    <link rel="canonical" href="https://saigonride.vn/@Context.Request.Path" />
+    <link rel="canonical" href="https://saigonride-web.onrender.com@Context.Request.Path" />
     <!-- Favicon -->
     <link rel="icon" type="image/svg+xml" href="~/favicon.svg" />
     <!-- Fonts -->
