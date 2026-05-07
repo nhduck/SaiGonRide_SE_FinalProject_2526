@@ -622,4 +622,14 @@
     "SaigonBike S2": "Xe đạp Saigon S2",
     "SaigonE Pro": "Xe điện Saigon Pro",
     "SaigonE Lite": "Xe điện Saigon Lite"
+
+    "pay_amount": "Số tiền:",
+    "pay_status": "Trạng thái:",
+    "pay_pending": "Đang chờ xác nhận",
+    "pay_loading": "Đang tải...",
+    "pay_processing": "Đang xử lý thanh toán...",
+    "pay_btn_confirm": "Xác nhận Thanh toán",
+    "pay_btn_cancel": "Quay lại / Hủy bỏ",
+    "pay_success": "Thanh toán thành công! Đang chuyển hướng...",
+    "pay_error_default": "Có lỗi xảy ra khi xử lý thanh toán."
 }
