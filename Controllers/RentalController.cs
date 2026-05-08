@@ -424,7 +424,7 @@ namespace RentalVehicleService.Controllers
         // Handle PayPal return after user approves payment
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> PaypalReturn(string token, int rentalId)
+        public IActionResult PaypalReturn(string token, int rentalId)
         {
             if (string.IsNullOrWhiteSpace(token))
             {
