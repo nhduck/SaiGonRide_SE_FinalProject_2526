@@ -1,9 +1,10 @@
-using System.Net;
-using System.Net.Mail;
 using Microsoft.Extensions.Options;
 using System.Threading.Tasks;
 using RentalVehicleService.Models;
 using Microsoft.Extensions.Logging;
+using MailKit.Net.Smtp;
+using MailKit.Security;
+using MimeKit;
 
 namespace RentalVehicleService.Services
 {
@@ -20,30 +21,29 @@ namespace RentalVehicleService.Services
 
         public async Task SendEmailAsync(string to, string subject, string htmlBody)
         {
+            var email = new MimeMessage();
+            email.From.Add(new MailboxAddress(_settings.SenderName, _settings.SenderEmail));
+            email.To.Add(MailboxAddress.Parse(to));
+            email.Subject = subject;
+
+            var builder = new BodyBuilder { HtmlBody = htmlBody };
+            email.Body = builder.ToMessageBody();
+
+            using var client = new SmtpClient();
             try
             {
-                var msg = new MailMessage
-                {
-                    From = new MailAddress(_settings.SenderEmail, _settings.SenderName),
-                    Subject = subject,
-                    Body = htmlBody,
-                    IsBodyHtml = true,
-                };
-                msg.To.Add(to);
-
-                using var client = new SmtpClient(_settings.SmtpServer, _settings.Port)
-                {
-                    Credentials = new NetworkCredential(_settings.SenderEmail, _settings.Password),
-                    EnableSsl = true,
-                };
-
-                await client.SendMailAsync(msg);
-                _logger.LogInformation("Email sent successfully to {To}", to);
+                // Use StartTls for port 587
+                await client.ConnectAsync(_settings.SmtpServer, _settings.Port, SecureSocketOptions.StartTls);
+                
+                await client.AuthenticateAsync(_settings.SenderEmail, _settings.Password);
+                await client.SendAsync(email);
+                
+                await client.DisconnectAsync(true);
+                _logger.LogInformation("Email sent successfully to {To} via MailKit", to);
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Failed to send email to {To}. Error: {Message}", to, ex.Message);
-                // We re-throw to allow the controller to handle it if needed, or just log it
+                _logger.LogError(ex, "MailKit failed to send email to {To}. Error: {Message}", to, ex.Message);
                 throw;
             }
         }
