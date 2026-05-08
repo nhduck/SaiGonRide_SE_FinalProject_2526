@@ -883,20 +883,23 @@
             setTimeout(function () {
                 $('#qrScannerModal').modal('show');
                 stopCamera();
-                html5QrCode = new Html5Qrcode("reader");
+html5QrCode = new Html5Qrcode("reader");
                 const config = { fps: 10, qrbox: { width: 250, height: 250 } };
-                    html5QrCode.start({ facingMode: "user" }, config,
-                        (decodedText, decodedResult) => {
-                            stopCamera();
+                const onScanSuccess = (decodedText) => {
+                    stopCamera();
+                    let currentUrl = window.location.origin;
+                    window.location.href = currentUrl + "/Rental/Create?vehicleId=" + decodedText + "&startStationId=" + stationId;
+                };
+                const onScanError = (errorMessage) => {};
 
-                            let currentUrl = window.location.origin;
-                            window.location.href = currentUrl + "/Rental/Create?vehicleId=" + decodedText + "&startStationId=" + stationId;
-                        },
-                        (errorMessage) => {
-                        }
-                    ).catch(err => {
-                        console.error("Không thể mở Camera: ", err);
-                        alert(getI18nText("modal_camera_error"));
+                html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanError)
+                    .catch(() => {
+                        // Fallback to front camera if rear not available
+                        html5QrCode.start({ facingMode: "user" }, config, onScanSuccess, onScanError)
+                            .catch(err => {
+                                console.error("Không thể mở Camera: ", err);
+                                alert(getI18nText("modal_camera_error"));
+                            });
                     });
 
                 }, 400);

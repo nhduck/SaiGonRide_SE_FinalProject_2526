@@ -9,12 +9,12 @@
     <div class="container-fluid py-4 px-lg-5">
 
         <!-- Header -->
-        <div class="d-flex justify-content-between align-items-center mb-4">
+        <div class="d-flex justify-content-between align-items-center mb-4 flex-wrap gap-2">
             <div>
                 <h4 class="fw-bold mb-1"><i class="bi bi-people-fill"></i> <span data-i18n="admin_user_management">User Management</span></h4>
                 <p class="text-muted small mb-0" data-i18n="admin_user_management_subtitle">Manage all registered users in the system</p>
             </div>
-            <button class="btn btn-success" id="openCreateUserBtn">
+            <button class="btn btn-success flex-shrink-0" id="openCreateUserBtn">
                 <i class="bi bi-person-plus-fill"></i> <span data-i18n="admin_add_user">Add User</span>
             </button>
         </div>
@@ -116,8 +116,8 @@
         <!-- Search & Filter -->
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-body">
-                <form method="get" class="row g-2">
-                    <div class="col-lg-4">
+                <form method="get" class="row g-2 align-items-center">
+                    <div class="col-12 col-lg-4">
                         <div class="input-group">
                             <span class="input-group-text border-end-0">
                                 <i class="bi bi-search text-muted"></i>
@@ -127,13 +127,13 @@
                                    placeholder="Search by name, email or ID..." data-i18n="[placeholder]admin_search_placeholder">
                         </div>
                     </div>
-                    <div class="col-lg-8 d-flex gap-2 flex-wrap justify-content-lg-end">
-                        <button id="userClearBTN" class="btn btn-outline-primary d-none" data-i18n="admin_clear_sort">Clear Sort</button>
-                        <button id="activeBTN" class="userSortBTN btn btn-outline-success" data-filter="Active" data-i18n="admin_active">Active</button>
-                        <button id="lockedBTN" class="userSortBTN btn btn-outline-danger" data-filter="Locked" data-i18n="admin_locked">Locked</button>
-                        <button id="adminBTN" class="userSortBTN btn btn-outline-warning" data-filter="Admin" data-i18n="admin_admins">Admin</button>
-                        <button id="customerBTN" class="userSortBTN btn btn-outline-info" data-filter="Customer" data-i18n="admin_customers">Customer</button>
-                        <button id="staffBTN" class="userSortBTN btn btn-outline-purple" data-filter="Staff" data-i18n="admin_staff">Staff</button>
+                    <div class="col-12 col-lg-8 d-flex gap-2 flex-wrap">
+                        <button id="userClearBTN" class="btn btn-outline-primary btn-sm d-none" data-i18n="admin_clear_sort">Clear Sort</button>
+                        <button id="activeBTN" class="userSortBTN btn btn-outline-success btn-sm" data-filter="Active" data-i18n="admin_active">Active</button>
+                        <button id="lockedBTN" class="userSortBTN btn btn-outline-danger btn-sm" data-filter="Locked" data-i18n="admin_locked">Locked</button>
+                        <button id="adminBTN" class="userSortBTN btn btn-outline-warning btn-sm" data-filter="Admin" data-i18n="admin_admins">Admin</button>
+                        <button id="customerBTN" class="userSortBTN btn btn-outline-info btn-sm" data-filter="Customer" data-i18n="admin_customers">Customer</button>
+                        <button id="staffBTN" class="userSortBTN btn btn-outline-purple btn-sm" data-filter="Staff" data-i18n="admin_staff">Staff</button>
                     </div>
                 </form>
             </div>
