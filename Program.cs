@@ -7,6 +7,7 @@ using RentalVehicleService.Services.PaymentStrategies;
 using VNPAY;
 
 var builder = WebApplication.CreateBuilder(args);
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 builder.Services.AddHttpContextAccessor();
 
 builder.Services.Configure<VNPAY.Extensions.Options.VnpayConfiguration>(
@@ -18,7 +19,7 @@ builder.Services.AddScoped<IVnpayClient, VnpayClient>();
 // Add services to the container.
 var connectionString = builder.Configuration.GetConnectionString("DefaultConnection") ?? throw new InvalidOperationException("Connection string 'DefaultConnection' not found.");
 builder.Services.AddDbContext<ApplicationDbContext>(options =>
-    options.UseSqlServer(connectionString));
+    options.UseNpgsql(connectionString));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
 
 builder.Services.AddDefaultIdentity<ApplicationUser>(options => options.SignIn.RequireConfirmedAccount = false)
