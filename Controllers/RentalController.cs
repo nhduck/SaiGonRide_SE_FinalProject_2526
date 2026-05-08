@@ -416,7 +416,6 @@ namespace RentalVehicleService.Controllers
 
                 TempData["Error"] = "Payment failed " + ex.Message;
                 return rentalId > 0
-                    ? RedirectToAction("Payment", new { id = rentalId })
                     : RedirectToAction("Index");
             }
         }
