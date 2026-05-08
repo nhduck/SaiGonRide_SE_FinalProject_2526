@@ -117,7 +117,7 @@ namespace RentalVehicleService.Controllers
             {
                 VehicleId = vehicleId,
                 StartStationId = startStationId,
-                StartTime = DateTime.Now,
+                StartTime = DateTime.UtcNow,
                 Status = RentalStatus.Active,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty,
                 VehicleType = vehicle?.Type ?? VehicleType.Standard
@@ -172,7 +172,7 @@ namespace RentalVehicleService.Controllers
 
             try
             {
-                rental.EndTime = DateTime.Now;
+                rental.EndTime = DateTime.UtcNow;
                 rental.EndStationId = endStationId;
                 rental.Status = RentalStatus.PendingPayment;
 
@@ -394,7 +394,7 @@ namespace RentalVehicleService.Controllers
                     rental.Status = RentalStatus.Completed;
                     rental.PaymentMethod = "VNPay";
                     rental.PaymentTransactionId = vnpTxnRef;
-                    rental.PaymentCompletedTime = DateTime.Now;
+                    rental.PaymentCompletedTime = DateTime.UtcNow;
 
                     // Ensure vehicle is available
                     if (rental.Vehicle != null && rental.Vehicle.State != VehicleState.Available)
