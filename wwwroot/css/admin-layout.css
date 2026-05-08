@@ -52,7 +52,7 @@ html {
     display: flex;
     align-items: center;
     padding: 0.75rem 1rem;
-    color: #495057;
+    color: var(--sr-text-main);
     text-decoration: none;
     border-radius: 0.5rem;
     font-weight: 500;
@@ -62,13 +62,13 @@ html {
 .sr-sidebar-link i {
     font-size: 1.25rem;
     margin-right: 1rem;
-    color: #adb5bd;
+    color: var(--sr-text-muted);
     transition: color 0.2s ease-in-out;
 }
 
 /* Hover State */
 .sr-sidebar-link:hover {
-    background-color: #f1f8f5;
+    background-color: rgba(22, 163, 74, 0.05);
     color: #16a34a;
 }
 
@@ -89,7 +89,7 @@ html {
 
 /* Divider */
 .sr-sidebar-divider {
-    border-color: #edf2f9;
+    border-color: var(--sr-border);
     margin: 1rem 0;
 }
 
@@ -122,11 +122,11 @@ html {
     width: 32px;
     height: 32px;
     border-radius: 50%;
-    background-color: #e9ecef;
+    background-color: var(--sr-gray-100);
     display: flex;
     align-items: center;
     justify-content: center;
-    color: #6c757d;
+    color: var(--sr-text-muted);
 }
 
 .sr-avatar-sm {
@@ -253,7 +253,7 @@ html {
 }
 
 .btn-white:hover {
-    background-color: #f8fafc;
+    background-color: var(--sr-gray-50);
     color: #16a34a;
     border-color: #16a34a;
 }

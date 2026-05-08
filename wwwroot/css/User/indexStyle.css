@@ -93,8 +93,8 @@
 }
 
 .bg-purple-subtle {
-    background-color: #f1e9ff !important;
-    color: #6f42c1 !important;
+    background-color: rgba(111, 66, 193, 0.15) !important;
+    color: #a78bfa !important;
 }
 
 /* Avatar & Table */

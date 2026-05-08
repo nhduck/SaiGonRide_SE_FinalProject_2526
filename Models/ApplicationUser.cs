@@ -17,6 +17,10 @@ namespace RentalVehicleService.Models
         public string? EmailVerificationCode { get; set; }
         public DateTime? VerificationCodeExpires { get; set; }
 
+        // Password reset OTP fields
+        public string? PasswordResetOTP { get; set; }
+        public DateTime? PasswordResetOTPExpires { get; set; }
+
         // Local User Specific
         [StringLength(20)]
         public string? CCCD { get; set; }

@@ -40,7 +40,7 @@
     }
     .sr-login-card {
         width: 100%; max-width: 440px;
-        background: #fff;
+        background: var(--sr-card-bg);
         border-radius: 24px;
         box-shadow: 0 20px 60px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.04);
         padding: 2.75rem 2.5rem;
@@ -55,7 +55,7 @@
         font-size:.82rem;margin:1.25rem 0;
     }
     .sr-divider::before,.sr-divider::after {
-        content:'';flex:1;height:1px;background:#e2e8f0;
+        content:'';flex:1;height:1px;background:var(--sr-card-border);
     }
 </style>
 
@@ -249,7 +249,7 @@
             @if (TempData["SuccessMessage"] != null)
             {
                 <div class="alert d-flex align-items-center gap-2 rounded-3 mb-4 py-2 border-0"
-                     style="background:#f0fdf4;color:#166534;">
+                     style="background:rgba(22,163,74,0.1);color:var(--sr-green);">
                     <i class="bi bi-check-circle-fill fs-5"></i>
                     @TempData["SuccessMessage"]
                 </div>
@@ -257,7 +257,7 @@
             @if (!ViewData.ModelState.IsValid)
             {
                 <div class="alert d-flex align-items-start gap-2 rounded-3 mb-4 py-2 border-0 shake"
-                     id="loginError" style="background:#fef2f2;color:#991b1b;">
+                     id="loginError" style="background:rgba(239,68,68,0.1);color:#ef4444;">
                     <i class="bi bi-exclamation-triangle-fill fs-5 mt-1"></i>
                     <div>
                         @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
@@ -301,7 +301,7 @@
                             Remember me
                         </label>
                     </div>
-                    <a href="#" class="text-sr-green text-decoration-none fw-medium" style="font-size:.875rem;" data-i18n="auth_forgot_pwd">
+                    <a asp-action="ForgotPassword" class="text-sr-green text-decoration-none fw-medium" style="font-size:.875rem;" data-i18n="auth_forgot_pwd">
                         Forgot password?
                     </a>
                 </div>

@@ -263,13 +263,13 @@
     <!-- Wave divider -->
     <div style="position:absolute;bottom:0;left:0;right:0;line-height:0;">
         <svg viewBox="0 0 1440 80" fill="none" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="none" style="width:100%;display:block;">
-            <path d="M0,40 C360,90 1080,-10 1440,40 L1440,80 L0,80 Z" fill="#ffffff"/>
+            <path d="M0,40 C360,90 1080,-10 1440,40 L1440,80 L0,80 Z" fill="currentColor" style="color: var(--sr-body-bg);"/>
         </svg>
     </div>
 </section>
 
 <!-- FEATURES SECTION-->
-<section class="sr-section" style="background:#fff;">
+<section class="sr-section" style="background:var(--sr-body-bg);">
     <div class="container">
         <div class="text-center mb-5 sr-reveal">
             <span class="sr-price-badge mb-3" data-i18n="feat_badge">Why SaigonRide?</span>
@@ -358,7 +358,7 @@
 </section>
 
 <!-- STATION SEARCH SECTION -->
-<section class="sr-section" id="station-search" style="background:#fff;">
+<section class="sr-section" id="station-search" style="background:var(--sr-body-bg);">
     <div class="container">
         <div class="sr-reveal mb-4">
             <div class="d-flex flex-column flex-md-row justify-content-between align-items-md-start gap-3 mb-3">
@@ -366,8 +366,8 @@
                     <h2 class="fw-bold mb-1" style="font-size:2rem;" data-i18n="stations_title">📍 Stations Near You</h2>
                     <p class="text-muted mb-0" data-i18n="stations_desc">Pick a station, pick a ride, start your journey</p>
                 </div>
-                <div class="input-group shadow-sm rounded-pill overflow-hidden bg-white border flex-shrink-0" style="min-width:260px;max-width:320px;">
-                    <span class="input-group-text bg-white border-0 ps-3 text-muted"><i class="bi bi-search"></i></span>
+                <div class="input-group shadow-sm rounded-pill overflow-hidden border flex-shrink-0" style="min-width:260px;max-width:320px;background:var(--sr-card-bg);">
+                    <span class="input-group-text border-0 ps-3 text-muted" style="background:var(--sr-card-bg);"><i class="bi bi-search"></i></span>
                     <input type="text" id="liveSearchBox" class="form-control border-0 shadow-none ps-1" placeholder="Search by name or address..." data-i18n-placeholder="stations_search_placeholder">
                 </div>
             </div>
@@ -587,7 +587,7 @@
 </section>
 
 <!-- CTA BANNER -->
-<section class="sr-section" style="background:#fff;">
+<section class="sr-section" style="background:var(--sr-body-bg);">
     <div class="container sr-reveal">
         <div class="rounded-4 p-5 text-center text-white position-relative overflow-hidden"
              style="background:linear-gradient(135deg,#064e3b,#065f46 50%,#0f172a);">

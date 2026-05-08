@@ -92,7 +92,7 @@
                     <div class="dropdown me-3">
                         <button class="btn btn-light dropdown-toggle d-flex align-items-center gap-1"
                                 type="button" id="adminLangDropdownBtn" data-bs-toggle="dropdown" aria-expanded="false">
-                            <i class="bi bi-translate text-success"></i><span class="d-none d-md-inline small text-dark">English</span>
+                            <i class="bi bi-translate text-success"></i><span class="d-none d-md-inline small">English</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-end shadow-sm border-0">
                             <li><a class="dropdown-item sr-lang-item d-flex align-items-center gap-2" href="javascript:void(0);" data-lang="en" onclick="changeLanguage('en')">🇬🇧 English</a></li>
@@ -115,7 +115,7 @@
                         </button>
                         <div class="dropdown-menu dropdown-menu-end shadow-sm p-0" style="width: 320px; border-radius: 0.5rem; overflow: hidden;">
                             <div class="p-3 border-bottom d-flex justify-content-between align-items-center bg-light">
-                                <h6 class="mb-0 fw-bold text-dark fs-6" data-i18n="admin_notifications">Notifications</h6>
+                                <h6 class="mb-0 fw-bold fs-6" data-i18n="admin_notifications">Notifications</h6>
                                 <span id="notifStatusBadge" class="badge bg-success rounded-pill px-2 py-1 d-none" style="font-size: 0.7rem;">0 new</span>
                             </div>
                             <div id="notifList" class="list-group list-group-flush" style="max-height: 350px; overflow-y: auto;">
@@ -226,9 +226,9 @@
                         desc = desc.replace('{0}', '<strong>' + item.param1 + '</strong>').replace('{1}', '<strong>' + item.param2 + '</strong>');
 
                         const html = `
-                            <div class="list-group-item border-bottom-0 px-3 py-3" style="background-color: ${item.type === 'Rental' ? '#f8fff9' : '#fffaf0'};">
+                            <div class="list-group-item border-bottom-0 px-3 py-3" style="background-color: ${item.type === 'Rental' ? 'rgba(22,163,74,0.05)' : 'rgba(245,158,11,0.05)'};">
                                 <div class="d-flex w-100 justify-content-between mb-1">
-                                    <span class="fw-semibold text-dark" style="font-size: 0.85rem;">
+                                    <span class="fw-semibold" style="font-size: 0.85rem; color:var(--sr-text-heading);">
                                         <i class="bi ${item.icon} text-${item.iconClass.replace('bg-', '')} me-2"></i>
                                         <span>${title}</span>
                                     </span>

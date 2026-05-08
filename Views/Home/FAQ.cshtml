@@ -14,8 +14,8 @@
         </p>
         <div class="mt-4 mx-auto" style="max-width:440px;">
             <div class="input-group shadow-lg rounded-pill overflow-hidden">
-                <span class="input-group-text bg-white border-0 ps-3"><i class="bi bi-search text-muted"></i></span>
-                <input type="text" id="faqSearch" class="form-control border-0 shadow-none py-2"
+                <span class="input-group-text border-0 ps-3" style="background:var(--sr-card-bg);"><i class="bi bi-search text-muted"></i></span>
+                <input type="text" id="faqSearch" class="form-control border-0 shadow-none py-2" style="background:var(--sr-card-bg);"
                        placeholder="Search questions..." data-i18n-placeholder="faq_search">
             </div>
         </div>
@@ -52,7 +52,7 @@
                     };
                 }
 
-                <div class="accordion accordion-flush bg-white rounded-4 shadow-sm overflow-hidden" id="faqAccordion">
+                <div class="accordion accordion-flush rounded-4 shadow-sm overflow-hidden" id="faqAccordion" style="background:var(--sr-card-bg);">
                     @for (int i = 0; i < faqs.Length; i++)
                     {
                         var faq = faqs[i];
@@ -80,7 +80,7 @@
 
             <!-- Sidebar -->
             <div class="col-lg-4">
-                <div class="bg-white rounded-4 shadow-sm p-4 mb-4">
+                <div class="rounded-4 shadow-sm p-4 mb-4" style="background:var(--sr-card-bg);">
                     <h6 class="fw-bold mb-3" data-i18n="faq_contact_title">📞 Quick Contact</h6>
                     <div class="d-flex flex-column gap-3">
                         <a href="tel:0932013424" class="btn btn-success rounded-3 d-flex align-items-center gap-2 fw-semibold">
@@ -95,7 +95,7 @@
                     </div>
                 </div>
 
-                <div class="bg-white rounded-4 shadow-sm p-4 mb-4">
+                <div class="rounded-4 shadow-sm p-4 mb-4" style="background:var(--sr-card-bg);">
                     <h6 class="fw-bold mb-3" data-i18n="faq_hours_title">🕐 Support Hours</h6>
                     <ul class="list-unstyled small text-muted mb-0">
                         <li class="d-flex justify-content-between py-2 border-bottom">
@@ -110,7 +110,7 @@
                     </ul>
                 </div>
 
-                <div class="bg-white rounded-4 shadow-sm p-4">
+                <div class="rounded-4 shadow-sm p-4" style="background:var(--sr-card-bg);">
                     <h6 class="fw-bold mb-3" data-i18n="faq_links_title">🔗 Useful Links</h6>
                     <div class="list-group list-group-flush">
                         <a href="/Home/Guide"   class="list-group-item list-group-item-action border-0 ps-0 text-muted py-2">
