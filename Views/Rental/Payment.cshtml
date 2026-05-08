@@ -8,6 +8,20 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
     <link rel="stylesheet" href="~/css/Vehicle/payment.css" />
+
+    <style>
+        .pay-card.payment-disabled {
+        opacity: 0.4;
+        cursor: not-allowed;
+        pointer-events: none;
+        background-color: #f3f4f6;
+        border-color: #d1d5db;
+        }
+
+        .pay-card.payment-disabled .check {
+        display: none !important;
+        }
+    </style>
 }
 
 <div class="payment-wrapper">
@@ -94,7 +108,7 @@
         <hr class="divider mb-5" />
 
         <!-- ── Section: Promo Code ── -->
-        <div class="mb-5">
+        @* <div class="mb-5">
             <div class="coupon-wrap">
                 <p class="section-heading" style="width:140px;flex-shrink:0;" data-i18n="pay_promo_code">Mã Giảm Giá</p>
                 <div class="coupon-input-wrap">
@@ -105,7 +119,7 @@
             <p class="coupon-msg text-green-600 ml-0" id="couponMsg"></p>
         </div>
 
-        <hr class="divider mb-5" />
+        <hr class="divider mb-5" /> *@
 
         <!-- ── Grand Total ── -->
         <div class="grand-total-row">
@@ -160,13 +174,44 @@
 </div>
 
 @section Scripts {
-
     <script>
         const BASE_FARE = @(Model.FinalFare ?? 0);
         const RENTAL_ID = @Model.RentalId;
         let couponDiscount = 0;
 
+        // 1. CHẠY KIỂM TRA NGAY KHI LOAD TRANG
+        document.addEventListener("DOMContentLoaded", function () {
+            checkPaymentMethodAvailability(BASE_FARE);
+        });
+
+        // 2. HÀM KIỂM TRA ĐIỀU KIỆN 5K
+        function checkPaymentMethodAvailability(currentTotal) {
+            const vnpayCard = document.querySelector('.pay-card[data-method="VNPay"]');
+            const paypalCard = document.querySelector('.pay-card[data-method="PayPal"]');
+            const paymentInput = document.getElementById('paymentMethodInput');
+
+            if (!vnpayCard || !paypalCard) return;
+
+            if (currentTotal < 5000) {
+                vnpayCard.classList.add('payment-disabled');
+                
+            // Nếu đang chọn VNPay mà giá rớt xuống dưới 5k, tự đẩy qua PayPal
+                if (paymentInput.value === 'VNPay') {
+            // Xóa class selected hiện tại
+                    document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('selected'));
+            // Chọn PayPal
+                    paypalCard.classList.add('selected');
+                    paymentInput.value = 'PayPal';
+            }
+            } else {
+                 vnpayCard.classList.remove('payment-disabled');
+            }
+        }
+
         function selectPay(el) {
+        // Chặn click nếu thẻ đang bị vô hiệu hóa
+            if (el.classList.contains('payment-disabled')) return;
+
             document.querySelectorAll('.pay-card').forEach(c => c.classList.remove('selected'));
             el.classList.add('selected');
             document.getElementById('paymentMethodInput').value = el.dataset.method;
@@ -195,47 +240,61 @@
             const total = Math.max(0, BASE_FARE - couponDiscount);
             const formattedTotal = total.toLocaleString('vi-VN');
             const el = document.getElementById('grandTotal');
-            if (typeof getI18nText === 'function') {
-                el.textContent = getI18nText('pay_total_fare').replace('{0}', formattedTotal);
-                el.setAttribute('data-i18n-param1', formattedTotal);
-            } else {
-                el.textContent = 'Total: ' + formattedTotal + ' VND';
-            }
+        if (typeof getI18nText === 'function') {
+            el.textContent = getI18nText('pay_total_fare').replace('{0}', formattedTotal);
+            el.setAttribute('data-i18n-param1', formattedTotal);
+        } else {
+            el.textContent = 'Total: ' + formattedTotal + ' VND';
+        }
+            
+        // 3. GỌI LẠI HÀM KIỂM TRA MỖI KHI CẬP NHẬT TỔNG TIỀN
+        checkPaymentMethodAvailability(total);
         }
 
         async function submitPayment() {
             const paymentMethod = document.getElementById('paymentMethodInput').value;
             const totalAmount = Math.max(0, BASE_FARE - couponDiscount);
 
+        // Chặn hoàn toàn hành động submit nếu logic bị qua mặt
+            if (paymentMethod === 'VNPay' && totalAmount < 5000) {
+                alert("Số tiền tối thiểu để thanh toán VNPay là 5.000 VND. Vui lòng chọn phương thức khác.");
+                return;
+        }
+
             if (paymentMethod === 'PayPal') {
+<<<<<<< Updated upstream
                 // Call PayPal API to create order
                 const finalAmount = (totalAmount / 23000).toFixed(2); // Convert VND to USD (approximate)
+=======
+            // Call PayPal API to create order
+             const finalAmount = (totalAmount / 26310).toFixed(2);
+            // Convert VND to USD (approximate)
+>>>>>>> Stashed changes
 
-                try {
-                    const response = await fetch('/api/paypal/create-order', {
-                        method: 'POST',
-                        headers: { 'Content-Type': 'application/json' },
-                        body: JSON.stringify({
-                            rentalId: RENTAL_ID,
-                            amount: parseFloat(finalAmount),
-                            currency: 'USD',
-                            returnUrl: window.location.origin + `/Rental/PaypalReturn?rentalId=${RENTAL_ID}`,
-                            cancelUrl: window.location.origin + `/Rental/Payment?id=${RENTAL_ID}`
-                        })
-                    });
-
-                    const result = await response.json();
-                    if (result.success && result.approveUrl) {
-                        window.location.href = result.approveUrl;
-                    } else {
-                        alert('Failed to create PayPal order: ' + (result.error || 'Unknown error'));
-                    }
-                } catch (error) {
-                    alert('Error creating PayPal order: ' + error.message);
-                    console.error(error);
-                }
+            try {
+                const response = await fetch('/api/paypal/create-order', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        rentalId: RENTAL_ID,
+                        amount: parseFloat(finalAmount),
+                        currency: 'USD',
+                        returnUrl: window.location.origin + `/Rental/PaypalReturn?rentalId=${RENTAL_ID}`,
+                        cancelUrl: window.location.origin + `/Rental/Payment?id=${RENTAL_ID}`
+                    })
+                });
+            const result = await response.json();
+            if (result.success && result.approveUrl) {
+                window.location.href = result.approveUrl;
             } else {
-                // For other payment methods, submit form normally
+                alert('Failed to create PayPal order: ' + (result.error || 'Unknown error'));
+            }
+            } catch (error) {
+                     alert('Error creating PayPal order: ' + error.message);
+            console.error(error);
+            }
+            } else {
+            // For other payment methods, submit form normally
                 document.getElementById('paymentForm').submit();
             }
         }
