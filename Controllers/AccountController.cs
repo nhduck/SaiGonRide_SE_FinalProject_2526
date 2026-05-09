@@ -117,17 +117,21 @@ namespace RentalVehicleService.Controllers
                         <p style='color:#9ca3af;font-size:12px;text-align:center;'>If you didn't request this, please ignore this email.</p>
                     </div>";
 
-                try
+                // Send verification email in background to speed up response time
+                _ = Task.Run(async () =>
                 {
-                    await _emailService.SendEmailAsync(user.Email, "SaigonRide Registration Verification Code", emailBody);
-                }
-                catch (Exception ex)
-                {
-                    // Log error but still redirect — user can resend
-                    Console.WriteLine($"Email send failed: {ex.Message}");
-                }
+                    try
+                    {
+                        await _emailService.SendEmailAsync(user.Email, "SaigonRide Registration Verification Code", emailBody);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log background error
+                        Console.WriteLine($"Background Email send failed: {ex.Message}");
+                    }
+                });
 
-                // Redirect to email confirmation page
+                // Redirect to email confirmation page immediately
                 return RedirectToAction("RegisterConfirm", new { email = user.Email });
             }
 
@@ -223,16 +227,20 @@ namespace RentalVehicleService.Controllers
                     <p style='color:#ef4444;font-size:14px;text-align:center;'>⏰ This code will expire in <strong>3 minutes</strong>.</p>
                 </div>";
 
-            try
+            // Send email in background
+            _ = Task.Run(async () =>
             {
-                await _emailService.SendEmailAsync(user.Email!, "New Verification Code – SaigonRide", emailBody);
-                TempData["InfoMessage"] = "A new verification code has been sent to your email.";
-            }
-            catch
-            {
-                TempData["ErrorMessage"] = "Failed to send email. Please try again later.";
-            }
+                try
+                {
+                    await _emailService.SendEmailAsync(user.Email!, "New Verification Code – SaigonRide", emailBody);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Background Email resend failed: {ex.Message}");
+                }
+            });
 
+            TempData["InfoMessage"] = "A new verification code has been sent to your email.";
             return RedirectToAction("RegisterConfirm", new { email });
         }
 
@@ -281,18 +289,22 @@ namespace RentalVehicleService.Controllers
                     <p style='color:#9ca3af;font-size:12px;text-align:center;'>If you didn't request this, you can safely ignore this email.</p>
                 </div>";
 
-            try
+            // Send email in background
+            _ = Task.Run(async () =>
             {
-                var recipientEmail = user.Email ?? model.Email;
-                if (!string.IsNullOrEmpty(recipientEmail))
+                try
                 {
-                    await _emailService.SendEmailAsync(recipientEmail, "SaigonRide Password Reset OTP", emailBody);
+                    var recipientEmail = user.Email ?? model.Email;
+                    if (!string.IsNullOrEmpty(recipientEmail))
+                    {
+                        await _emailService.SendEmailAsync(recipientEmail, "SaigonRide Password Reset OTP", emailBody);
+                    }
                 }
-            }
-            catch (Exception ex)
-            {
-                Console.WriteLine($@"Email send failed: {ex.Message}");
-            }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Background ForgotPassword Email send failed: {ex.Message}");
+                }
+            });
 
             return RedirectToAction("ResetPassword", new { email = model.Email });
         }
