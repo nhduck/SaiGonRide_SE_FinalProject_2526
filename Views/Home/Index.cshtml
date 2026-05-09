@@ -882,13 +882,31 @@
             setTimeout(function () {
                 $('#qrScannerModal').modal('show');
                 stopCamera();
-html5QrCode = new Html5Qrcode("reader");
+                
+                html5QrCode = new Html5Qrcode("reader");
                 const config = { fps: 10, qrbox: { width: 250, height: 250 } };
+                
+                let isRedirecting = false; // Tránh quét nhiều lần cùng lúc
+
                 const onScanSuccess = (decodedText) => {
+                    if (isRedirecting) return;
+                    
+                    // Chỉ chấp nhận nếu nội dung quét được là số (ID xe)
+                    if (!/^\d+$/.test(decodedText)) {
+                        console.warn("Nội dung QR không hợp lệ:", decodedText);
+                        return;
+                    }
+
+                    isRedirecting = true;
                     stopCamera();
-                    let currentUrl = window.location.origin;
-                    window.location.href = currentUrl + "/Rental/Create?vehicleId=" + decodedText + "&startStationId=" + stationId;
+                    
+                    // Thêm delay nhỏ để user cảm nhận được đã quét xong
+                    setTimeout(() => {
+                        let currentUrl = window.location.origin;
+                        window.location.href = currentUrl + "/Rental/Create?vehicleId=" + decodedText + "&startStationId=" + stationId;
+                    }, 600);
                 };
+                
                 const onScanError = (errorMessage) => {};
 
                 html5QrCode.start({ facingMode: "environment" }, config, onScanSuccess, onScanError)
