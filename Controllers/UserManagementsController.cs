@@ -71,11 +71,18 @@ namespace RentalVehicleService.Controllers
 
         // SEARCH (gọi từ AdminDashboard/SearchUsers hoặc trực tiếp)
         [HttpGet]
-        public async Task<IActionResult> SearchUsers(string searchTerm, List<string> filters)
+        public async Task<IActionResult> SearchUsers(string searchTerm, string emailSearch, List<string> filters)
         {
             var users = await GetAllViewModels();
 
-            // Tìm kiếm theo text
+            // Tìm kiếm theo email chuyên dụng
+            if (!string.IsNullOrWhiteSpace(emailSearch))
+            {
+                var emailTerm = emailSearch.ToLower();
+                users = users.Where(u => u.Email.ToLower().Contains(emailTerm)).ToList();
+            }
+
+            // Tìm kiếm theo text (name, username, id)
             if (!string.IsNullOrWhiteSpace(searchTerm))
             {
                 var term = searchTerm.ToLower();
