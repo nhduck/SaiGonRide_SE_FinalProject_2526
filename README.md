@@ -1,7 +1,10 @@
 # 🚲 SaigonRide — Rental Vehicle Service
 
-> **Course Project:** Software Engineering (SE FinalProject 2526)
-> **Author:** Le Minh Thanh, Ngo Huynh Duc, Lam Tan Dat — Ton Duc Thang University (TDTU)
+> **Course Project:** Software Engineering (SE FinalProject 2526)  
+> **Author:** Truong Minh Thanh, Ngo Huynh Duc, Lam Tan Dat — Ton Duc Thang University (TDTU)
+
+[![Live Demo](https://img.shields.io/badge/Live-Demo%20on%20Render-brightgreen?style=for-the-badge&logo=render)](https://saigonride-web.onrender.com)
+**🌐 URL:** [https://saigonride-web.onrender.com](https://saigonride-web.onrender.com)
 
 SaigonRide (technical name: `RentalVehicleService`) is a modern web application built on **ASP.NET Core 8.0**, designed to address the urban mobility needs of Ho Chi Minh City. The platform provides an end-to-end bicycle and electric vehicle rental experience — from account registration with OTP verification, QR code scanning, real-time trip tracking, to multi-gateway payment processing via VNPay and PayPal.
 
@@ -11,15 +14,13 @@ SaigonRide (technical name: `RentalVehicleService`) is a modern web application 
 
 | Component | Technology | Details |
 |---|---|---|
-| **Framework** | ASP.NET Core 8.0 | MVC pattern with Razor Pages and Web API |
-| **Database** | SQL Server | Managed via Entity Framework Core 8.0 with Migrations & Seeding |
-| **ORM** | Entity Framework Core 8.0 | `ApplicationDbContext`; InMemory Database for testing |
-| **Security** | ASP.NET Core Identity | OTP authentication, Role-based authorization (Admin, Tourist, LocalUser) |
-| **Payments** | VNPay & PayPal | VNPay via `VNPAY.NET` v2.1.0; PayPal via REST API v2 |
-| **Email** | SMTP Gmail | `SmtpEmailService` for OTP delivery and invoice notifications |
-| **Architecture** | Strategy & Service Pattern | Flexible payment gateway and business logic management |
-| **Testing** | xUnit & Moq | Unit tests for billing logic, promotions, and domain models |
-| **DevOps** | Docker & Docker Compose | Multi-stage build; supports Azure Zip Deploy and MSDeploy |
+| **Framework** | ASP.NET Core 8.0 | MVC pattern with Controllers and Views |
+| **Database** | PostgreSQL | Optimized for Render deployment and local development |
+| **ORM** | Entity Framework Core 8.0 | `ApplicationDbContext` with support for both SQL Server and Npgsql |
+| **Security** | ASP.NET Core Identity | OTP authentication, Forgot Password flow, Role-based authorization |
+| **Payments** | VNPay & PayPal | Full Strategy Pattern implementation for international gateways |
+| **Design** | Premium Dark Mode | Global Glassmorphism design system with high-fidelity SVG animations |
+| **DevOps** | Render & Docker | CI/CD ready for Render; multi-stage Docker build |
 
 ---
 
@@ -27,11 +28,11 @@ SaigonRide (technical name: `RentalVehicleService`) is a modern web application 
 
 ### 1. Membership & Authentication (`AccountController`)
 
-- **Two-factor OTP Verification:** Secure registration flow using a **6-digit confirmation code** sent via Email (SMTP), valid for **3 minutes**.
+- **Two-factor OTP Verification:** Secure registration and **Forgot Password** flow using a **6-digit confirmation code** sent via Email, valid for **3 minutes**.
 - **User Type Classification:**
-  - `Tourist` — Foreign visitors register using a **Passport number** and nationality.
+  - `Tourist` — Foreign visitors register using a **Passport number**.
   - `LocalUser` — Local residents register using a **National ID (CCCD)**.
-- **Profile Management:** Update personal information and view trip history with a clean, visual interface.
+- **Premium Profile Management:** Update personal information, track trip history, and manage security settings in a unified, theme-aware dashboard.
 
 ### 2. Smart Rental Workflow (`RentalController` & `RentalService`)
 
@@ -70,7 +71,14 @@ The system uses the **Payment Strategy Pattern** to switch seamlessly between pa
 - **Dashboard Analytics:** Revenue chart for the **last 7 days**, new user statistics.
 - **Battery Monitoring:** Alerts for any vehicle with a battery level **below 20%**.
 - **Station Inventory Management:** Real-time tracking of vehicle density with anomaly alerts.
-- **CSV Report Export:** Export revenue and station inventory data to CSV files encoded in **UTF-8 BOM** for proper Vietnamese character rendering.
+- **Bilingual CSV Export:** Export revenue data with full Vietnamese character support (UTF-8 BOM).
+
+### 7. Design Excellence & Global Dark Mode
+
+- **Unified Theme System:** A custom-built CSS variable system (`--sr-bg`, `--sr-card-bg`) providing a consistent, premium Dark Mode across all modules.
+- **Glassmorphism UI:** Modern, translucent card designs with high-fidelity drop shadows and smooth hover effects.
+- **High-Fidelity Animations:** SVG-based animated hero assets (lightning bike) and 3D character mascots for an engaging user experience.
+- **Responsive & Liquid Layout:** Fully optimized for all screen sizes, from mobile scanners to large admin monitors.
 
 ---
 
@@ -78,11 +86,11 @@ The system uses the **Payment Strategy Pattern** to switch seamlessly between pa
 
 Update the following settings in `appsettings.json` to enable all features:
 
-### 1. Database Connection
+### 1. Database Connection (PostgreSQL)
 
 ```json
 "ConnectionStrings": {
-    "DefaultConnection": "Server=(localdb)\\mssqllocaldb;Database=SaigonRideDB;Trusted_Connection=True;"
+    "DefaultConnection": "Host=localhost;Database=SaigonRideDB;Username=postgres;Password=your_password"
 }
 ```
 
@@ -255,13 +263,14 @@ RentalVehicleService/
 │       ├── [Timestamp]_AddPaymentFeatures.cs
 │       └── ...
 │
-├── 📁 Pages/                                # Razor Pages (Presentation Layer)
+├── 📁 Views/                                 # MVC Views (Presentation Layer)
 │   ├── Index.cshtml                         # Home page
-│   ├── Index.cshtml.cs
 │   ├── 📁 Account/                          # Authentication & account pages
-│   │   ├── Login.cshtml / .cs
-│   │   ├── Register.cshtml / .cs
-│   │   ├── VerifyOtp.cshtml / .cs
+│   │   ├── Login.cshtml
+│   │   ├── Register.cshtml
+│   │   ├── VerifyOtp.cshtml
+│   │   ├── ForgotPassword.cshtml
+│   │   ├── ResetPassword.cshtml
 │   │   └── Profile.cshtml
 │   ├── 📁 Rental/                           # Trip management pages
 │   │   ├── Index.cshtml                     # Trip list
@@ -271,23 +280,20 @@ RentalVehicleService/
 │   │   ├── PaymentSuccess.cshtml
 │   │   ├── PaymentFailed.cshtml
 │   │   └── RentalHistory.cshtml
-│   ├── 📁 Admin/                            # Admin management pages
-│   │   ├── Dashboard.cshtml                 # Revenue & user statistics
-│   │   ├── Vehicles.cshtml                  # Vehicle management
-│   │   ├── Stations.cshtml                  # Station management
-│   │   ├── Users.cshtml                     # User management
-│   │   └── Reports.cshtml                   # CSV report export
+│   ├── 📁 AdminDashboard/                    # Admin management pages
+│   │   ├── Index.cshtml                     # Main Dashboard
+│   │   └── 📁 Pages/                        # Sub-management modules
+│   │       ├── Station/                     # Station management
+│   │       ├── Vehicle/                     # Vehicle management
+│   │       └── UserManagements/             # User management
 │   ├── 📁 Shared/                           # Layouts & shared components
 │   │   ├── _Layout.cshtml                   # Main layout
-│   │   ├── _LoginPartial.cshtml
+│   │   ├── _AuthLayout.cshtml               # Specialized Authentication layout
+│   │   ├── _AdminLayout.cshtml              # Specialized Admin layout
 │   │   ├── _Navigation.cshtml
-│   │   ├── _Footer.cshtml
-│   │   └── 📁 Components/                   # Reusable UI components
-│   │       ├── AlertComponent.cshtml
-│   │       ├── LoadingSpinner.cshtml
-│   │       └── PaginationComponent.cshtml
-│   └── 📁 Error/
-│       └── Error.cshtml
+│   │   └── _Footer.cshtml
+│   └── 📁 Home/
+│       └── FAQ.cshtml                       # Interactive FAQ with Dark Mode support
 │
 ├── 📁 wwwroot/                              # Static Files (CSS, JS, Images)
 │   ├── 📁 css/
@@ -351,6 +357,6 @@ RentalVehicleService/
 
 ## 👤 Author
 
-**Le Minh Thanh, Ngo Huynh Duc, Lam Tan Dat**
+**Truong Minh Thanh, Ngo Huynh Duc, Lam Tan Dat**
 Ton Duc Thang University (TDTU)
 Software Engineering Course Project — SE FinalProject 2526 | © 2026

@@ -112,7 +112,7 @@ namespace RentalVehicleService.Controllers
             {
                 VehicleId = vehicleId,
                 StartStationId = startStationId,
-                StartTime = DateTime.Now,
+                StartTime = DateTime.UtcNow,
                 Status = RentalStatus.Active,
                 UserId = User.FindFirstValue(ClaimTypes.NameIdentifier) ?? string.Empty,
                 VehicleType = vehicle?.Type ?? VehicleType.Standard
@@ -167,7 +167,7 @@ namespace RentalVehicleService.Controllers
 
             try
             {
-                rental.EndTime = DateTime.Now;
+                rental.EndTime = DateTime.UtcNow;
                 rental.EndStationId = endStationId;
                 rental.Status = RentalStatus.PendingPayment;
 
@@ -393,12 +393,12 @@ namespace RentalVehicleService.Controllers
                 .Include(r => r.EndStation)
                 .FirstOrDefaultAsync(r => r.RentalId == rentalId);
 
-            if (rental != null)
-            {
-                rental.Status = RentalStatus.Completed;
-                rental.PaymentMethod = "VNPay";
-                rental.PaymentTransactionId = txnRef;
-                rental.PaymentCompletedTime = DateTime.Now;
+                if (rental != null)
+                {
+                    rental.Status = RentalStatus.Completed;
+                    rental.PaymentMethod = "VNPay";
+                    rental.PaymentTransactionId = vnpTxnRef;
+                    rental.PaymentCompletedTime = Utc.Now;
 
                 if (rental.Vehicle != null && rental.Vehicle.State != VehicleState.Available)
                 {
@@ -415,7 +415,7 @@ namespace RentalVehicleService.Controllers
         // Handle PayPal return after user approves payment
         [Authorize]
         [HttpGet]
-        public async Task<IActionResult> PaypalReturn(string token, int rentalId)
+        public IActionResult PaypalReturn(string token, int rentalId)
         {
             if (string.IsNullOrWhiteSpace(token))
             {

@@ -13,7 +13,7 @@
     }
 
     .sr-register-card {
-        background: #fff;
+        background: var(--sr-card-bg);
         border-radius: 24px;
         box-shadow: 0 20px 60px rgba(0,0,0,.08), 0 4px 16px rgba(0,0,0,.04);
         overflow: hidden;
@@ -45,12 +45,12 @@
         cursor: pointer;
         transition: all .25s ease;
         text-align: center;
-        background: #fff;
+        background: var(--sr-card-bg);
     }
-    .sr-type-card:hover             { border-color: #16a34a; background: #f0fdf4; }
-    .sr-type-card.selected          { border-color: #16a34a; background: #f0fdf4; box-shadow: 0 0 0 3px rgba(22,163,74,.15); }
+    .sr-type-card:hover             { border-color: #16a34a; background: rgba(22,163,74,0.05); }
+    .sr-type-card.selected          { border-color: #16a34a; background: rgba(22,163,74,0.1); box-shadow: 0 0 0 3px rgba(22,163,74,.15); }
     .sr-type-card .type-icon        { font-size:2rem;margin-bottom:.5rem;line-height:1; }
-    .sr-type-card .type-title       { font-weight:700;font-size:.95rem;color:#1e293b; }
+    .sr-type-card .type-title       { font-weight:700;font-size:.95rem;color:var(--sr-text-heading); }
     .sr-type-card .type-sub         { font-size:.78rem;color:#64748b;margin-top:.2rem; }
 
     .field-group { transition: all .3s ease; }
@@ -63,7 +63,7 @@
         display:flex;align-items:center;gap:1rem;color:#94a3b8;
         font-size:.82rem;margin:1rem 0;
     }
-    .sr-divider::before,.sr-divider::after { content:'';flex:1;height:1px;background:#e2e8f0; }
+    .sr-divider::before,.sr-divider::after { content:'';flex:1;height:1px;background:var(--sr-card-border); }
 </style>
 
 <div class="sr-register-page">
@@ -102,7 +102,7 @@
                         @if (!ViewData.ModelState.IsValid && ViewData.ModelState.Values.Any(v => v.Errors.Any()))
                         {
                             <div class="alert d-flex align-items-start gap-2 rounded-3 mb-4 border-0"
-                                 style="background:#fef2f2;color:#991b1b;">
+                                 style="background:rgba(239,68,68,0.1);color:#ef4444;">
                                 <i class="bi bi-exclamation-triangle-fill fs-5 mt-1"></i>
                                 <div>
                                     @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
@@ -115,7 +115,7 @@
 
                         <!-- User type -->
                         <div class="mb-4">
-                            <p class="fw-semibold mb-3" style="font-size:.9rem;color:#334155;" data-i18n="auth_iam_label">I am a...</p>
+                            <p class="fw-semibold mb-3" style="font-size:.9rem;color:var(--sr-text-heading);" data-i18n="auth_iam_label">I am a...</p>
                             <div class="row g-3">
                                 <div class="col-6">
                                     <div class="sr-type-card selected" id="card-local" onclick="selectType('Local')">

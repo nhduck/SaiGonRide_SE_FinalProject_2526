@@ -27,7 +27,7 @@ namespace RentalVehicleService.Models
 
         public int? EndStationId { get; set; }
 
-        public DateTime StartTime { get; set; } = DateTime.Now;
+        public DateTime StartTime { get; set; } = DateTime.UtcNow;
 
         public DateTime? EndTime { get; set; }
 

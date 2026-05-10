@@ -44,7 +44,7 @@ namespace RentalVehicleService.Services
             var vehicle = _context.Vehicles.Find(rental.VehicleId);
             if (vehicle == null) return 0m;
 
-            DateTime end = endTime ?? DateTime.Now;
+            DateTime end = endTime ?? DateTime.UtcNow;
             decimal baseFare = CalculateFare(rental.StartTime, end, (decimal)vehicle.Price);
             decimal discountRate = CheckDiscount(endStationId);
 

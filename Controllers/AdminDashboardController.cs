@@ -15,7 +15,7 @@ namespace RentalVehicleService.Controllers
             _context = context;
         }
 
-        public async Task<IActionResult> Index()
+        public IActionResult Index()
         {
             return View();
         }
@@ -150,7 +150,7 @@ namespace RentalVehicleService.Controllers
 
                 return PartialView("~/Views/AdminDashboard/Pages/Vehicle/_VehicleTablePartial.cshtml", allVehicles);
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // Return empty table in case of errors
                 return PartialView("~/Views/AdminDashboard/Pages/Vehicle/_VehicleTablePartial.cshtml", new List<Vehicle>());

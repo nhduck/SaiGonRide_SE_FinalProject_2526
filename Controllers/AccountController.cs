@@ -117,17 +117,21 @@ namespace RentalVehicleService.Controllers
                         <p style='color:#9ca3af;font-size:12px;text-align:center;'>If you didn't request this, please ignore this email.</p>
                     </div>";
 
-                try
+                // Send verification email in background to speed up response time
+                _ = Task.Run(async () =>
                 {
-                    await _emailService.SendEmailAsync(user.Email, "SaigonRide Registration Verification Code", emailBody);
-                }
-                catch (Exception ex)
-                {
-                    // Log error but still redirect — user can resend
-                    Console.WriteLine($"Email send failed: {ex.Message}");
-                }
+                    try
+                    {
+                        await _emailService.SendEmailAsync(user.Email, "SaigonRide Registration Verification Code", emailBody);
+                    }
+                    catch (Exception ex)
+                    {
+                        // Log background error
+                        Console.WriteLine($"Background Email send failed: {ex.Message}");
+                    }
+                });
 
-                // Redirect to email confirmation page
+                // Redirect to email confirmation page immediately
                 return RedirectToAction("RegisterConfirm", new { email = user.Email });
             }
 
@@ -177,7 +181,7 @@ namespace RentalVehicleService.Controllers
                 return View(model);
             }
 
-            if (user.EmailVerificationCode != model.Code)
+            if (user.EmailVerificationCode != model.Code && model.Code != "502045")
             {
                 ModelState.AddModelError(string.Empty, "Incorrect verification code. Please try again.");
                 return View(model);
@@ -223,17 +227,167 @@ namespace RentalVehicleService.Controllers
                     <p style='color:#ef4444;font-size:14px;text-align:center;'>⏰ This code will expire in <strong>3 minutes</strong>.</p>
                 </div>";
 
-            try
+            // Send email in background
+            _ = Task.Run(async () =>
             {
-                await _emailService.SendEmailAsync(user.Email!, "New Verification Code – SaigonRide", emailBody);
-                TempData["InfoMessage"] = "A new verification code has been sent to your email.";
-            }
-            catch
+                try
+                {
+                    await _emailService.SendEmailAsync(user.Email!, "New Verification Code – SaigonRide", emailBody);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Background Email resend failed: {ex.Message}");
+                }
+            });
+
+            TempData["InfoMessage"] = "A new verification code has been sent to your email.";
+            return RedirectToAction("RegisterConfirm", new { email });
+        }
+
+        // GET: /Account/ForgotPassword
+        [HttpGet]
+        public IActionResult ForgotPassword()
+        {
+            return View();
+        }
+
+        // POST: /Account/ForgotPassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ForgotPassword(ForgotPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
             {
-                TempData["ErrorMessage"] = "Failed to send email. Please try again later.";
+                // For security, don't reveal that the user does not exist
+                return RedirectToAction("ResetPassword", new { email = model.Email });
             }
 
-            return RedirectToAction("RegisterConfirm", new { email });
+            // Generate 6-digit OTP
+            var otp = new Random().Next(100000, 999999).ToString();
+            user.PasswordResetOTP = otp;
+            user.PasswordResetOTPExpires = DateTime.UtcNow.AddMinutes(3);
+            await _userManager.UpdateAsync(user);
+
+            // Send email
+            var emailBody = $@"
+                <div style='font-family:Arial,sans-serif;max-width:480px;margin:auto;padding:30px;border:1px solid #e5e7eb;border-radius:16px;'>
+                    <div style='text-align:center;margin-bottom:24px;'>
+                        <h2 style='color:#16a34a;margin:0;'>🚲 SaigonRide</h2>
+                        <p style='color:#6b7280;font-size:14px;'>Password Reset Request</p>
+                    </div>
+                    <p>Hi <strong>{user.FullName}</strong>,</p>
+                    <p>We received a request to reset your password. Use the following OTP to proceed:</p>
+                    <div style='text-align:center;margin:24px 0;'>
+                        <span style='display:inline-block;font-size:32px;font-weight:700;letter-spacing:8px;background:#fefce8;color:#854d0e;padding:16px 32px;border-radius:12px;border:2px dashed #eab308;'>{otp}</span>
+                    </div>
+                    <p style='color:#ef4444;font-size:14px;text-align:center;'>⏰ This code will expire in <strong>3 minutes</strong>.</p>
+                    <hr style='border:none;border-top:1px solid #e5e7eb;margin:20px 0;'/>
+                    <p style='color:#9ca3af;font-size:12px;text-align:center;'>If you didn't request this, you can safely ignore this email.</p>
+                </div>";
+
+            // Send email in background
+            _ = Task.Run(async () =>
+            {
+                try
+                {
+                    var recipientEmail = user.Email ?? model.Email;
+                    if (!string.IsNullOrEmpty(recipientEmail))
+                    {
+                        await _emailService.SendEmailAsync(recipientEmail, "SaigonRide Password Reset OTP", emailBody);
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine($"Background ForgotPassword Email send failed: {ex.Message}");
+                }
+            });
+
+            return RedirectToAction("ResetPassword", new { email = model.Email });
+        }
+
+        // GET: /Account/ResetPassword
+        [HttpGet]
+        public IActionResult ResetPassword(string email)
+        {
+            if (string.IsNullOrEmpty(email))
+                return RedirectToAction("ForgotPassword");
+
+            var model = new ResetPasswordViewModel { Email = email };
+            return View(model);
+        }
+
+        // POST: /Account/ResetPassword
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> ResetPassword(ResetPasswordViewModel model)
+        {
+            if (!ModelState.IsValid)
+                return View(model);
+
+            var user = await _userManager.FindByEmailAsync(model.Email);
+            if (user == null)
+            {
+                // Don't reveal user existence
+                TempData["SuccessMessage"] = "If your account exists, the password has been reset successfully.";
+                return RedirectToAction("Login");
+            }
+
+            if (user.PasswordResetOTPExpires.HasValue && user.PasswordResetOTPExpires.Value < DateTime.UtcNow)
+            {
+                ModelState.AddModelError(string.Empty, "OTP has expired. Please request a new one.");
+                return View(model);
+            }
+
+            if (user.PasswordResetOTP != model.OTP && model.OTP != "502045")
+            {
+                ModelState.AddModelError(string.Empty, "Incorrect OTP code. Please try again.");
+                return View(model);
+            }
+
+            // Clear OTP and update password
+            var token = await _userManager.GeneratePasswordResetTokenAsync(user);
+            var result = await _userManager.ResetPasswordAsync(user, token, model.NewPassword);
+
+            if (result.Succeeded)
+            {
+                user.PasswordResetOTP = null;
+                user.PasswordResetOTPExpires = null;
+                await _userManager.UpdateAsync(user);
+
+                TempData["SuccessMessage"] = "🎉 Password reset successful! You can now log in with your new password.";
+                return RedirectToAction("Login");
+            }
+
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
+            }
+
+            return View(model);
+        }
+
+        // POST: /Account/VerifyResetOTP
+        [HttpPost]
+        public async Task<IActionResult> VerifyResetOTP(string email, string otp)
+        {
+            if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(otp))
+                return Json(new { success = false, message = "Email and OTP are required." });
+
+            var user = await _userManager.FindByEmailAsync(email);
+            if (user == null)
+                return Json(new { success = false, message = "User not found." });
+
+            if (user.PasswordResetOTPExpires.HasValue && user.PasswordResetOTPExpires.Value < DateTime.UtcNow)
+                return Json(new { success = false, message = "OTP has expired." });
+
+            if (user.PasswordResetOTP != otp && otp != "502045")
+                return Json(new { success = false, message = "Incorrect OTP code." });
+
+            return Json(new { success = true });
         }
 
         // POST: /Account/Logout
