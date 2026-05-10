@@ -9,3 +9,5 @@
 **/*.db
 **/*.db-journal
 publish/
+test-results/
+data/

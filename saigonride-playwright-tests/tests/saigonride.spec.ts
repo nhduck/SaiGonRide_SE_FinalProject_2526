@@ -36,15 +36,13 @@ const STATION_DATA = {
     currentCount: "0"
 };
 
-// Vehicle: dùng đúng field names theo form thực tế (VehicleModel, Price, State, BatteryPercentage)
 const VEHICLE_DATA = {
     vehicleModel: "Honda Wave Alpha",
     price: "15000",
-    state: "Available",         // phải khớp với enum VehicleState
+    state: "Available",
     batteryPercentage: "80"
 };
 
-// User: dùng đúng field names theo form thực tế
 const USER_DATA = {
     email: `testuser${Date.now()}@saigonride.vn`,
     username: `testuser${Date.now()}`,
@@ -63,11 +61,6 @@ const REPORT_DATA = {
 // ============================================================
 // 2. HELPERS (UTILITY FUNCTIONS)
 // ============================================================
-
-async function navigateToHome(page: Page) {
-    await page.goto(BASE_URL);
-    await page.waitForLoadState('networkidle');
-}
 
 async function loginAs(page: Page, email: string, password: string) {
     await page.goto(`${BASE_URL}/Admin/Account/Login`);
@@ -138,25 +131,40 @@ async function registerAndVerify(page: Page, email: string, password: string) {
     }
 }
 
-/**
- * Điều hướng đến menu admin dạng AJAX (dùng loadPage).
- * Sau khi click, chờ content load vào #main.
- */
 async function navigateToAdminMenu(page: Page, menuUrl: string) {
     await page.locator(`a[data-url="${menuUrl}"]`).click();
     await page.waitForLoadState('networkidle');
     await page.waitForTimeout(1000);
 }
 
-async function findTableRow(page: Page, searchText: string) {
-    return page.locator(`tbody tr:has-text("${searchText}")`).first();
+/**
+ * Fill a search bar, dispatch the 'input' event to trigger AJAX immediately,
+ * then wait for the target row to become visible in the table.
+ *
+ * Fixes the 800 ms hard-coded wait that was too short for AJAX + DOM update.
+ *
+ * @param searchBarSelector  CSS selector for the input (e.g. '#stationSearchBar')
+ * @param searchText         Text to type into the search bar
+ * @param rowText            Text expected in the target <tr> (defaults to searchText)
+ */
+async function searchAndGetRow(
+    page: Page,
+    searchBarSelector: string,
+    searchText: string,
+    rowText: string = searchText
+) {
+    const searchBox = page.locator(searchBarSelector).first();
+    await expect(searchBox).toBeVisible({ timeout: 5000 });
+    await searchBox.fill(searchText);
+    // Trigger JS 'input' handler immediately so AJAX fires without waiting for the
+    // browser's own debounce/idle timing.
+    await searchBox.dispatchEvent('input');
+    // Now wait for the row itself — this is the reliable signal that AJAX is done.
+    const row = page.locator(`tbody tr:has-text("${rowText}")`).first();
+    await row.waitFor({ state: 'visible', timeout: 12000 });
+    return row;
 }
 
-/**
- * Chờ và kiểm tra thông báo thành công sau submit.
- * Ưu tiên: toast Bootstrap (.toast-body trong .text-bg-success),
- * sau đó alert-success thông thường.
- */
 async function expectSuccess(page: Page, timeout = 10000) {
     const successSelectors = [
         '.toast.text-bg-success',
@@ -172,7 +180,7 @@ async function expectSuccess(page: Page, timeout = 10000) {
             break;
         }
     }
-    if (!found) throw new Error("❌ Không tìm thấy thông báo thành công.");
+    if (!found) throw new Error("❌ No success notification found.");
 }
 
 // ============================================================
@@ -181,19 +189,21 @@ async function expectSuccess(page: Page, timeout = 10000) {
 
 test.describe("SaigonRide - Complete Automation Suite", () => {
 
-    // --- 3.1. TRANG TĨNH ---
+    // --- 3.1. STATIC PAGES ---
     test.describe("UI & Static Pages", () => {
         for (const pageInfo of STATIC_PAGES) {
             test(`Verify Page: ${pageInfo.name}`, async ({ page }) => {
                 await page.goto(`${BASE_URL}${pageInfo.url}`);
-                const header = pageInfo.i18n ? page.locator(`[data-i18n="${pageInfo.i18n}"]`) : page.locator('h1.fw-bold');
+                const header = pageInfo.i18n
+                    ? page.locator(`[data-i18n="${pageInfo.i18n}"]`)
+                    : page.locator('h1.fw-bold');
                 await expect(header).toBeVisible();
                 await expect(header).toContainText(pageInfo.expectedText);
             });
         }
     });
 
-    // --- 3.2. XÁC THỰC ---
+    // --- 3.2. AUTHENTICATION ---
     test.describe("Authentication Flows", () => {
         test("TC-AUTH: Registration Process", async ({ page }) => {
             await registerAndVerify(page, CUSTOMER_EMAIL, CUSTOMER_PASSWORD);
@@ -207,7 +217,7 @@ test.describe("SaigonRide - Complete Automation Suite", () => {
         });
     });
 
-    // --- 3.3. QUẢN TRỊ ADMIN CƠ BẢN ---
+    // --- 3.3. ADMIN NAVIGATION ---
     test.describe("Admin Operations", () => {
         test.beforeEach(async ({ page }) => {
             await loginAsAdmin(page);
@@ -216,14 +226,16 @@ test.describe("SaigonRide - Complete Automation Suite", () => {
         for (const menu of ADMIN_MENU_AJAX) {
             test(`Admin -> ${menu.name} (AJAX)`, async ({ page }) => {
                 await page.locator(`a[data-url="${menu.url}"]`).click();
-                const pageHeader = page.locator(`h4 span[data-i18n="${menu.i18nKey}"], h1, h2`).first();
+                const pageHeader = page.locator(
+                    `h4 span[data-i18n="${menu.i18nKey}"], h1, h2, h4`
+                ).first();
                 await expect(pageHeader).toBeVisible({ timeout: 10000 });
                 await expect(pageHeader).toContainText(menu.expectedText);
             });
         }
     });
 
-    // --- 3.4. THUÊ XE & THANH TOÁN ---
+    // --- 3.4. BIKE RENTAL & PAYMENT ---
     test("TC-RENT: Bike Rental with PayPal Payment", async ({ page }) => {
         await loginAs(page, CUSTOMER_EMAIL, CUSTOMER_PASSWORD);
 
@@ -241,7 +253,9 @@ test.describe("SaigonRide - Complete Automation Suite", () => {
 
         await page.locator('select[name="endStationId"]').selectOption({ index: 1 });
 
-        const finishBtn = page.locator('button[type="submit"].btn-success:has(span[data-i18n="trip_finish"])');
+        const finishBtn = page.locator(
+            'button[type="submit"].btn-success:has(span[data-i18n="trip_finish"])'
+        );
         await finishBtn.click();
 
         await page.locator('.pay-card[data-method="PayPal"]').click();
@@ -249,7 +263,9 @@ test.describe("SaigonRide - Complete Automation Suite", () => {
 
         await page.waitForURL(/paypal\.com/, { timeout: 30000 });
 
-        const paypalLoginBtn = page.locator('button.css-ltr-1d5lazx-button-Button:has-text("Log In")');
+        const paypalLoginBtn = page.locator(
+            'button.css-ltr-1d5lazx-button-Button:has-text("Log In")'
+        );
         await paypalLoginBtn.click();
 
         const emailInput = page.locator('input#email');
@@ -264,7 +280,9 @@ test.describe("SaigonRide - Complete Automation Suite", () => {
 
         await page.locator('#btnLogin, button[type="submit"]:has-text("Log In")').first().click();
 
-        const paypalSubmitBtn = page.locator('button[data-testid="submit-button-initial"], #payment-submit-btn');
+        const paypalSubmitBtn = page.locator(
+            'button[data-testid="submit-button-initial"], #payment-submit-btn'
+        );
         await expect(paypalSubmitBtn).toBeEnabled({ timeout: 20000 });
         await paypalSubmitBtn.click();
 
@@ -290,104 +308,102 @@ test.describe("Station Management - CRUD Operations", () => {
     });
 
     test("ST-01: Create New Station", async ({ page }) => {
-        // Nút "Add Station" dùng onclick="loadPage('/Stations/Create')" — không có href/data-url
         const createBtn = page.locator('button[onclick*="Stations/Create"]');
         await expect(createBtn).toBeVisible({ timeout: 5000 });
         await createBtn.click();
 
-        // Chờ form Create load vào #main (AJAX)
-        await expect(page.locator('#stationCreateForm, form#stationCreateForm')).toBeVisible({ timeout: 10000 });
+        await expect(
+            page.locator('#stationCreateForm, form#stationCreateForm')
+        ).toBeVisible({ timeout: 10000 });
 
-        // Điền đúng field names: Name, Address, TotalCapacity, CurrentCount
         await page.locator('input[name="Name"], input#Name').first().fill(STATION_DATA.name);
         await page.locator('input[name="Address"], input#Address').first().fill(STATION_DATA.address);
 
-        // TotalCapacity có default value="20", ghi đè
-        const totalCapInput = page.locator('input[name="TotalCapacity"], input#TotalCapacity').first();
+        const totalCapInput = page.locator(
+            'input[name="TotalCapacity"], input#TotalCapacity'
+        ).first();
         await totalCapInput.clear();
         await totalCapInput.fill(STATION_DATA.totalCapacity);
 
-        // CurrentCount có default value="0", giữ nguyên hoặc ghi đè
-        const currentCountInput = page.locator('input[name="CurrentCount"], input#CurrentCount').first();
+        const currentCountInput = page.locator(
+            'input[name="CurrentCount"], input#CurrentCount'
+        ).first();
         await currentCountInput.clear();
         await currentCountInput.fill(STATION_DATA.currentCount);
 
-        // IsActive checkbox đã checked theo mặc định — không cần thay đổi
-
-        // Submit form
         const submitBtn = page.locator('#stationCreateForm button[type="submit"]');
         await expect(submitBtn).toBeVisible({ timeout: 5000 });
         await submitBtn.click();
 
-        // Sau submit thành công, app loadPage('/Stations/Index') → chờ table xuất hiện
+        // On success the form JS calls loadPage('/Stations/Index') — wait for table
         await expect(page.locator('#stationTableBody, table tbody')).toBeVisible({ timeout: 10000 });
     });
 
     test("ST-02: Read/View Station Details", async ({ page }) => {
-        // Tìm kiếm station vừa tạo qua search bar (client-side AJAX search)
-        const searchBox = page.locator('#stationSearchBar, input[placeholder*="Search"]').first();
-        if (await searchBox.isVisible()) {
-            await searchBox.fill(STATION_DATA.name);
-            await page.waitForTimeout(800); // debounce search
-        }
+        // FIX: use searchAndGetRow — dispatches 'input' event and waits for AJAX row
+        const row = await searchAndGetRow(page, '#stationSearchBar', STATION_DATA.name);
 
-        const row = await findTableRow(page, STATION_DATA.name);
-        await expect(row).toBeVisible({ timeout: 5000 });
-
-        // Nút Edit/Details trong row
-        const viewBtn = row.locator('a[href*="Details"], a[href*="Edit"], button:has-text("View"), button[onclick*="Details"], button[onclick*="Edit"]').first();
+        // FIX: station view button is onclick="loadPage('/Stations/Details/ID')"
+        // Selector matches via substring of the onclick attribute value
+        const viewBtn = row.locator('button[onclick*="Stations/Details"]').first();
+        await expect(viewBtn).toBeVisible({ timeout: 5000 });
         await viewBtn.click();
+
+        // Wait for the AJAX partial view to finish loading into #main
         await page.waitForLoadState('networkidle');
 
-        await expect(page.locator(`text="${STATION_DATA.name}"`)).toBeVisible();
+        // FIX: station name is rendered as:
+        //   <h2 data-i18n="@Model.Name">@Model.Name</h2>
+        // The i18n JS processes data-i18n and may replace text; using exact text= locator
+        // is fragile. toContainText on body is reliable regardless of i18n outcome.
+        await expect(page.locator('body')).toContainText(STATION_DATA.name, { timeout: 10000 });
     });
 
     test("ST-03: Update Station", async ({ page }) => {
-        const searchBox = page.locator('#stationSearchBar, input[placeholder*="Search"]').first();
-        if (await searchBox.isVisible()) {
-            await searchBox.fill(STATION_DATA.name);
-            await page.waitForTimeout(800);
-        }
+        // FIX: use searchAndGetRow — dispatches 'input' event and waits for AJAX row
+        const row = await searchAndGetRow(page, '#stationSearchBar', STATION_DATA.name);
 
-        const row = await findTableRow(page, STATION_DATA.name);
-        await expect(row).toBeVisible({ timeout: 5000 });
-
-        const editBtn = row.locator('a[href*="Edit"], button:has-text("Edit"), button[onclick*="Edit"]').first();
+        // FIX: edit button is onclick="loadPage('/Stations/Edit/ID')"
+        const editBtn = row.locator('button[onclick*="Stations/Edit"]').first();
+        await expect(editBtn).toBeVisible({ timeout: 5000 });
         await editBtn.click();
-        await page.waitForLoadState('networkidle');
 
-        // Cập nhật TotalCapacity (đúng field name theo form)
-        const capacityInput = page.locator('input[name="TotalCapacity"], input#TotalCapacity').first();
+        // Wait for the AJAX partial edit form to load into #main
+        await page.waitForLoadState('networkidle');
+        const capacityInput = page.locator(
+            'input[name="TotalCapacity"], input#TotalCapacity'
+        ).first();
+        await expect(capacityInput).toBeVisible({ timeout: 8000 });
         await capacityInput.clear();
         await capacityInput.fill("75");
 
-        const submitBtn = page.locator('button[type="submit"]:has-text("Save"), button[type="submit"]:has-text("Update"), button[type="submit"]:has-text("Edit")').first();
+        const submitBtn = page.locator('button[type="submit"]:has-text("Save")').first();
+        await expect(submitBtn).toBeVisible({ timeout: 5000 });
         await submitBtn.click();
 
-        await expectSuccess(page);
+        // FIX: the station edit AJAX success handler calls loadPage('/Stations/Index') —
+        // there is NO toast. Confirm success by waiting for the station table to reappear.
+        await expect(
+            page.locator('#stationTableBody, table tbody')
+        ).toBeVisible({ timeout: 10000 });
     });
 
     test("ST-04: Delete Station", async ({ page }) => {
-        const searchBox = page.locator('#stationSearchBar, input[placeholder*="Search"]').first();
-        if (await searchBox.isVisible()) {
-            await searchBox.fill(STATION_DATA.name);
-            await page.waitForTimeout(800);
-        }
+        // FIX: use searchAndGetRow — dispatches 'input' event and waits for AJAX row
+        const row = await searchAndGetRow(page, '#stationSearchBar', STATION_DATA.name);
 
-        const row = await findTableRow(page, STATION_DATA.name);
-        await expect(row).toBeVisible({ timeout: 5000 });
-
-        // Nút delete gọi window.prepareDeleteStation(id, name) → mở #deleteStationModal
-        const deleteBtn = row.locator('button[onclick*="prepareDeleteStation"], button:has-text("Delete"), a[href*="Delete"]').first();
+        // FIX: delete button uses onclick="prepareDeleteStation(id, name)"
+        const deleteBtn = row.locator('button[onclick*="prepareDeleteStation"]').first();
+        await expect(deleteBtn).toBeVisible({ timeout: 5000 });
         await deleteBtn.click();
 
-        // Xác nhận trong modal #deleteStationModal
+        // Confirm inside the Bootstrap modal
         const confirmBtn = page.locator('#confirmDeleteStationBtn');
         await expect(confirmBtn).toBeVisible({ timeout: 5000 });
         await confirmBtn.click();
 
-        // Toast success: #stationSuccessToast
-        await expect(page.locator('#stationSuccessToast')).toBeVisible({ timeout: 5000 });
+        // Station-specific success toast: #stationSuccessToast
+        await expect(page.locator('#stationSuccessToast')).toBeVisible({ timeout: 8000 });
     });
 });
 
@@ -401,112 +417,106 @@ test.describe("Vehicle Management - CRUD Operations", () => {
     });
 
     test("VH-01: Create New Vehicle", async ({ page }) => {
-        // Nút "Add Vehicle" có id="openCreateBtn"
         const createBtn = page.locator('#openCreateBtn');
         await expect(createBtn).toBeVisible({ timeout: 5000 });
         await createBtn.click();
 
-        // Chờ modal #createModal hiện ra
         const createModal = page.locator('#createModal');
         await expect(createModal).toBeVisible({ timeout: 5000 });
 
-        // Điền đúng field names theo form thực tế
-        // VehicleModel
-        await createModal.locator('input[name="VehicleModel"], #VehicleModelInput').first().fill(VEHICLE_DATA.vehicleModel);
-
-        // Price
+        await createModal
+            .locator('input[name="VehicleModel"], #VehicleModelInput')
+            .first()
+            .fill(VEHICLE_DATA.vehicleModel);
         await createModal.locator('input[name="Price"]').first().fill(VEHICLE_DATA.price);
 
-        // State (select với enum VehicleState)
         const stateSelect = createModal.locator('select[name="State"], #VehicleStateInput');
         await expect(stateSelect).toBeVisible({ timeout: 3000 });
         await stateSelect.selectOption({ label: VEHICLE_DATA.state });
 
-        // BatteryPercentage — điền vào input number, range tự sync qua oninput
-        const batteryInput = createModal.locator('input#batteryNumber, input[name="BatteryPercentage"]').first();
+        const batteryInput = createModal
+            .locator('input#batteryNumber, input[name="BatteryPercentage"]')
+            .first();
         await batteryInput.fill(VEHICLE_DATA.batteryPercentage);
-        // Trigger input event để validation form bật nút submit
         await batteryInput.dispatchEvent('input');
 
-        // CurrentStationId là optional — không cần chọn
-
-        // Nút submit id="sunmitBtn" (typo trong source nhưng đúng ID thực tế)
         const submitBtn = createModal.locator('#sunmitBtn, button[type="submit"]').first();
         await expect(submitBtn).toBeEnabled({ timeout: 5000 });
         await submitBtn.click();
 
-        // Modal đóng lại và table refresh — chờ modal ẩn đi
         await expect(createModal).not.toBeVisible({ timeout: 10000 });
-
-        // Kiểm tra vehicle vừa tạo xuất hiện trong bảng
-        await expect(page.locator(`#vehicleTableBody, table tbody`)).toBeVisible({ timeout: 5000 });
+        await expect(page.locator('#vehicleTableBody, table tbody')).toBeVisible({ timeout: 5000 });
     });
 
     test("VH-02: Read/View Vehicle Details", async ({ page }) => {
-        const searchBox = page.locator('input[placeholder*="Search"], input[name="search"]').first();
-        if (await searchBox.isVisible()) {
-            await searchBox.fill(VEHICLE_DATA.vehicleModel);
-            await page.waitForTimeout(800);
-        }
+        // FIX: use searchAndGetRow with vehicle search bar id
+        const row = await searchAndGetRow(page, '#searchBar', VEHICLE_DATA.vehicleModel);
 
-        const row = await findTableRow(page, VEHICLE_DATA.vehicleModel);
-        await expect(row).toBeVisible({ timeout: 5000 });
-
-        const viewBtn = row.locator('a[href*="Details"], button:has-text("View"), button[onclick*="Details"]').first();
+        // FIX: vehicle view button is onclick="ShowDetailsModal(ID)" — no text, no href.
+        // The button has title="View Details" which is the reliable selector.
+        const viewBtn = row.locator('button[title="View Details"]').first();
+        await expect(viewBtn).toBeVisible({ timeout: 5000 });
         await viewBtn.click();
 
-        // Details modal hoặc page — kiểm tra model name hiển thị
-        await expect(page.locator(`text="${VEHICLE_DATA.vehicleModel}"`)).toBeVisible({ timeout: 5000 });
+        // FIX: ShowDetailsModal() first shows a loading spinner in #detailsModalBody,
+        // then fetches vehicle details via AJAX and populates #detailsModalBody,
+        // then shows #detailsModal. Wait for the modal to be visible.
+        const detailsModal = page.locator('#detailsModal');
+        await expect(detailsModal).toBeVisible({ timeout: 8000 });
+
+        // FIX: vehicle model is in <h5 data-i18n="@Model.VehicleModel">@Model.VehicleModel</h5>
+        // Use toContainText on the modal body — avoids exact-match issues from i18n processing.
+        await expect(
+            page.locator('#detailsModalBody')
+        ).toContainText(VEHICLE_DATA.vehicleModel, { timeout: 10000 });
     });
 
     test("VH-03: Update Vehicle", async ({ page }) => {
-        const searchBox = page.locator('input[placeholder*="Search"], input[name="search"]').first();
-        if (await searchBox.isVisible()) {
-            await searchBox.fill(VEHICLE_DATA.vehicleModel);
-            await page.waitForTimeout(800);
-        }
+        // FIX: use searchAndGetRow
+        const row = await searchAndGetRow(page, '#searchBar', VEHICLE_DATA.vehicleModel);
 
-        const row = await findTableRow(page, VEHICLE_DATA.vehicleModel);
-        await expect(row).toBeVisible({ timeout: 5000 });
-
-        const editBtn = row.locator('a[href*="Edit"], button:has-text("Edit"), button[onclick*="Edit"]').first();
+        // FIX: edit button is onclick="ShowEditModal(ID)" with title="Edit"
+        const editBtn = row.locator('button[title="Edit"]').first();
+        await expect(editBtn).toBeVisible({ timeout: 5000 });
         await editBtn.click();
 
-        // Edit modal hoặc page
-        await page.waitForTimeout(500);
+        // FIX: ShowEditModal() fetches vehicle data via AJAX then shows #editModal
+        const editModal = page.locator('#editModal');
+        await expect(editModal).toBeVisible({ timeout: 8000 });
 
-        const modelInput = page.locator('input[name="VehicleModel"], #VehicleModelInput').first();
+        // FIX: the model name input inside the edit modal is #editVehicleModel
+        const modelInput = editModal.locator('#editVehicleModel');
         await expect(modelInput).toBeVisible({ timeout: 5000 });
         await modelInput.clear();
         await modelInput.fill("Honda Air Blade");
 
-        const submitBtn = page.locator('button[type="submit"]:has-text("Save"), button[type="submit"]:has-text("Update"), #sunmitBtn').first();
+        // FIX: submit button inside the edit modal is #editSubmitBtn
+        const submitBtn = editModal.locator('#editSubmitBtn');
+        await expect(submitBtn).toBeVisible({ timeout: 5000 });
         await submitBtn.click();
 
-        await expectSuccess(page);
+        // FIX: vehicle edit success calls $('#editModal').modal('hide') — no toast is shown.
+        // Closing of the modal is the reliable success signal.
+        await expect(editModal).not.toBeVisible({ timeout: 10000 });
     });
 
     test("VH-04: Delete Vehicle", async ({ page }) => {
-        const searchBox = page.locator('input[placeholder*="Search"], input[name="search"]').first();
-        if (await searchBox.isVisible()) {
-            await searchBox.fill(VEHICLE_DATA.vehicleModel);
-            await page.waitForTimeout(800);
-        }
+        // VH-03 renamed the vehicle — search by the updated name
+        const updatedModel = "Honda Air Blade";
+        const row = await searchAndGetRow(page, '#searchBar', updatedModel);
 
-        const row = await findTableRow(page, VEHICLE_DATA.vehicleModel);
-        await expect(row).toBeVisible({ timeout: 5000 });
-
-        const deleteBtn = row.locator('button:has-text("Delete"), a[href*="Delete"], button[onclick*="Delete"]').first();
+        // FIX: delete button is onclick="prepareDelete(ID, name)" with title="Delete"
+        const deleteBtn = row.locator('button[title="Delete"]').first();
+        await expect(deleteBtn).toBeVisible({ timeout: 5000 });
         await deleteBtn.click();
 
-        // Confirm dialog (modal hoặc JS confirm)
-        page.on('dialog', dialog => dialog.accept());
-        const confirmBtn = page.locator('button:has-text("Confirm"), button:has-text("Yes"), button[class*="danger"][type="submit"]').first();
-        if (await confirmBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
-            await confirmBtn.click();
-        }
+        // FIX: confirm button inside #deleteModal is #confirmDeleteBtn
+        const confirmBtn = page.locator('#confirmDeleteBtn');
+        await expect(confirmBtn).toBeVisible({ timeout: 5000 });
+        await confirmBtn.click();
 
-        await expectSuccess(page);
+        // FIX: on success the JS removes the <tr> from the DOM — wait for it to vanish
+        await expect(row).not.toBeVisible({ timeout: 8000 });
     });
 });
 
@@ -520,16 +530,13 @@ test.describe("User Management - CRUD Operations", () => {
     });
 
     test("US-01: Create New User", async ({ page }) => {
-        // Nút "Add User" có id="openCreateUserBtn"
         const createBtn = page.locator('#openCreateUserBtn');
         await expect(createBtn).toBeVisible({ timeout: 5000 });
         await createBtn.click();
 
-        // Chờ modal #createUserModal hiện ra
         const createModal = page.locator('#createUserModal');
         await expect(createModal).toBeVisible({ timeout: 5000 });
 
-        // Điền đúng field names theo form thực tế
         await createModal.locator('input[name="FullName"]').fill(USER_DATA.fullname);
         await createModal.locator('input[name="UserName"]').fill(USER_DATA.username);
         await createModal.locator('input[name="Email"]').fill(USER_DATA.email);
@@ -537,101 +544,100 @@ test.describe("User Management - CRUD Operations", () => {
         await createModal.locator('input[name="Password"]').fill(USER_DATA.password);
         await createModal.locator('input[name="CCCD"]').fill(USER_DATA.cccd);
 
-        // UserType select — mặc định "Local", có thể giữ nguyên
         const userTypeSelect = createModal.locator('select[name="UserType"]');
         if (await userTypeSelect.isVisible({ timeout: 1000 }).catch(() => false)) {
             await userTypeSelect.selectOption('Local');
         }
 
-        // Role checkboxes — chọn "Customer"
-        const customerRoleCheckbox = createModal.locator('input[name="Roles"][value="Customer"]');
+        const customerRoleCheckbox = createModal.locator(
+            'input[name="Roles"][value="Customer"]'
+        );
         if (await customerRoleCheckbox.isVisible({ timeout: 1000 }).catch(() => false)) {
             await customerRoleCheckbox.check();
         }
 
-        // Submit: button[type="submit"] form="createUserForm" id="createUserSubmitBtn"
         const submitBtn = page.locator('#createUserSubmitBtn');
         await expect(submitBtn).toBeVisible({ timeout: 5000 });
         await submitBtn.click();
 
-        // Chờ modal đóng → thành công
         await expect(createModal).not.toBeVisible({ timeout: 10000 });
 
-        // Kiểm tra alert success hoặc user xuất hiện trong bảng
+        // FIX: verify created user by searching username (userSearchBar searches name/username,
+        // not email — there is no emailSearchBar element in the rendered HTML)
         await expectSuccess(page).catch(async () => {
-            // Nếu không có toast, kiểm tra user trong bảng
-            const searchBox = page.locator('input[placeholder*="Search"]').first();
-            if (await searchBox.isVisible()) {
-                await searchBox.fill(USER_DATA.email);
-                await page.waitForTimeout(800);
-                await expect(page.locator(`tbody tr:has-text("${USER_DATA.email}")`).first()).toBeVisible({ timeout: 5000 });
-            }
+            const row = await searchAndGetRow(page, '#userSearchBar', USER_DATA.username);
+            await expect(row).toBeVisible({ timeout: 5000 });
         });
     });
 
     test("US-02: Read/View User Details", async ({ page }) => {
-        const searchBox = page.locator('input[placeholder*="Search"], input[name="search"]').first();
-        if (await searchBox.isVisible()) {
-            await searchBox.fill(USER_DATA.email);
-            await page.waitForTimeout(800);
-        }
+        // FIX: #userSearchBar searches by name/username — fill username, NOT email
+        const row = await searchAndGetRow(page, '#userSearchBar', USER_DATA.username);
 
-        const row = await findTableRow(page, USER_DATA.email);
-        await expect(row).toBeVisible({ timeout: 5000 });
-
-        const viewBtn = row.locator('a[href*="Details"], button:has-text("View"), button[onclick*="Details"]').first();
+        // FIX: user details button is onclick="ShowUserDetailsModal('userId')"
+        const viewBtn = row.locator('button[onclick*="ShowUserDetailsModal"]').first();
+        await expect(viewBtn).toBeVisible({ timeout: 5000 });
         await viewBtn.click();
-        await page.waitForTimeout(500);
 
-        await expect(page.locator(`text="${USER_DATA.email}"`)).toBeVisible({ timeout: 5000 });
-        await expect(page.locator(`text="${USER_DATA.fullname}"`)).toBeVisible({ timeout: 5000 });
+        // FIX: ShowUserDetailsModal() fetches user data via AJAX into #userDetailsModalBody,
+        // then shows #userDetailsModal
+        const detailsModal = page.locator('#userDetailsModal');
+        await expect(detailsModal).toBeVisible({ timeout: 8000 });
+
+        // FIX: email appears as a link in #userDetailsModalBody — use toContainText
+        await expect(
+            page.locator('#userDetailsModalBody')
+        ).toContainText(USER_DATA.email, { timeout: 10000 });
+        await expect(
+            page.locator('#userDetailsModalBody')
+        ).toContainText(USER_DATA.fullname, { timeout: 5000 });
     });
 
     test("US-03: Update User", async ({ page }) => {
-        const searchBox = page.locator('input[placeholder*="Search"], input[name="search"]').first();
-        if (await searchBox.isVisible()) {
-            await searchBox.fill(USER_DATA.email);
-            await page.waitForTimeout(800);
-        }
+        // FIX: search by username
+        const row = await searchAndGetRow(page, '#userSearchBar', USER_DATA.username);
 
-        const row = await findTableRow(page, USER_DATA.email);
-        await expect(row).toBeVisible({ timeout: 5000 });
-
-        const editBtn = row.locator('a[href*="Edit"], button:has-text("Edit"), button[onclick*="Edit"]').first();
+        // FIX: edit button is onclick="ShowUserEditModal('userId')"
+        const editBtn = row.locator('button[onclick*="ShowUserEditModal"]').first();
+        await expect(editBtn).toBeVisible({ timeout: 5000 });
         await editBtn.click();
-        await page.waitForTimeout(500);
 
-        const phoneInput = page.locator('input[name="PhoneNumber"], input#PhoneNumber').first();
+        // FIX: ShowUserEditModal() fetches user data via AJAX and shows #editUserModal
+        const editModal = page.locator('#editUserModal');
+        await expect(editModal).toBeVisible({ timeout: 8000 });
+
+        // FIX: phone input inside the edit modal is #editUserPhone
+        const phoneInput = editModal.locator('#editUserPhone');
         await expect(phoneInput).toBeVisible({ timeout: 5000 });
         await phoneInput.clear();
         await phoneInput.fill("0123456789");
 
-        const submitBtn = page.locator('button[type="submit"]:has-text("Save"), button[type="submit"]:has-text("Update")').first();
+        // FIX: submit button is #editUserSubmitBtn
+        const submitBtn = page.locator('#editUserSubmitBtn');
+        await expect(submitBtn).toBeVisible({ timeout: 5000 });
         await submitBtn.click();
 
-        await expectSuccess(page);
+        // FIX: user edit success calls $('#editUserModal').modal('hide') — no toast.
+        // Closing of the modal is the reliable success signal.
+        await expect(editModal).not.toBeVisible({ timeout: 10000 });
     });
 
     test("US-04: Delete User", async ({ page }) => {
-        const searchBox = page.locator('input[placeholder*="Search"], input[name="search"]').first();
-        if (await searchBox.isVisible()) {
-            await searchBox.fill(USER_DATA.email);
-            await page.waitForTimeout(800);
-        }
+        // FIX: search by username
+        const row = await searchAndGetRow(page, '#userSearchBar', USER_DATA.username);
 
-        const row = await findTableRow(page, USER_DATA.email);
-        await expect(row).toBeVisible({ timeout: 5000 });
-
-        const deleteBtn = row.locator('button:has-text("Delete"), a[href*="Delete"], button[onclick*="Delete"]').first();
+        // FIX: delete button is onclick="prepareUserDelete('userId', 'name')"
+        const deleteBtn = row.locator('button[onclick*="prepareUserDelete"]').first();
+        await expect(deleteBtn).toBeVisible({ timeout: 5000 });
         await deleteBtn.click();
 
-        page.on('dialog', dialog => dialog.accept());
-        const confirmBtn = page.locator('button:has-text("Confirm"), button:has-text("Yes"), button[class*="danger"][type="submit"]').first();
-        if (await confirmBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
-            await confirmBtn.click();
-        }
+        // FIX: confirm button inside #deleteUserModal is #confirmUserDeleteBtn
+        const confirmBtn = page.locator('#confirmUserDeleteBtn');
+        await expect(confirmBtn).toBeVisible({ timeout: 5000 });
+        await confirmBtn.click();
 
-        await expectSuccess(page);
+        // FIX: on success the JS removes the <tr> from the DOM — wait for it to vanish
+        await expect(row).not.toBeVisible({ timeout: 8000 });
     });
 });
 
@@ -640,49 +646,46 @@ test.describe("User Management - CRUD Operations", () => {
 // -------------------------------------------------------
 test.describe("Report Management - CRUD Operations", () => {
 
-    // RP-01 KHÔNG dùng beforeEach admin vì cần login customer để tạo report
+    // RP-01: customer creates a report
     test("RP-01: Create New Report (User UI)", async ({ page }) => {
         await loginAs(page, CUSTOMER_EMAIL, CUSTOMER_PASSWORD);
 
-        // Điều hướng đến trang tạo report (BugReports/Create hoặc trang có form report)
         await page.goto(`${BASE_URL}/Home/ReportIssue`);
         await page.waitForLoadState('networkidle');
 
-        // Điền đúng field names: Title, Description, CreatedDate, Status
         const titleInput = page.locator('input[name="Title"], input#Title').first();
         await expect(titleInput).toBeVisible({ timeout: 5000 });
         await titleInput.fill(REPORT_DATA.title);
 
-        const descInput = page.locator('input[name="Description"], textarea[name="Description"]').first();
+        const descInput = page.locator(
+            'input[name="Description"], textarea[name="Description"]'
+        ).first();
         await descInput.fill(REPORT_DATA.description);
 
-        // CreatedDate — điền ngày hiện tại nếu required
         const createdDateInput = page.locator('input[name="CreatedDate"]').first();
         if (await createdDateInput.isVisible({ timeout: 1000 }).catch(() => false)) {
             const today = new Date().toISOString().split('T')[0];
             await createdDateInput.fill(today);
         }
 
-        // Status field
         const statusInput = page.locator('input[name="Status"]').first();
         if (await statusInput.isVisible({ timeout: 1000 }).catch(() => false)) {
             await statusInput.fill(REPORT_DATA.status);
         }
 
-        // Submit
-        const submitBtn = page.locator('input[type="submit"][value="Create"], button[type="submit"]').first();
+        const submitBtn = page.locator(
+            'input[type="submit"][value="Create"], button[type="submit"]'
+        ).first();
         await expect(submitBtn).toBeVisible({ timeout: 5000 });
         await submitBtn.click();
         await page.waitForLoadState('networkidle');
 
-        // Kiểm tra thành công: redirect hoặc success message
         await expectSuccess(page).catch(async () => {
-            // Nếu không có toast, kiểm tra đã redirect về list
             await expect(page).not.toHaveURL(/Create/);
         });
     });
 
-    // Các test còn lại dùng admin
+    // RP-02 to RP-05: admin operations on reports
     test.describe("Report Admin Operations", () => {
         test.beforeEach(async ({ page }) => {
             await loginAsAdmin(page);
@@ -690,20 +693,24 @@ test.describe("Report Management - CRUD Operations", () => {
         });
 
         test("RP-02: View Report Details", async ({ page }) => {
-            const searchBox = page.locator('input[placeholder*="Search"], input[name="search"]').first();
+            const searchBox = page.locator(
+                'input[placeholder*="Search"], input[name="search"]'
+            ).first();
             if (await searchBox.isVisible()) {
                 await searchBox.fill(REPORT_DATA.title);
-                await page.waitForTimeout(800);
+                await searchBox.dispatchEvent('input');
+                await page.waitForTimeout(1500);
             }
 
-            const row = await findTableRow(page, REPORT_DATA.title);
-            if (await row.isVisible({ timeout: 3000 }).catch(() => false)) {
-                const viewBtn = row.locator('a[href*="Details"], a[href*="View"], button:has-text("View")').first();
-
+            const row = page.locator(`tbody tr:has-text("${REPORT_DATA.title}")`).first();
+            if (await row.isVisible({ timeout: 5000 }).catch(() => false)) {
+                const viewBtn = row.locator(
+                    'a[href*="Details"], a[href*="View"], button:has-text("View")'
+                ).first();
                 if (await viewBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
                     await viewBtn.click();
                     await page.waitForLoadState('networkidle');
-                    await expect(page.locator(`text="${REPORT_DATA.title}"`)).toBeVisible();
+                    await expect(page.locator('body')).toContainText(REPORT_DATA.title);
                 } else {
                     console.log("ℹ️ No view button found for report.");
                 }
@@ -713,8 +720,9 @@ test.describe("Report Management - CRUD Operations", () => {
         });
 
         test("RP-03: Export/Download Reports", async ({ page }) => {
-            const exportBtn = page.locator('button:has-text("Export"), button:has-text("Download"), a[href*="Export"]').first();
-
+            const exportBtn = page.locator(
+                'button:has-text("Export"), button:has-text("Download"), a[href*="Export"]'
+            ).first();
             if (await exportBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
                 await exportBtn.click();
                 await expectSuccess(page).catch(() => {
@@ -726,12 +734,20 @@ test.describe("Report Management - CRUD Operations", () => {
         });
 
         test("RP-04: Filter Reports by Date Range", async ({ page }) => {
-            const startDateInput = page.locator('input[name="StartDate"], input[type="date"]').first();
-            const endDateInput = page.locator('input[name="EndDate"], input[type="date"]').nth(1);
-            const filterBtn = page.locator('button:has-text("Filter"), button:has-text("Search")').first();
+            const startDateInput = page.locator(
+                'input[name="StartDate"], input[type="date"]'
+            ).first();
+            const endDateInput = page.locator(
+                'input[name="EndDate"], input[type="date"]'
+            ).nth(1);
+            const filterBtn = page.locator(
+                'button:has-text("Filter"), button:has-text("Search")'
+            ).first();
 
-            if (await startDateInput.isVisible({ timeout: 3000 }).catch(() => false) &&
-                await endDateInput.isVisible({ timeout: 3000 }).catch(() => false)) {
+            if (
+                await startDateInput.isVisible({ timeout: 3000 }).catch(() => false) &&
+                await endDateInput.isVisible({ timeout: 3000 }).catch(() => false)
+            ) {
                 const today = new Date().toISOString().split('T')[0];
                 await startDateInput.fill(today);
                 await endDateInput.fill(today);
@@ -748,21 +764,27 @@ test.describe("Report Management - CRUD Operations", () => {
         });
 
         test("RP-05: Delete Report", async ({ page }) => {
-            const searchBox = page.locator('input[placeholder*="Search"], input[name="search"]').first();
+            const searchBox = page.locator(
+                'input[placeholder*="Search"], input[name="search"]'
+            ).first();
             if (await searchBox.isVisible()) {
                 await searchBox.fill(REPORT_DATA.title);
-                await page.waitForTimeout(800);
+                await searchBox.dispatchEvent('input');
+                await page.waitForTimeout(1500);
             }
 
-            const row = await findTableRow(page, REPORT_DATA.title);
-            if (await row.isVisible({ timeout: 3000 }).catch(() => false)) {
-                const deleteBtn = row.locator('button:has-text("Delete"), a[href*="Delete"]').first();
-
+            const row = page.locator(`tbody tr:has-text("${REPORT_DATA.title}")`).first();
+            if (await row.isVisible({ timeout: 5000 }).catch(() => false)) {
+                const deleteBtn = row.locator(
+                    'button:has-text("Delete"), a[href*="Delete"]'
+                ).first();
                 if (await deleteBtn.isVisible({ timeout: 2000 }).catch(() => false)) {
                     await deleteBtn.click();
 
                     page.on('dialog', dialog => dialog.accept());
-                    const confirmBtn = page.locator('button:has-text("Confirm"), button:has-text("Yes"), button[class*="danger"][type="submit"]').first();
+                    const confirmBtn = page.locator(
+                        'button:has-text("Confirm"), button:has-text("Yes"), button[class*="danger"][type="submit"]'
+                    ).first();
                     if (await confirmBtn.isVisible({ timeout: 3000 }).catch(() => false)) {
                         await confirmBtn.click();
                     }
