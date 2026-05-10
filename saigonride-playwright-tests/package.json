@@ -1,0 +1,23 @@
+{
+  "name": "saigonride-playwright-tests",
+  "version": "1.0.0",
+  "description": "Automation tests cho SaigonRide với Playwright",
+  "scripts": {
+    "test": "playwright test",
+    "test:auth": "playwright test tests/auth.spec.ts",
+    "test:home": "playwright test tests/home.spec.ts",
+    "test:admin": "playwright test tests/admin.spec.ts",
+    "test:rental": "playwright test tests/rental.spec.ts",
+    "test:nav": "playwright test tests/navigation.spec.ts",
+    "test:chrome": "playwright test --project='Chromium (Chrome)'",
+    "test:firefox": "playwright test --project='Firefox'",
+    "test:mobile": "playwright test --project='Mobile Chrome'",
+    "test:headed": "playwright test --headed",
+    "test:debug": "playwright test --debug",
+    "report": "playwright show-report"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.44.0",
+    "typescript": "^5.4.5"
+  }
+}

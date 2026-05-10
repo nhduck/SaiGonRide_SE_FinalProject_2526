@@ -116,27 +116,34 @@
         <!-- Search & Filter -->
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-body">
-                <form method="get" class="row g-2 align-items-center">
-                    <div class="col-12 col-lg-4">
+                <form method="get" class="row g-3 align-items-center">
+                    
+                    <div class="col-12 col-lg-5 col-xl-4">
                         <div class="input-group">
-                            <span class="input-group-text border-end-0">
+                            <span class="input-group-text border-end-0 bg-white">
                                 <i class="bi bi-search text-muted"></i>
                             </span>
                             <input id="userSearchBar" type="text" name="searchString"
                                    class="form-control border-start-0 ps-0"
-                                   placeholder="Search by name, email or ID..." data-i18n="[placeholder]admin_search_placeholder">
+                                   placeholder="Search by name, username or ID..."
+                                   data-i18n="[placeholder]admin_search_placeholder">
                         </div>
                     </div>
-                    <div class="col-12 col-lg-8 d-flex gap-2 flex-wrap">
-                        <button id="userClearBTN" class="btn btn-outline-primary btn-sm d-none" data-i18n="admin_clear_sort">Clear Sort</button>
-                        <button id="activeBTN" class="userSortBTN btn btn-outline-success btn-sm" data-filter="Active" data-i18n="admin_active">Active</button>
-                        <button id="lockedBTN" class="userSortBTN btn btn-outline-danger btn-sm" data-filter="Locked" data-i18n="admin_locked">Locked</button>
-                        <button id="adminBTN" class="userSortBTN btn btn-outline-warning btn-sm" data-filter="Admin" data-i18n="admin_admins">Admin</button>
-                        <button id="customerBTN" class="userSortBTN btn btn-outline-info btn-sm" data-filter="Customer" data-i18n="admin_customers">Customer</button>
-                        <button id="staffBTN" class="userSortBTN btn btn-outline-purple btn-sm" data-filter="Staff" data-i18n="admin_staff">Staff</button>
+
+                    <div class="col-12 col-lg-7 col-xl-8">
+                        <div class="d-flex justify-content-lg-end flex-wrap gap-2">
+                            <button id="userClearBTN" type="button" class="btn btn-outline-primary btn-sm d-none" data-i18n="admin_clear_sort">Clear Sort</button>
+                            <button id="activeBTN" type="button" class="userSortBTN btn btn-outline-success btn-sm" data-filter="Active" data-i18n="admin_active">Active</button>
+                            <button id="lockedBTN" type="button" class="userSortBTN btn btn-outline-danger btn-sm" data-filter="Locked" data-i18n="admin_locked">Locked</button>
+                            <button id="adminBTN" type="button" class="userSortBTN btn btn-outline-warning btn-sm" data-filter="Admin" data-i18n="admin_admins">Admin</button>
+                            <button id="customerBTN" type="button" class="userSortBTN btn btn-outline-info btn-sm" data-filter="Customer" data-i18n="admin_customers">Customer</button>
+                            <button id="staffBTN" type="button" class="userSortBTN btn btn-outline-purple btn-sm" data-filter="Staff" data-i18n="admin_staff">Staff</button>
+                        </div>
                     </div>
+
                 </form>
             </div>
+        </div>
         </div>
  
         <!-- Table -->
@@ -206,7 +213,7 @@
             $.ajax({
                 url: '/Admin/UserManagements/SearchUsers',
                 type: 'GET',
-                data: { searchTerm: $('#userSearchBar').val(), filters: selectedUserFilters },
+                data: { searchTerm: $('#userSearchBar').val(), emailSearch: $('#emailSearchBar').val(), filters: selectedUserFilters },
                 traditional: true,
                 success: function (html) {
                     $('#userTableBody').html(html);

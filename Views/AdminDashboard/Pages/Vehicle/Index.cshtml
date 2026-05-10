@@ -113,10 +113,10 @@
             </div>
         </div>
 
-        <!-- Search & Filter -->
         <div class="card border-0 shadow-sm mb-4">
             <div class="card-body">
                 <form method="get" class="row g-2 align-items-center">
+                    
                     <div class="col-12 col-lg-4">
                         <div class="input-group">
                             <span class="input-group-text bg-white border-end-0">
@@ -127,7 +127,8 @@
                                    placeholder="Search by model or ID..." data-i18n="[placeholder]admin_search_placeholder">
                         </div>
                     </div>
-                    <div class="col-12 col-lg-8 d-flex gap-2 flex-wrap">
+
+                    <div class="col-12 col-lg-8 d-flex justify-content-lg-end gap-2 flex-wrap">
                         <button id="clearBTN" class="btn btn-outline-primary btn-sm d-none">Clear Sort</button>
                         <button id="availableBTN" class="sortBTN btn btn-outline-success btn-sm" data-i18n="admin_available">Available</button>
                         <button id="UnAvailableBTN" class="sortBTN btn btn-outline-secondary btn-sm" data-i18n="admin_unavailable">UnAvailable</button>
@@ -135,6 +136,7 @@
                         <button id="MaintenanceBTN" class="sortBTN btn btn-outline-danger btn-sm" data-i18n="admin_maintenance">Maintenance</button>
                         <button id="RentedBTN" class="sortBTN btn btn-outline-purple btn-sm" data-i18n="admin_rented">Rented</button>
                     </div>
+
                 </form>
             </div>
         </div>

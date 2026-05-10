@@ -393,12 +393,14 @@ namespace RentalVehicleService.Controllers
                 .Include(r => r.EndStation)
                 .FirstOrDefaultAsync(r => r.RentalId == rentalId);
 
-                if (rental != null)
-                {
-                    rental.Status = RentalStatus.Completed;
-                    rental.PaymentMethod = "VNPay";
-                    rental.PaymentTransactionId = vnpTxnRef;
-                    rental.PaymentCompletedTime = Utc.Now;
+            if (rental != null)
+            {
+                rental.Status = RentalStatus.Completed;
+                rental.PaymentMethod = "VNPay";
+
+                rental.PaymentTransactionId = txnRef;
+
+                rental.PaymentCompletedTime = DateTime.UtcNow;
 
                 if (rental.Vehicle != null && rental.Vehicle.State != VehicleState.Available)
                 {
