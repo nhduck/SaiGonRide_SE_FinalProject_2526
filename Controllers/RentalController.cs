@@ -378,7 +378,7 @@ namespace RentalVehicleService.Controllers
             string txnRef = vnpay.GetResponseData("vnp_TxnRef");
             int rentalId = string.IsNullOrEmpty(txnRef) ? 0 : int.Parse(txnRef.Split('_')[0]);
 
-            string vnp_SecureHash = Request.Query["vnp_SecureHash"];
+            string? vnp_SecureHash = Request.Query["vnp_SecureHash"];
             bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, _configuration["Vnpay:HashSecret"]);
 
             if (!checkSignature || vnpay.GetResponseData("vnp_ResponseCode") != "00")

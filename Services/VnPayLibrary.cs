@@ -1,4 +1,4 @@
-﻿using System.Globalization;
+using System.Globalization;
 using System.Net;
 using System.Net.Sockets;
 using System.Security.Cryptography;
@@ -11,7 +11,7 @@ namespace RentalVehicleService.Services
         private readonly SortedList<string, string> _requestData = new SortedList<string, string>(new VnPayCompare());
         private readonly SortedList<string, string> _responseData = new SortedList<string, string>(new VnPayCompare());
 
-        public void AddRequestData(string key, string value)
+        public void AddRequestData(string key, string? value)
         {
             if (!string.IsNullOrEmpty(value)) _requestData.Add(key, value);
         }
@@ -26,8 +26,9 @@ namespace RentalVehicleService.Services
             return _responseData.TryGetValue(key, out var retValue) ? retValue : string.Empty;
         }
 
-        public string CreateRequestUrl(string baseUrl, string vnp_HashSecret)
+        public string CreateRequestUrl(string? baseUrl, string? vnp_HashSecret)
         {
+            if (baseUrl == null || vnp_HashSecret == null) return string.Empty;
             var data = new StringBuilder();
             foreach (var kv in _requestData.Where(kv => !string.IsNullOrEmpty(kv.Value)))
             {
@@ -42,8 +43,9 @@ namespace RentalVehicleService.Services
             return baseUrl;
         }
 
-        public bool ValidateSignature(string inputHash, string secretKey)
+        public bool ValidateSignature(string? inputHash, string? secretKey)
         {
+            if (inputHash == null || secretKey == null) return false;
             var rspRaw = GetResponseData();
             var myChecksum = HmacSHA512(secretKey, rspRaw);
             return myChecksum.Equals(inputHash, StringComparison.InvariantCultureIgnoreCase);
@@ -78,8 +80,9 @@ namespace RentalVehicleService.Services
             return hash.ToString();
         }
 
-        public static string GetIpAddress(HttpContext context)
+        public static string GetIpAddress(HttpContext? context)
         {
+            if (context == null) return "127.0.0.1";
             var ipAddress = string.Empty;
             try
             {
@@ -102,7 +105,7 @@ namespace RentalVehicleService.Services
 
     public class VnPayCompare : IComparer<string>
     {
-        public int Compare(string x, string y)
+        public int Compare(string? x, string? y)
         {
             if (x == y) return 0;
             if (x == null) return -1;
