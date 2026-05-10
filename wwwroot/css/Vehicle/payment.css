@@ -1,4 +1,4 @@
-﻿/* wwwroot/css/Vehicle/payment.css */
+/* wwwroot/css/Vehicle/payment.css */
 
 .payment-wrapper {
     font-family: 'Be Vietnam Pro', sans-serif;
@@ -10,7 +10,7 @@
 .invoice-card {
     background: #fff;
     border-radius: 16px;
-    box-shadow: 0 2px 20px rgba(0,0,0,0.07);
+    box-shadow: 0 2px 20px rgba(0, 0, 0, 0.07);
     max-width: 740px;
     margin: 0 auto;
 }
@@ -124,9 +124,9 @@
     padding-left: 16px;
 }
 
-    .fee-value.discount {
-        color: #16a34a;
-    }
+.fee-value.discount {
+    color: #16a34a;
+}
 
 .fee-total-label {
     font-size: 0.875rem;
@@ -167,10 +167,10 @@
     font-family: 'Be Vietnam Pro', sans-serif;
 }
 
-    .coupon-input:focus {
-        border-color: #22c55e;
-        box-shadow: 0 0 0 2px rgba(34,197,94,0.15);
-    }
+.coupon-input:focus {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 2px rgba(34, 197, 94, 0.15);
+}
 
 .coupon-btn {
     padding: 0 20px;
@@ -187,9 +187,9 @@
     height: 42px;
 }
 
-    .coupon-btn:hover {
-        background: #15803d;
-    }
+.coupon-btn:hover {
+    background: #15803d;
+}
 
 .coupon-msg {
     font-size: 0.875rem;
@@ -235,33 +235,33 @@
     gap: 8px;
 }
 
-    .pay-card:hover {
-        border-color: #22c55e;
-    }
+.pay-card:hover {
+    border-color: #22c55e;
+}
 
-    .pay-card.selected {
-        border-color: #22c55e;
-        box-shadow: 0 0 0 1.5px #22c55e;
-    }
+.pay-card.selected {
+    border-color: #22c55e;
+    box-shadow: 0 0 0 1.5px #22c55e;
+}
 
-    .pay-card .check {
-        display: none;
-        position: absolute;
-        top: 8px;
-        right: 8px;
-        background: #22c55e;
-        color: #fff;
-        border-radius: 50%;
-        width: 20px;
-        height: 20px;
-        font-size: 0.7rem;
-        align-items: center;
-        justify-content: center;
-    }
+.pay-card .check {
+    display: none;
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    background: #22c55e;
+    color: #fff;
+    border-radius: 50%;
+    width: 20px;
+    height: 20px;
+    font-size: 0.7rem;
+    align-items: center;
+    justify-content: center;
+}
 
-    .pay-card.selected .check {
-        display: flex;
-    }
+.pay-card.selected .check {
+    display: flex;
+}
 
 .pay-card-logo {
     height: 40px;
@@ -293,6 +293,153 @@
     text-transform: uppercase;
 }
 
-    .btn-confirm:hover {
-        background: #15803d;
+.btn-confirm:hover {
+    background: #15803d;
+}
+
+/* RESPONSIVE — Tablet (≤768px) */
+@media (max-width: 768px) {
+    .payment-wrapper {
+        padding: 24px 10px;
     }
+
+    .invoice-card {
+        padding: 24px 18px !important;
+        border-radius: 12px;
+    }
+
+    .invoice-title {
+        font-size: 1.2rem;
+        margin-bottom: 1.25rem;
+    }
+
+    .fee-section {
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .fee-section-label {
+        width: auto;
+    }
+
+    .grand-total-row {
+        flex-direction: column;
+        align-items: flex-start;
+        gap: 4px;
+    }
+
+    .grand-total-amount {
+        font-size: 1.2rem;
+    }
+}
+
+/* RESPONSIVE — Mobile (≤576px) */
+@media (max-width: 576px) {
+    .payment-wrapper {
+        padding: 16px 6px;
+    }
+
+    .invoice-card {
+        padding: 18px 14px !important;
+        border-radius: 10px;
+    }
+
+    .invoice-title {
+        font-size: 1.1rem;
+        margin-bottom: 1rem;
+    }
+
+    .section-heading {
+        font-size: 0.88rem;
+    }
+
+    /* Customer Info → stacked */
+    .customer-row {
+        flex-direction: column;
+        gap: 4px;
+        font-size: 0.82rem;
+    }
+
+    /* Time row → stacked */
+    .time-row {
+        flex-direction: column;
+        gap: 10px;
+        padding: 12px 14px;
+    }
+
+    .time-cell {
+        min-width: unset;
+        display: flex;
+        justify-content: space-between;
+        align-items: baseline;
+    }
+
+    .time-label {
+        font-size: 0.75rem;
+    }
+
+    .time-value {
+        font-size: 0.88rem;
+        margin-top: 0;
+    }
+
+    /* Fee rows */
+    .fee-row {
+        flex-wrap: wrap;
+        gap: 2px;
+    }
+
+    .fee-label {
+        font-size: 0.8rem;
+        flex: 1 1 60%;
+    }
+
+    .fee-value {
+        font-size: 0.82rem;
+        padding-left: 0;
+        text-align: right;
+        flex: 1 1 35%;
+    }
+
+    .fee-total-label {
+        font-size: 0.82rem;
+    }
+
+    .fee-total-value {
+        font-size: 0.82rem;
+        padding-left: 0;
+    }
+
+    /* Grand total */
+    .grand-total-amount {
+        font-size: 1.1rem;
+    }
+
+    /* Payment cards → 2 columns on small screens */
+    .pay-cards-wrap {
+        gap: 8px;
+    }
+
+    .pay-card {
+        min-width: calc(50% - 8px);
+        padding: 12px 8px;
+    }
+
+    .pay-card-name {
+        font-size: 0.68rem;
+    }
+
+    /* Confirm button */
+    .btn-confirm {
+        height: 48px;
+        font-size: 0.92rem;
+        border-radius: 12px;
+    }
+
+    /* Coupon input */
+    .coupon-wrap {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 8px;
+    }
+}
