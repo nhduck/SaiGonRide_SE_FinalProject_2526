@@ -651,5 +651,17 @@
     "auth_verifying": "Verifying...",
     "auth_otp_invalid": "Invalid or expired OTP code.",
     "auth_password_strength_error": "Password must be at least 8 characters long and include letters, numbers, and special characters.",
-    "auth_password_mismatch": "Passwords do not match."
+    "auth_password_mismatch": "Passwords do not match.",
+
+    "admin_change_password": "Change Password",
+    "admin_leave_blank_keep": "(leave blank to keep current)",
+    "admin_lock_account": "Lock Account",
+    "admin_new_password": "New Password",
+    "admin_new_password_placeholder": "Min. 8 characters",
+    "admin_confirm_password": "Confirm Password",
+    "admin_confirm_password_placeholder": "Repeat new password",
+    "admin_total_vehicles": "Total Vehicles",
+    "admin_no_notifications": "No notifications",
+    "admin_in_progress": "In Progress",
+    "nav_guide": "Guide"
 }

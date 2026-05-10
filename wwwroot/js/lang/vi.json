@@ -651,5 +651,17 @@
     "auth_verifying": "Đang xác thực...",
     "auth_otp_invalid": "Mã OTP không chính xác hoặc đã hết hạn.",
     "auth_password_strength_error": "Mật khẩu phải chứa ít nhất 8 ký tự, bao gồm chữ cái, chữ số và ký tự đặc biệt.",
-    "auth_password_mismatch": "Mật khẩu xác nhận không khớp."
+    "auth_password_mismatch": "Mật khẩu xác nhận không khớp.",
+
+    "admin_change_password": "Đổi mật khẩu",
+    "admin_leave_blank_keep": "(để trống nếu không đổi)",
+    "admin_lock_account": "Khóa tài khoản",
+    "admin_new_password": "Mật khẩu mới",
+    "admin_new_password_placeholder": "Tối thiểu 8 ký tự",
+    "admin_confirm_password": "Xác nhận mật khẩu",
+    "admin_confirm_password_placeholder": "Nhập lại mật khẩu mới",
+    "admin_total_vehicles": "Tổng số xe",
+    "admin_no_notifications": "Không có thông báo",
+    "admin_in_progress": "Đang xử lý",
+    "nav_guide": "Hướng dẫn"
 }
