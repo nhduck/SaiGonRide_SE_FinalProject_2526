@@ -86,8 +86,9 @@ namespace RentalVehicleService.Controllers
             return View();
         }
 
-        public IActionResult Guide()
+        public async Task<IActionResult> Guide()
         {
+            ViewBag.TotalStations = await _context.Stations.CountAsync(s => s.IsActive);
             return View();
         }
 
