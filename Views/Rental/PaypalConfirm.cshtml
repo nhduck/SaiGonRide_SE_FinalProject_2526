@@ -2,87 +2,139 @@
     ViewData["Title"] = "Confirm PayPal Payment - SaigonRide";
 }
 
-<div class="container py-5">
-    <div class="row">
-        <div class="col-md-6 offset-md-3">
-            <div class="card">
-                <div class="card-body">
-                    <h2 class="card-title mb-4">Xác nhận Thanh toán PayPal</h2>
-                    <p class="card-text">
-                        <strong>Số tiền:</strong> <span id="amountDisplay">@ViewBag.Amount.ToString("N0")</span> VND
-                    </p>
-                    <p class="card-text">
-                        <strong>Trạng thái:</strong> <span class="badge badge-warning">Đang chờ xác nhận</span>
-                    </p>
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/Vehicle/success.css" />
+    
+    <style>
+        body { font-family: 'Be Vietnam Pro', sans-serif; }
+        .confirm-card {
+            background: #ffffff;
+            border-radius: 24px;
+            padding: 32px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1);
+        }
+        /* Custom spinner màu vàng để hợp với brand */
+        .loader {
+            border-top-color: #FFD700;
+            animation: spinner 1.5s linear infinite;
+        }
+        @@keyframes spinner {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+    </style>
+</head>
 
-                    <div id="loadingSpinner" class="text-center my-3" style="display:none;">
-                        <div class="spinner-border text-primary" role="status">
-                            <span class="sr-only">Loading...</span>
-                        </div>
-                        <p>Đang xử lý thanh toán...</p>
-                    </div>
+<body class="flex flex-col min-h-screen bg-gray-50">
+    <main class="flex-grow flex items-center justify-center px-4 py-12">
+        <div class="max-w-md w-full flex flex-col items-center">
+            
+            <div class="text-center mb-8">
+                <div class="w-20 h-20 bg-yellow-400 rounded-full flex items-center justify-center mx-auto mb-4 shadow-lg shadow-yellow-200">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+                        <rect x="2" y="5" width="20" height="14" rx="2" />
+                        <line x1="2" y1="10" x2="22" y2="10" />
+                    </svg>
+                </div>
+                <h1 class="font-black text-3xl text-gray-900 mb-1" data-i18n="pay_confirm">Xác nhận Thanh toán</h1>
+                <p class="text-gray-500 font-medium text-lg">PayPal Gateway</p>
+            </div>
 
-                    <div id="errorMessage" class="alert alert-danger" style="display:none;"></div>
-                    <div id="successMessage" class="alert alert-success" style="display:none;"></div>
+            <div class="confirm-card w-full mb-6">
+                <div class="flex justify-between items-center mb-4 pb-4 border-b border-gray-100">
+                    <span class="text-gray-500 font-medium" data-i18n="pay_amount">Số tiền:</span>
+                    <span class="text-2xl font-black text-gray-900">
+                        <span id="amountDisplay">@ViewBag.Amount.ToString("N0")</span> <small class="text-sm">VND</small>
+                    </span>
+                </div>
 
-                    <button class="btn btn-primary w-100 mt-3" onclick="capturePayment()">
+                <div class="flex justify-between items-center mb-6">
+                    <span class="text-gray-500 font-medium" data-i18n="pay_status">Trạng thái:</span>
+                    <span class="px-3 py-1 bg-yellow-100 text-yellow-700 rounded-full text-xs font-bold uppercase tracking-wider" data-i18n="pay_pending">
+                        Đang chờ
+                    </span>
+                </div>
+
+                <div id="loadingSpinner" class="hidden text-center py-4">
+                    <div class="loader ease-linear rounded-full border-4 border-t-4 border-gray-200 h-12 w-12 mx-auto mb-3"></div>
+                    <p class="text-gray-600 font-medium animate-pulse" data-i18n="pay_processing">Đang xử lý giao dịch...</p>
+                </div>
+
+                <div id="errorMessage" class="hidden p-4 mb-4 text-sm text-red-700 bg-red-50 rounded-xl border border-red-100 font-medium text-center"></div>
+                <div id="successMessage" class="hidden p-4 mb-4 text-sm text-green-700 bg-green-50 rounded-xl border border-green-100 font-medium text-center"></div>
+
+                <div class="space-y-3">
+                    <button id="btnCapture" onclick="capturePayment(this)" class="w-full bg-gray-900 text-white font-bold py-4 rounded-2xl hover:bg-black transition-all transform active:scale-95 shadow-lg flex justify-center items-center" data-i18n="pay_btn_confirm">
                         Xác nhận Thanh toán
                     </button>
-                    <a href="@Url.Action("Payment", "Rental", new { id = ViewBag.RentalId })" class="btn btn-secondary w-100 mt-2">
-                        Hủy bỏ
+                    
+                    <a href="@Url.Action("Payment", "Rental", new { id = ViewBag.RentalId })" 
+                       class="block w-full text-center text-gray-500 font-semibold py-3 hover:text-gray-800 transition-colors" data-i18n="pay_btn_cancel">
+                        Hủy bỏ giao dịch
                     </a>
                 </div>
             </div>
+
+            <p class="text-gray-400 text-xs text-center px-8" data-i18n="pay_thanks">
+                Cảm ơn bạn vì đã lựa chọn SaigonRide để Move Green.
+            </p>
         </div>
-    </div>
-</div>
+    </main>
 
-@section Scripts {
-    <script>
-        async function capturePayment() {
-            const token = '@ViewBag.Token';
-            const rentalId = @ViewBag.RentalId;
-            const errorDiv = document.getElementById('errorMessage');
-            const successDiv = document.getElementById('successMessage');
-            const spinner = document.getElementById('loadingSpinner');
-            const btn = event.target;
+    @section Scripts {
+        <script src="~/lib/jquery/dist/jquery.min.js"></script>
+        <script src="~/js/i18n.js"></script>
+        <script>
+            async function capturePayment(btn) {
+                const token = '@ViewBag.Token';
+                const rentalId = '@ViewBag.RentalId';
+                const errorDiv = document.getElementById('errorMessage');
+                const successDiv = document.getElementById('successMessage');
+                const spinner = document.getElementById('loadingSpinner');
 
-            errorDiv.style.display = 'none';
-            successDiv.style.display = 'none';
-            spinner.style.display = 'block';
-            btn.disabled = true;
+                // UI State
+                errorDiv.classList.add('hidden');
+                successDiv.classList.add('hidden');
+                spinner.classList.remove('hidden');
+                btn.disabled = true;
+                btn.classList.add('opacity-50', 'cursor-not-allowed');
 
-            try {
-                const response = await fetch('/api/paypal/capture-order', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        orderId: token,
-                        rentalId: rentalId
-                    })
-                });
+                try {
+                    const response = await fetch('/api/paypal/capture-order', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ orderId: token, rentalId: parseInt(rentalId) })
+                    });
 
-                const result = await response.json();
+                    const result = await response.json();
 
-                if (result.success) {
-                    successDiv.textContent = result.message || 'Thanh toán thành công!';
-                    successDiv.style.display = 'block';
-                    setTimeout(() => {
-                        window.location.href = '/Rental/PaymentSuccess?rentalId=' + rentalId;
-                    }, 2000);
-                } else {
-                    errorDiv.textContent = result.error || 'Có lỗi xảy ra khi xử lý thanh toán.';
-                    errorDiv.style.display = 'block';
+                    if (response.ok && result.success) {
+                        successDiv.textContent = window.i18next ? i18next.t('pay_success') : 'Thanh toán thành công!';
+                        successDiv.classList.remove('hidden');
+                        spinner.classList.add('hidden');
+
+                        setTimeout(() => {
+                            window.location.href = '@Url.Action("PaymentSuccess", "Rental")' + '?rentalId=' + rentalId;
+                        }, 1500);
+                    } else {
+                        const errorMsg = result.error || (window.i18next ? i18next.t('pay_error_default') : 'Đã có lỗi xảy ra');
+                        throw new Error(errorMsg);
+                    }
+                } catch (error) {
+                    errorDiv.textContent = error.message;
+                    errorDiv.classList.remove('hidden');
+                    spinner.classList.add('hidden');
                     btn.disabled = false;
-                    spinner.style.display = 'none';
+                    btn.classList.remove('opacity-50', 'cursor-not-allowed');
                 }
-            } catch (error) {
-                errorDiv.textContent = 'Error: ' + error.message;
-                errorDiv.style.display = 'block';
-                btn.disabled = false;
-                spinner.style.display = 'none';
-                console.error(error);
             }
-        }
-    </script>
-}
+        </script>
+    }
+</body>
+</html>

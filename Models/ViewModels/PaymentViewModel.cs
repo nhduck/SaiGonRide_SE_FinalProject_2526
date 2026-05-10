@@ -19,5 +19,6 @@
         public int TotalMinutes { get; set; }
         public decimal? FinalFare { get; set; }
         public decimal? DiscountAmount { get; set; }
+        public decimal UnitPrice { get; set; }
     }
 }

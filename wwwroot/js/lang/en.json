@@ -588,8 +588,8 @@
     "Trạm Parkson Cantavil": "Parkson Cantavil Station",
     "Trạm Vincom Thảo Điền": "Vincom Thao Dien Station",
     "Trạm Estella Place": "Estella Place Station",
-    "Trạm Gigamall Thủ Đức": "Gigamall Thu Đức Station",
-    "Trạm Vincom Thủ Đức": "Vincom Thu Đức Station",
+    "Trạm Gigamall Thủ Đức": "Gigamall Thu Duc Station",
+    "Trạm Vincom Thủ Đức": "Vincom Thu Duc Station",
     "Trạm ĐH Sư Phạm Kỹ Thuật": "HCMUTE Station",
     "1 Lê Lợi, Quận 1, TP.HCM": "1 Le Loi, District 1, HCMC",
     "1 Nguyễn Tất Thành, Quận 4, TP.HCM": "1 Nguyen Tat Thanh, District 4, HCMC",
@@ -621,5 +621,16 @@
     "SaigonBike S1": "SaigonBike S1",
     "SaigonBike S2": "SaigonBike S2",
     "SaigonE Pro": "SaigonE Pro",
-    "SaigonE Lite": "SaigonE Lite"
+    "SaigonE Lite": "SaigonE Lite",
+
+    "pay_amount": "Amount:",
+    "pay_status": "Status:",
+    "pay_pending": "Pending Confirmation",
+    "pay_loading": "Loading...",
+    "pay_processing": "Processing payment...",
+    "pay_btn_confirm": "Confirm Payment",
+    "pay_btn_cancel": "Cancel",
+    "pay_success": "Payment successful! Redirecting...",
+    "pay_error_default": "An error occurred while processing the payment."
+    
 }

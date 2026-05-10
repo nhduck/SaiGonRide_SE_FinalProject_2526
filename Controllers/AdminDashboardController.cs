@@ -124,27 +124,39 @@ namespace RentalVehicleService.Controllers
 
         public IActionResult SearchVehicles(string searchTerm, List<string> statuses)
         {
-            var query = _context.Vehicles.Include(v => v.CurrentStation).AsQueryable();
-
-            var allVehicles = query.ToList();
-
-            if (!string.IsNullOrEmpty(searchTerm))
+            try
             {
-                string st = searchTerm.ToLower();
-                allVehicles = allVehicles.Where(v =>
-                    v.VehicleId.ToString().Contains(st) ||
-                    (v.VehicleModel != null && v.VehicleModel.ToLower().Contains(st)) ||
-                    v.Type.ToString().ToLower().Contains(st)
-                    ).ToList();
-            }
+                var query = _context.Vehicles.Include(v => v.CurrentStation).OrderBy(v => v.VehicleId).AsQueryable();
 
-            if (statuses != null && statuses.Any())
+                var allVehicles = query.ToList();
+
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    string st = searchTerm.ToLower();
+                    allVehicles = allVehicles.Where(v =>
+                        v.VehicleId.ToString().Contains(st) ||
+                        (v.VehicleModel != null && v.VehicleModel.ToLower().Contains(st)) ||
+                        v.Type.ToString().ToLower().Contains(st) ||
+                        (v.CurrentStation != null && v.CurrentStation.Name.ToLower().Contains(st))
+                        ).ToList();
+                }
+
+                if (statuses != null && statuses.Any(s => !string.IsNullOrWhiteSpace(s)))
+                {
+                    // Clean up status names and filter
+                    var cleanStatuses = statuses.Where(s => !string.IsNullOrWhiteSpace(s)).ToList();
+                    allVehicles = allVehicles.Where(v => cleanStatuses.Contains(v.State.ToString())).ToList();
+                }
+
+                return PartialView("~/Views/AdminDashboard/Pages/Vehicle/_VehicleTablePartial.cshtml", allVehicles);
+            }
+            catch (Exception ex)
             {
-                allVehicles = allVehicles.Where(v => statuses.Contains(v.State.ToString())).ToList();
+                // Return empty table in case of errors
+                return PartialView("~/Views/AdminDashboard/Pages/Vehicle/_VehicleTablePartial.cshtml", new List<Vehicle>());
             }
-
-            return PartialView("~/Views/AdminDashboard/Pages/Vehicle/_VehicleTablePartial.cshtml", allVehicles);
         }
+       
 
         [HttpGet]
         public async Task<IActionResult> GetNotifications()
