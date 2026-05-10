@@ -282,9 +282,12 @@
 
         <div class="row g-4">
             @{
+                string totalStations = (ViewBag.TotalStations ?? 50).ToString();
+                string cityWideDesc = $"{totalStations}+ stations from District 1 to District 12, Thu Duc and beyond. Always a bike nearby.";
+
                 var features = new[] {
                     new { Icon="bi-lightning-charge-fill", Color="#16a34a", BgColor="#dcfce7", Title="Lightning Fast",       Desc="Book a bike in under 30 seconds. Scan, ride, done. No dedicated app required.", Delay="sr-delay-1", TitleKey="feat_1_title", DescKey="feat_1_desc", Param1="" },
-                    new { Icon="bi-geo-alt-fill",           Color="#0d9488", BgColor="#ccfbf1", Title="City-Wide Network",   Desc=$"{(ViewBag.TotalStations ?? 50)}+ stations from District 1 to District 12, Thu Duc and beyond. Always a bike nearby.", Delay="sr-delay-2", TitleKey="feat_2_title", DescKey="feat_2_desc", Param1=(string)(ViewBag.TotalStations?.ToString() ?? "50") },
+                    new { Icon="bi-geo-alt-fill",           Color="#0d9488", BgColor="#ccfbf1", Title="City-Wide Network",   Desc=cityWideDesc, Delay="sr-delay-2", TitleKey="feat_2_title", DescKey="feat_2_desc", Param1=totalStations },
                     new { Icon="bi-shield-fill-check",      Color="#7c3aed", BgColor="#ede9fe", Title="Safe & Transparent",  Desc="Vehicle insurance + real-time GPS tracking. Honest pricing, zero hidden fees.", Delay="sr-delay-3", TitleKey="feat_3_title", DescKey="feat_3_desc", Param1="" },
                     new { Icon="bi-currency-dollar",        Color="#ea580c", BgColor="#ffedd5", Title="Ultra Affordable",    Desc="Standard bike from 500 VND/min. E-scooter from 1,500 VND/min. Always cheaper than taxis.", Delay="sr-delay-4", TitleKey="feat_4_title", DescKey="feat_4_desc", Param1="" },
                     new { Icon="bi-leaf-fill",              Color="#16a34a", BgColor="#dcfce7", Title="100% Eco-Friendly",   Desc="Each ride saves ~200g of CO₂ vs. a motorbike. Together, we're greening Saigon.", Delay="sr-delay-5", TitleKey="feat_5_title", DescKey="feat_5_desc", Param1="" },
