@@ -7,3 +7,5 @@ obj/
 [Bb]in/
 [Obj]/
 .vs/
+test-results/
+data/
