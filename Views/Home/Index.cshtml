@@ -28,8 +28,9 @@
                     </span>
                 </h1>
 
-                <p class="text-white-50 mb-5 hero-animate-3" style="font-size:1.1rem;line-height:1.75;max-width:480px;" data-i18n-html="hero_desc">
-                    A network of over <strong class="text-white">50 stations</strong> covering all of HCMC.
+                <p class="text-white-50 mb-5 hero-animate-3" style="font-size:1.1rem;line-height:1.75;max-width:480px;" 
+                   data-i18n-html="hero_desc" data-i18n-param1="@(ViewBag.TotalStations ?? 50)">
+                    A network of over <strong class="text-white">@(ViewBag.TotalStations ?? 50) stations</strong> covering all of HCMC.
                     Book a bike in 30 seconds — no cash, no traffic jams.
                 </p>
 
@@ -49,15 +50,15 @@
                 <!-- Mini stats -->
                 <div class="d-flex gap-5 mt-5 hero-animate-4 pt-2">
                     <div>
-                        <div class="sr-stat-number" data-target="50">0</div>
+                        <div class="sr-stat-number" data-target="@(ViewBag.TotalStations ?? 50)">0</div>
                         <div class="text-white-50 small mt-1" data-i18n="stat_stations">Stations</div>
                     </div>
                     <div style="border-left:1px solid rgba(255,255,255,.15);padding-left:2rem;">
-                        <div class="sr-stat-number" data-target="500">0</div>
+                        <div class="sr-stat-number" data-target="@(ViewBag.TotalVehicles ?? 500)">0</div>
                         <div class="text-white-50 small mt-1" data-i18n="stat_vehicles">Vehicles</div>
                     </div>
                     <div style="border-left:1px solid rgba(255,255,255,.15);padding-left:2rem;">
-                        <div class="sr-stat-number" data-target="10000">0</div>
+                        <div class="sr-stat-number" data-target="@(ViewBag.TotalRides ?? 10000)">0</div>
                         <div class="text-white-50 small mt-1" data-i18n="stat_rides">Total Rides</div>
                     </div>
                 </div>
@@ -282,12 +283,12 @@
         <div class="row g-4">
             @{
                 var features = new[] {
-                    new { Icon="bi-lightning-charge-fill", Color="#16a34a", BgColor="#dcfce7", Title="Lightning Fast",       Desc="Book a bike in under 30 seconds. Scan, ride, done. No dedicated app required.", Delay="sr-delay-1", TitleKey="feat_1_title", DescKey="feat_1_desc" },
-                    new { Icon="bi-geo-alt-fill",           Color="#0d9488", BgColor="#ccfbf1", Title="City-Wide Network",   Desc="50+ stations from District 1 to District 12, Thu Duc and beyond. Always a bike nearby.", Delay="sr-delay-2", TitleKey="feat_2_title", DescKey="feat_2_desc" },
-                    new { Icon="bi-shield-fill-check",      Color="#7c3aed", BgColor="#ede9fe", Title="Safe & Transparent",  Desc="Vehicle insurance + real-time GPS tracking. Honest pricing, zero hidden fees.", Delay="sr-delay-3", TitleKey="feat_3_title", DescKey="feat_3_desc" },
-                    new { Icon="bi-currency-dollar",        Color="#ea580c", BgColor="#ffedd5", Title="Ultra Affordable",    Desc="Standard bike from 500 VND/min. E-scooter from 1,500 VND/min. Always cheaper than taxis.", Delay="sr-delay-4", TitleKey="feat_4_title", DescKey="feat_4_desc" },
-                    new { Icon="bi-leaf-fill",              Color="#16a34a", BgColor="#dcfce7", Title="100% Eco-Friendly",   Desc="Each ride saves ~200g of CO₂ vs. a motorbike. Together, we're greening Saigon.", Delay="sr-delay-5", TitleKey="feat_5_title", DescKey="feat_5_desc" },
-                    new { Icon="bi-headset",                Color="#0284c7", BgColor="#e0f2fe", Title="24/7 Support",        Desc="Live support agents around the clock. Issue on the road? We're there in 15 minutes.", Delay="sr-delay-6", TitleKey="feat_6_title", DescKey="feat_6_desc" },
+                    new { Icon="bi-lightning-charge-fill", Color="#16a34a", BgColor="#dcfce7", Title="Lightning Fast",       Desc="Book a bike in under 30 seconds. Scan, ride, done. No dedicated app required.", Delay="sr-delay-1", TitleKey="feat_1_title", DescKey="feat_1_desc", Param1="" },
+                    new { Icon="bi-geo-alt-fill",           Color="#0d9488", BgColor="#ccfbf1", Title="City-Wide Network",   Desc=$"{(ViewBag.TotalStations ?? 50)}+ stations from District 1 to District 12, Thu Duc and beyond. Always a bike nearby.", Delay="sr-delay-2", TitleKey="feat_2_title", DescKey="feat_2_desc", Param1=(ViewBag.TotalStations ?? 50).ToString() },
+                    new { Icon="bi-shield-fill-check",      Color="#7c3aed", BgColor="#ede9fe", Title="Safe & Transparent",  Desc="Vehicle insurance + real-time GPS tracking. Honest pricing, zero hidden fees.", Delay="sr-delay-3", TitleKey="feat_3_title", DescKey="feat_3_desc", Param1="" },
+                    new { Icon="bi-currency-dollar",        Color="#ea580c", BgColor="#ffedd5", Title="Ultra Affordable",    Desc="Standard bike from 500 VND/min. E-scooter from 1,500 VND/min. Always cheaper than taxis.", Delay="sr-delay-4", TitleKey="feat_4_title", DescKey="feat_4_desc", Param1="" },
+                    new { Icon="bi-leaf-fill",              Color="#16a34a", BgColor="#dcfce7", Title="100% Eco-Friendly",   Desc="Each ride saves ~200g of CO₂ vs. a motorbike. Together, we're greening Saigon.", Delay="sr-delay-5", TitleKey="feat_5_title", DescKey="feat_5_desc", Param1="" },
+                    new { Icon="bi-headset",                Color="#0284c7", BgColor="#e0f2fe", Title="24/7 Support",        Desc="Live support agents around the clock. Issue on the road? We're there in 15 minutes.", Delay="sr-delay-6", TitleKey="feat_6_title", DescKey="feat_6_desc", Param1="" },
                 };
             }
 
@@ -299,7 +300,11 @@
                             <i class="bi @f.Icon"></i>
                         </div>
                         <h5 class="fw-bold mb-2" data-i18n="@f.TitleKey">@f.Title</h5>
-                        <p class="text-muted mb-0" style="font-size:.92rem;line-height:1.65;" data-i18n="@f.DescKey">@f.Desc</p>
+                        <p class="text-muted mb-0" style="font-size:.92rem;line-height:1.65;" 
+                           data-i18n="@f.DescKey" 
+                           data-i18n-param1="@(f.GetType().GetProperty("Param1") != null ? f.GetType().GetProperty("Param1").GetValue(f, null) : "")">
+                            @f.Desc
+                        </p>
                     </div>
                 </div>
             }

@@ -215,11 +215,11 @@
             <!-- Stats badges -->
             <div class="d-flex justify-content-center gap-3 flex-wrap mt-4">
                 <div class="sr-glass px-3 py-2 text-center">
-                    <div class="text-white fw-bold fs-5">50+</div>
+                    <div class="text-white fw-bold fs-5">@(ViewBag.TotalStations ?? 50)+</div>
                     <div class="text-white-50" style="font-size:.75rem;" data-i18n="auth_stats_stations">Stations</div>
                 </div>
                 <div class="sr-glass px-3 py-2 text-center">
-                    <div class="text-white fw-bold fs-5">500+</div>
+                    <div class="text-white fw-bold fs-5">@(ViewBag.TotalVehicles ?? 500)+</div>
                     <div class="text-white-50" style="font-size:.75rem;" data-i18n="auth_stats_vehicles">Vehicles</div>
                 </div>
                 <div class="sr-glass px-3 py-2 text-center">

@@ -25,9 +25,11 @@ namespace RentalVehicleService.Controllers
 
         // GET: /Account/Login
         [HttpGet]
-        public IActionResult Login(string? returnUrl = null)
+        public async Task<IActionResult> Login(string? returnUrl = null)
         {
             ViewData["ReturnUrl"] = returnUrl;
+            ViewBag.TotalStations = await _context.Stations.CountAsync(s => s.IsActive);
+            ViewBag.TotalVehicles = await _context.Vehicles.CountAsync();
             return View();
         }
 
@@ -39,11 +41,17 @@ namespace RentalVehicleService.Controllers
             ViewData["ReturnUrl"] = returnUrl;
 
             if (!ModelState.IsValid)
+            {
+                ViewBag.TotalStations = await _context.Stations.CountAsync(s => s.IsActive);
+                ViewBag.TotalVehicles = await _context.Vehicles.CountAsync();
                 return View(model);
+            }
 
             var user = await _userManager.FindByEmailAsync(model.Email);
             if (user != null && !await _userManager.IsEmailConfirmedAsync(user))
             {
+                ViewBag.TotalStations = await _context.Stations.CountAsync(s => s.IsActive);
+                ViewBag.TotalVehicles = await _context.Vehicles.CountAsync();
                 ModelState.AddModelError(string.Empty, "Email is not verified. Please check your email and enter the verification code.");
                 return View(model);
             }
@@ -56,14 +64,18 @@ namespace RentalVehicleService.Controllers
                 return LocalRedirect(returnUrl ?? "/");
             }
 
+            ViewBag.TotalStations = await _context.Stations.CountAsync(s => s.IsActive);
+            ViewBag.TotalVehicles = await _context.Vehicles.CountAsync();
             ModelState.AddModelError(string.Empty, "Invalid login attempt.");
             return View(model);
         }
 
         // GET: /Account/Register
         [HttpGet]
-        public IActionResult Register()
+        public async Task<IActionResult> Register()
         {
+            ViewBag.TotalStations = await _context.Stations.CountAsync(s => s.IsActive);
+            ViewBag.TotalVehicles = await _context.Vehicles.CountAsync();
             return View();
         }
 
@@ -73,7 +85,14 @@ namespace RentalVehicleService.Controllers
         public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (!ModelState.IsValid)
+            {
+                ViewBag.TotalStations = await _context.Stations.CountAsync(s => s.IsActive);
+                ViewBag.TotalVehicles = await _context.Vehicles.CountAsync();
                 return View(model);
+            }
+
+
+
 
             // Create user with EmailConfirmed set to false for verification
             var user = new ApplicationUser
@@ -144,6 +163,8 @@ namespace RentalVehicleService.Controllers
                 ModelState.AddModelError(string.Empty, error.Description);
             }
 
+            ViewBag.TotalStations = await _context.Stations.CountAsync(s => s.IsActive);
+            ViewBag.TotalVehicles = await _context.Vehicles.CountAsync();
             return View(model);
         }
 

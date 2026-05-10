@@ -50,6 +50,7 @@ namespace RentalVehicleService.Controllers
             // Stats for hero
             ViewBag.TotalStations = await _context.Stations.CountAsync(s => s.IsActive);
             ViewBag.TotalVehicles = await _context.Vehicles.CountAsync();
+            ViewBag.TotalRides = await _context.Rentals.CountAsync(); // Total ever
             ViewBag.ActiveRentals = await _context.Rentals.CountAsync(r => r.Status == RentalStatus.Active);
             ViewBag.SearchQuery = query;
 
@@ -90,8 +91,10 @@ namespace RentalVehicleService.Controllers
             return View();
         }
 
-        public IActionResult About()
+        public async Task<IActionResult> About()
         {
+            ViewBag.TotalStations = await _context.Stations.CountAsync(s => s.IsActive);
+            ViewBag.TotalVehicles = await _context.Vehicles.CountAsync();
             return View();
         }
 
