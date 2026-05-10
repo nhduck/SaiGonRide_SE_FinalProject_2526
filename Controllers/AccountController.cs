@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using RentalVehicleService.Data;
 using RentalVehicleService.Models;
 using RentalVehicleService.Models.ViewModels;
 using RentalVehicleService.Services;
@@ -11,12 +13,14 @@ namespace RentalVehicleService.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
         private readonly IEmailService _emailService;
+        private readonly ApplicationDbContext _context;
 
-        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService emailService)
+        public AccountController(UserManager<ApplicationUser> userManager, SignInManager<ApplicationUser> signInManager, IEmailService emailService, ApplicationDbContext context)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _emailService = emailService;
+            _context = context;
         }
 
         // GET: /Account/Login
@@ -409,6 +413,30 @@ namespace RentalVehicleService.Controllers
                 return RedirectToAction("Login");
             }
 
+            // Fetch rental history statistics
+            var rentals = await _context.Rentals
+                .Where(r => r.UserId == user.Id && r.Status == RentalStatus.Completed)
+                .ToListAsync();
+
+            int totalRides = rentals.Count;
+            double totalDistance = 0;
+            
+            // Calculate distance based on time (avg 15km/h for simplicity)
+            foreach (var rental in rentals)
+            {
+                if (rental.EndTime.HasValue)
+                {
+                    var durationMinutes = (rental.EndTime.Value - rental.StartTime).TotalMinutes;
+                    if (durationMinutes > 0)
+                    {
+                        totalDistance += (durationMinutes / 60.0) * 15.0; 
+                    }
+                }
+            }
+
+            // Assuming 150g CO2 saved per km
+            double totalCO2Saved = totalDistance * 150.0;
+
             var model = new ProfileViewModel
             {
                 FullName = user.FullName,
@@ -417,7 +445,10 @@ namespace RentalVehicleService.Controllers
                 UserType = user.UserType,
                 CCCD = user.CCCD,
                 PassportNumber = user.PassportNumber,
-                Nationality = user.Nationality
+                Nationality = user.Nationality,
+                TotalRides = totalRides,
+                TotalDistance = totalDistance,
+                TotalCO2Saved = totalCO2Saved
             };
 
             return View(model);

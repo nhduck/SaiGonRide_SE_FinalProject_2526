@@ -148,15 +148,15 @@
                 <p class="text-muted fw-semibold mb-3" style="font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;">Activity</p>
                 <div class="d-flex flex-column gap-2">
                     <div class="sr-profile-stat">
-                        <span class="sr-profile-stat-val">0</span>
+                        <span class="sr-profile-stat-val">@Model.TotalRides</span>
                         <span class="text-muted mt-1 d-block" style="font-size:.8rem;">Total Rides</span>
                     </div>
                     <div class="sr-profile-stat">
-                        <span class="sr-profile-stat-val">0km</span>
+                        <span class="sr-profile-stat-val">@(Math.Round(Model.TotalDistance, 1))km</span>
                         <span class="text-muted mt-1 d-block" style="font-size:.8rem;">Distance</span>
                     </div>
                     <div class="sr-profile-stat">
-                        <span class="sr-profile-stat-val">0g</span>
+                        <span class="sr-profile-stat-val">@(Math.Round(Model.TotalCO2Saved, 0))g</span>
                         <span class="text-muted mt-1 d-block" style="font-size:.8rem;">CO₂ Saved</span>
                     </div>
                 </div>

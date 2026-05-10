@@ -27,5 +27,10 @@ namespace RentalVehicleService.Models.ViewModels
 
         [Display(Name = "Nationality")]
         public string? Nationality { get; set; }
+
+        // Activity Stats
+        public int TotalRides { get; set; } = 0;
+        public double TotalDistance { get; set; } = 0;
+        public double TotalCO2Saved { get; set; } = 0;
     }
 }
