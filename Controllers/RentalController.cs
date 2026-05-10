@@ -10,10 +10,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Claims;
 using System.Threading.Tasks;
-using VNPAY;
-using VNPAY.Models;
-using VNPAY.Models.Enums;
-using VNPAY.Models.Exceptions;
+
 using System.Text.RegularExpressions;
 using RentalVehicleService.Services.PaymentStrategies;
 
@@ -25,15 +22,13 @@ namespace RentalVehicleService.Controllers
 
         private readonly RentalService _rentalService;
 
-        private readonly IVnpayClient _vnpayClient;
         private readonly IConfiguration _configuration;
         private readonly IEnumerable<IPaymentStrategy> _paymentStrategies;
 
-        public RentalController(ApplicationDbContext context, RentalService rentalService, IVnpayClient vnpayClient, IConfiguration configuration, IEnumerable<IPaymentStrategy> paymentStrategies)
+        public RentalController(ApplicationDbContext context, RentalService rentalService, IConfiguration configuration, IEnumerable<IPaymentStrategy> paymentStrategies)
         {
             _context = context;
             _rentalService = rentalService;
-            _vnpayClient = vnpayClient;
             _configuration = configuration;
             _paymentStrategies = paymentStrategies;
         }
@@ -363,62 +358,58 @@ namespace RentalVehicleService.Controllers
         }
 
         //Xử lý kết quả trả về từ VNPay
-       [HttpGet]
+        [HttpGet]
         [Authorize]
         public async Task<IActionResult> PaymentCallback()
         {
-            try
+            var vnpayData = Request.Query;
+            var vnpay = new VnPayLibrary();
+
+            foreach (var (key, value) in vnpayData)
             {
-                var paymentResult = _vnpayClient.GetPaymentResult(Request);
-                var match = Regex.Match(paymentResult.Description, @"\d+");
-                if (!match.Success)
+                // Lọc ra những biến bắt đầu bằng vnp_
+                if (!string.IsNullOrEmpty(key) && key.StartsWith("vnp_"))
                 {
-                    // Nếu không tìm thấy số nào trong chuỗi, báo lỗi hoặc quay về trang chủ
-                    TempData["Error"] = "Không tìm thấy mã chuyến đi trong giao dịch.";
-                    return RedirectToAction("Index", "Home");
+                    vnpay.AddResponseData(key, value.ToString());
                 }
+            }
 
-                int rentalId = int.Parse(match.Value);
+            // Lấy mã đơn hàng và mã giao dịch
+            string txnRef = vnpay.GetResponseData("vnp_TxnRef");
+            int rentalId = string.IsNullOrEmpty(txnRef) ? 0 : int.Parse(txnRef.Split('_')[0]);
 
-                // Get VNPay transaction ID from request
-                var vnpTxnRef = Request.Query["vnp_TxnRef"].ToString();
+            string vnp_SecureHash = Request.Query["vnp_SecureHash"];
+            bool checkSignature = vnpay.ValidateSignature(vnp_SecureHash, _configuration["Vnpay:HashSecret"]);
 
-                // Thanh toán thành công
-                var rental = await _context.Rentals
-                    .Include(r => r.Vehicle)
-                    .Include(r => r.EndStation)
-                    .FirstOrDefaultAsync(r => r.RentalId == rentalId);
+            if (!checkSignature || vnpay.GetResponseData("vnp_ResponseCode") != "00")
+            {
+                TempData["Error"] = "Thanh toán thất bại hoặc giao dịch bị hủy.";
+                return rentalId > 0 ? RedirectToAction("Payment", new { id = rentalId }) : RedirectToAction("Index", "Home");
+            }
+
+            // Giao dịch thành công
+            var rental = await _context.Rentals
+                .Include(r => r.Vehicle)
+                .Include(r => r.EndStation)
+                .FirstOrDefaultAsync(r => r.RentalId == rentalId);
 
                 if (rental != null)
                 {
                     rental.Status = RentalStatus.Completed;
                     rental.PaymentMethod = "VNPay";
                     rental.PaymentTransactionId = vnpTxnRef;
-                    rental.PaymentCompletedTime = DateTime.UtcNow;
+                    rental.PaymentCompletedTime = Utc.Now;
 
-                    // Ensure vehicle is available
-                    if (rental.Vehicle != null && rental.Vehicle.State != VehicleState.Available)
-                    {
-                        rental.Vehicle.State = VehicleState.Available;
-                    }
-
-                    await _context.SaveChangesAsync();
+                if (rental.Vehicle != null && rental.Vehicle.State != VehicleState.Available)
+                {
+                    rental.Vehicle.State = VehicleState.Available;
                 }
 
-                TempData["Success"] = "Payment successful! Thank you for using saigonRide.";
-                return View("Success");
+                await _context.SaveChangesAsync();
             }
-            catch (VnpayException ex) // Thanh toán thất bại / sai chữ ký
-            {
-                // Parse rentalId từ query string trực tiếp để redirect về Payment
-                var txnRef = Request.Query["vnp_TxnRef"].ToString();
-                int rentalId = string.IsNullOrEmpty(txnRef) ? 0 : int.Parse(txnRef.Split('_')[0]);
 
-                TempData["Error"] = "Payment failed " + ex.Message;
-                return rentalId > 0
-                    ? RedirectToAction("Payment", new { id = rentalId })
-                    : RedirectToAction("Index");
-            }
+            TempData["Success"] = "Payment successful! Thank you for using SaigonRide.";
+            return View("Success");
         }
 
         // Handle PayPal return after user approves payment
