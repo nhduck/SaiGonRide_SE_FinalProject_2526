@@ -1,7 +1,7 @@
 # 🚲 SaigonRide — Rental Vehicle Service
 
 > **Course Project:** Software Engineering (SE FinalProject 2526)  
-> **Author:** Truong Minh Thanh, Ngo Huynh Duc, Lam Tan Dat — Ton Duc Thang University (TDTU)
+> **Author:** 524H0032 - Truong Minh Thanh, 524H0010 - Ngo Huynh Duc, 524H0008 - Lam Tan Dat — Ton Duc Thang University (TDTU)
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo%20on%20Render-brightgreen?style=for-the-badge&logo=render)](https://saigonride-web.onrender.com)
 **🌐 URL:** [https://saigonride-web.onrender.com](https://saigonride-web.onrender.com)  
@@ -358,6 +358,6 @@ RentalVehicleService/
 
 ## 👤 Author
 
-**Truong Minh Thanh, Ngo Huynh Duc, Lam Tan Dat**
+**524H0032 - Truong Minh Thanh, 524H0010 - Ngo Huynh Duc, 524H0008 - Lam Tan Dat**
 Ton Duc Thang University (TDTU)
 Software Engineering Course Project — SE FinalProject 2526 | © 2026
