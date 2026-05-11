@@ -5,7 +5,8 @@
 
 [![Live Demo](https://img.shields.io/badge/Live-Demo%20on%20Render-brightgreen?style=for-the-badge&logo=render)](https://saigonride-web.onrender.com)
 **🌐 URL:** [https://saigonride-web.onrender.com](https://saigonride-web.onrender.com)  
-**🖥️ GitHub Repo:** [https://github.com/nhduck/SaiGonRide_SE_FinalProject_2526](https://github.com/nhduck/SaiGonRide_SE_FinalProject_2526)
+**🖥️ GitHub Repo:** [https://github.com/nhduck/SaiGonRide_SE_FinalProject_2526](https://github.com/nhduck/SaiGonRide_SE_FinalProject_2526)  
+**🎥 Demo Video:** [https://youtu.be/EdA1cOv_rfw](https://youtu.be/EdA1cOv_rfw)
 
 SaigonRide (technical name: `RentalVehicleService`) is a modern web application built on **ASP.NET Core 8.0**, designed to address the urban mobility needs of Ho Chi Minh City. The platform provides an end-to-end bicycle and electric vehicle rental experience — from account registration with OTP verification, QR code scanning, real-time trip tracking, to multi-gateway payment processing via VNPay and PayPal.
 
