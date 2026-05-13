@@ -1,14 +1,17 @@
 # SaigonRide – Playwright E2E Automation Test Suite
 
-Comprehensive automation test suite for SaigonRide bike rental application, covering authentication, resource management (stations, vehicles, users), and payment flows with PayPal integration.
+Comprehensive E2E automation test suite for SaigonRide bike rental application,
+covering authentication, admin CRUD operations (stations, vehicles, users, reports),
+and a full PayPal rental payment flow.
 
 ---
 
 ## 📋 Requirements
 
 - **Node.js** v16+
-- **Playwright** @latest
-- **Application** running on `http://localhost:5072` (configurable)
+- **@playwright/test** ^1.44.0
+- **TypeScript** ^5.4.5
+- **SaigonRide app** running on `http://localhost:5072`
 
 ---
 
@@ -17,37 +20,49 @@ Comprehensive automation test suite for SaigonRide bike rental application, cove
 ### 1. Install Dependencies
 
 ```bash
-npm install -D @playwright/test
+cd saigonride-playwright-tests
+npm install
 npx playwright install chromium
 ```
 
 ### 2. Configure BASE_URL
 
-Open `tests/saigonride.specs.ts` and update the first line if needed:
+Open `tests/saigonride.spec.ts` and update the constant at the top if needed:
 
 ```typescript
 const BASE_URL = "http://localhost:5072"; // Change port if different
 ```
 
-### 3. Run Tests
+### 3. Start the Application
+
+In a separate terminal, start the SaigonRide web application first:
 
 ```bash
-# Run all tests (display browser)
+cd /path/to/RentalVehicleService
+dotnet run
+```
+
+Wait until you see `Now listening on: http://localhost:5072` before running tests.
+
+### 4. Run Tests
+
+```bash
+# Run all tests (with visible browser window)
 npx playwright test --headed
 
-# Run tests headless (faster, no browser window)
+# Run all tests headless (faster, no browser window)
 npx playwright test
 
-# Run specific test suite
+# Run a specific test suite by name
 npx playwright test --grep "Authentication Flows"
 npx playwright test --grep "Station Management"
 npx playwright test --grep "Vehicle Management"
 npx playwright test --grep "User Management"
 
-# Run single test
+# Run a single test by ID/name
 npx playwright test -g "ST-01: Create New Station"
 
-# View HTML report
+# View the HTML report after a run
 npx playwright show-report
 ```
 
@@ -55,50 +70,47 @@ npx playwright show-report
 
 ## 📊 Test Suites
 
-### 1. **UI & Static Pages** ✅
+All tests are in a single file: `tests/saigonride.spec.ts`.
 
-Verify static pages display correctly:
-- How It Works (`/Home/Guide`)
-- About Us (`/Home/About`)
-- FAQ (`/Home/FAQ`)
-- Privacy Policy (`/Home/Privacy`)
+### 1. UI & Static Pages ✅
 
-| Test | Description |
-|------|-------------|
-| `Verify Page: How It Works` | Guide page header and content |
-| `Verify Page: About Us` | About Us page header and content |
-| `Verify Page: FAQ` | FAQ page header and content |
-| `Verify Page: Privacy Policy` | Privacy Policy page header |
+Verify static pages render correctly.
+
+| Test | Route | Assertion |
+|------|-------|-----------|
+| `Verify Page: How It Works` | `/Home/Guide` | Header contains "How to Rent" |
+| `Verify Page: About Us` | `/Home/About` | Header contains "About SaigonRide" |
+| `Verify Page: FAQ` | `/Home/FAQ` | Header contains "Frequently Asked" |
+| `Verify Page: Privacy Policy` | `/Home/Privacy` | Header contains "Privacy Policy & Terms of Service" |
 
 ---
 
-### 2. **Authentication Flows** 🔐
+### 2. Authentication Flows 🔐
 
 | ID | Test | Description |
 |----|------|-------------|
-| TC-AUTH-01 | `TC-AUTH: Registration Process` | Register new user + OTP verification |
-| TC-AUTH-02 | `TC-PWD: Reset Password and Login check` | Forgot password → reset → login |
+| TC-AUTH-01 | `TC-AUTH: Registration Process` | Register new user → OTP verification |
+| TC-AUTH-02 | `TC-PWD: Reset Password and Login check` | Forgot password → OTP → reset → login |
 
 **Test Accounts:**
-```
 Admin:
-  Email: admin@saigonride.vn
-  Password: Admin@123
-
+Email:    admin@saigonride.vn
+Password: Admin@123
 Customer:
-  Email: pokemongo99113@gmail.com
-  Password: TestPassword123!
+Email:    pokemongo99113@gmail.com
+Password: TestPassword123!
+PayPal Sandbox (for rental flow):
+Email:    thanhtestacc1@gmail.com
+Password: thanhtest1
 
-PayPal (for rental test):
-  Email: thanhtestacc1@gmail.com
-  Password: thanhtest1
-```
+> ⚠️ **OTP Note:** The OTP code in `resetPasswordFlow()` is hardcoded as `"502045"`.
+> Replace this with the real OTP received by email if running against a live SMTP setup.
 
 ---
 
-### 3. **Admin Navigation** 👨‍💼
+### 3. Admin Navigation 👨‍💼
 
-Navigate admin dashboard menu items via AJAX:
+Navigate admin dashboard sections via AJAX sidebar links.
 
 | ID | Test | Endpoint |
 |----|------|----------|
@@ -109,16 +121,14 @@ Navigate admin dashboard menu items via AJAX:
 
 ---
 
-### 4. **Station Management – CRUD** 🏢
-
-Complete CRUD operations for bike stations.
+### 4. Station Management – CRUD 🏢
 
 | ID | Test | Description |
 |----|------|-------------|
-| ST-01 | `Create New Station` | Create station: name, address, capacity |
-| ST-02 | `Read/View Station Details` | Search → view station details |
-| ST-03 | `Update Station` | Update capacity from 50 → 75 |
-| ST-04 | `Delete Station` | Delete station via confirmation modal |
+| ST-01 | `Create New Station` | Create station with name, address, capacity |
+| ST-02 | `Read/View Station Details` | Search → open details |
+| ST-03 | `Update Station` | Update capacity: 50 → 75 |
+| ST-04 | `Delete Station` | Delete via confirmation modal |
 
 **Test Data:**
 ```typescript
@@ -130,22 +140,16 @@ Complete CRUD operations for bike stations.
 }
 ```
 
-**Key Notes:**
-- Use `searchAndGetRow()` to trigger AJAX search with proper waits
-- Search returns `<tr>` element containing station name
-
 ---
 
-### 5. **Vehicle Management – CRUD** 🚍
-
-Complete CRUD operations for vehicles.
+### 5. Vehicle Management – CRUD 🚍
 
 | ID | Test | Description |
 |----|------|-------------|
-| VH-01 | `Create New Vehicle` | Create vehicle: model, price, state, battery |
-| VH-02 | `Read/View Vehicle Details` | Search → view details modal |
-| VH-03 | `Update Vehicle` | Rename vehicle to "Honda Air Blade" |
-| VH-04 | `Delete Vehicle` | Delete vehicle via confirmation modal |
+| VH-01 | `Create New Vehicle` | Create vehicle with model, price, state, battery |
+| VH-02 | `Read/View Vehicle Details` | Search → open details modal |
+| VH-03 | `Update Vehicle` | Rename to "Honda Air Blade" |
+| VH-04 | `Delete Vehicle` | Delete via confirmation modal |
 
 **Test Data:**
 ```typescript
@@ -157,23 +161,18 @@ Complete CRUD operations for vehicles.
 }
 ```
 
-**Key Notes:**
-- Modals: `#createModal`, `#editModal`
-- Submit button: `#sunmitBtn` (typo in form)
-- Some forms don't show toast on success → wait for modal close or page reload
+> ⚠️ **Known quirk:** The submit button ID is `#sunmitBtn` (typo in the actual form — do not change).
 
 ---
 
-### 6. **User Management – CRUD** 👥
-
-Complete CRUD operations for user accounts.
+### 6. User Management – CRUD 👥
 
 | ID | Test | Description |
 |----|------|-------------|
-| US-01 | `Create New User` | Create user: email, username, phone, CCCD |
-| US-02 | `Read/View User Details` | Search → view details modal |
+| US-01 | `Create New User` | Create user with email, username, phone, CCCD |
+| US-02 | `Read/View User Details` | Search → open details modal |
 | US-03 | `Update User` | Update phone number |
-| US-04 | `Delete User` | Delete user via confirmation modal |
+| US-04 | `Delete User` | Delete via confirmation modal |
 
 **Test Data:**
 ```typescript
@@ -187,190 +186,136 @@ Complete CRUD operations for user accounts.
 }
 ```
 
-**Key Notes:**
-- Search bar `#userSearchBar` searches by username, **not email**
-- Modals: `#createUserModal`, `#editUserModal`, `#deleteUserModal`
+> ⚠️ **Search bar** (`#userSearchBar`) searches by **username**, not email.
 
 ---
 
-### 7. **Report Management – CRUD** 📋
+### 7. Report Management – CRUD 📋
 
-#### **RP-01: Create New Report (User UI)**
+**RP-01: Create Report (Customer UI)**
+- Route: `/Home/ReportIssue`
+- Fill: Title, Description → Submit → expect success toast
 
-```
-Page: /Home/ReportIssue
-Test Data:
-  title: `Test Report ${Date.now()}`
-  description: "This is a test report"
-  status: "Open"
-```
-
-Steps:
-1. Customer login
-2. Navigate to `/Home/ReportIssue`
-3. Fill Title, Description, CreatedDate (auto: today)
-4. Click Submit → success toast appears
-
-#### **RP-02 to RP-05: Admin Operations**
+**RP-02 to RP-05: Admin Operations**
 
 | ID | Test | Description |
 |----|------|-------------|
-| RP-02 | `View Report Details` | Search report → view details |
-| RP-03 | `Export/Download Reports` | Click export button |
-| RP-04 | `Filter Reports by Date Range` | Filter by StartDate/EndDate |
-| RP-05 | `Delete Report` | Delete report via confirm dialog |
+| RP-02 | `View Report Details` | Search → view details |
+| RP-03 | `Export/Download Reports` | Click export → file downloaded |
+| RP-04 | `Filter Reports by Date Range` | Filter by StartDate / EndDate |
+| RP-05 | `Delete Report` | Delete via confirm dialog |
 
 ---
 
-### 8. **Bike Rental + PayPal Payment** 💳
+### 8. Bike Rental + PayPal Payment 💳
 
-End-to-end rental flow with PayPal payment integration.
-
-| Test | Steps |
-|------|-------|
-| `TC-RENT: Bike Rental with PayPal Payment` | 1. Customer login |
-| | 2. Station search → select station |
-| | 3. View list → select vehicle |
-| | 4. Scan QR (mock: redirect to `/Rental/Create?vehicleId=4&startStationId=30`) |
-| | 5. Start ride → confirm |
-| | 6. Select end station → Finish |
-| | 7. Pay with PayPal |
-| | 8. PayPal login → approve payment |
-| | 9. Verify success page |
-
-**PayPal Test Credentials:**
-```
-Email: thanhtestacc1@gmail.com
-Password: thanhtest1
-```
+Full end-to-end rental flow:
+Customer login
+→ Search station → select station
+→ Select vehicle
+→ Mock QR scan: /Rental/Create?vehicleId=4&startStationId=30
+→ Start ride → confirm
+→ Select end station → Finish
+→ Choose PayPal payment
+→ PayPal sandbox login → approve
+→ Verify payment success page
 
 ---
 
 ## 🔧 Helper Functions
 
 ### `loginAs(page, email, password)`
-Login with any email/password combination.
-
-```typescript
-await loginAs(page, "admin@saigonride.vn", "Admin@123");
-```
+Navigates to the login page and signs in with any credentials.
 
 ### `loginAsAdmin(page)`
-Login as admin and navigate to Admin Panel.
-
-```typescript
-await loginAsAdmin(page);
-// Auto redirects to /AdminDashboard/Index
-```
+Logs in as admin and navigates to `/AdminDashboard/Index`.
 
 ### `searchAndGetRow(page, selectorSearch, searchText, rowText?)`
-**Fixes AJAX timeout issues:**
-- Fill search box
-- Trigger `input` event → AJAX fires immediately (no browser debounce wait)
-- Wait for row to appear (reliable signal that AJAX completed)
+Fires an `input` event on the search bar to trigger AJAX immediately (bypasses browser debounce), then waits for the result `<tr>` to appear. **Always use this instead of `.fill()` + manual wait** for AJAX-driven tables.
 
 ```typescript
-const row = await searchAndGetRow(
-  page, 
-  '#stationSearchBar', 
-  'Test Station 123'
-);
+const row = await searchAndGetRow(page, '#stationSearchBar', 'Test Station 123');
 ```
 
 ### `registerAndVerify(page, email, password)`
-Register new user and verify via OTP.
-
-```typescript
-await registerAndVerify(page, "newuser@test.com", "Pass123!");
-```
+Registers a new user and completes OTP verification.
 
 ### `resetPasswordFlow(page, email, newPassword)`
-Complete forgot password flow: forgot → OTP verify → reset → login page.
-
-```typescript
-await resetPasswordFlow(page, "user@test.com", "NewPass123!");
-```
+Runs the full forgot-password flow: submit email → enter OTP → reset → redirects to login.
 
 ### `expectSuccess(page, timeout?)`
-Wait for success toast (checks multiple selectors).
-
-```typescript
-await expectSuccess(page, 10000);
-```
+Waits for a success toast notification (checks multiple CSS selectors).
 
 ---
 
-## ⚙️ Playwright Configuration
-
-Edit `playwright.config.ts`:
+## ⚙️ Playwright Configuration (`playwright.config.ts`)
 
 ```typescript
 export default defineConfig({
-  testDir: './tests', // Tests in tests/ directory
-  fullyParallel: false,
-  forbidOnly: !!process.env.CI,
-  retries: process.env.CI ? 2 : 0,
-  workers: process.env.CI ? 1 : 1, // ✅ Run sequentially to avoid DB conflicts
+  testDir: './tests',
+  fullyParallel: false,   // Tests run sequentially — required to avoid DB conflicts
+  workers: 1,
   reporter: 'html',
   use: {
     baseURL: 'http://localhost:5072',
-    trace: 'on-first-retry',
+    video: 'on',
     screenshot: 'only-on-failure',
-    video: 'retain-on-failure',
-    ignoreHTTPSErrors: true, // ✅ For localhost SSL
+    trace: 'on-first-retry',
+    ignoreHTTPSErrors: true,
   },
-  webServer: {
-    command: 'dotnet run', // Optional: auto-start app
-    url: 'http://localhost:5072',
-    reuseExistingServer: !process.env.CI,
-  },
+  projects: [
+    {
+      name: 'chromium',
+      use: { ...devices['Desktop Chrome'] },
+    },
+  ],
 });
 ```
+
+> **Why `workers: 1`?** All tests share a single PostgreSQL database. Running in parallel causes race conditions and false failures on CRUD operations.
 
 ---
 
 ## ⚠️ Important Notes
 
-| Point | Detail |
+| Issue | Detail |
 |-------|--------|
-| **App must run first** | `dotnet run` before starting tests |
-| **BASE_URL config** | Update if port differs from 5072 |
-| **Workers: 1** | Run sequentially to avoid shared DB conflicts |
-| **AJAX Search** | Use `searchAndGetRow()` (dispatches event + waits) |
-| **No Toast on some forms** | Station/vehicle edit → wait for page reload or modal close |
-| **OTP Code** | Hardcoded `"502045"` → replace with real OTP if different |
-| **i18n Processing** | `data-i18n` attributes processed by JS → use `toContainText()` for assertions |
-| **Entity Modals** | Each entity has separate modals (`#createModal`, `#editModal`, etc) |
-| **Headless Mode** | Add `--headed=false` or config `headless: true` for fast CI runs |
+| **App must be running** | Run `dotnet run` before executing any tests |
+| **Single spec file** | All tests are in `tests/saigonride.spec.ts` |
+| **Workers = 1** | Sequential execution is mandatory — parallel runs cause DB conflicts |
+| **AJAX search** | Always use `searchAndGetRow()` — direct `.fill()` won't trigger the AJAX handler |
+| **No toast on some forms** | Station/vehicle edit forms don't show a success toast; wait for modal close or page reload instead |
+| **OTP hardcoded** | `"502045"` in `resetPasswordFlow()` — replace with real OTP if SMTP is live |
+| **Submit button typo** | Vehicle/station forms use `#sunmitBtn` (typo in source HTML — correct in tests) |
+| **i18n attributes** | `data-i18n` values are processed by JS; use `.toContainText()` not exact text match |
 
 ---
 
 ## 📁 Project Structure
-
-```
 saigonride-playwright-tests/
 ├── tests/
-│   └── saigonride.specs.ts       ← Main test file
-├── playwright-report/             ← HTML test reports (generated)
-├── test-results/                  ← Test results (generated)
-├── playwright.config.ts           ← Playwright configuration
-├── package.json                   ← Dependencies
-└── README.md                      ← This file
-```
+│   └── saigonride.spec.ts     ← All test cases (single file)
+├── playwright-report/          ← HTML report (generated after run)
+├── test-results/               ← Artifacts: screenshots, videos, traces
+├── playwright.config.ts        ← Playwright configuration
+├── package.json                ← Dependencies & scripts
+└── README.md                   ← This file
 
 ---
 
 ## 🎯 Quick Start
 
 ```bash
-# 1. Start the app
-cd /path/to/saigonride
+# Terminal 1 — start the app
+cd RentalVehicleService
 dotnet run
 
-# 2. Run tests (in another terminal)
+# Terminal 2 — run tests
 cd saigonride-playwright-tests
+npm install
+npx playwright install chromium
 npx playwright test --headed
 
-# 3. View results
+# View results
 npx playwright show-report
 ```

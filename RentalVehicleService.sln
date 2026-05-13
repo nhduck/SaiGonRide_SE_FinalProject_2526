@@ -5,8 +5,6 @@ VisualStudioVersion = 18.2.11415.280
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "RentalVehicleService", "RentalVehicleService.csproj", "{605475F3-9DB8-495E-8B14-85F1010A4B3A}"
 EndProject
-Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{02EA681E-C7D8-13C7-8484-4AC65E1B71E8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SaiGonRide.Tests", "SaiGonRide.Tests\SaiGonRide.Tests.csproj", "{3747476B-1F99-4131-8AE9-02C9D22E9358}"
 EndProject
 Global
